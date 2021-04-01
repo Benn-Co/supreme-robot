@@ -1,0 +1,201 @@
+.product_add_client {
+  display: none;
+  width: 100% !important;
+  margin-right: 0% !important;
+
+}
+
+.add_ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  max-width: fit-content;
+  overflow: hidden;
+  background-color: transparent;
+  z-index: 2;
+  position: fixed;
+
+}
+.add_arrow {
+  --active: #fff;
+  --border: rgba(255, 255, 255, .12);
+  display: block;
+  position: relative;
+  width: 44px;
+  height: 44px;
+}
+.add_arrow i {
+  display: block;
+  position: absolute;
+  margin: -15px 0 0 -15px;
+  left: 50%;
+  top: 50%;
+  width: fit-content !important;
+}
+
+.add_li {
+  float: left;
+  padding: 1px;
+}
+
+.add_li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.add_li a:hover:not(.add_active) {
+  background-color: rgb(241, 240, 240);
+}
+
+.add_active {
+  background-color: transparent;
+  right: 0;
+  position: fixed;
+
+}
+
+
+.add_bottom_label {
+  cursor: pointer;
+  display: flex;
+  width: 33%;
+  height: 66px;
+  position: relative;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+}
+.add_bottom_label > img {
+  width: 25px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+  z-index: 3;
+  transition: 200ms 100ms cubic-bezier(0.14, -0.08, 0.74, 1.4);
+}
+.add_bottom_label::before {
+  content: "";
+  position: absolute;
+}
+
+.add_product_column {
+  margin-top: 50px;
+}
+.add_clidduct_column {
+  width: 100% !important;
+  padding: 2px !important;
+}  
+.add_cliext {    
+  padding-top: 20px;
+}
+.add_divtext {    
+
+  color: black;
+  opacity: 0.5;
+  max-width: 200px;
+  left: 0%;
+  z-index: 0;
+}
+.carousel_othe_divtext {  
+  z-index: 0;
+  text-align: center;
+  background-color: #000;
+  opacity: 0.5;
+}
+._carousel_indicators {  
+  z-index: 0;
+}
+.othetext { 
+  padding-top: 50px;
+
+  text-align: center;
+  background-color: #fff;
+  color: #000;
+}
+.currencyclass {  
+  height: auto!important;
+  padding: auto;
+  padding-top: 2px !important;
+}
+
+.currencyicon_label {
+  cursor: pointer;
+  display: flex;
+  width: 33%;
+  height: fit-content;
+  position: relative;
+  z-index: 0;
+  align-items: center;
+  justify-content: center;
+}
+.currencyicon_label > img {
+  width: 25px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+  z-index: 0;
+  transition: 200ms 100ms cubic-bezier(0.14, -0.08, 0.74, 1.4);
+}
+.currencyicon_label::before {
+  content: "";
+  position: absolute;
+}
+.add_oertag {  
+  height: fit-content!important;
+  width: 200px !important;
+  right: 2% !important;
+}
+.add_oer {  
+  height: fit-content!important;
+  width: 200px !important;
+  right: 2% !important;
+  bottom: 10% !important;
+  left: 25% !important;
+  top: 50%;
+  text-align: center !important;
+}
+.addagenttext{
+  background-color: aliceblue !important;
+  color: black !important;
+  padding: 10px !important;
+  text-align: center !important;
+}
+
+.buynownow{
+  color: white !important;
+  background-color: #000 !important;
+  height: auto !important;
+  width: auto !important;
+}
+
+
+.add_float{
+	position:fixed;
+	width:60px;
+	height:60px;
+	bottom:20%;
+	right:40px;
+	background-color:rgb(224, 228, 226);
+	color:rgb(2, 0, 0);
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+
+.add_my-float{
+	margin-top:22px;
+}
+
+
+
+
+
+
+
+

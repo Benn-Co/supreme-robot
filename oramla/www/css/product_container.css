@@ -1,0 +1,127 @@
+
+* {
+  box-sizing: border-box;
+} 
+.ms-1{
+  margin: auto !important;
+}
+
+.product_main_container {
+  margin-top: 50px !important;
+  height: auto !important;
+  font-family: 'Open Sans';
+  background-color: rgb(34, 18, 36);
+  display: none;
+
+}
+.product_error_container{
+  display: none;
+}
+.product_column {
+  float: right;
+  width: 25%;
+  padding: 5px;
+  height: 100%;
+  min-height: max-content !important;
+}
+.icon_padding {  
+    width: 100%;
+    height: auto;
+    margin: auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    text-align: center;
+    
+}
+.icon_padding_div { 
+  
+  margin: 10px !important;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  text-align: center;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+.icon_input {
+  display: none;
+}
+
+.icon_label {
+  cursor: pointer;
+  display: flex;
+  width: 33%;
+  height: 66px;
+  position: relative;
+  z-index: 0;
+  align-items: center;
+  justify-content: center;
+}
+.icon_label > img {
+  width: 25px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  position: absolute;
+  z-index: 0;
+  transition: 200ms 100ms cubic-bezier(0.14, -0.08, 0.74, 1.4);
+}
+.icon_label::before {
+  content: "";
+  position: absolute;
+}
+.product_row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.product_price {
+  color: grey;
+  font-size: 22px;
+  width: 100%;
+}
+.product_title {  
+  color: white;
+  background-color: #000;
+  height: 75px;
+  width: 100%;
+}
+
+
+.buynow{
+  color: white !important;
+  background-color: #000 !important;
+  height: auto !important;
+  width: auto !important;
+}
+
+.product_button{
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+.product_button:hover {
+  opacity: 0.7;
+  color: #000;
+  background-color: rgb(240, 230, 230);
+}
+
+@media screen and (max-width: 60em) {
+  .product_column {
+    width: 33.33%;
+  }
+}
+@media screen and (max-width: 40em) {
+  .product_column {
+    width: 50%;
+  }
+}

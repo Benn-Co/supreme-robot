@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    Customize this policy to fit your own app's needs. For more guidance, see:
+      https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+    Some notes:
+      * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+      * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+      * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+    -->
+  <!-- Removing 'unsafe-eval'. If needed, I will figure out a way around it -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://oramla.com http://192.168.0.102 http://localhost https://itunes.apple.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
+
+  <!-- Required meta tags-->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <link rel="stylesheet" href="lib/font-awesome-4.5.0/css/font-awesome.min.css" />
+  <meta name="color-scheme" content="light dark">
+        
+  <link rel='stylesheet' href='bootstrap/4.3.1/css/bootstrap.min.css'>
+  <link rel="stylesheet" href="fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+ 
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/authentication.css">
+
+  <link rel="stylesheet" href="css/menu_container_top_tab.css">
+  <link rel="stylesheet" href="css/menu_container_left_tab.css">
+  <link rel="stylesheet" href="css/menu_container_bottom_tab.css">
+  <link rel="stylesheet" href="css/menu_container_apps_tab.css">
+
+  <link rel="stylesheet" href="css/arrow_navigation_container.css">
+
+  <link rel="stylesheet" href="css/product_container.css">
+  <link rel="stylesheet" href="css/product_add_client_container.css">
+
+  <link rel="stylesheet" href="css/chat_container.css">
+  <link rel="stylesheet" href="css/cart_container.css">
+  <link rel="stylesheet" href="css/location_container.css">
+  <link rel="stylesheet" href="css/user_container.css">
+  <link rel="stylesheet" href="css/orders_container.css">
+  <link rel="stylesheet" href="css/order_items_container.css">
+  <link rel="stylesheet" href="bulma/css/bulma.css">
+  <link rel="stylesheet" href="foundation-sites@6.6.3/dist/css/foundation.min.css" integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I=" crossorigin="anonymous">
+
+
+
+  <title>Oramla</title>
+</head>
+
+<body>
+  <div id="app-cover-spin" class="app-cover">
+            
+  </div>
+
+   <div id="maincontainer" class="main">
+
+    <div id="menu_container_top_tab" class="menu-container">  
+      <div class="top_container_menu" id="top_menu">
+        
+        <input class="top_container_input" type="radio" id="radio-0" name="menu" checked />
+        <label class="tab top_container_label" for="radio-0">
+          <div class="item">
+            <img src="img/panorama_fish_eye-24px.svg" alt="">
+          </div>
+        </label>
+
+        <input class="top_container_input" type="radio" id="radio-1" name="menu" />
+        <label class="tab top_container_label" for="radio-1">
+          <div class="item">
+            <img src="img/search-24px.svg" alt="">
+          </div>
+        </label>             
+        
+        
+        <input class="top_container_input" type="radio" id="radio-2" name="menu" />
+        <label class="tab top_container_label" for="radio-2">
+          <div class="item">
+            <img src="img/group_work-24px.svg" alt="">
+          </div>
+        </label>
+        
+        <input class="top_container_input" type="radio" id="radio-3" name="menu"  />
+        <label class="tab top_container_label" for="radio-3">
+          <div class="item">
+            <img src="img/apps-24px.svg" alt="">
+          </div>
+        </label>
+        
+        <div class="blob-container">
+          <div class="blob"></div>
+        </div>
+    
+      </div>
+      <div class="top_container_search" id="search">
+        <!-- -->
+        <div class="search-form">
+          <input id="search_value" type="search" value="" placeholder="Search" class="search-input">
+          <button type="submit" class="search-button">
+            <svg class="submit-button">
+              <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#searchicon"></use>
+            </svg>
+          </button>
+          <div class="search-option">
+
+            <div>
+              <input name="type" type="radio" value="type-images" id="type-images">
+              <label for="type-images">
+                <svg class="edit-pen-title">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#search-images"></use>
+                </svg>
+                <span>Products</span>
+              </label>
+            </div>                  
+            
+            <div>
+              <input name="type" type="radio" value="type-posts" id="type-posts">
+              <label for="type-posts">
+                <svg class="edit-pen-title">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#search-post"></use>
+                </svg>
+                <span>Industries</span>
+              </label>
+            </div>
+            
+            <div>
+              <input name="type" type="radio" value="type-special" id="type-special" checked="">
+              <label for="type-special">
+                <svg class="edit-pen-title">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#search-special"></use>
+                </svg>
+                <span>Categories</span>
+              </label>
+            </div>
+
+            <div>
+              <input name="type" type="radio" value="type-users" id="type-users">
+              <label for="type-users">
+                <svg class="edit-pen-title">
+                  <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#useracc"></use>
+                </svg>
+                <span>Agents</span>
+              </label>
+            </div>
+
+          </div>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" display="none">
+          <symbol id="searchicon" viewBox="0 0 32 32">
+            <path d="M 19.5 3 C 14.26514 3 10 7.2651394 10 12.5 C 10 14.749977 10.810825 16.807458 12.125 18.4375 L 3.28125 27.28125 L 4.71875 28.71875 L 13.5625 19.875 C 15.192542 21.189175 17.250023 22 19.5 22 C 24.73486 22 29 17.73486 29 12.5 C 29 7.2651394 24.73486 3 19.5 3 z M 19.5 5 C 23.65398 5 27 8.3460198 27 12.5 C 27 16.65398 23.65398 20 19.5 20 C 15.34602 20 12 16.65398 12 12.5 C 12 8.3460198 15.34602 5 19.5 5 z" />
+          </symbol>
+          <symbol id="useracc" viewBox="0 0 32 32">
+            <path d="M 16 4 C 12.145852 4 9 7.1458513 9 11 C 9 13.393064 10.220383 15.517805 12.0625 16.78125 C 8.485554 18.302923 6 21.859881 6 26 L 8 26 C 8 21.533333 11.533333 18 16 18 C 20.466667 18 24 21.533333 24 26 L 26 26 C 26 21.859881 23.514446 18.302923 19.9375 16.78125 C 21.779617 15.517805 23 13.393064 23 11 C 23 7.1458513 19.854148 4 16 4 z M 16 6 C 18.773268 6 21 8.2267317 21 11 C 21 13.773268 18.773268 16 16 16 C 13.226732 16 11 13.773268 11 11 C 11 8.2267317 13.226732 6 16 6 z" /></symbol>
+          <symbol id="search-images" viewbox="0 0 32 32">
+            <path d="M 2 5 L 2 6 L 2 26 L 2 27 L 3 27 L 29 27 L 30 27 L 30 26 L 30 6 L 30 5 L 29 5 L 3 5 L 2 5 z M 4 7 L 28 7 L 28 20.90625 L 22.71875 15.59375 L 22 14.875 L 21.28125 15.59375 L 17.46875 19.40625 L 11.71875 13.59375 L 11 12.875 L 10.28125 13.59375 L 4 19.875 L 4 7 z M 24 9 C 22.895431 9 22 9.8954305 22 11 C 22 12.104569 22.895431 13 24 13 C 25.104569 13 26 12.104569 26 11 C 26 9.8954305 25.104569 9 24 9 z M 11 15.71875 L 20.1875 25 L 4 25 L 4 22.71875 L 11 15.71875 z M 22 17.71875 L 28 23.71875 L 28 25 L 23.03125 25 L 18.875 20.8125 L 22 17.71875 z" />
+          </symbol>
+          <symbol id="search-post" viewbox="0 0 32 32">
+            <path d="M 3 5 L 3 6 L 3 23 C 3 25.209804 4.7901961 27 7 27 L 25 27 C 27.209804 27 29 25.209804 29 23 L 29 13 L 29 12 L 28 12 L 23 12 L 23 6 L 23 5 L 22 5 L 4 5 L 3 5 z M 5 7 L 21 7 L 21 12 L 21 13 L 21 23 C 21 23.73015 21.221057 24.41091 21.5625 25 L 7 25 C 5.8098039 25 5 24.190196 5 23 L 5 7 z M 7 9 L 7 10 L 7 13 L 7 14 L 8 14 L 18 14 L 19 14 L 19 13 L 19 10 L 19 9 L 18 9 L 8 9 L 7 9 z M 9 11 L 17 11 L 17 12 L 9 12 L 9 11 z M 23 14 L 27 14 L 27 23 C 27 24.190196 26.190196 25 25 25 C 23.809804 25 23 24.190196 23 23 L 23 14 z M 7 15 L 7 17 L 12 17 L 12 15 L 7 15 z M 14 15 L 14 17 L 19 17 L 19 15 L 14 15 z M 7 18 L 7 20 L 12 20 L 12 18 L 7 18 z M 14 18 L 14 20 L 19 20 L 19 18 L 14 18 z M 7 21 L 7 23 L 12 23 L 12 21 L 7 21 z M 14 21 L 14 23 L 19 23 L 19 21 L 14 21 z" />
+          </symbol>
+          <symbol id="search-special" viewbox="0 0 32 32">
+            <path d="M 4 4 L 4 5 L 4 27 L 4 28 L 5 28 L 27 28 L 28 28 L 28 27 L 28 5 L 28 4 L 27 4 L 5 4 L 4 4 z M 6 6 L 26 6 L 26 26 L 6 26 L 6 6 z M 16 8.40625 L 13.6875 13.59375 L 8 14.1875 L 12.3125 18 L 11.09375 23.59375 L 16 20.6875 L 20.90625 23.59375 L 19.6875 18 L 24 14.1875 L 18.3125 13.59375 L 16 8.40625 z M 16 13.3125 L 16.5 14.40625 L 17 15.5 L 18.1875 15.59375 L 19.40625 15.6875 L 18.5 16.5 L 17.59375 17.3125 L 17.8125 18.40625 L 18.09375 19.59375 L 17 19 L 16 18.40625 L 15 19 L 14 19.59375 L 14.3125 18.40625 L 14.5 17.3125 L 13.59375 16.5 L 12.6875 15.6875 L 13.90625 15.59375 L 15.09375 15.5 L 15.59375 14.40625 L 16 13.3125 z" />
+          </symbol>
+        </svg>
+      </div>
+      <div class="top_container_slider" id="top_slider"> 
+        <label for="top_slid_range"><span id="top_value_range" class="top_val_range badge bg-info">Geoshop loading products from agents near you... </span></label>             
+        <input id="top_slid_range" name="top_slid_range" type="range" min="0" max="100" value="50" class="range blue"/>
+      </div>            
+    </div>         
+
+    <nav id="menu_container_left_tab" role='navigation' class="navigation">
+      <input type="checkbox" id="post" class="postToggle" />
+      <label for="post" class="postBtn"></label>
+      <ul>
+        <li id="add_products_agent" class="text">Add products</li>
+        <li class="quote">Orders</li>
+        <li class="link">Sell</li>
+        <li class="chat">Connects</li>
+        <li class="video">Currency</li>
+      </ul>
+    </nav>
+    
+
+    <nav id="menu_container_apps_tab" class="nav-drill">
+      <ul id="apps_categories" class="apps_nav-items nav-level-1">
+          
+      </ul>
+    </nav>
+    
+    <div id="product_container" class="product_main_container container is-fullhd">                                 
+      
+      <div id="product_error" class="w-full sm:w-1/2 md:w-1/3 flex flex-col p-3 product_error_container">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden flex-1 flex flex-col">
+          <div class="bg-cover h-48" style="background-image: url(https://images.unsplash.com/photo-1523978591478-c753949ff840?w=900);"></div>
+          <div class="p-4 flex-1 flex flex-col" >
+            <h3 id="product_row_h" class="mb-4 text-2xl">Error!</h3>
+            <div class="mb-4 text-grey-darker text-sm flex-1">
+              <p id="product_row_p"></p>
+            </div>
+            <a href="https://oramla.com/" class="border-t border-grey-light pt-2 text-xs text-grey hover:text-red uppercase no-underline tracking-wide" >Oramla.com</a>
+          </div>
+        </div>  
+      </div>
+
+      <div id="product_row_container" class="row">
+        
+      </div>
+
+      <div id="product_add_client_container" class="product_add_client">
+        <ul class="add_ul ">
+          <li class="add_li">
+            <a id="add_client_agent" href="#carouselExampleIndicators" class="my-2 my-sm-0 add_arrow add_left">
+              <img src="img/user-svgrepo-com.svg" alt="" width="25px" height="25px">
+            </a>
+          </li>
+          <li class="add_li">
+            <a id="add_client_rating" class="my-2 my-sm-0 add_arrow add_left">
+              <i id="rating_num" class="circle_num badge badge-info">0</i>
+              <img src="img/best-employee.svg" alt="" width="25px" height="25px">
+            </a>
+          </li>
+          <li class="add_li">
+            <a id="add_client_location" href="#agentlocation" class="my-2 my-sm-0 add_arrow add_left">
+              <img src="img/location-svgrepo-com.svg" alt="" width="25px" height="25px">
+            </a>
+          </li>
+          <li class="add_li">
+            <a id="add_client_delivery" class="my-2 my-sm-0 add_arrow add_left">
+              <img src="img/international-delivery.svg" alt="" width="25px" height="25px">
+            </a>
+          </li>
+          <li class="add_li">
+            <a id="add_client_payment" class="my-2 my-sm-0 add_arrow add_left">
+              <img src="img/payment-methods-svgrepo-com.svg" alt="" width="25px" height="25px">
+            </a>
+          </li>
+
+          <li class="add_li add_active" style="float:right">
+            <a id="arrow_add_client_back" class="my-2 my-sm-0 arrow left">
+              <i></i>
+              <svg>
+                <use xlink:href="#circle">
+              </svg>
+            </a>
+          </li>
+        </ul> 
+        
+        <div class="card bg-dark text-white  row" style="width: 100%;">
+          <img id="add_imageadd_" class="card-img-top card-img" src="img/jeans3.jpg" alt="Card image cap">
+          <div class="card-img-overlay add_product_column add_oertag">
+            <h5 class="card-title add_divtext btn btn-primary">
+              
+              <a id="add_carousel_currency" class=""></a>
+              <a id="add_carousel_price" class=""></a>
+
+            </h5>
+            <div class="add_oer">
+              <h5 class="card-title add_divtext ">
+                
+                <a id="add_carousel_buynow" class="buynownow"></a>
+
+              </h5>
+            </div>
+          </div>
+         
+          <div class="card-body">
+            <div class="container" style="width: 100%;">
+              <b id="add_carousel_title"></b> 
+              <br> 
+              <div id="other_title" class="row">
+                
+              </div>
+            </div>                    
+            <p id="add_carousel_desc" class="card-text add_cliext"></p>
+          </div>
+        </div>
+        <div class=" othetext  row" style="text-align:center">
+          <h6>Other Products from Agent <b id="otheadd"></b></h6>
+        </div>
+        <div id="carouselExampleIndicators" class="carousel slide bg-dark text-white  row" data-ride="carousel">
+          
+          <ol id="add_carousel_indicators" class="carousel-indicators _carousel_indicators" style="z-index: 0;">
+
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+
+          </ol>
+          <div id="add_carousel_other" class="carousel-inner">                  
+
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+        <div id="agentlocation" class="addagenttext  row" style="text-align:center;">
+          <span>Agent <b id="otheaddl"></b> location</span>
+        </div>
+        <div class="card bg-dark text-white  row" style="width: 100%;">
+          <img id="add_heremap" class="card-img-top card-img" src="img/jeans3.jpg" alt="Card image cap">
+        </div>
+        <div class="addagenttext  row" style="text-align:center;">
+          <Strong>Similar products </Strong>
+        </div>
+        <div id="other_simillor" class="row">
+          <div class="col add_clidduct_column">
+              <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+          </div>
+          <div class="col add_clidduct_column">
+              <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+          </div>
+          <div class="col add_clidduct_column">
+              <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+          </div>
+          <div class="col add_clidduct_column">
+              <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+          </div>
+          <div class="col add_clidduct_column">
+            <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+          </div>
+          <div class="col add_clidduct_column">
+            <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+          </div>
+        </div>
+
+        <a id="add_fload_id" connect_from="" connects_id="" connects_time="" class="add_float">
+            <input class="bottom_input" type="radio" name="s" id="add_s5">
+            <label class="bottom_label" for="add_s5"><img src="img/bubble_chart-24px.svg" alt=""></label>
+        </a>              
+        
+      </div>
+      
+      <div id="arrow_navigation_container" class="arrow_navigation_cont">
+        <ul class="v-effect-link">
+          <li id="product_previous">
+            <a id="pr_previous" class="arrow left">
+              <i></i>
+              <svg>
+                <use xlink:href="#circle">
+              </svg>
+            </a>
+          </li>
+          <li id="product_next">
+            <a id="pr_next" class="arrow">
+              <i></i>
+              <svg>
+                  <use xlink:href="#circle">
+              </svg>
+            </a>
+          </li>
+        </ul>
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+          <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="44px" height="44px" id="circle" fill="none" stroke="currentColor">
+              <circle r="20" cy="22" cx="22" id="test">
+          </symbol>
+        </svg> 
+      </div>
+         
+    </div>
+
+    <div id="chat_container" class="chat_main_container">
+      <div id="connects_contacts">
+        
+        <div class="center_top">
+          <div id="center_top_id" >
+            <h2 class="float-left">Connects </h2>
+            <a id="contacts_back" class="my-2 my-sm-0 arrow left float-right" style="float:right">
+              <i></i>
+              <svg>
+                <use xlink:href="#circle">
+              </svg>
+            </a>
+          </div>
+        </div>
+        
+        <div id="connects" class="center_connects">                
+        </div>
+      </div>
+      <div id="connects_messages" class="contacts_messanges">             
+
+        <div class="chat">  
+
+          <div class="contact bar">
+            <div id="namepic" class="pic stark"></div>
+            <div id="contactname" class="name">
+            </div>
+            <div id="cotacttime" class="seen">
+            </div>
+
+            <div class="add_li add_active" style="float:right">
+              <a id="connects_back" class="my-2 my-sm-0 arrow left">
+                <i></i>
+                <svg>
+                  <use xlink:href="#circle">
+                </svg>
+              </a>
+            </div>
+            
+          </div>
+
+          <div class="messages" id="chat">
+            <div class="time">
+            </div>
+          </div>  
+          
+          <div class="input">
+            <input id="chat_message" placeholder="Type your message here!" type="text" />
+            <input class="top_container_input" type="radio" id="radio-send" name="send" checked />
+            <label class="tab top_container_label" for="radio-send">
+              <div class="item">
+                <img src="img/panorama_fish_eye-24px.svg" alt="">
+              </div>
+            </label>
+          </div>
+
+        </div>             
+
+      </div>          
+
+    </div>
+    
+    <div id="cart_container" class="cart">  
+      <div class="row order_head">
+        <div class="col-sm-4 ">
+            <h2>shopping cart</h2>
+        </div>
+      </div>
+      <div id="site-header">
+        <div id="cart_row_container" class="caercontainer order_body">
+        
+        </div>              
+      </div> 
+                            
+      
+      <div class="flex flex-wrap -m-3 container cart_main_container"> 
+
+        <div id="cart_error" class="w-full sm:w-1/2 md:w-1/3 flex flex-col p-3 cart_error_container">
+          <div class="bg-white rounded-lg shadow-lg overflow-hidden flex-1 flex flex-col">
+            <div class="bg-cover h-48" style="background-image: url(https://images.unsplash.com/photo-1523978591478-c753949ff840?w=900);"></div>
+            <div class="p-4 flex-1 flex flex-col" >
+              <h3 id="cart_row_h" class="mb-4 text-2xl"></h3>
+              <div class="mb-4 text-grey-darker text-sm flex-1">
+                <p id="cart_row_p"></p>
+              </div>
+              <a href="https://oramla.com/" class="border-t border-grey-light pt-2 text-xs text-grey hover:text-red uppercase no-underline tracking-wide" >Oramla.com</a>
+            </div>
+          </div>  
+        </div>
+        
+      </div>
+
+      <div class="optionss">
+
+        <div class="cart_shipping">
+          <a class="optionsa">Delivery option</a>
+          <select id="_shipping" class="ex3" data-menu>
+            <option value="0" selected>Select</option>
+            <option value="Pick up">Pick up</option>
+            <option value="Door to door">Door to door</option>
+            <option value="Drop point">Drop point</option>
+            <option value="Shipping">Shipping</option>
+          </select>
+          <small id="_shippingerror"></small>
+        </div>
+        <div class="cart_pay">
+          <a class="optionsa">Payment option</a>
+          <select id="_pay" class="ex3" data-menu>
+            <option value="0" selected>Select</option>
+            <option value="M-Pesa">M-Pesa</option>
+            <option value="Paypal">Paypal</option>
+            <option value="Google pay">Google pay</option>
+            <option value="Ali pay">Ali pay</option>
+            <option value="Amozon pay">Amozon pay</option>
+            <option value="Apple pay">Apple pay</option>
+            <option value="Payment on delivery">Payment on delivery</option>
+          </select>
+          <small id="_payerror"></small>
+
+        </div>
+
+      </div>
+      
+      <footer id="site-footer">
+        
+
+        <div class="container clearfix"> 
+          
+         
+
+          <div class="left">
+            <h2 id="total_pay" class="subtotal">Subtotal: $<span>00.00</span></h2>
+            <h3 id="total_tax" class="tax">Taxes (16%): $<span>0.0</span></h3>
+            <h3 id="total_shipping" class="shipping">Delivery: $<span>0.00</span></h3>
+          </div>
+          
+
+          <!--<select data-menu>
+            <option selected>Delivery option</option>
+            <option>Pick up</option>
+            <option>Door to door</option>
+            <option>Drop point</option>
+            <option>Shipping</option>
+          </select>
+            
+            
+            
+            <div class="select-menu">
+            <select data-menu>
+              <option>M-Pesa</option>
+              <option>Paypal</option>
+              <option>Google pay</option>
+              <option>Ali pay</option>
+              <option>Amozon pay</option>
+              <option>Apple pay</option>
+              <option>Payment on delivery</option>
+              <option selected>Payment option</option>
+
+            </select>
+          </div>-->
+          
+    
+          <div class="right">
+            <h1 id="total_total" class="total">Total: $<span>00.00</span></h1>
+            <a id="checkout_total" class="btn">Checkout</a>
+          </div>
+    
+        </div>
+      </footer>
+      
+      <div id="arrow_navigation_cart" class="arrow_navigation_cont">
+        
+        <ul class="v-effect-link">
+          <li>
+            <a class="arrow left">
+              <i></i>
+              <svg>
+                <use xlink:href="#circle">
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a class="arrow">
+              <i></i>
+              <svg>
+                  <use xlink:href="#circle">
+              </svg>
+            </a>
+          </li>
+        </ul>
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+          <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="44px" height="44px" id="circle" fill="none" stroke="currentColor">
+              <circle r="20" cy="22" cx="22" id="test">
+          </symbol>
+        </svg>
+      
+      </div>
+    
+    </div>
+
+    <div id="orders_container" class="orders_">
+      <div class="row order_head">
+        <div class="col-sm-4">
+            <h2>Order <b>Details</b></h2>
+        </div>
+      </div>
+
+      <table class="table table-striped table-hover order_body">
+        <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Details</th>
+                <th>Order</th>
+            </tr>
+        </thead>
+        <tbody id="orders_made">
+          
+        </tbody>
+      </table>
+      <div id="arrow_navigation_order" class="arrow_navigation_cont">
+
+      <ul class="v-effect-link">
+        <li>
+          <a class="arrow left">
+            <i></i>
+            <svg>
+              <use xlink:href="#circle">
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a class="arrow">
+            <i></i>
+            <svg>
+                <use xlink:href="#circle">
+            </svg>
+          </a>
+        </li>
+      </ul>
+      <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="44px" height="44px" id="circle" fill="none" stroke="currentColor">
+            <circle r="20" cy="22" cx="22" id="test">
+        </symbol>
+      </svg>
+    
+      </div>
+      
+    </div>
+
+    <div id="order_items_container" class="order_items">
+      <div class="row order_head">
+        <div class="col-sm-4 ">
+            <h2>Order <b id="orderid"></b></h2>
+        </div>
+      </div>
+      <div class="tems_container order_body">              
+        <div id="orders_items_made" class="caercontainer">
+        
+        </div>
+        <div id="arrow_navigation_order_items" class="arrow_navigation_cont">
+        
+          <ul class="v-effect-link">
+            <li>
+              <a class="arrow left">
+                <i></i>
+                <svg>
+                  <use xlink:href="#circle">
+                </svg>
+              </a>
+            </li>
+            <li>
+              <a class="arrow">
+                <i></i>
+                <svg>
+                    <use xlink:href="#circle">
+                </svg>
+              </a>
+            </li>
+          </ul>
+          <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="44px" height="44px" id="circle" fill="none" stroke="currentColor">
+                <circle r="20" cy="22" cx="22" id="test">
+            </symbol>
+          </svg>
+        
+        </div>
+      </div>
+    </div>
+
+    <div id="location_container" class="location_main_container">
+      
+      <div class="flex flex-wrap -m-3"> 
+        <div id="locationinfo"></div>
+
+        <div id="map"></div>
+
+        <div class="card bg-dark text-white" style="width: 100%;">
+          <img id="main_heremap" class="card-img-top card-img" src="img/jeans3.jpg" alt="Card image cap">
+        </div>
+          
+            
+      </div>
+    </div>
+
+    <div id="user_container" class="user">
+
+      <div id="user_error" class="w-full sm:w-1/2 md:w-1/3 flex flex-col p-3 user_error_container">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden flex-1 flex flex-col">
+          <div class="bg-cover h-48" style="background-image: url(https://images.unsplash.com/photo-1523978591478-c753949ff840?w=900);"></div>
+          <div class="p-4 flex-1 flex flex-col" >
+            <h3 id="user_row_h" class="mb-4 text-2xl">Error!</h3>
+            <div class="mb-4 text-grey-darker text-sm flex-1">
+              <p id="user_row_p"></p>
+            </div>
+            <a href="https://oramla.com/" class="border-t border-grey-light pt-2 text-xs text-grey hover:text-red uppercase no-underline tracking-wide" >Oramla.com</a>
+          </div>
+        </div>  
+      </div>
+
+      <div id="user_row_container" >
+
+        <a class="btn btn-sm btn-secondary left"><b class="">Account</b></a>
+        <a class="btn btn-sm btn-secondary right"><span>Balance</span> <b><span><i id="user_rams_symbol">V </i><b id="user_rams">0.00</b></span></b></a>
+
+        <div class="col raww">                 
+                       
+          <div class="card card-profile shadow raww">
+
+            <div class="row justify-content-center">
+              <div class="col-lg-3 order-lg-2">
+                <div class="card-profile-image">
+                  <a id="user_name_image">
+                    <img id="user_name_image_src" src="img/49806f3f1c7483093855ebca1b8ae2c4.jpg" class="rounded-circle">
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+              <div class="d-flex justify-content-between">
+                
+                
+                <a id="logout" class="btn btn-sm btn-info mr-4">Logout</a>
+                <a id="track_order" class="btn btn-sm btn-secondary float-right">Track Order(s)</a>
+              </div>
+            </div>
+            <div class="card-body pt-0 pt-md-4">
+              <div class="userpt-8 text-center">
+                <h5 id="user_orders" class="mb-0 btn btn-info"><b id="_orders_count" class=""></b> Orders</h5>                        
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="card-profile-stats d-flex justify-content-center mt-md-5 ">
+                    
+                    <div class="btn-group">
+                      
+                      <a id="pending_orders" class="btn btn-warning" role="button"><span id="pending_orders_count" class="heading">0</span>Pending</a>
+                      <a id="active_orders" class="btn btn-success" role="button"><span id="active_orders_count" class="heading">0</span>Active</a>
+                      <a id="confirmed_orders" class="btn btn-danger" role="button"><span id="confirmed_orders_count" class="heading">0</span>Cancelled</a>
+                      <a id="complete_orders" class="btn btn-info" role="button"><span id="complete_orders_count" class="heading">0</span>Complete</a>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <h3 id="user_name">
+                </h3>
+                <div id="user_review_acc" class="h5 font-weight-300">
+                </div>
+                <div id="user_rating_acc" class="h5 font-weight-300">
+                </div>
+              </div>
+
+              <div id="uersdash" class="userpt-8 text-center">                                                
+                <h5 id="user_dashboard" class="mb-0">Dashboard</h5>
+              </div>
+              <div id="uersdashro" class="row">
+                <div class="col">
+                  <div class="card-profile-stats d-flex justify-content-center mt-md-5">
+                    <div>
+                      <span id="product_sold_count" class="heading">22</span>
+                      <span id="products_sold" class="description btn btn-sm btn-primary">Products sold</span>
+                    </div>
+                    <div>
+                      <span id="in_stock_count" class="heading">10</span>
+                      <span id="in_stock" class="description btn btn-sm btn-success">In stock</span>
+                    </div>
+                    <div>
+                      <span id="products_count" class="heading">89</span>
+                      <span id="user_products" class="description btn btn-sm btn-info">Products</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="col raww">
+          <div class="card bg-secondary shadow raww">                    
+            <div class="card-body">
+              <form>
+                <h6 class="heading-small text-muted mb-4">User information</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group focused">
+                        <label class="form-control-label" for="input-username">Username</label>
+                        <input type="text" id="input-username" class="form-control form-control-alternative" placeholder="Username" value="lucky.jesse">
+                        <small id="input-username_help" class="form-text text-muted"></small>
+                      </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-email">Email address</label>
+                        <input type="email" id="input-email" class="form-control form-control-alternative" placeholder="jesse@example.com">
+                        <small id="input-email_help" class="form-text text-muted"></small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label class="form-control-label" for="input-phone">Phone number</label>
+                      <input type="number" id="input-phone" class="form-control form-control-alternative" placeholder="#">
+                      <small id="input-phone_help" class="form-text text-muted"></small>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group focused">
+                        <label class="form-control-label" for="input-first-name">First name</label>
+                        <input type="text" id="input-first-name" class="form-control form-control-alternative" placeholder="First name" value="Lucky">
+                        <small id="input-first-name_help" class="form-text text-muted"></small>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="form-group focused">
+                        <label class="form-control-label" for="input-last-name">Last name</label>
+                        <input type="text" id="input-last-name" class="form-control form-control-alternative" placeholder="Last name" value="Jesse">
+                        <small id="input-last-name_help" class="form-text text-muted"></small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr class="my-4">
+                <h6 class="heading-small text-muted mb-4">Contact information</h6>
+                <div class="pl-lg-4">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group focused">
+                        <label class="form-control-label" for="input-address">Address</label>
+                        <input id="input-address" class="form-control form-control-alternative" placeholder="Home Address" value="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09" type="text">
+                        <small id="input-address_help" class="form-text text-muted"></small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="form-group focused">
+                        <label class="form-control-label" for="input-city">City</label>
+                        <input type="text" id="input-city" class="form-control form-control-alternative" placeholder="City" value="New York">
+                        <small id="input-city_help" class="form-text text-muted"></small>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="form-group focused">
+                        <label class="form-control-label" for="input-country">Country</label>
+                        <input type="text" id="input-country" class="form-control form-control-alternative" placeholder="Country" value="United States">
+                        <small id="input-country_help" class="form-text text-muted"></small>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="form-group">
+                        <label class="form-control-label" for="input-country">Postal code</label>
+                        <input type="number" id="input-postal-code" class="form-control form-control-alternative" placeholder="Postal code">
+                        <small id="input-postal-code_help" class="form-text text-muted"></small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <hr class="my-4">                        
+
+                <div class="pl-lg-4">
+                  <div class="form-group focused">
+                    <label>About Our Service</label>
+                    <textarea id="user_review" rows="4" class="form-control form-control-alternative" placeholder="Say a few words about us ..."></textarea>
+                  </div> 
+                  
+                  <b>Give us stars</b>
+                  <nav class="rating">
+                    <ul>
+                      <li star="1" class="current give_us_stars">
+                        <svg>
+                          <use xlink:href="#star"></use>
+                        </svg>
+                      </li>
+                      <li star="2" class="give_us_stars">
+                        <svg>
+                          <use xlink:href="#star"></use>
+                        </svg>
+                      </li>
+                      <li star="3" class="give_us_stars">
+                        <svg>
+                          <use xlink:href="#star"></use>
+                        </svg>
+                      </li>
+                      <li star="4" class="give_us_stars"><span></span>
+                        <svg>
+                          <use xlink:href="#star"></use>
+                        </svg>
+                      </li>
+                      <li star="5" class="give_us_stars"><span></span>
+                        <svg>
+                          <use xlink:href="#star"></use>
+                        </svg>
+                      </li>
+                    </ul>
+                    <div><span>
+                        <svg>
+                          <use xlink:href="#star"></use>
+                        </svg></span></div>
+                  </nav>
+                  <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+                    <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 34" id="star">
+                      <path fill="currentColor" d="M19.6859343,0.861782958 L24.8136328,8.05088572 C25.0669318,8.40601432 25.4299179,8.6717536 25.8489524,8.80883508 L34.592052,11.6690221 C35.6704701,12.021812 36.2532905,13.1657829 35.8938178,14.2241526 C35.8056709,14.4836775 35.6647294,14.7229267 35.4795411,14.9273903 L29.901129,21.0864353 C29.5299163,21.4962859 29.3444371,22.0366367 29.3872912,22.5833831 L30.1116131,31.8245163 C30.1987981,32.9368499 29.3506698,33.9079379 28.2172657,33.993502 C27.9437428,34.0141511 27.6687736,33.9809301 27.4085205,33.8957918 L18.6506147,31.0307612 C18.2281197,30.8925477 17.7713439,30.8925477 17.3488489,31.0307612 L8.59094317,33.8957918 C7.51252508,34.2485817 6.34688429,33.6765963 5.98741159,32.6182265 C5.90066055,32.3628116 5.86681029,32.0929542 5.88785051,31.8245163 L6.61217242,22.5833831 C6.65502653,22.0366367 6.46954737,21.4962859 6.09833466,21.0864353 L0.519922484,14.9273903 C-0.235294755,14.0935658 -0.158766688,12.8167745 0.690852706,12.0755971 C0.899189467,11.8938516 1.14297067,11.7555303 1.40741159,11.6690221 L10.1505113,8.80883508 C10.5695458,8.6717536 10.9325319,8.40601432 11.1858308,8.05088572 L16.3135293,0.861782958 C16.9654141,-0.0521682813 18.2488096,-0.274439442 19.1800736,0.365326425 C19.3769294,0.500563797 19.5481352,0.668586713 19.6859343,0.861782958 Z"></path>
+                    </symbol>
+                    <path class="shadow" d="M18.7022469,29.7633426 L29.1611722,33.6861584 C28.8859085,33.8576358 28.5650147,33.9672494 28.2172657,33.993502 C27.9437428,34.0141511 27.6687736,33.9809301 27.4085205,33.8957918 L18.6506147,31.0307612 C18.2281197,30.8925477 17.7713439,30.8925477 17.3488489,31.0307612 L8.59094317,33.8957918 C7.98083887,34.0953792 7.34281791,33.9989813 6.83864817,33.6859784 L17.2977531,29.7633426 C17.7505234,29.5935537 18.2494766,29.5935537 18.7022469,29.7633426 Z"></path>
+                  </svg>
+                                          
+                </div>
+
+                <hr class="my-4">                        
+                <div class="col-4 text-right">
+                  <a id="update_user_data" class="btn btn-sm btn-primary">Update</a>
+                </div>
+                <small id="update_user_data_help" class="form-text text-muted"></small>
+
+                <hr class="my-4">                        
+
+                
+                
+
+              </form>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      
+     
+    </div>
+
+    
+    <div id="add_products_new" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Add your product(s)</p>
+            <button id="add_products_close" class="delete" aria-label="close"></button>
+          </header>
+          <section class="modal-card-body">
+            <!-- Content ... -->
+
+            <div class="field">
+              <label class="label">Product Title:</label>
+              <div class="control">
+                <input class="input" type="text" placeholder="Enter name">
+              </div>
+            </div>
+            
+            <div class="field">
+              <label class="label">Product Price:</label>
+              <div class="control has-icons-left has-icons-right">
+                <input class="input is-success" type="text" placeholder="Enter price">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-check"></i>
+                </span>
+              </div>
+              <p class="help is-success">Calculated as 5% of the product price</p>
+            </div>            
+            
+            <div class="field is-grouped">
+              <label class="label">Product Industry/Department:</label>
+              <div class="control">
+                <div class="select is-link">
+                  <select >
+                    <option value="Argentina">Argentina</option>
+                    <option value="Bolivia">Bolivia</option>
+                    <option value="Brazil">Brazil</option>
+                    <option value="Chile">Chile</option>
+                    <option value="Colombia">Colombia</option>
+                    <option value="Ecuador">Ecuador</option>
+                    <option value="Guyana">Guyana</option>
+                    <option value="Paraguay">Paraguay</option>
+                    <option value="Peru">Peru</option>
+                    <option value="Suriname">Suriname</option>
+                    <option value="Uruguay">Uruguay</option>
+                    <option value="Venezuela">Venezuela</option>
+                  </select>
+                </div>
+              </div>
+              <label class="label">Product Category:</label>
+              <div class="control">
+                <div class="select is-link">
+                  <select >
+                    <option value="Argentina">Argentina</option>
+                    <option value="Bolivia">Bolivia</option>
+                    <option value="Brazil">Brazil</option>
+                    <option value="Chile">Chile</option>
+                    <option value="Colombia">Colombia</option>
+                    <option value="Ecuador">Ecuador</option>
+                    <option value="Guyana">Guyana</option>
+                    <option value="Paraguay">Paraguay</option>
+                    <option value="Peru">Peru</option>
+                    <option value="Suriname">Suriname</option>
+                    <option value="Uruguay">Uruguay</option>
+                    <option value="Venezuela">Venezuela</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Product Description:</label>
+              <div class="control">
+                <textarea class="textarea" placeholder="Describe your product"></textarea>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Product quantity:</label>
+              <div class="control has-icons-left has-icons-right">
+                <input class="input is-danger" type="number" placeholder="Enter quantity">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label">Product image:</label>
+              <div id="upload_from_url" class="control">
+                <button class="button is-link">Upload from URL</button>
+              </div>
+              <div id="upload_from_file" class="control">
+                <button class="button is-link is-light">Upload from File</button>
+              </div>
+
+              <div class="control">
+                <div class="file has-name is-fullwidth is-primary">
+                  <label class="file-label">
+                    <input class="file-input" type="file" name="resume">
+                    <span class="file-cta">
+                      <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                      </span>
+                      <span class="file-label">
+                        Choose a file…
+                      </span>
+                    </span>
+                    <span class="file-name">
+                      Screen Shot 2017-07-29 at 15.54.25.png
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="control has-icons-left has-icons-right">
+                <input class="input is-danger" type="url" placeholder="Enter url i.e http://oramla.com">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-cloud"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </span>
+              </div>
+           
+            </div>            
+            
+            <div class="field">
+              <div class="control">
+                <label class="checkbox">
+                  <input id="more_pictures_checkbox" type="checkbox">
+                  <a id="more_pictures"> Add more pictures of the same product</a>
+                </label>
+              </div>
+              <div class="control">
+                <a> Select the number of photos you want to add</a>
+                <div class="select is-link">
+                  <select >
+                    <option value="1">1 photos(s)</option>
+                    <option value="2">2 photos(s)</option>
+                    <option value="3">3 photos(s)</option>
+                    <option value="4">4 photos(s)</option>
+                    <option value="5">5 photos(s)</option>
+                    <option value="6">6 photos(s)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="control">
+                <div class="file has-name is-fullwidth is-primary">
+                  <label class="file-label">
+                    <input class="file-input" type="file" name="resume">
+                    <span class="file-cta">
+                      <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                      </span>
+                      <span class="file-label">
+                        Choose a file…
+                      </span>
+                    </span>
+                    <span class="file-name">
+                      Screen Shot 2017-07-29 at 15.54.25.png
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="control has-icons-left has-icons-right">
+                <input class="input is-danger" type="url" placeholder="Enter url i.e http://oramla.com">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-cloud"></i>
+                </span>
+                <span class="icon is-small is-right">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </span>
+              </div>
+
+
+            </div>
+
+          </section>
+          <footer class="modal-card-foot">            
+            <button class="button is-success">Add</button>
+            <button class="button is-danger">Cancel</button>
+          </footer>
+        </div>
+    </div>
+      
+    
+    <div id="menu_container_bottom_tab" class="phone">           
+
+        <input class="bottom_input" type="radio" name="s" id="s1" checked="checked">
+        <input class="bottom_input" type="radio" name="s" id="s5">
+        <input class="bottom_input" type="radio" name="s" id="s2">
+        <input class="bottom_input" type="radio" name="s" id="s3">
+        <input class="bottom_input" type="radio" name="s" id="s4">
+        <label class="bottom_label" for="s1"><img src="img/home-svgrepo-com.svg" alt=""></label>
+        <label class="bottom_label" for="s5">
+          <img src="img/bubble_chart-24px.svg" alt="">
+          <span id="chat_num" class="circle_num badge badge-danger">0</span>
+        </label>
+        <label class="bottom_label" for="s2">
+          <img src="img/shopping-cart-svgrepo-com.svg" alt="">
+          <span id="shopping_cart_num" class="circle_num badge badge-danger">0</span>
+        </label>
+
+        <label class="bottom_label" for="s3"><img src="img/location-svgrepo-com.svg" alt=""></label>
+        <label class="bottom_label" for="s4"><img src="img/user-svgrepo-com.svg" alt=""></label>
+
+        <div class="circle"></div>
+        <div class="phone_content">
+          <div class="phone_bottom">
+            <span class="indicator"></span>
+          </div>
+        </div> 
+
+        
+    </div>  
+
+
+  </div> 
+  
+  <div id="snackbar"></div>
+
+
+  <div class="authentication">
+    
+    <div class="tab-content">
+      <ul class="nav nav-pills" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="pill" href="#login">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="pill" href="#regis">Register</a>
+        </li>
+      </ul>
+      <div id="login" class="login-tab-content container tab-pane active">
+        <form >
+          <div class="form-group">
+            <input type="email" class="form-control is-valid" id="login_email" name="login_email" placeholder="name@example.com">
+            <small id="login_email_help" class="form-text text-muted">Provide email address</small>
+          </div>
+          <div class="form-group">                
+            <input type="password" class="form-control is-invalid" id="login_password" name="login_password" placeholder="Password">
+            <small id="login_password_help" class="form-text text-muted">Password needed.</small>
+          </div>
+          <a id="login_button" type="" class="btn btn-primary">Login</a>
+          <small id="login_button_help" class="form-text text-muted"></small>
+
+        </form>
+      </div>
+      <div id="regis" class="regis-tab-content container tab-pane fade">
+        <form >                      
+          <div class="form-group">
+            <input type="text" class="form-control is-valid" id="signup_username"  name="signup_username" placeholder="Username">
+            <small id="signup_username_help" class="form-text text-muted">Your username</small>
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-control is-valid" id="signup_email" name="signup_email" placeholder="name@example.com">
+            <small id="signup_email_help" class="form-text text-muted">Valid email address, name@example.com</small>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control is-invalid" id="signup_password" name="signup_password" placeholder="Password">
+            <small id="signup_password_help" class="form-text text-muted">At least 8 characters...</small>
+          </div>
+          
+          <a id="signup_button" type="" class="btn btn-primary">Sign Up</a>
+          <small id="signup_button_help" class="form-text text-muted"></small>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+
+  
+  <!-- <script type="text/template7" id="results">
+    {{#if @global.ios}}
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="left sliding">
+                <a href="#" class="back link">
+                  <i class="icon icon-back"></i>
+                  <span>Search</span>
+                </a>
+            </div>
+            <div class="center sliding">Results</div>
+        </div>
+    </div>
+    {{/if}}
+
+    <div class="page" data-page="results">
+        {{#if @global.material}}
+        <div class="navbar">
+            <div class="navbar-inner">
+              <div class="left">
+                <a href="#" class="back link"><i class="icon icon-back"></i></a>
+              </div>
+              <div class="center">Results</div>
+            </div>
+        </div>
+        {{/if}}
+
+        <div class="page-content">
+          <div class="content-block-title">{{tracks.count}} tracks returned</div>
+          <div class="list-block media-list">
+            <ul>
+              {{#each tracks.items}}
+              <li>
+                <a href="#" class="item-link item-content"
+                  data-item="{{@index}}"
+                  data-context="{{stringify this}}"
+                  data-template="details"
+                >
+                  <div class="item-media">
+                    <img width="80" src="{{this.artworkUrl60}}">
+                  </div>
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{this.trackName}}</div>
+                      <div class="item-after">{{durationFromMs this.trackTimeMillis}}</div>
+                    </div>
+                    <div class="item-subtitle">{{this.artistName}}</div>
+                    <div class="item-text">{{this.collectionName}}</div>
+                  </div>
+                </a>
+              </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+    </div>
+  </script> -->
+
+  
+  <!-- <script type="text/template7" id="details">
+    {{#if @global.ios}}
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left sliding">
+          <a href="#" class="back link">
+            <i class="icon icon-back"></i>
+              <span>Results</span>
+          </a>
+        </div>
+        <div class="center sliding">Track details</div>
+        <div class="right">
+          <a href="#" class="link star">
+            <i class="fa fa-star-o"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    {{/if}}
+
+    <div class="page" data-page="details">
+        {{#if @global.material}}
+        <div class="navbar">
+            <div class="navbar-inner">
+              <div class="left">
+                <a href="#" class="back link"><i class="icon icon-back"></i></a>
+              </div>
+              <div class="center">Track details</div>
+              <div class="right">
+                <a href="#" class="link star">
+                  <i class="fa fa-star-o"></i>
+                </a>
+              </div>
+            </div>
+        </div>
+        {{/if}}
+
+        <div class="page-content">
+          <div class="card">
+            <div class="card-header no-border no-padding">
+              <img src="{{this.artworkUrl100}}" width="100%" />
+            </div>
+            <div class="card-content">
+              <div class="card-content-inner">
+                <div class="track-name">{{this.trackName}}</div>
+                <div class="artists-name">by {{this.artistName}}</div>
+                <div class="album-title">{{this.collectionName}}</div>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-content-inner preview">
+                <div class="playback-controls">
+                  <a class="play-button play displayed" href="#">
+                    <div class="arrow-right play"></div>
+                  </a>
+                  <a class="pending-button pending" href="#">
+                    <span class="preloader pending"></span>
+                  </a>
+                  <a class="stop-button stop" href="#">
+                    <div class="square stop"></div>
+                  </a>
+                  <div class="duration">
+                    <span data-progress="0" class="progressbar"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <div>Track duration</div>
+              <div>{{durationFromMs this.trackTimeMillis}}</div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </script> -->
+
+  
+  <!-- <script type="text/template7" id="favorites">
+    {{#if @global.ios}}
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="left">
+          <a href="#" class="link icon-only open-panel"><i class="fa fa-bars"></i></a>
+        </div>
+        <div class="center sliding">Favorites</div>
+      </div>
+    </div>
+    {{/if}}
+
+    <div class="page" data-page="favorites">
+        {{#if @global.material}}
+          <div class="navbar">
+            <div class="navbar-inner">
+              <div class="left">
+                <a href="#" class="link icon-only open-panel"><i class="fa fa-bars"></i></a>
+              </div>
+            <div class="center sliding">Favorites</div>
+          </div>
+        </div>
+        {{/if}}
+
+        <div class="page-content">
+          {{#if tracks}}
+          <div class="content-block-title">Tracks</div>
+          <div class="list-block media-list">
+            <ul>
+              {{#each tracks}}
+              <li>
+                <a href="#" class="item-link item-content"
+                  data-item="{{@index}}"
+                  data-context="{{stringify this}}"
+                  data-template="details"
+                >
+                  <div class="item-media">
+                    <img width="80" src="{{this.artworkUrl100}}">
+                  </div>
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title">{{this.trackName}}</div>
+                      <div class="item-after">{{durationFromMs this.trackTimeMillis}}</div>
+                    </div>
+                    <div class="item-subtitle">{{this.artistName}}</div>
+                    <div class="item-text">{{this.collectionName}}</div>
+                  </div>
+                </a>
+              </li>
+              {{/each}}
+            </ul>
+          </div>
+          {{else}}
+          <div class="content-block">
+            <p>You haven't favorited any tracks! Use the search function and add some to favorites.</p>
+          </div>
+          {{/if}}
+        </div>
+    </div>
+  </script> -->
+
+    <!-- <script type="text/javascript" src="cordova.js"></script>
+  <script type="text/javascript" src="lib/MSOpenTech/winstore-jscompat.js"></script>
+  <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
+  <script type="text/javascript" src="js/init-styles.js"></script>
+   -->
+
+   <!-- <script type="text/javascript" src="js/my-app.js"></script> -->
+  
+  <script src="foundation-sites@6.6.3/dist/js/foundation.min.js" integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o=" crossorigin="anonymous"></script>
+
+  <script src='ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+  <script src='ajax/libs/popper.js/1.14.7/umd/popper.min.js'></script>
+  <script src='bootstrap/4.3.1/js/bootstrap.min.js'></script>  
+  <script src="cordova.js"></script>
+  
+  <script src="js/menu_container_top_tab.js"></script>
+  <script src="js/menu_container_left_tab.js"></script>
+  <script src="js/menu_container_bottom_tab.js"></script>
+  <script src="js/arrow_navigation_container.js"></script>
+  <script src="js/menu_container_apps_tab.js"></script>
+
+  <script src="js/index.js"></script>
+
+  <script src="js/product_add_client_container.js"></script>
+  <script src="js/product_container.js"></script>
+
+  <script src="js/chat_container.js"></script>
+  <script src="js/cart_container.js"></script>
+  <script src="js/location_container.js"></script>
+  <script src="js/user_container.js"></script>
+  <script src="js/orders_container.js"></script>
+
+
+  
+    <!-- <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function(event) {
+      init();
+    });
+  </script> -->
+
+</body>
+
+</html>
