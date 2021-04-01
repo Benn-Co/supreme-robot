@@ -24,7 +24,7 @@ cordova run browser
 ### View
 
 You can now view the app either in a browser at`localhost:3000`.All the other Cordova CLI commands work as expected.
-
+ 
 ```
 cordova platform add ios
 cordova run ios
