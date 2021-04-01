@@ -16,15 +16,18 @@ Oramla app using [Framework7 HTML Framework](http://framework7.io/).
 ```
 git clone https://github.com/Benn-Co/supreme-robot.git
 cd supreme-robot
+cd oramla
+cordova run browser
+
 ```
 
 ### View
 
-You can now view the app either in a browser at`localhost:3000`.All the other PhoneGap CLI commands work as expected.
+You can now view the app either in a browser at`localhost:3000`.All the other Cordova CLI commands work as expected.
 
 ```
-phonegap platform add ios
-phonegap run ios
+cordova platform add ios
+cordova run ios
 cordova platform add android
 cordova run android --device
 ```
