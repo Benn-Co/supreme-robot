@@ -51,81 +51,8 @@ var api_server_url = "https://oramla.com";
 function onDeviceReady() {
     //console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     //document.getElementById('deviceready').classList.add('ready');
-    //formdata();
-   /** var myObj = { edit_prod_title:edit_overlay_prod_title,edit_prod_price:edit_overlay_prod_price,edit_product_description:edit_overlay_product_description,edit_quantity:edit_overlay_quantity,edit_category_option:edit_overlay_category_option,edit_brands_option:edit_overlay_brands_option };
-    var myJSON = JSON.stringify(myObj);
-    var str = myJSON; */
-
-    ////////////////////////////////////////////////////////////
-    /**$.ajax({
-        dataType: 'json',
-        data: { product_main_container: 12, startlimit: 0, endlimit: 20 },
-        processData: true,
-        url: 'https://oramla.com/cordova/product_main_container.php',
-        success: function searchSuccess(resp) {
-          alert(resp);
-          
-        },
-        error: function searchError(xhr, err) {
-          alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-
-        }
-    }); */
-    /////////////////////////////////////////////////////////////
-
-    /**$.ajax({
-        url: "https://oramla.com/cordova/product_main_container.php", // Url to which the request is 
-        type: "POST", // Type of request to be send, called as 
-        //data: new FormData(this), // Data sent to server, a set of key/value pairs (i.e. form fields and values)	
-        data: { product_main_container: 12, startlimit: startlimit, endlimit: endlimit },
-        contentType: false, // The content type used when sending data to the server.
-        cache: false, // To unable request pages to be cached	
-        processData:false, // To send DOMDocument or non processed data file it is set to false	
-        success: function(data) // A function to be called if request
-        {
-            alert(data);
-
-        },
-        error: function(xhr, err) {
-            alert(err);
-        }
-    }); */
     
-
-    /**$.ajax({
-        dataType: 'json',
-        data: { product_main_container: 12, startlimit: startlimit, endlimit: endlimit },
-        processData: true,
-        url: 'https://itunes.apple.com/search',
-        success: function searchSuccess(resp) {
-          alert(resp);
-          
-        },
-        error: function searchError(xhr, err) {
-            alert(err);
-        }
-      }); */
-
-
     authentication(username);
-    /**$.ajax({
-        type: 'POST',
-        contentType: 'application/json',
-        url: "https://oramla.com/cordova/product_main_container.php",
-        dataType: "json",
-        data: { product_main_container: 12, startlimit: startlimit, endlimit: endlimit },
-        cache:false,
-        success: function(data) {
-            //success handling
-            alert(data);
-        },
-        error: function(data) {
-            //
-            alert(data.status + " : " + data.error);
-
-        }
-    }); */
-
 }
 
 function user_container(user) {
@@ -1084,6 +1011,64 @@ $("body").delegate(".add_to_remove","click",function(event){
     event.preventDefault();
     product_id(startlimit,endlimit,"remove_product",username,$(this).attr('product_id'));    
 }); 
+$("body").delegate(".wishlist_product","click",function(event){
+    event.preventDefault();
+    product_id(startlimit,endlimit,"edit_product",username,$(this).attr('product_id'));    
+});
+var connect_product = 0;
+$("body").delegate(".connect_product","click",function(event){
+    event.preventDefault();
+    conta = 1;
+    chat_ = 1;
+    window.location.href="#center_top_id"; 
+    $("#menu_container_top_tab").hide(100);                
+    $("#center_top_id").show(100);                
+
+    if (username == "") {
+        $(".main").hide(100);
+        $(".authentication").show(100);
+    } else {        
+
+        $("#contactname").html($(this).attr('add_client'));
+        $("#cotacttime").html($(this).attr(Date()));
+        var IMAGE_url = 'img/jeans3.jpg';
+        $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
+        var chat_message = '';
+        connect_product = 1;
+        //alert(connect_from);
+        connect_from = $(this).attr('add_client');
+        //connects_datalengthnow = 0;
+        connects_datalength = 0;
+        //$("#chat").html('');
+        contact(username,$(this).attr('add_client'),$(this).attr('product_id'),chat_message);
+    
+        $("#connects_chatbar").show(100);
+        $("#product_container").hide(100);
+        $("#menu_container_left_tab").hide(100);
+        $("#orders_container").hide(100);
+        $("#order_items_container").hide(10);
+        $("#cart_container").hide(100);
+        $("#location_container").hide(100);
+        $("#user_container").hide(100);
+        $("#top_menu").show(100,function(){       
+            $("#search").hide(100);
+            $("#top_slider").hide(100);
+
+        });
+        $("#connects_contacts").show(100,function(){       
+            $("#connects_messages").hide(100);                
+        });
+    }
+    $("#product_add_client_container").hide(100,function(){       
+        $("#product_error").hide(100);
+    });
+    if (_apps_tab != 0) {
+        document.body.classList.toggle('nav-is-toggled');
+        _apps_tab =0;
+    }
+
+    //product_id(startlimit,endlimit,"connect_product",username,$(this).attr('product_id'),$(this).attr('add_client'));    
+});
 $("body").delegate(".icon_remove_cart","click",function(event){
     event.preventDefault();
     product_id(startlimit,endlimit,"cart_to_remove",username,$(this).attr('product_id'));    
@@ -2475,51 +2460,33 @@ function products_datamyFunction(item, index) {
     } else {
         var IMAGE_url = IMAGE_url_path_name + product_image + '';
     }
-    //var IMAGE_url = 'img/jeans3.jpg';
 
-    /**currency_price_symbal = '<div class="currencyclass"><input class="icon_input" type="radio" name="' + item.product_id + '_currency_symbal" id="' + item.product_id + '_currency_symbal">' +
-                            '<label class="currencyicon_label" for="' + item.product_id + '_currency_symbal"><img src="img/dollar.svg" alt=""></label></div>';
-    */
-    /**var product_row_container = '<div class="col column product_column">' +
-    '<div class="card" style="width: 18rem;">' +
-    '<img class="card-img-top div_cimage" src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
+    if (username == item.add_client) {
+        var actions = '<div class="tags are-medium">' +
     
-    '<div class="card-body">' +    
+        '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+        '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
+        '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
+        '</div>';
+    } else {
+        var actions = '<div class="tags are-medium">' +
     
-    '<p class="card-text"><b style="height: auto;">' + product_title_account + '</b></p>' +
-
-    '<div class="btn btn-primary">' +
-    '<a>' +  currency_price_symbal + '</a>' +    
-    '<a>' +  product_price + '</a>' +
-    '</div> ' + 
-
-    '<p class="card-text">From ' + item.add_client + '</p>' +     
-    
-    '</div>' +
-
-    '<footer class="card-footer">' +
-    '<div class="icon_padding">' + 
-
-    '<div class="float-left icon_padding_div">' +
-    '<input class="add_to_cart icon_input" product_id = "' + item.product_id + '" type="radio" name="' + item.product_id + '_cart" id="' + item.product_id + '_cart">' +
-    '<label class="currencyicon_label" for="' + item.product_id + '_cart"><img src="img/shopping-cart.svg" alt=""></label>' +
-    '</div>' +   
-
-    '<div class="float-left icon_padding_div">' +
-    '<input class="edit_product icon_input" product_id = "' + item.product_id + '" type="radio" name="' + item.product_id + '_edit" id="' + item.product_id + '_edit">' +
-    '<label class="currencyicon_label" for="' + item.product_id + '_edit"><img src="img/edit.svg" alt=""></label>' +
-    '</div>' +
-
-    '<div class="float-left icon_padding_div">' +
-    '<input class="add_to_remove icon_input" product_id = "' + item.product_id + '" type="radio" name="' + item.product_id + 'remove_cart" id="' + item.product_id + 'remove_cart">' +
-    '<label class="currencyicon_label" for="' + item.product_id + 'remove_cart"><img src="img/delete.svg" alt=""></label>' +
-    '</div>' + 
-
-    '</div>' +
-    '</footer>' +
-
-    '</div>' +
-    '</div>'; */
+        '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+        '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
+        '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+        '</div>';
+    }
+    if (role == 'admin' || role == 'Admin'){
+        var actions = '<div class="tags are-medium">' +
+        '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+        '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
+        '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
+        
+        '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+        '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
+        '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+        '</div>';
+    } 
 
 
     var product_row_container = '<div class="product_column">' +
@@ -2539,16 +2506,7 @@ function products_datamyFunction(item, index) {
 
     '<p class="card-text">From ' + item.add_client + '</p>' +    '</div>' +
     
-    '<footer class="card-footer">' +
-
-    '<div class="tags are-medium">' +
-    
-    '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-    '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
-    '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-    '</div>' +
-
-    '</footer>' +
+    '<footer class="card-footer">' + actions + '</footer>' +
 
     '</div>' +
     '</div>'; 
@@ -2695,9 +2653,9 @@ $("body").delegate(".add_float","click",function(event){
         $("#connects_chatbar").show(100);
         $("#product_container").hide(100);
         $("#menu_container_left_tab").hide(100);
-       $("#orders_container").hide(100);
-   $("#order_items_container").hide(10);
-               $("#cart_container").hide(100);
+        $("#orders_container").hide(100);
+        $("#order_items_container").hide(10);
+        $("#cart_container").hide(100);
         $("#location_container").hide(100);
         $("#user_container").hide(100);
         $("#top_menu").show(100,function(){       
@@ -2940,6 +2898,16 @@ function contacts_datamyFunction(item, index) {
 }
 $("#connects_back").click(function(){
     connect_from = "";
+    if (connect_product == 1) {
+        connect_product = 0; 
+        connect_from = "";
+        $("#chat_container").hide(500,function(){
+            $("#product_container").show(100);
+            //$("#product_row_container").hide(100);   
+            $("#product_error").hide(100);  
+            //$("#product_add_client_container").show(100);
+        });               
+    }
     $("#menu_container_top_tab").show(500,function(){
         $("#menu_container_bottom_tab").show(100);
         $("#connects_messages").hide(500);      
@@ -2949,6 +2917,16 @@ $("#connects_back").click(function(){
 });
 $("#contacts_back").click(function(){
     connect_from = "";
+    if (connect_product == 1) {
+        connect_product = 0; 
+        connect_from = "";
+        $("#chat_container").hide(500,function(){
+            $("#product_container").show(100);
+            //$("#product_row_container").hide(100);   
+            $("#product_error").hide(100);  
+            //$("#product_add_client_container").show(100);
+        });               
+    }
     $("#menu_container_top_tab").show(500,function(){
         $("#menu_container_bottom_tab").show(100);
         $("#connects_messages").hide(500);      
@@ -3200,6 +3178,16 @@ document.addEventListener('backbutton', function(){
             $("#product_row_container").hide(100);   
             $("#product_error").hide(100);  
             $("#product_add_client_container").show(100);
+        });               
+    }
+    if (connect_product == 1) {
+        connect_product = 0; 
+        connect_from = "";
+        $("#chat_container").hide(500,function(){
+            $("#product_container").show(100);
+            //$("#product_row_container").hide(100);   
+            $("#product_error").hide(100);  
+            //$("#product_add_client_container").show(100);
         });               
     }
     if (add_cdiv_cima == 1  ) {
@@ -3730,34 +3718,4 @@ function signup_user(signup_username,signup_email,signup_password) {
         $("#signup_button_help").html(response.status + " : " + response.error);
         main();        
     }); */
-}
-
-
-
-
-
-
-
-
-
-//
-
-//name();
-function namemm() {
-    alert('resp');
-
-    $.ajax({
-        dataType: 'json',
-        data: { product_main_container: 12, startlimit: 0, endlimit: 20 },
-        processData: true,
-        url: 'https://oramla.com/cordova/product_main_container.php',
-        success: function searchSuccess(resp) {
-          alert(resp);
-          
-        },
-        error: function searchError(xhr, err) {
-          alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-
-        }
-    });
 }
