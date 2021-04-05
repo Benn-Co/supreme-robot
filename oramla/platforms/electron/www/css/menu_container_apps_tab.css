@@ -1,0 +1,111 @@
+  
+  .nav-drill {
+    margin-top: 50px;
+    transform: translateX(100%);
+  }
+  
+  .nav-is-toggled .nav-drill {
+    transform: translateX(0);
+  }
+  .nav-is-toggled::after {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .nav-drill {
+    display: flex;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: auto;
+    max-height: 80%;
+    background-color: #fff;
+    color: #030c0a;
+    border-radius: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    transition: 0.45s;
+  }
+  .apps_nav-items {
+    flex: 0 0 100%;
+  }
+  .apps_nav-item:not(:last-child) {
+    border-bottom: solid 1px #daf9f4;
+  }
+  .nav-link {
+    display: block;
+    padding: 0.875em 1em;
+    background-color: #fff;
+    color: #030c0a;
+    font-size: 1rem;
+    line-height: 1.5em;
+    font-weight: 300;
+  }
+  .nav-expand-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height:auto;
+    transform: translateX(100%);
+    background-color: #daf9f4;
+    transition: 0.3s;
+    visibility: hidden;
+  }
+  .nav-expand-content .apps_nav-item:not(:last-child) {
+    border-bottom: solid 1px #20b49c;
+  }
+  .nav-expand-content .nav-link {
+    background-color: #daf9f4;
+  }
+  .nav-expand-content .nav-back-link {
+    display: flex;
+    align-items: center;
+    background-color: #20b49c !important;
+    color: #fff;
+  }
+  .nav-expand-content .nav-back-link::before {
+    content: " << ";
+    margin-right: 0.5em;
+    font-family: "Material Icons";
+  }
+  .nav-expand-link {
+    display: flex;
+    justify-content: space-between;
+  }
+  .nav-expand-link::after {
+    content: " >> ";
+    flex: 0 1 auto;
+    font-family: "Material Icons";
+  }
+  .nav-expand.active > .nav-expand-content {
+    transform: translateX(0);
+    visibility: visible;
+  }
+  .nav-expand .nav-expand-content {
+    background-color: #daf9f4;
+  }
+  .nav-expand .nav-expand-content .nav-link {
+    background-color: #daf9f4;
+  }
+  .nav-expand .nav-expand-content .nav-expand-content {
+    background-color: #aff1e6;
+  }
+  .nav-expand .nav-expand-content .nav-expand-content .nav-link {
+    background-color: #aff1e6;
+  }
+  .nav-expand .nav-expand-content .nav-expand-content .nav-expand-content {
+    background-color: #84e9d9;
+  }
+  .nav-expand .nav-expand-content .nav-expand-content .nav-expand-content .nav-link {
+    background-color: #84e9d9;
+  }
+  .nav-expand .nav-expand-content .nav-expand-content .nav-expand-content .nav-expand-content {
+    background-color: #59e1cb;
+  }
+  .nav-expand .nav-expand-content .nav-expand-content .nav-expand-content .nav-expand-content .nav-link {
+    background-color: #59e1cb;
+  }

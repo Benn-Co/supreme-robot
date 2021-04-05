@@ -22,7 +22,13 @@
   <meta name="msapplication-tap-highlight" content="no">
   <link rel="stylesheet" href="lib/font-awesome-4.5.0/css/font-awesome.min.css" />
   <meta name="color-scheme" content="light dark">
-        
+
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+  <meta name="msapplication-TileImage" content="img/favicon-32x32.png">
+  <link rel="shortcut icon" href="img/favicon-32x32.png">
+
   <link rel='stylesheet' href='bootstrap/4.3.1/css/bootstrap.min.css'>
   <link rel="stylesheet" href="fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
  
@@ -56,7 +62,7 @@
 <body>
   <div id="app-cover-spin" class="app-cover">
             
-  </div>
+  </div> 
 
    <div id="maincontainer" class="main">
 
@@ -1160,12 +1166,13 @@
     <div class="tab-content">
       <ul class="nav nav-pills" role="tablist">
         <li class="nav-item">
-          <a class="nav-link active" data-toggle="pill" href="#login">Login</a>
+          <a id="login_pill" class="nav-link active" data-toggle="pill" href="#login">Login</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" data-toggle="pill" href="#regis">Register</a>
+          <a id="regis_pill" class="nav-link" data-toggle="pill" href="#regis">Register</a>
         </li>
       </ul>
+
       <div id="login" class="login-tab-content container tab-pane active">
         <form >
           <div class="form-group">
@@ -1180,7 +1187,53 @@
           <small id="login_button_help" class="form-text text-muted"></small>
 
         </form>
+        <span id="forgot_password" class="nav-link" data-toggle="pill" >Forgot password?</span>
+
       </div>
+
+      <div id="forgot" class="regis-tab-content container tab-pane">
+          <span>Password reset</span>
+
+          <div class="form-group">
+            <input type="email" class="form-control is-valid" id="forgot_login_email" name="forgot_login_email" placeholder="name@example.com">
+            <small id="forgot_login_email_help" class="form-text text-muted">Enter email address</small>
+          </div>
+          <a id="forgot_login_button" type="" class="btn btn-primary">Verify</a>
+          <small id="forgot_login_button_help" class="form-text text-muted"></small>
+
+      </div>
+
+      <div id="reset_code" class="regis-tab-content container tab-pane">
+          <span>Verify the code</span>
+
+          <div class="form-group">
+            <input type="number" class="form-control is-valid" id="forgot_code_email" name="forgot_code_email" placeholder="#">
+            <small id="forgot_code_email_help" class="form-text text-muted">Enter the code sent to <i id="code_email"></i></small>
+          </div>
+          <a id="code_button" type="button" class="btn btn-primary">Continue</a>
+          <small id="code_button_help" class="form-text text-muted"></small>
+
+      </div>
+
+      <div id="new_password" class="regis-tab-content container tab-pane">
+          <span>Create new password</span>
+
+          <div class="form-group">
+            <input type="password" class="form-control is-invalid" id="create_new_password" name="create_new_password" placeholder="New password">
+            <small id="create_new_password_help" class="form-text text-muted">At least 8 characters...</small>
+          </div>
+
+          <div class="form-group">
+            <input type="password" class="form-control is-invalid" id="confirm_new_password" name="confirm_new_password" placeholder="Confirm Password">
+            <small id="confirm_new_password_help" class="form-text text-muted"></small>
+          </div>
+
+
+          <a id="new_password_button" type="" class="btn btn-primary">Create</a>
+          <small id="new_password_button_help" class="form-text text-muted"></small>
+
+      </div>
+
       <div id="regis" class="regis-tab-content container tab-pane fade">
         <form >                      
           <div class="form-group">
@@ -1201,6 +1254,7 @@
 
         </form>
       </div>
+
     </div>
 
   </div>

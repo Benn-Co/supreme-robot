@@ -41,7 +41,7 @@ var path_name = window.location.pathname;
 var path_href = window.location.href;
 var datab = null;
 var api_server_url = "https://oramla.com";
-//var api_server_url = "http://192.168.0.100";
+//var api_server_url = "http://192.168.0.102";
 //var api_server_url = "http://169.254.249.58";
 //var api_server_url = "http://192.168.0.103";
 //var api_server_url = "http://localhost";
@@ -548,12 +548,16 @@ inputRange.addEventListener('input', function() {
         gradius = this.value; 
         top_value_range.classList.remove('bg-info');
         top_value_range.classList.add('bg-warning');
-        geoshop(latitude,longitude,gradius);
+        startlimit = 0;
+        endlimit = 24;
+        geoshop(latitude,longitude,gradius,startlimit,endlimit);
     } else {
         gradius = this.value; 
         top_value_range.classList.remove('bg-warning');
         top_value_range.classList.add('bg-success');
-        geoshop(latitude,longitude,gradius);
+        startlimit = 0;
+        endlimit = 24;
+        geoshop(latitude,longitude,gradius,startlimit,endlimit);
     }    
     
 });
@@ -589,9 +593,9 @@ $("#radio-2").click(function(){
         $("#menu_container_left_tab").show(100);
         $("#chat_container").hide(100);
         $("#connects_chatbar").hide(100);
-       $("#orders_container").hide(100);
-   $("#order_items_container").hide(10);
-               $("#cart_container").hide(100);
+        $("#orders_container").hide(100);
+        $("#order_items_container").hide(10);
+        $("#cart_container").hide(100);
         $("#location_container").hide(100);
         $("#user_container").hide(100);
         $("#top_menu").hide(100,function(){       
@@ -600,7 +604,7 @@ $("#radio-2").click(function(){
         var onSuccess = function(position) {
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
-            geoshop(latitude,longitude,gradius);        
+            geoshop(latitude,longitude,gradius,startlimit,endlimit);        
         };
         function onError(error) {
             $('#top_value_range').html('code: ' + error.code + 'message: ' + error.message);
@@ -616,12 +620,11 @@ $("#radio-2").click(function(){
     //$("#menu_container_apps_tab").hide(100);
 
 });
-function geoshop(latitude,longitude,gradius) {
-    startlimit = 0;
-    endlimit = 24;
+var geoshop_value = '';
+function geoshop(latitude,longitude,gradius,startlimit,endlimit) {
     $('#top_value_range').html(" latitude : " + latitude + ", longitude : " + longitude + ". Radius : " + gradius + " Km. ");
+    geoshop_value = " latitude : " + latitude + ", longitude : " + longitude + ". Radius : " + gradius + " Km. ";
     $('#app-cover-spin').show(0);
-
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
@@ -630,52 +633,55 @@ function geoshop(latitude,longitude,gradius) {
         url: api_server_url + '/cordova/product_geo_container.php',
         success: function searchSuccess(response) {
             try {
-                //response.data = JSON.parse(response.data);
-                $("#product_row_container").html('');
-                //alert(gradius);
                 if (response.message == "success") {
                     var products_status = response.products_status;
                     var products_data = response.products;
                     if (products_status != "0") {  
                         $('.product_error_container').hide(500, function(){
-                            window.location.href="#product_container";
+                            //window.location.href="#product_container";
                             $("#product_row_container").show(100);
                             $("#arrow_navigation_container").show(100);
                         }); 
                         product_row_container_index = products_data.length;                   
+                        $("#product_row_container").html(''); 
+                        $('#app-cover-spin').hide(0); 
+                        search_value != '';
+                        cat_id != '';
                         products_data.forEach(products_datamyFunction);
                     } else {
                         $('.product_error_container').show(500, function(){
-                            window.location.href="#product_container";
+                            //window.location.href="#product_container";
                             $("#product_row_container").hide(100);
                             $("#arrow_navigation_container").hide(100);
                             $("#product_row_h").html(response.message);
                             $("#product_row_p").html('No new Products');
+                            $('#app-cover-spin').hide(0);
                         });
                     }
                 }
                 else {
                     $('.product_error_container').show(500, function(){
-                        window.location.href="#product_container";
+                        //window.location.href="#product_container";
                         $("#product_row_container").hide(100);
                         $("#arrow_navigation_container").hide(100);
                         $("#product_row_h").html(response.message);
                         $("#product_row_p").html('No new Products');
+                        $('#app-cover-spin').hide(0);
                     });
                 }
             } catch(e) {
                 $('.product_error_container').show(500, function(){
-                    window.location.href="#product_container";
+                    //window.location.href="#product_container";
                     $("#product_row_container").hide(100);
                     $("#arrow_navigation_container").hide(100);
                     $("#product_row_h").html(response.message);
                     $("#product_row_p").html('JSON parsing error');
+                    $('#app-cover-spin').hide(0);
                 });
             }
           
         },
         error: function searchError(xhr, err) {
-          //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
           $('#app-cover-spin').hide(0);
           $('.product_error_container').show(500, function(){
             window.location.href="#product_container";
@@ -686,66 +692,6 @@ function geoshop(latitude,longitude,gradius) {
           });
         }
     });
-
-    /**const options = {
-        method: 'post',
-        data: { product_geo_container: 12, startlimit: startlimit, endlimit: endlimit, latitude: latitude, longitude: longitude, gradius:gradius },
-        headers: { Authorization: 'OAuth2: token' }
-    };      
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/product_geo_container.php', options, function(response) {
-        $('#app-cover-spin').hide(0);
-        try {
-            response.data = JSON.parse(response.data);
-            $("#product_row_container").html('');
-            //alert(gradius);
-            if (response.data.message == "success") {
-                var products_status = response.data.products_status;
-                var products_data = response.data.products;
-                if (products_status != "0") {  
-                    $('.product_error_container').hide(500, function(){
-                        window.location.href="#product_container";
-                        $("#product_row_container").show(100);
-                        $("#arrow_navigation_container").show(100);
-                    });                  
-                    products_data.forEach(products_datamyFunction);
-                } else {
-                    $('.product_error_container').show(500, function(){
-                        window.location.href="#product_container";
-                        $("#product_row_container").hide(100);
-                        $("#arrow_navigation_container").hide(100);
-                        $("#product_row_h").html(response.data.message);
-                        $("#product_row_p").html('No new Products');
-                    });
-                }
-            }
-            else {
-                $('.product_error_container').show(500, function(){
-                    window.location.href="#product_container";
-                    $("#product_row_container").hide(100);
-                    $("#arrow_navigation_container").hide(100);
-                    $("#product_row_h").html(response.data.message);
-                    $("#product_row_p").html('No new Products');
-                });
-            }
-        } catch(e) {
-            $('.product_error_container').show(500, function(){
-                window.location.href="#product_container";
-                $("#product_row_container").hide(100);
-                $("#arrow_navigation_container").hide(100);
-                $("#product_row_h").html(response.data.message);
-                $("#product_row_p").html('JSON parsing error');
-            });
-        }
-    }, function(response) {
-        $('#app-cover-spin').hide(0);
-        $('.product_error_container').show(500, function(){
-            window.location.href="#product_container";
-            $("#product_row_container").hide(100);
-            $("#arrow_navigation_container").hide(100);
-            $("#product_row_h").html(response.data.message);
-            $("#product_row_p").html(response.status + " : " + response.error);
-        });
-    }); */
 }
 var _apps_tab = 0;
 $("#radio-3").click(function(){
@@ -769,54 +715,40 @@ $("#radio-1").click(function(){
 });
 $("#search").keypress(function (e){
     if(e.keyCode == 13){
-        $("#search").hide(100,function(){       
-            $("#top_menu").show(100);
-            if ($("#search_value").val() != '' && $("#search_value").val() != null) {
-                $('.product_main_container').show(500, function(){
-                    window.location.href="#product_container";
-                    $("#menu_container_left_tab").show(100);
-                    $("#chat_container").hide(100);
-                    $("#connects_chatbar").hide(100);
-                   $("#orders_container").hide(100);
-   $("#order_items_container").hide(10);
-               $("#cart_container").hide(100);
-                    $("#location_container").hide(100);
-                    $("#user_container").hide(100);
-                    $("#product_add_client_container").hide(100,function(){       
-                    });
-                    search($("#search_value").val());
-                });               
-            }
-        });        
+        search_button()        
     }
 });
 $(".search-button").click(function(){
+    search_button()
+});
+function search_button() {
     $("#search").hide(100,function(){       
         $("#top_menu").show(100);
-        if ($("#search_value").val() != '' && $("#search_value").val() != null) {
+        search_value = $("#search_value").val();
+        if (search_value != '' && search_value != null) {
             $('.product_main_container').show(500, function(){
-                window.location.href="#product_container";
+                //window.location.href="#product_container";
                 $("#menu_container_left_tab").show(100);
                 $("#chat_container").hide(100);
                 $("#connects_chatbar").hide(100);
-               $("#orders_container").hide(100);
-   $("#order_items_container").hide(10);
-               $("#cart_container").hide(100);
+                $("#orders_container").hide(100);
+                $("#order_items_container").hide(10);
+                $("#cart_container").hide(100);
                 $("#location_container").hide(100);
                 $("#user_container").hide(100);
                 $("#product_error").hide(100);
                 $("#product_add_client_container").hide(100,function(){       
                 });
-                search($("#search_value").val());
+                startlimit = 0;
+                endlimit = 24;
+                search(search_value,startlimit,endlimit);
             });
         }
     });
-});
-function search(search_params) {
-    startlimit = 0;
-    endlimit = 24;
+}
+var search_value = '';
+function search(search_params,startlimit,endlimit) {
     $('#app-cover-spin').show(0);
-
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
@@ -825,118 +757,58 @@ function search(search_params) {
         url: api_server_url + '/cordova/product_search_container.php',
         success: function searchSuccess(response) {
             try {
-                //response.data = JSON.parse(response.data);
-                $("#product_row_container").html('');
                 if (response.message == "success") {
                     var products_status = response.products_status;
                     var products_data = response.products;
                     if (products_status != "0") {
                         $('.product_error_container').hide(500, function(){
-                            window.location.href="#product_container";
                             $("#product_row_container").show(100);
                             $("#arrow_navigation_container").show(100);
                         });  
-                        product_row_container_index = products_data.length;                   
+                        product_row_container_index = products_data.length;
+                        $("#product_row_container").html(''); 
+                        $('#app-cover-spin').hide(0);
+                        geoshop_value != '';
+                        cat_id != '';
                         products_data.forEach(products_datamyFunction);
                     } else {
                         $('.product_error_container').show(500, function(){
-                            window.location.href="#product_container";
                             $("#product_row_container").hide(100);
                             $("#arrow_navigation_container").hide(100);
                             $("#product_row_h").html(response.message);
                             $("#product_row_p").html('No new Products');
+                            $('#app-cover-spin').hide(0);
                         });
                     }
                 }
                 else {
                     $('.product_error_container').show(500, function(){
-                        window.location.href="#product_container";
                         $("#product_row_container").hide(100);
                         $("#arrow_navigation_container").hide(100);
                         $("#product_row_h").html(response.message);
                         $("#product_row_p").html('No new Products');
+                        $('#app-cover-spin').hide(0);
                     });
                 }
             } catch(e) {
                 $('.product_error_container').show(500, function(){
-                    window.location.href="#product_container";
                     $("#product_row_container").hide(100);
                     $("#arrow_navigation_container").hide(100);
                     $("#product_row_h").html(response.message);
                     $("#product_row_p").html('JSON parsing error');
+                    $('#app-cover-spin').hide(0);
                 });
-            }
-          
+            }          
         },
         error: function searchError(xhr, err) {
-          //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-          $('#app-cover-spin').hide(0);
           $('.product_error_container').show(500, function(){
-              window.location.href="#product_container";
               $("#product_row_container").hide(100);
               $("#arrow_navigation_container").hide(100);
               $("#product_row_p").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+              $('#app-cover-spin').hide(0);
           });
         }
     });
-
-    /**const options = {
-        method: 'post',
-        data: { product_search_container: 12, startlimit: startlimit, endlimit: endlimit, search_params:search_params },
-        headers: { Authorization: 'OAuth2: token' }
-    };      
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/product_search_container.php', options, function(response) {
-        $('#app-cover-spin').hide(0);
-        try {
-            response.data = JSON.parse(response.data);
-            $("#product_row_container").html('');
-            if (response.data.message == "success") {
-                var products_status = response.data.products_status;
-                var products_data = response.data.products;
-                if (products_status != "0") {
-                    $('.product_error_container').hide(500, function(){
-                        window.location.href="#product_container";
-                        $("#product_row_container").show(100);
-                        $("#arrow_navigation_container").show(100);
-                    });                    
-                    products_data.forEach(products_datamyFunction);
-                } else {
-                    $('.product_error_container').show(500, function(){
-                        window.location.href="#product_container";
-                        $("#product_row_container").hide(100);
-                        $("#arrow_navigation_container").hide(100);
-                        $("#product_row_h").html(response.data.message);
-                        $("#product_row_p").html('No new Products');
-                    });
-                }
-            }
-            else {
-                $('.product_error_container').show(500, function(){
-                    window.location.href="#product_container";
-                    $("#product_row_container").hide(100);
-                    $("#arrow_navigation_container").hide(100);
-                    $("#product_row_h").html(response.data.message);
-                    $("#product_row_p").html('No new Products');
-                });
-            }
-        } catch(e) {
-            $('.product_error_container').show(500, function(){
-                window.location.href="#product_container";
-                $("#product_row_container").hide(100);
-                $("#arrow_navigation_container").hide(100);
-                $("#product_row_h").html(response.data.message);
-                $("#product_row_p").html('JSON parsing error');
-            });
-        }
-    }, function(response) {
-        $('#app-cover-spin').hide(0);
-        $('.product_error_container').show(500, function(){
-            window.location.href="#product_container";
-            $("#product_row_container").hide(100);
-            $("#arrow_navigation_container").hide(100);
-            $("#product_row_p").html(response.status + " : " + response.error);
-        });
-    }); */
 }
 
 function authentication(username) {
@@ -971,13 +843,16 @@ function main() {
     $('.authentication').hide(500, function(){
         $(".main").show(500);
         $(".product_main_container").show(100);
-        window.location.href="#product_container";
     });
-    var cat_id = "";
+    //var cat_id = "";
+    startlimit = 0;
+    endlimit = 24;
+    search_value != '';
+    geoshop_value != '';
+    cat_id != '';
     product_main_container(startlimit,endlimit,cat_id);
     apps_categories(username);
     if (username != "") {
-        //contact(username,"","","");
         loadconnects();
         //setTimeout(loadchat, 3000);
     }
@@ -1252,10 +1127,14 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                     } else if (products_status == "edit_product") {
                         $("#product_row_container").html(''); 
                         product_row_container_index = products_data.length;        
+                        $("#product_row_container").html(''); 
+                        $('#app-cover-spin').hide(0); 
                         products_data.forEach(products_datamyFunction);
                     } else if (products_status == "remove_product") {                    
                         $("#product_row_container").html(''); 
                         product_row_container_index = products_data.length;
+                        $("#product_row_container").html(''); 
+                        $('#app-cover-spin').hide(0); 
                         products_data.forEach(products_datamyFunction);
                     } else if (products_status == "cart_to_remove") {                    
                         $('.cart_error_container').hide(500, function(){
@@ -1469,7 +1348,9 @@ function cart_datamyFunction(item, index) {
     }
     //var IMAGE_url = 'img/jeans3.jpg';
     //currency_price_symbal = '$';
-    
+    var actions = '<div class="tags are-medium">' +
+    '<span class="tag is-danger icon_remove_cart" product_id = "' + item.product_id + '">Remove</span>' +
+    '</div>';
     product_row_container = '<div class="cart_productitem"> ' + 
     '<div class="cart_menu">' +
     '<img src="' + IMAGE_url + '" alt="' + item.product_image + '">' +
@@ -1485,11 +1366,13 @@ function cart_datamyFunction(item, index) {
     '<input class="qt qtinput" product_id = "' + item.product_id + '" type="number" name="' + item.product_id + 'qt_cart" id="' + item.product_id + 'qt_cart" value="' + item.quantity + '">' +
     '</span>' +
     '<span class="qt-plus" product_id = "' + item.product_id + '">+</span>' +
-    '</div>' +    
-    '<div class="float-left icon_padding_div icon_cartdelete">' +
+    '</div>' + actions + 
+
+    /**'<div class="float-left icon_padding_div icon_cartdelete">' +
     '<input class="icon_remove_cart icon_input" product_id = "' + item.product_id + '" type="radio" name="' + item.product_id + 'remove_cart" id="' + item.product_id + 'remove_cart">' +
     '<label class="currencyicon_label" for="' + item.product_id + 'remove_cart"><img src="img/delete.svg" alt=""></label>' +
-    '</div>' +     
+    '</div>' + */   
+      
     '<div class="full-price">' +
     '' +  currency_price_symbal + '' +  total_ + '' +
     '</div>' +
@@ -1925,7 +1808,29 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
     var currency = currency_price_symbal;
     $("#add_carousel_currency").html(currency);
     $("#add_carousel_price").html(product_price);
-    var buynow = '<div class="float-left icon_padding_div">' +
+    if (username == add_client) {
+        var actions = '<div class="tags are-medium">' +    
+        '<span class="tag is-success add_to_cart" product_id = "' + product_id + '">Buy</span>' +
+        '<span class="tag is-info edit_product" product_id = "' + product_id + '">Edit</span>' +
+        '<span class="tag is-danger add_to_remove" product_id = "' + product_id + '">Delete</span>' +
+        '</div>';
+    } else {
+        var actions = '<div class="tags are-medium">' +    
+        '<span class="tag is-success add_to_cart" product_id = "' + product_id + '">Buy</span>' +
+        '<span class="tag is-primary wishlist_product" product_id = "' + product_id + '">Wishlist</span>' +
+        '<span class="tag is-secondary connect_product" product_id = "' + product_id + '" add_client = "' + add_client + '">Connect</span>' +
+        '</div>';
+    }
+    if (role == 'admin' || role == 'Admin'){
+        var actions = '<div class="tags are-medium">' +
+        '<span class="tag is-success add_to_cart" product_id = "' + product_id + '">Buy</span>' +
+        '<span class="tag is-primary wishlist_product" product_id = "' + product_id + '">Wishlist</span>' +
+        '<span class="tag is-secondary connect_product" product_id = "' + product_id + '" add_client = "' + add_client + '">Connect</span>' +
+        '<span class="tag is-info edit_product" product_id = "' + product_id + '">Edit</span>' +
+        '<span class="tag is-danger add_to_remove" product_id = "' + product_id + '">Delete</span>' +
+        '</div>';
+    }
+    /**var buynow = '<div class="float-left icon_padding_div">' +
     '<input class="add_to_cart icon_input" product_id = "' + product_id + '" type="radio" name="add_buy' + product_id + '_cart" id="add_buy' + product_id + '_cart">' +
     '<label class="currencyicon_label" for="add_buy' + product_id + '_cart"><img src="img/shopping-cart.svg" alt=""></label>' +
     '</div>' + 
@@ -1936,8 +1841,8 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
     '<div class="float-left icon_padding_div">' +
     '<input class="add_to_remove icon_input" product_id = "' + product_id + '" type="radio" name="add_buy' + product_id + 'remove_cart" id="add_buy' + product_id + 'remove_cart">' +
     '<label class="currencyicon_label" for="add_buy' + product_id + 'remove_cart"><img src="img/delete.svg" alt=""></label>' +
-    '</div>';
-    $("#add_carousel_buynow").html(buynow);
+    '</div>'; */
+    $("#add_carousel_buynow").html(actions);
 
     $("#add_carousel_desc").html(add_description);
 
@@ -2115,18 +2020,50 @@ function other_product_same_clientmyFunction(item, index) {
     if (index < 1) {
         var add_carousel_indicators = '<li data-target="#carouselExampleIndicators" data-slide-to="' + index + '" class="active"></li>';
         $("#add_carousel_indicators").append(add_carousel_indicators);
+        
+        if (username == item.add_client) {
+            var actions = '<div class="tags are-medium">' + 
+            '<span class="tag is-primary">' +
+            '<a>' +  currency_price_symbal + '</a>' +    
+            '<a>' +  product_price + '</a>' +
+            '</span> ' +
+            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
+            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
+            '</div>';
+        } else {
+            var actions = '<div class="tags are-medium">' +
+            '<span class="tag is-primary">' +
+            '<a>' +  currency_price_symbal + '</a>' +    
+            '<a>' +  product_price + '</a>' +
+            '</span> ' +    
+            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
+            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '</div>';
+        }
+        if (role == 'admin' || role == 'Admin'){
+            var actions = '<div class="tags are-medium">' +
+            '<span class="tag is-primary">' +
+            '<a>' +  currency_price_symbal + '</a>' +    
+            '<a>' +  product_price + '</a>' +
+            '</span> ' +
+            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
+            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
+            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
+            '</div>';
+        }
+        
+        
+        
         var add_carousel_other  = '<div class="carousel-item active">' +
         '<img class="d-block w-100 div_cimage" src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
+                
+        '<div class="carousel-caption d-md-block card-title add_divtext add_oer">' + actions +
         
-        '<div class="carousel-caption d-md-block card-title add_divtext card-img-overlay add_oertag">' +
-        '<div class="btn btn-primary">' +
-        '<a>' +  currency_price_symbal + '</a>' +    
-        '<a>' +  product_price + '</a>' +
-        '</div> ' + 
-        '</div> ' + 
-        
-        '<div class="carousel-caption d-md-block card-title add_divtext add_oer">' +
-        '<a class="buynownow">' +
+        /**'<a class="buynownow">' +
         '<div class="float-left icon_padding_div">' +
         '<input class="add_to_cart icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + '_cart" id="add_' + item.product_id + '_cart">' +
         '<label class="currencyicon_label" for="add_' + item.product_id + '_cart"><img src="img/shopping-cart.svg" alt=""></label>' +
@@ -2141,7 +2078,9 @@ function other_product_same_clientmyFunction(item, index) {
         '<input class="add_to_remove icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + 'remove_cart" id="add_' + item.product_id + 'remove_cart">' +
         '<label class="currencyicon_label" for="add_' + item.product_id + 'remove_cart"><img src="img/delete.svg" alt=""></label>' +
         '</div>' + 
-        '</a>' + 
+        '</a>' + */ 
+
+
 
         '</div> ' +
 
@@ -2154,18 +2093,47 @@ function other_product_same_clientmyFunction(item, index) {
     } else {
         var add_carousel_indicators = '<li data-target="#carouselExampleIndicators" data-slide-to="' + index + '" class=""></li>';
         $("#add_carousel_indicators").append(add_carousel_indicators);
+
+        if (username == item.add_client) {
+            var actions = '<div class="tags are-medium">' + 
+            '<span class="tag is-primary">' +
+            '<a>' +  currency_price_symbal + '</a>' +    
+            '<a>' +  product_price + '</a>' +
+            '</span> ' +   
+            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
+            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
+            '</div>';
+        } else {
+            var actions = '<div class="tags are-medium">' + 
+            '<span class="tag is-primary">' +
+            '<a>' +  currency_price_symbal + '</a>' +    
+            '<a>' +  product_price + '</a>' +
+            '</span> ' +   
+            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
+            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '</div>';
+        }
+        if (role == 'admin' || role == 'Admin'){
+            var actions = '<div class="tags are-medium">' +
+            '<span class="tag is-primary">' +
+            '<a>' +  currency_price_symbal + '</a>' +    
+            '<a>' +  product_price + '</a>' +
+            '</span> ' +
+            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
+            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
+            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
+            '</div>';
+        }
         var add_carousel_other  = '<div class="carousel-item">' +
         '<img class="d-block w-100 div_cimage " src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
        
-        '<div class="carousel-caption d-md-block card-title add_divtext card-img-overlay add_oertag">' +
-        '<div class="btn btn-primary">' +
-        '<a>' +  currency_price_symbal + '</a>' +    
-        '<a>' +  product_price + '</a>' +
-        '</div> ' + 
-        '</div> ' + 
-
-        '<div class="carousel-caption d-md-block card-title add_divtext add_oer">' +
-        '<a class="buynownow">' +
+        '<div class="carousel-caption d-md-block card-title add_divtext add_oer">' + actions +
+        
+        /**'<a class="buynownow">' +
         '<div class="float-left icon_padding_div">' +
         '<input class="add_to_cart icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + '_cart" id="add_' + item.product_id + '_cart">' +
         '<label class="currencyicon_label" for="add_' + item.product_id + '_cart"><img src="img/shopping-cart.svg" alt=""></label>' +
@@ -2180,7 +2148,9 @@ function other_product_same_clientmyFunction(item, index) {
         '<input class="add_to_remove icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + 'remove_cart" id="add_' + item.product_id + 'remove_cart">' +
         '<label class="currencyicon_label" for="add_' + item.product_id + 'remove_cart"><img src="img/delete.svg" alt=""></label>' +
         '</div>' + 
-        '</a>' + 
+        '</a>' + */ 
+
+
 
         '</div> ' + 
         
@@ -2199,22 +2169,24 @@ $("#arrow_add_client_back").click(function(){
     });
 });
 
+var cat_id = "";
 $("body").delegate(".category","click",function(event){
     event.preventDefault();
-    var cat_id = $(this).attr('cat_id');
+    cat_id = $(this).attr('cat_id');
     var add_client = $(this).attr('add_client');
     startlimit = 0;
     endlimit = 24;
     $('.product_main_container').show(500, function(){
-        window.location.href="#product_container";
         $("#menu_container_left_tab").show(100);
         $("#chat_container").hide(100);
         $("#connects_chatbar").hide(100);
-       $("#orders_container").hide(100);
-   $("#order_items_container").hide(10);
-               $("#cart_container").hide(100);
+        $("#orders_container").hide(100);
+        $("#order_items_container").hide(10);
+        $("#cart_container").hide(100);
         $("#location_container").hide(100);
         $("#user_container").hide(100);
+        search_value != '';
+        geoshop_value != '';
         product_main_container(startlimit,endlimit,cat_id);
     });
     $("#product_add_client_container").hide(100,function(){       
@@ -2223,6 +2195,7 @@ $("body").delegate(".category","click",function(event){
     if (_apps_tab != 0) {
         document.body.classList.toggle('nav-is-toggled');
         _apps_tab =0;
+        cat_id = "";
     }
 });
 function apps_categories(add_client) {
@@ -2314,7 +2287,6 @@ function apps_categoriesmyFunction(item, index) {
 
 function product_main_container(startlimit,endlimit,cat_id) {
     $('#app-cover-spin').show(0);
-
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
@@ -2322,121 +2294,57 @@ function product_main_container(startlimit,endlimit,cat_id) {
         processData: true,
         url: api_server_url + '/cordova/product_main_container.php',
         success: function searchSuccess(response) {
-            $('#app-cover-spin').hide(0);
             try {
-                //response.data = JSON.parse(response.data);
-                $("#product_row_container").html('');
                 if (response.message == "success") {
                     var products_status = response.products_status;
                     var products_data = response.products;
                     if (products_status != "0") { 
                         $('.product_error_container').hide(500, function(){
-                            window.location.href="#product_container";
                             $("#product_row_container").show(100);
                             $("#arrow_navigation_container").show(100);
                         });
-                        product_row_container_index = products_data.length;                   
+                        product_row_container_index = products_data.length; 
+                        $("#product_row_container").html(''); 
+                        $('#app-cover-spin').hide(0);                 
                         products_data.forEach(products_datamyFunction);
                     } else {
                         $('.product_error').show(500, function(){
-                            window.location.href="#product_container";
                             $("#product_row_container").hide(100);
                             $("#arrow_navigation_container").hide(100);
                             $("#product_row_h").html(response.message);
                             $("#product_row_p").html('No new Products');
+                            $('#app-cover-spin').hide(0);
                         });
                     }
                 }
                 else {
                     $('.product_error_container').show(500, function(){
-                        window.location.href="#product_container";
                         $("#product_row_container").hide(100);
                         $("#arrow_navigation_container").hide(100);
                         $("#product_row_h").html(response.message);
                         $("#product_row_p").html('No new Products');
+                        $('#app-cover-spin').hide(0);
                     });
                 }
             } catch(e) {
                 $('.product_error_container').show(500, function(){
-                    window.location.href="#product_container";
                     $("#product_row_container").hide(100);
                     $("#arrow_navigation_container").hide(100);
                     $("#product_row_h").html(response.message);
                     $("#product_row_p").html('JSON parsing error');
+                    $('#app-cover-spin').hide(0);
                 });
-            }
-          
+            }          
         },
         error: function searchError(xhr, err) {
-          //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-          $('#app-cover-spin').hide(0);
-          $('.product_error_container').show(500, function(){
-              window.location.href="#product_container";
+            $('.product_error_container').show(500, function(){
               $("#product_row_container").hide(100);
               $("#arrow_navigation_container").hide(100);
               $("#product_row_p").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-          });
-
-        }
-    });
-    /**const options = {
-        method: 'post',
-        data: { product_main_container: 12, startlimit: startlimit, endlimit: endlimit, cat_id:cat_id },
-        headers: { Authorization: 'OAuth2: token' }
-    };      
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/product_main_container.php', options, function(response) {
-        $('#app-cover-spin').hide(0);
-        try {
-            response.data = JSON.parse(response.data);
-            $("#product_row_container").html('');
-            if (response.data.message == "success") {
-                var products_status = response.data.products_status;
-                var products_data = response.data.products;
-                if (products_status != "0") { 
-                    $('.product_error_container').hide(500, function(){
-                        window.location.href="#product_container";
-                        $("#product_row_container").show(100);
-                        $("#arrow_navigation_container").show(100);
-                    });                   
-                    products_data.forEach(products_datamyFunction);
-                } else {
-                    $('.product_error').show(500, function(){
-                        window.location.href="#product_container";
-                        $("#product_row_container").hide(100);
-                        $("#arrow_navigation_container").hide(100);
-                        $("#product_row_h").html(response.data.message);
-                        $("#product_row_p").html('No new Products');
-                    });
-                }
-            }
-            else {
-                $('.product_error_container').show(500, function(){
-                    window.location.href="#product_container";
-                    $("#product_row_container").hide(100);
-                    $("#arrow_navigation_container").hide(100);
-                    $("#product_row_h").html(response.data.message);
-                    $("#product_row_p").html('No new Products');
-                });
-            }
-        } catch(e) {
-            $('.product_error_container').show(500, function(){
-                window.location.href="#product_container";
-                $("#product_row_container").hide(100);
-                $("#arrow_navigation_container").hide(100);
-                $("#product_row_h").html(response.data.message);
-                $("#product_row_p").html('JSON parsing error');
+              $('#app-cover-spin').hide(0);
             });
         }
-    }, function(response) {
-        $('#app-cover-spin').hide(0);
-        $('.product_error_container').show(500, function(){
-            window.location.href="#product_container";
-            $("#product_row_container").hide(100);
-            $("#arrow_navigation_container").hide(100);
-            $("#product_row_p").html(response.status + " : " + response.error);
-        });
-    }); */
-
+    });
 }
 
 var product_row_container_index = 0;
@@ -2462,15 +2370,13 @@ function products_datamyFunction(item, index) {
     }
 
     if (username == item.add_client) {
-        var actions = '<div class="tags are-medium">' +
-    
+        var actions = '<div class="tags are-medium">' +    
         '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
         '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
         '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
         '</div>';
     } else {
-        var actions = '<div class="tags are-medium">' +
-    
+        var actions = '<div class="tags are-medium">' +    
         '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
         '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
         '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
@@ -2479,43 +2385,35 @@ function products_datamyFunction(item, index) {
     if (role == 'admin' || role == 'Admin'){
         var actions = '<div class="tags are-medium">' +
         '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-        '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
-        '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-        
-        '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
         '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
         '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+        '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
+        '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
         '</div>';
     } 
-
-
     var product_row_container = '<div class="product_column">' +
     '<div class="card">' +
     '<div class="card-section">' +
     '<img class="div_cimage" src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
     '</div>' +
-    '<div class="card-section">' +
-    
+    '<div class="card-section">' +    
     '<p class="card-text"><b style="height: auto;">' + product_title_account + '</b></p>' +
-
     '<div class="btn btn-primary">' +
     '<a>' +  currency_price_symbal + '</a>' +    
     '<a>' +  product_price + '</a>' +
-    '<i class="bi bi-cart"></i>' +
     '</div> ' + 
-
-    '<p class="card-text">From ' + item.add_client + '</p>' +    '</div>' +
-    
+    '<p class="card-text">From ' + item.add_client + '</p>' +    '</div>' +    
     '<footer class="card-footer">' + actions + '</footer>' +
-
     '</div>' +
     '</div>'; 
-    //$("#product_row_row").append(product_row_row);
 
-    $("#product_row_container").append(product_row_container);
+    if (index >= startlimit) {
+        $("#product_row_container").append(product_row_container);
+    }
 
     if (startlimit > 0) {
-        if (product_row_index < 20) {
+        var ger = product_row_index - startlimit;
+        if (ger < 24) {
             $("#product_next").hide(100,function(){       
                 $("#product_previous").show(100);
             });
@@ -2529,6 +2427,10 @@ function products_datamyFunction(item, index) {
             $("#product_previous").hide(100);
         });
     }
+    if (product_row_index < 24) {
+        $("#product_previous").hide(100);
+        $("#product_next").hide(100);
+    }
     
 }
 
@@ -2540,26 +2442,41 @@ $("#add_products_close").click(function(){
 });
 $("#pr_next").click(function(){
     startlimit = endlimit;
-    endlimit = endlimit + 20;
-    var cat_id = "";
-    product_main_container(startlimit,endlimit,cat_id);
+    endlimit = endlimit + 24;
+    if (search_value != '') {
+        search(search_value,startlimit,endlimit);
+    } else if(geoshop_value != ''){
+        geoshop(latitude,longitude,gradius,startlimit,endlimit);
+    } else if(cat_id != ''){
+        product_main_container(startlimit,endlimit,cat_id);
+    } else{
+        product_main_container(startlimit,endlimit,cat_id);
+    }
 });
+
 $("#pr_previous").click(function(){
     endlimit = startlimit;
-    startlimit = startlimit - 20;
-    var cat_id = "";
-    product_main_container(startlimit,endlimit,cat_id);
+    startlimit = startlimit - 24;
+    if (search_value != '') {
+        search(search_value,startlimit,endlimit);
+    } else if(geoshop_value != ''){
+        geoshop(latitude,longitude,gradius,startlimit,endlimit);
+    } else if(cat_id != ''){
+        product_main_container(startlimit,endlimit,cat_id);
+    } else{
+        product_main_container(startlimit,endlimit,cat_id);
+    }
 });
 
 $("#s1").click(function(){
-    window.location.href="#product_container";
+    //window.location.href="#product_container";
     $("#menu_container_top_tab").show(100);
     $("#menu_container_left_tab").show(100);
     $("#chat_container").hide(100);
     $("#connects_chatbar").hide(100);
-   $("#orders_container").hide(100);
-   $("#order_items_container").hide(10);
-               $("#cart_container").hide(100);
+    $("#orders_container").hide(100);
+    $("#order_items_container").hide(10);
+    $("#cart_container").hide(100);
     $("#location_container").hide(100);
     $("#user_container").hide(100);
     $("#top_menu").show(100,function(){       
@@ -2937,6 +2854,9 @@ $("#contacts_back").click(function(){
 var chat_ = 0;
 $("#s5").click(function(){
     chat_ = 1;
+    search_value != '';
+    geoshop_value != '';
+    cat_id != '';
     window.location.href="#center_top_id"; 
     $("#menu_container_top_tab").hide(100);                
     $("#center_top_id").show(100);                
@@ -3201,6 +3121,9 @@ document.addEventListener('backbutton', function(){
 });
 
 $("#s2").click(function(){
+    search_value != '';
+    geoshop_value != '';
+    cat_id != '';
     window.location.href="#cart_container";
     $("#menu_container_top_tab").show(100);                
 
@@ -3235,6 +3158,9 @@ function cart() {
 }
 
 $("#s4").click(function(){
+    search_value != '';
+    geoshop_value != '';
+    cat_id != '';
     window.location.href="#user_container";
     $("#menu_container_top_tab").show(100);                
 
@@ -3277,6 +3203,9 @@ function user() {
 }
 
 $("#s3").click(function(){
+    search_value != '';
+    geoshop_value != '';
+    cat_id != '';
     window.location.href="#location_container";
     $("#menu_container_top_tab").show(100);                
 
@@ -3448,6 +3377,7 @@ function login_user(login_email,login_password) {
                 if (response.message == "success") {
                     $("#login_button_help").html("Welcome " + response.username);
                     username = response.username;
+                    role = response.role;
                     main();
                 } else {
                     $("#login_button_help").html(response.login_email + " or " + response.login_password);
@@ -3718,4 +3648,247 @@ function signup_user(signup_username,signup_email,signup_password) {
         $("#signup_button_help").html(response.status + " : " + response.error);
         main();        
     }); */
+}
+
+$("#forgot_password").click(function(){
+    $("#login").removeClass("active");
+    $("#regis").removeClass("active");
+
+    $("#forgot").addClass("active");
+});
+$("#login_pill").click(function(){
+    $("#reset_code").removeClass("active");
+    $("#forgot").removeClass("active");
+    $("#regis").removeClass("active");
+
+    $("#login").addClass("active");
+});
+var forgot_login_email = "";
+$("#forgot").keypress(function (e){
+    if(e.keyCode == 13){
+        forgot_login_button();
+    }
+});
+function forgot_login_button() {
+    var forgot_email_format =/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+    forgot_login_email = $("#forgot_login_email").val();
+    if (forgot_login_email != "" && forgot_login_email != "name@example.com" && forgot_login_email != null) {
+        if (forgot_email_format.test(forgot_login_email)) {
+            $("#forgot_login_email_help").html(forgot_login_email);
+            $("#forgot_login_email").removeClass("is-invalid");
+            $("#forgot_login_email").addClass("is-valid");
+
+            forgot_login_password(forgot_login_email);
+        } else {
+            $("#forgot_login_email_help").html("Enter a valid email address, e.g name@example.com");
+            $("#forgot_login_email").removeClass("is-valid");
+            $("#forgot_login_email").addClass("is-invalid");
+        }
+    } else {
+        $("#forgot_login_email_help").html("Email address should be provided");
+        $("#forgot_login_email").removeClass("is-valid");
+        $("#forgot_login_email").addClass("is-invalid");
+    }
+}
+$("#forgot_login_button").click(function(){
+    forgot_login_button();
+});
+function forgot_login_password(forgot_login_email) {
+    $('#app-cover-spin').show(0);
+
+    $.ajax({
+        type: "POST", // Type of request to be send, called as 
+        dataType: 'json',
+        data: { forgot_login_password: 12, forgot_login_email: forgot_login_email},
+        processData: true,
+        url: api_server_url + '/cordova/forgot_login_password.php',
+        success: function searchSuccess(response) {
+            $('#app-cover-spin').hide(0);
+            try {
+                if (response.message == "success") {
+                    $("#code_email").html(forgot_login_email);
+                    $("#forgot").removeClass("active");
+                    //$("#regis").removeClass("active");
+                    //$("#login").removeClass("active");
+                    $("#reset_code").addClass("active");
+
+                    $("#forgot_login_button_help").html(response.validate_message);
+
+                }
+                else if(response.message == "fail validate"){                    
+                    $("#forgot_login_button_help").html(response.validate_message);
+                } else {
+                    $("#forgot_login_button_help").html(response.signup_email + " or " + response.signup_password);
+                }
+            } catch(e) {
+                $("#forgot_login_button_help").html('JSON parsing error');
+            }          
+        },
+        error: function searchError(xhr, err) {
+          $('#app-cover-spin').hide(0);
+          $("#forgot_login_button_help").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+        }
+    });
+    
+
+}
+$("#reset_code").keypress(function (e){
+    if(e.keyCode == 13){
+        code_button();
+    }
+});
+function code_button() {
+    var forgot_code_email = $("#forgot_code_email").val();
+    if (forgot_code_email != "" && forgot_code_email != null) {
+        $("#forgot_code_email_help").html(forgot_code_email);
+        $("#forgot_code_email").removeClass("is-invalid");
+        $("#forgot_code_email").addClass("is-valid");
+        
+        code_verification(forgot_code_email,forgot_login_email);
+        //alert(Number.isInteger(forgot_code_email) + forgot_code_email);
+        /**if (Number.isInteger(forgot_code_email)) {
+            $("#forgot_code_email_help").html(forgot_code_email);
+            $("#forgot_code_email").removeClass("is-invalid");
+            $("#forgot_code_email").addClass("is-valid");
+            
+            code_verification(forgot_code_email);
+        } else {
+            $("#forgot_code_email_help").html("Enter a valid code");
+            $("#forgot_code_email").removeClass("is-valid");
+            $("#forgot_code_email").addClass("is-invalid");
+        } */
+    } else {
+        $("#forgot_code_email_help").html("Enter the code sent to " + forgot_login_email + "");
+        $("#forgot_code_email").removeClass("is-valid");
+        $("#forgot_code_email").addClass("is-invalid");
+    }
+}
+$("#code_button").click(function(){
+    code_button();
+});
+function code_verification(code, email) {
+    $('#app-cover-spin').show(0);
+
+    $.ajax({
+        type: "POST", // Type of request to be send, called as 
+        dataType: 'json',
+        data: { code_verification: 12, code: code, email:email},
+        processData: true,
+        url: api_server_url + '/cordova/code_verification.php',
+        success: function searchSuccess(response) {
+            $('#app-cover-spin').hide(0);
+            try {
+                if (response.message == "success") {
+                    $("#forgot_code_email_help").html(code);
+
+                    $("#reset_code").removeClass("active");
+                    //$("#forgot").removeClass("active");
+                    //$("#regis").removeClass("active");
+                    //$("#login").removeClass("active");
+                    $("#new_password").addClass("active");
+
+                    $("#code_button_help").html(response.validate_message);
+
+                }
+                else if(response.message == "fail validate"){                    
+                    $("#code_button_help").html(response.validate_message);
+                } else {
+                    $("#code_button_help").html(response.signup_email + " or " + response.signup_password);
+                }
+            } catch(e) {
+                $("#code_button_help").html('JSON parsing error');
+            }          
+        },
+        error: function searchError(xhr, err) {
+          $('#app-cover-spin').hide(0);
+          $("#code_button_help").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+        }
+    });
+}
+$("#new_password").keypress(function (e){
+    if(e.keyCode == 13){
+        new_password_button();
+    }
+}); 
+function new_password_button() {
+    var create_new_password = $("#create_new_password").val();
+    var confirm_new_password = $("#confirm_new_password").val();
+
+    if (create_new_password != "" && create_new_password != null) {
+        if (create_new_password.length >= 8) {
+            $("#create_new_password_help").html(create_new_password.length);
+            $("#create_new_password").removeClass("is-invalid");
+            $("#create_new_password").addClass("is-valid");
+        } else {
+            $("#create_new_password_help").html("Password should be atleast 8 characters");
+            $("#create_new_password").removeClass("is-valid");
+            $("#create_new_password").addClass("is-invalid");
+        }        
+    } else {
+        $("#create_new_password_help").html("Create new password");
+        $("#create_new_password").removeClass("is-valid");
+        $("#create_new_password").addClass("is-invalid");
+    }
+
+    if (confirm_new_password != "" && confirm_new_password != null) {
+        if (confirm_new_password.length >= 8) {
+            if (create_new_password == confirm_new_password) {
+                $("#confirm_new_password_help").html(confirm_new_password.length);
+                $("#confirm_new_password").removeClass("is-invalid");
+                $("#confirm_new_password").addClass("is-valid");
+                create_new_user_password(forgot_login_email,create_new_password);
+            } else {
+                $("#confirm_new_password_help").html("Password do not match");
+                $("#confirm_new_password").removeClass("is-valid");
+                $("#confirm_new_password").addClass("is-invalid");
+            }
+        } else {
+            $("#confirm_new_password_help").html("Password should be atleast 8 characters");
+            $("#confirm_new_password").removeClass("is-valid");
+            $("#confirm_new_password").addClass("is-invalid");
+        }        
+    } else {
+        $("#confirm_new_password_help").html("Confirm new password");
+        $("#confirm_new_password").removeClass("is-valid");
+        $("#confirm_new_password").addClass("is-invalid");
+    }
+}
+$("#new_password_button").click(function(){
+    new_password_button();
+});
+function create_new_user_password(forgot_login_email,new_password) {
+    $('#app-cover-spin').show(0);
+
+    $.ajax({
+        type: "POST", // Type of request to be send, called as 
+        dataType: 'json',
+        data: { create_new_password: 12, forgot_login_email: forgot_login_email, new_password:new_password},
+        processData: true,
+        url: api_server_url + '/cordova/create_new_password.php',
+        success: function searchSuccess(response) {
+            $('#app-cover-spin').hide(0);
+            try {
+                if (response.message == "success") {
+                    $("#new_password_button_help").html(forgot_login_email);
+
+                    $("#new_password").removeClass("active");
+                    $("#login").addClass("active");
+
+                    $("#new_password_button_help").html(response.validate_message);
+
+                }
+                else if(response.message == "fail validate"){                    
+                    $("#new_password_button_help").html(response.validate_message);
+                } else {
+                    $("#new_password_button_help").html(response.signup_email + " or " + response.signup_password);
+                }
+            } catch(e) {
+                $("#new_password_button_help").html('JSON parsing error');
+            }          
+        },
+        error: function searchError(xhr, err) {
+          $('#app-cover-spin').hide(0);
+          $("#new_password_button_help").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+        }
+    });
 }

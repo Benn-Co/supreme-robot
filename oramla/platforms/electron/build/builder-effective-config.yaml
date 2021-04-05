@@ -1,0 +1,15 @@
+directories:
+  output: 'C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\cordova\bennco\supreme-robot\oramla\platforms\electron\build'
+  buildResources: 'C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\cordova\bennco\supreme-robot\oramla\platforms\electron\build-res'
+  app: 'C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\cordova\bennco\supreme-robot\oramla\platforms\electron\www'
+appId: com.benco.org
+productName: Oramla
+electronVersion: 4.0.1
+electronDownload:
+  version: 4.0.1
+win:
+  icon: installer.png
+  target:
+    - target: nsis
+      arch:
+        - x64
