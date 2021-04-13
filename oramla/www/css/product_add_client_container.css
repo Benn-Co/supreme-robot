@@ -192,8 +192,169 @@
 	margin-top:22px;
 }
 
+	/* Fonts */
+  @import url('https://fonts.googleapis.com/css?family=Lato');
 
 
+
+
+  img {
+    max-width: 100%;
+  }
+  .buy-grid {
+    background-color: #ededed;
+  }
+  
+  @media (min-width: 768px) {
+    .buy-grid {
+      padding-top: 3rem;
+      padding-bottom: 5rem;
+      display: grid;
+      grid-column-gap: 2rem;
+      grid-template-columns: 50% 50%;
+      grid-template-rows: auto;
+      grid-template-areas: "hero-image header" "hero-image selection" "hero-image specs";
+    }
+  }
+  
+  header {
+    padding-bottom: 3rem;
+    grid-area: header;
+  }
+  header h1 {
+    margin: 0;
+  }
+  
+  .hero-image-wrapper {
+    grid-area: hero-image;
+    height: 100%;
+  }
+  
+  @media (min-width: 768px) {
+    .hero-image-element {
+      position: sticky;
+      top: 0;
+      left: 0;
+    }
+  }
+  
+  .selection {
+    grid-area: selection;
+    padding-bottom: 3rem;
+  }
+  
+  .selection-row {
+    padding-bottom: 2rem;
+  }
+  
+  .swatch {
+    width: 36px;
+    height: 36px;
+    background-color: #ededed;
+    text-align: center;
+    line-height: 36px;
+    display: inline-block;
+    margin: 8px;
+    cursor: pointer;
+  }
+  
+  .btn-primary {
+    background: #336699;
+    width: 100%;
+    display: block;
+  }
+  
+  .swatch.color {
+    background-color: #336699;
+  }
+  .swatch.color:nth-of-type(2) {
+    background-color: #264d73;
+  }
+  .swatch.color:nth-of-type(3) {
+    background-color: #204060;
+  }
+  .swatch.color:nth-of-type(4) {
+    background-color: #1a334d;
+  }
+  .swatch.color:nth-of-type(5) {
+    background-color: #132639;
+  }
+  
+  .specs-table {
+    padding-bottom: 3rem;
+  }
+  
+  .specs-table-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-top: 1px solid #ccc;
+  }
+  
+  .spec-table-label {
+    font-weight: 700;
+  }
+  
+  .spec-table-description {
+    color: #999;
+  }
+  
+  .callout img {
+    width: 100%;
+  }
+
+
+  .card-price {
+    display: inline-block;
+    
+    width: auto;
+    height: 38px;
+    
+    background-color: rgb(68, 47, 0);
+    -webkit-border-radius: 3px 4px 4px 3px;
+    -moz-border-radius: 3px 4px 4px 3px;
+    border-radius: 3px 4px 4px 3px;
+    
+    border-left: 1px solid #333;
+  
+    /* This makes room for the triangle */
+    margin-left: 19px;
+    
+    position: relative;
+    
+    color: white;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 38px;
+  
+    padding: 0 10px 0 10px;
+  }
+  
+  /* Makes the triangle */
+  .card-price:before {
+    content: "";
+    position: absolute;
+    display: block;
+    left: -19px;
+    width: 0;
+    height: 0;
+    border-top: 19px solid transparent;
+    border-bottom: 19px solid transparent;
+    border-right: 19px solid #333;
+  }
+  
+  /* Makes the circle */
+  .card-price:after {
+    content: "";
+    background-color: white;
+    border-radius: 50%;
+    width: 4px;
+    height: 4px;
+    display: block;
+    position: absolute;
+    left: -9px;
+    top: 17px;
+  }
 
 
 

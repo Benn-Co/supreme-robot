@@ -1,0 +1,42 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>KML Click Capture Sample</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100% ;
+        }
+      #map {
+       height: 100%;
+       width: 100%;
+       overflow: hidden;
+       float: left;
+       border: thin solid #333;
+       }
+      #capture {
+       overflow: hidden;
+       float: left;
+       background-color: #1a1a1b;
+       border: thin solid #333;
+       border-left: none;
+       color: aliceblue;
+       }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="capture"></div>
+    <script src='../ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    <script src='../ajax/libs/popper.js/1.14.7/umd/popper.min.js'></script>
+    <script src="agent_location_map.js"></script>
+
+    <script defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpPM8vcpY3LhhPJ4CYL6_aZ3lAOJwHTEo&callback=initMap">
+    </script>
+  </body>
+</html>
