@@ -38,3 +38,26 @@ function searchToggle(obj, evt){
             container.find('.search-input').val('');
         }
 }
+
+(function($) {
+    $("body").delegate(".more","click",function(event){
+        event.preventDefault();
+        //alert();
+        var showMe = $(this)
+        .closest(".card")
+        .find(".container-prod");
+      $(this)
+        .closest(".product_column")
+        .find(".container-prod")
+        .not(showMe)
+        .removeClass("information");
+      $(".container-prod").removeClass("social-sharing");
+      showMe
+        .stop(false, true)
+        .toggleClass("information")
+        .removeClass("social-sharing");
+      show.preventDefault();   
+        
+    });
+  })(jQuery);
+  

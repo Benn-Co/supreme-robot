@@ -20,6 +20,8 @@
 
 // Wait for the deviceready event before using any of Cordova's device APIs.
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
+
+//export { colorCode };
 document.addEventListener('deviceready', onDeviceReady, false);
 
 var username = "";
@@ -27,8 +29,8 @@ var email = "";
 var phone = "";
 
 var timestamp =  "";
-var latitude =  "";
-var longitude =  "";
+var latitude =  52.5159;
+var longitude =  13.3777;
 var location_name =  "";
 var review =  "";
 var rating =  "";
@@ -1853,8 +1855,11 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
     $("#add_fload_id").attr("connects_id", "" + product_id + "");
     $("#add_fload_id").attr("connects_time", "" + Date() + "");
     add_cdiv_cima = 1;
+
+    
     other_product_same(product_id); 
     other_product_same_client(0,8,add_client);
+    agent_location_map(add_client,username);
 }
 $("body").delegate(".div_otherimage","click",function(event){
     event.preventDefault();
@@ -2369,29 +2374,52 @@ function products_datamyFunction(item, index) {
         var IMAGE_url = IMAGE_url_path_name + product_image + '';
     }
 
+    //var IMAGE_url = 'img/noni.png';
+
     if (username == item.add_client) {
-        var actions = '<div class="tags are-medium">' +    
+        /**var actions = '<div class="tags are-medium">' +    
         '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
         '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
         '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-        '</div>';
+        '</div>'; */
+        var adminactions = '';
+
+        var actions = '' +
+        '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="more fl-l edit_product" product_id = "' + item.product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>';
     } else {
-        var actions = '<div class="tags are-medium">' +    
+        /**var actions = '<div class="tags are-medium">' +    
         '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
         '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
         '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
-        '</div>';
+        '</div>'; */
+        var adminactions = '';
+        var actions = '' +
+        '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="share fl-l connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
     }
     if (role == 'admin' || role == 'Admin'){
-        var actions = '<div class="tags are-medium">' +
+        /**var actions = '<div class="tags are-medium">' +
         '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
         '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
         '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
         '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
         '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-        '</div>';
+        '</div>'; */
+        var admin_actions = '' +
+        '<a href="javascript:void(0)" class="more fl-l edit_product" product_id = "' + item.product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>';
+        var adminactions = '<div class="buttons cf">' + admin_actions + '</div><br>';
+
+        var actions = '' +
+        '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="share fl-l connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
+        
     } 
-    var product_row_container = '<div class="product_column">' +
+    /**var product_row_container = '<div class="product_column">' +
     '<div class="card">' +
     '<div class="card-section">' +
     '<img class="div_cimage" src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
@@ -2402,12 +2430,59 @@ function products_datamyFunction(item, index) {
     '<a>' +  currency_price_symbal + '</a>' +    
     '<a>' +  product_price + '</a>' +
     '</div> ' + 
-    '<p class="card-text">From ' + item.add_client + '</p>' +    '</div>' +    
+    '<p class="card-text">From ' + item.add_client + '</p>' +
+    '</div>' +    
     '<footer class="card-footer">' + actions + '</footer>' +
     '</div>' +
-    '</div>'; 
+    '</div>'; */ 
+
+
+
+    var product_container = '<div class="container-prod">' +
+    '<div class="image div_cimage" style="background-image:url(' + IMAGE_url + ');" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" ></div>' +
+    '<div class="container-information">' +
+    '<div class="title">' +
+    '<p class="card-text"><b style="height: auto;">' + product_title_account + '</b></p>' +
+    '<a href="javascript:void(0)" class="more close"><i class="fa fa-times"></i></a>' +                
+    '</div>' +
+    '<div class="description"><p>From ' + item.add_client + '</p><br>' + item.add_description + '<br>Ratings : ' + item.add_rating + '<br>' + adminactions + '</div>' +
+    '</div>' +
+    
+    
+
+    '<div class="buttons cf">' + actions + '</div>' +
+    '</div>';
+
+
+    var product_row_container = '<div class="product_column">' +
+    '<div class="card">' + product_container + '</div>' +
+    '</div>';
+
+
+
+    var newitem = '<li class="product fl-l">' +
+    '<div class="container-prod">' +
+    '<div class="image" style="background-image:url(' + IMAGE_url + ');"></div>' +
+    '<div class="container-information">' +
+    '<div class="title">' +
+    'Splatter hoodie' +
+    '<a href="javascript:void(0)" class="more close"><i class="fa fa-times"></i></a>' +                
+    '</div>' +
+    '<div class="description information">Siebdruck print<br>100% cotton<br>Color available: white on gray<br>Size available: L, XL</div>' +
+    '</div>' +
+    '<div class="buttons cf">' +
+    '<a href="javascript:void(0)" class="more fl-l"><span><span><i class="fa fa-shopping-cart"></i></span></span></a>' +
+    '<a href="javascript:void(0)" class="more fl-l"><span><span><i class="fa fa-plus"></i></span></span></a>' +
+    '<a href="javascript:void(0)" class="share fl-l"><span><span><i class="fa fa-share-alt"></span></i></span></a>' +
+    '</div>' +
+    '</div>' +
+    '</li>';
+
+
 
     if (index >= startlimit) {
+        //$("#product_row_container").append(newitem);
+
         $("#product_row_container").append(product_row_container);
     }
 
@@ -3233,6 +3308,24 @@ $("#s3").click(function(){
     //$("#menu_container_apps_tab").hide(100);
 });
 function location_container() {
+    heremapview(latitude,longitude);  
+    /**$.ajax({
+        url: 'https://image.maps.ls.hereapi.com/mia/1.6/mapview',
+        type: 'GET',
+        data: {
+            c: '52.5159,13.3777',
+            z: '14',
+            apiKey: '46q01OAMcax9dvSziSM9fEF8biYPSF5F4dPje-QCZ9Q'
+        },
+        success: function (data) {
+            //main_heremap
+            var add_heremap = document.getElementById('main_heremap');
+            add_heremap.src = JSON.stringify(data);
+            alert(JSON.stringify(data));
+          
+        }
+    }); */
+
     $(".location_main_container").show(100);
     window.location.href="#location_container";    
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
@@ -3242,51 +3335,26 @@ function location_container() {
         heremapview(latitude,longitude);        
     };
     function onError(error) {
+        heremapview(latitude,longitude);  
         $("#location_container").html('code: ' + error.code + 'message: ' + error.message + '');
     }
     navigator.geolocation.getCurrentPosition(onSuccess, onError); 
 }
-
-function addMarkersToMap_client(latitude,longitude){
-     var dataURL = "https://image.maps.ls.hereapi.com/mia/1.6/mapview?c=52.5159%2C13.3777&z=14&apiKey=H6XyiCT0w1t9GgTjqhRXxDMrVj9h78ya3NuxlwM7XUs";
-     var xmlhttp = new XMLHttpRequest();
-     xmlhttp.onreadystatechange = function() { 
-       if (this.readyState == 4 && this.status == 200) { 
-         var data = this.responseText ; 
-         alert(data);
-       } 
-     }; 
-     xmlhttp.open("GET", dataURL, true); 
-     xmlhttp.send(); 
-}
-
 function heremapview(latitude,longitude) {
     $('#app-cover-spin').show(0);
-    const options = {
-        method: 'GET',
+    $.ajax({
+        url: 'https://image.maps.ls.hereapi.com/mia/1.6/mapview',
+        type: 'GET',
         data: {
             c: '' + latitude + ',' + longitude + '',
             z: '14',
-            apiKey: 'DxmnLCJGBp0cNolyGK4WcikPtr5NPC-Yui8fqwaVuVs',
+            apiKey: '46q01OAMcax9dvSziSM9fEF8biYPSF5F4dPje-QCZ9Q'
+        },
+        success: function (data) {
+            //var add_heremap = document.getElementById('main_heremap');
+            //add_heremap.src = "http://image.maps.cit.api.here.com/mia/1.6/mapview?" +JSON.stringify(data);
+            //alert(data);          
         }
-    };     
-    cordova.plugin.http.sendRequest('https://image.maps.ls.hereapi.com/mia/1.6/mapview',options,function(response) {
-        $('#app-cover-spin').hide(0);
-        var add_heremap = document.getElementById('main_heremap');
-        add_heremap.src = response;
-        try {
-            //addMarkersToMap(map);
-
-            //$("#locationinfo").html('response: ' + JSON.stringify(response) + '');
-            alert(JSON.stringify(response));
-        } catch(e) {
-            $("#locationinfo").html('JSON parsing error');
-            alert('JSON parsing error');
-        }
-    }, function(response) {
-        $('#app-cover-spin').hide(0);
-       // $("#locationinfo").html(response.status + " : " + response.error);
-        alert(response.status + " : " + response.error);
     }); 
 }
 function snackbar(message) {
@@ -3660,7 +3728,8 @@ $("#login_pill").click(function(){
     $("#reset_code").removeClass("active");
     $("#forgot").removeClass("active");
     $("#regis").removeClass("active");
-
+    $("#reset_code").removeClass("active");
+    $("#new_password").removeClass("active");
     $("#login").addClass("active");
 });
 var forgot_login_email = "";
@@ -3707,12 +3776,17 @@ function forgot_login_password(forgot_login_email) {
             try {
                 if (response.message == "success") {
                     $("#code_email").html(forgot_login_email);
-                    $("#forgot").removeClass("active");
-                    //$("#regis").removeClass("active");
-                    //$("#login").removeClass("active");
-                    $("#reset_code").addClass("active");
+                    if (response.validate_message == 'Your mail has been sent successfully.') {
+                        $("#forgot").removeClass("active");
+                        //$("#regis").removeClass("active");
+                        //$("#login").removeClass("active");
+                        $("#reset_code").addClass("active");
 
-                    $("#forgot_login_button_help").html(response.validate_message);
+                        $("#forgot_login_button_help").html(response.validate_message);
+                    } else {
+                        $("#forgot_login_button_help").html(response.validate_message);
+                    }
+                    
 
                 }
                 else if(response.message == "fail validate"){                    
@@ -3892,3 +3966,1450 @@ function create_new_user_password(forgot_login_email,new_password) {
         }
     });
 }
+
+function agent_location_map(add_client,username) {
+    localStorage.setItem("add_client", add_client);
+    localStorage.setItem("username", username);
+
+    document.getElementById("agent_location_map").innerHTML = "";
+    //document.getElementById("agent_location_map").innerHTML = '<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/agent_location_map.html" height="400px" width="100%" title="map"></iframe>';
+    document.getElementById("agent_location_map").innerHTML = '<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/" height="400px" width="100%" title="map"></iframe>';
+
+    /**cordova.plugin.google.maps.LocationService.getMyLocation(function(result) {
+        alert(["Your current location:\n",
+            "latitude:" + location.latLng.lat.toFixed(3),
+            "longitude:" + location.latLng.lng.toFixed(3),
+            "speed:" + location.speed,
+            "time:" + location.time,
+            "bearing:" + location.bearing].join("\n"));
+    }); */
+    /**$.getScript( "" + path_protocol + "//" + host_name +  ':' + port + "/map/agent_location_map.js", function( data, textStatus, jqxhr ) {
+        //alert(data);
+    }); 
+    cordova.plugin.http.sendRequest(api_server_url + '/cordova/signup_user.php', options, function(response) {
+        $('#app-cover-spin').hide(0);
+        $("#signup_button_help").html(response.status);
+        
+    }, function(response) {
+        $('#app-cover-spin').hide(0);
+        $("#signup_button_help").html(response.status + " : " + response.error);
+        main();        
+    });*/
+}
+
+
+/**function edit_add_items_name() {
+          // Function to preview image after validation
+
+        $(function() {
+            $(".edit_add_items_").change(function() {
+
+
+
+
+
+
+
+                $("#message").empty(); // To remove the previous error message
+
+
+
+
+
+
+
+                urlimageIsLoaded($(this).val());
+
+
+
+
+
+
+
+            });
+            $("#edit_file").change(function() {
+
+
+
+
+
+
+
+                $("#message").empty(); // To remove the previous error message
+
+
+
+
+
+
+
+                var file = this.files[0];
+
+
+
+
+
+
+
+                var imagefile = file.type;
+
+
+
+
+
+
+
+                var match= ["image/jpeg","image/png","image/jpg"];
+
+
+
+
+
+
+
+                if(!((imagefile==match[0]) || (imagefile==match[1]) || (imagefile==match[2]))){
+
+
+
+
+
+
+
+                    $('#previewing').attr('src','noimage.png');
+
+
+
+
+
+
+
+                    $("#message").html("<p id='error'>Please Select A valid Image File</p>"+"<h4>Note</h4>"+"<span id='error_message'>Only jpeg, jpg and png Images type allowed</span>");
+
+
+
+
+
+
+
+                    return false;
+
+
+
+
+
+
+
+                } else {
+
+
+
+
+
+
+
+                    var reader = new FileReader();
+
+
+
+
+
+
+
+                    reader.onload = imageIsLoaded;
+
+
+
+
+
+
+
+                    reader.readAsDataURL(this.files[0]);
+
+
+
+
+
+
+
+                }
+
+
+
+
+
+
+
+            });
+        });
+
+        function urlimageIsLoaded(url) {
+
+
+
+
+
+
+
+            $(this).css("color","green");
+
+
+
+
+
+
+
+            document.getElementById("edit_add_prod_btn").disabled = false;
+
+
+
+
+
+
+
+            setTimeout(hide_items_name, 3000);
+
+
+
+
+
+
+
+            $('#overlay_image_preview').css("display", "block");
+
+
+
+
+
+
+
+            $('#previewing').attr('src', url);
+
+
+
+
+
+
+
+            $('#previewing').attr('width', '250px');
+
+
+
+
+
+
+
+            $('#previewing').attr('height', 30);
+
+
+
+
+
+
+
+        };
+        
+        function imageIsLoaded(e) {
+
+
+
+
+
+
+
+            $(this).css("color","green");
+
+
+
+
+
+
+
+            document.getElementById("edit_add_prod_btn").disabled = false;
+
+
+
+
+
+
+
+            setTimeout(hide_items_name, 3000);
+
+
+
+
+
+
+
+            $('#overlay_image_preview').css("display", "block");
+
+
+
+
+
+
+
+            $('#previewing').attr('src', e.target.result);
+
+
+
+
+
+
+
+            $('#previewing').attr('width', '250px');
+
+
+
+
+
+
+
+            $('#previewing').attr('height', 30);
+
+
+
+
+
+
+
+        };
+      }      
+      $("#edit_add_items_php").on('submit',(function(e) {
+
+
+
+
+
+
+
+          e.preventDefault();
+
+
+
+
+
+
+
+          var edit_overlay_prod_title = $("#edit_prod_title").val();
+
+
+
+
+
+
+
+          var edit_overlay_prod_price = $("#edit_prod_price").val();
+
+
+
+
+
+
+
+          var edit_overlay_product_description = $("#edit_product_description").val();
+
+
+
+
+
+
+
+          var edit_overlay_quantity = $("#edit_quantity").val();
+
+
+
+
+
+
+
+          var edit_overlay_category_option = $("#edit_category_option").val();
+
+
+
+
+
+
+
+          var edit_overlay_brands_option = $("#edit_brands_option").val();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          if (Number.isNaN(Number(edit_overlay_prod_price)) != true) {
+
+
+
+
+
+
+
+            $("#edit_prod_price").val(edit_overlay_prod_price/currency_exchange_rate);
+
+
+
+
+
+
+
+            //alert(edit_overlay_prod_price);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              if (upload_from_url == true) {
+
+
+
+
+
+
+
+                var edit_url = $("#edit_url").val();
+
+
+
+
+
+
+
+                if(edit_overlay_prod_title != "" && edit_overlay_prod_price != "" && edit_overlay_product_description != "" && edit_overlay_quantity != "" && edit_overlay_category_option != "" && edit_overlay_category_option != null && edit_overlay_brands_option != ""  && edit_overlay_brands_option != null){
+
+
+
+
+
+
+
+                  //alert(edit_overlay_prod_price);
+
+
+
+
+
+
+
+                  var myObj = { edit_prod_title:edit_overlay_prod_title,edit_prod_price:edit_overlay_prod_price,edit_product_description:edit_overlay_product_description,edit_quantity:edit_overlay_quantity,edit_category_option:edit_overlay_category_option,edit_brands_option:edit_overlay_brands_option };
+
+
+
+
+
+
+
+                  var myJSON = JSON.stringify(myObj);
+
+
+
+
+
+
+
+                  var str = myJSON;
+
+
+
+
+
+
+
+                 // alert(myJSON);
+
+
+
+
+
+
+
+                  var dataURL = "" + path_protocol + "//" + host_name + "/api/edit_urlToUpload.php?q=" + str;  
+
+
+
+
+
+
+
+                  $('#cover-spin').show(0);
+
+
+
+
+
+
+
+                  $.ajax({
+
+
+
+
+
+
+
+                      url: dataURL, // Url to which the request is 
+
+
+
+
+
+
+
+                      type: "POST", // Type of request to be send, called as 
+
+
+
+
+
+
+
+                      data: new FormData(this), // Data sent to server, a set of key/value pairs (i.e. form fields and values)			
+
+
+
+
+
+
+
+                      contentType: false, // The content type used when sending data to the server.			
+
+
+
+
+
+
+
+                      cache: false, // To unable request pages to be cached			
+
+
+
+
+
+
+
+                      processData:false, // To send DOMDocument or non processed data file it is set to false			
+
+
+
+
+
+
+
+                      success: function(data) // A function to be called if request 
+
+
+
+
+
+
+
+                      {
+
+
+
+
+
+
+
+                          $('#cover-spin').hide(0);
+
+
+
+
+
+
+
+                          var myObj = JSON.parse(data);
+
+
+
+
+
+
+
+                          var dataa = myObj.data_requested;
+
+
+
+
+
+
+
+                          var data_returned = myObj.data_returned;
+
+
+
+
+
+
+
+                          var uploaded = myObj.uploaded;
+
+
+
+
+
+
+
+                          var success = myObj.success; 
+
+
+
+
+
+
+
+                          var _more_success = myObj._more_success;
+
+
+
+
+
+
+
+                          var _more_uploaded = myObj._more_uploaded;
+
+
+
+
+
+
+
+                          if (success == "Uploaded Successfully...") {
+
+
+
+
+
+
+
+                              var  overlay_image_preview =  document.getElementById("overlay_image_preview");				
+
+
+
+
+
+
+
+                              overlay_image_preview.style.display = "none";
+
+
+
+
+
+
+
+                              add_items_press = 0;
+
+
+
+
+
+
+
+                              $("#edit_prod_title").val("");
+
+
+
+
+
+
+
+                              $("#edit_prod_price").val("");
+
+
+
+
+
+
+
+                              $("#edit_product_description").val("");
+
+
+
+
+
+
+
+                              $("#edit_quantity").val("");
+
+
+
+
+
+
+
+                              $("#edit_category_option").val("");
+
+
+
+
+
+
+
+                              $("#edit_brands_option").val("");
+
+
+
+
+
+
+
+                              $("#edit_url").val("");
+
+
+
+
+
+
+
+                              var  edit_modal =  document.getElementById("edit_modal");
+
+
+
+
+
+
+
+                              edit_modal.style.display = "none";
+
+
+
+
+
+
+
+                              snackbar(uploaded);
+
+
+
+
+
+
+
+                              product(username,start_limit, end_limit);
+
+
+
+
+
+
+
+                          } else {
+
+
+
+
+
+
+
+                              snackbar(uploaded);
+
+
+
+
+
+
+
+                          }
+
+
+
+
+
+
+
+                      }
+
+
+
+
+
+
+
+                  });
+
+
+
+
+
+
+
+                } else {
+
+
+
+
+
+
+
+                  if (edit_url != "" && edit_url != null ){
+
+
+
+
+
+
+
+                      $("#edit_url").css({
+
+
+
+
+
+
+
+                          "color": "white",
+
+
+
+
+
+
+
+                          "background-color": "#98bf21",
+
+
+
+
+
+
+
+                          "font-family": "Arial",
+
+
+
+
+
+
+
+                          "font-size": "20px",
+
+
+
+
+
+
+
+                          "padding": "5px"
+
+
+
+
+
+
+
+                      });
+
+
+
+
+
+
+
+                  }
+
+
+
+
+
+
+
+                  snackbar("Choose your product image");
+
+
+
+
+
+
+
+                  document.getElementById("edit_add_prod_btn").disabled = true;
+
+
+
+
+
+
+
+                }
+
+
+
+
+
+
+
+              } else {
+
+
+
+
+
+
+
+                var edit_file = $("#edit_file").val();
+
+
+
+
+
+
+
+                if(edit_overlay_prod_title != "" && edit_overlay_prod_price != "" && edit_overlay_product_description != "" && edit_overlay_quantity != "" && edit_overlay_category_option != "" && edit_overlay_category_option != null && edit_overlay_brands_option != ""  && edit_overlay_brands_option != null){
+
+
+
+
+
+
+
+                  var myObj = { edit_prod_title:edit_overlay_prod_title,edit_prod_price:edit_overlay_prod_price,edit_product_description:edit_overlay_product_description,edit_quantity:edit_overlay_quantity,edit_category_option:edit_overlay_category_option,edit_brands_option:edit_overlay_brands_option };
+
+
+
+
+
+
+
+                  var myJSON = JSON.stringify(myObj);
+
+
+
+
+
+
+
+                  var str = myJSON;
+
+
+
+
+
+
+
+                  //alert(myJSON);
+
+
+
+
+
+
+
+                  var dataURL = "" + path_protocol + "//" + host_name + "/api/edit_fileToUpload.php?q=" + str;  
+
+
+
+
+
+
+
+                  $('#cover-spin').show(0);
+
+
+
+
+
+
+
+                  $.ajax({
+
+
+
+
+
+
+
+                      url: dataURL, // Url to which the request is 
+
+
+
+
+
+
+
+                      type: "POST", // Type of request to be send, called as 
+
+
+
+
+
+
+
+                      data: new FormData(this), // Data sent to server, a set of key/value pairs (i.e. form fields and values)			
+
+
+
+
+
+
+
+                      contentType: false, // The content type used when sending data to the server.			
+
+
+
+
+
+
+
+                      cache: false, // To unable request pages to be cached			
+
+
+
+
+
+
+
+                      processData:false, // To send DOMDocument or non processed data file it is set to false			
+
+
+
+
+
+
+
+                      success: function(data) // A function to be called if request 
+
+
+
+
+
+
+
+                      {
+
+
+
+
+
+
+
+                          $('#cover-spin').hide(0);
+
+
+
+
+
+
+
+                          var myObj = JSON.parse(data);
+
+
+
+
+
+
+
+                          var dataa = myObj.data_requested;
+
+
+
+
+
+
+
+                          var data_returned = myObj.data_returned;
+
+
+
+
+
+
+
+                          var uploaded = myObj.uploaded;
+
+
+
+
+
+
+
+                          var success = myObj.success; 
+
+
+
+
+
+
+
+                          var _more_success = myObj._more_success;
+
+
+
+
+
+
+
+                          var _more_uploaded = myObj._more_uploaded;
+
+
+
+
+
+
+
+                          if (success == "Uploaded Successfully...") {
+
+
+
+
+
+
+
+                              var  overlay_image_preview =  document.getElementById("overlay_image_preview");				
+
+
+
+
+
+
+
+                              overlay_image_preview.style.display = "none";
+
+
+
+
+
+
+
+                              add_items_press = 0;
+
+
+
+
+
+
+
+                              $("#edit_prod_title").val("");
+
+
+
+
+
+
+
+                              $("#edit_prod_price").val("");
+
+
+
+
+
+
+
+                              $("#edit_product_description").val("");
+
+
+
+
+
+
+
+                              $("#edit_quantity").val("");
+
+
+
+
+
+
+
+                              $("#edit_category_option").val("");
+
+
+
+
+
+
+
+                              $("#edit_brands_option").val("");
+
+
+
+
+
+
+
+                              $("#edit_file").val("");
+
+
+
+
+
+
+
+                              var  edit_modal =  document.getElementById("edit_modal");
+
+
+
+
+
+
+
+                              edit_modal.style.display = "none";
+
+
+
+
+
+
+
+                              snackbar(uploaded);
+
+
+
+
+
+
+
+                              product(username,start_limit, end_limit);
+
+
+
+
+
+
+
+                          } else {
+
+
+
+
+
+
+
+                              snackbar(uploaded);
+
+
+
+
+
+
+
+                          }
+
+
+
+
+
+
+
+                      }
+
+
+
+
+
+
+
+                  });
+
+
+
+
+
+
+
+                } else {
+
+
+
+
+
+
+
+                  if (edit_file != "" && edit_file != null ){
+
+
+
+
+
+
+
+                      $("#edit_file").css({
+
+
+
+
+
+
+
+                          "color": "white",
+
+
+
+
+
+
+
+                          "background-color": "#98bf21",
+
+
+
+
+
+
+
+                          "font-family": "Arial",
+
+
+
+
+
+
+
+                          "font-size": "20px",
+
+
+
+
+
+
+
+                          "padding": "5px"
+
+
+
+
+
+
+
+                      });
+
+
+
+
+
+
+
+                  }
+
+
+
+
+
+
+
+                  snackbar("Choose your product image");
+
+
+
+
+
+
+
+                  document.getElementById("edit_add_prod_btn").disabled = true;
+
+
+
+
+
+
+
+                }
+
+
+
+
+
+
+
+              }
+
+
+
+
+
+
+
+              //alert(edit_overlay_prod_price);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          } else {
+
+
+
+
+
+
+
+            $("#edit_prod_price").css({
+
+
+
+
+
+
+
+                "color": "white",
+
+
+
+
+
+
+
+                "background-color": "#333"
+
+
+
+
+
+
+
+            });
+
+
+
+
+
+
+
+            snackbar("Enter a valid product price");
+
+
+
+
+
+
+
+          }
+
+
+
+
+
+
+
+      })); */
+
+

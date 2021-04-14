@@ -3973,7 +3973,8 @@ function agent_location_map(add_client,username) {
 
     document.getElementById("agent_location_map").innerHTML = "";
     //document.getElementById("agent_location_map").innerHTML = '<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/agent_location_map.html" height="400px" width="100%" title="map"></iframe>';
-    document.getElementById("agent_location_map").innerHTML = '<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/" height="400px" width="100%" title="map"></iframe>';
+    document.getElementById("agent_location_map").innerHTML = '<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/map.html" height="400px" width="100%" title="map"></iframe>';
+    //document.getElementById("agent_location_map").innerHTML = '<iframe src="http://oramla.onlinewebshop.net/" height="400px" width="100%" title="map"></iframe>';
 
     /**cordova.plugin.google.maps.LocationService.getMyLocation(function(result) {
         alert(["Your current location:\n",
