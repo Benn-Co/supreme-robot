@@ -41,18 +41,21 @@
           document.getElementById("pano")
         );
         // Set the initial Street View camera to the center of the map center_latitude, center_longitude
+        text = radius + " meters or less Street View near Agent <b>" + add_client + "</b> location.";         
+        showInContentWindow(text);
         sv.getPanorama({ location: new google.maps.LatLng(center_latitude, center_longitude), radius: radius }, processSVData);
         // Look for a nearby Street View panorama when the map is clicked.
         // getPanorama will return the nearest pano when the given
         // radius is 50 meters or less.
         map.addListener("click", (event) => {
           sv.getPanorama({ location: event.latLng, radius: radius }, processSVData);
+          text = radius + " meters or less Street View near <b>" + event.latLng + "</b>.";         
+          showInContentWindow(text);
         });          
       }
       function processSVData(data, status) {
         if (status === "OK") {
-          text = radius + " meters or less street View near Agent <b>" + add_client + "</b> location.";         
-          showInContentWindow(text);
+          
           document.getElementById("map").style.width = "50%";
           document.getElementById("pano").style.width = "50%";
           const location = data.location;
@@ -256,6 +259,16 @@
                 opacity:100.0,
                 store_id: locations[i][0],
             }); */
+            const svgMarker = {
+                path:
+                  "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+                fillColor: "blue",
+                fillOpacity: 0.6,
+                strokeWeight: 0,
+                rotation: 0,
+                scale: 2,
+                anchor: new google.maps.Point(15, 30),
+            };
             var icon = '';
             if (i < 1) {
                 icon = {
@@ -316,6 +329,30 @@
             })(marker, i);
         }
         
+      }
+
+      function directions() {
+        const directionsService = new google.maps.DirectionsService();
+        const directionsRenderer = new google.maps.DirectionsRenderer();        
+        directionsRenderer.setMap(map);
+        calculateAndDisplayRoute(directionsService, directionsRenderer);
+      }
+
+      function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+        directionsService.route(
+          {
+            origin: new google.maps.LatLng(username_latitude, username_longitude),
+            destination: new google.maps.LatLng(add_client_latitude,add_client_longitude),
+            travelMode: google.maps.TravelMode.DRIVING,
+          },
+          (response, status) => {
+            if (status === "OK") {
+              directionsRenderer.setDirections(response);
+            } else {
+              showInContentWindow("Directions request failed due to " + status)
+            }
+          }
+        );
       }
       function showInContentWindow(text) {
         const sidebar = document.getElementById("sidebar-panel");

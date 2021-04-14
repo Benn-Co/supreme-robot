@@ -1784,13 +1784,14 @@ $("body").delegate(".div_cimage","click",function(event){
 });
 var div_cima = 0;
 var add_cdiv_cima = 0;
+var add_client_cima = '';
+
 function div_cimage(product_price,product_title,add_description,add_client,product_id,add_rating,product_img,add_date,latitude,longitude,add_location,add_review) {
     if (product_img.includes("http", 0)) {
         var IMAGE_url = product_img + '';
     } else {
         var IMAGE_url = IMAGE_url_path_name + product_img + '';
     }
-    //var IMAGE_url = 'img/noni.png';
     var add_imageadd_ = document.getElementById('add_imageadd_');
     add_imageadd_.src = IMAGE_url;
     window.location.href="#product_add_client_container";
@@ -1802,48 +1803,33 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
     product_price = product_price.toFixed(2);
     $("#add_carousel_title").html(product_title);
     currency_price_symbal = '$';
-
-    /**var currency = '<div class="currencyclass">' +
-    '<input class="icon_input" product_id = "' + product_id + '" type="radio" name="add_image' + product_id + '_currency_symbal" id="add_image' + product_id + '_currency_symbal">' +
-    '<label class="currencyicon_label" for="add_image' + product_id + '_currency_symbal"><img src="img/dollar.svg" alt=""></label>' +
-    '</div>'; */
     var currency = currency_price_symbal;
     $("#add_carousel_currency").html(currency);
     $("#add_carousel_price").html(product_price);
+    
     if (username == add_client) {
-        var actions = '<div class="tags are-medium">' +    
-        '<span class="tag is-success add_to_cart" product_id = "' + product_id + '">Buy</span>' +
-        '<span class="tag is-info edit_product" product_id = "' + product_id + '">Edit</span>' +
-        '<span class="tag is-danger add_to_remove" product_id = "' + product_id + '">Delete</span>' +
+        var actions = '<div class="tags are-medium">' +
+        '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + product_id + '"><span><span><i class="fa fa-shopping-cart"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="tag is-info more fl-l edit_product" product_id = "' + product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="tag is-danger share fl-l add_to_remove" product_id = "' + product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>' +
         '</div>';
     } else {
-        var actions = '<div class="tags are-medium">' +    
-        '<span class="tag is-success add_to_cart" product_id = "' + product_id + '">Buy</span>' +
-        '<span class="tag is-primary wishlist_product" product_id = "' + product_id + '">Wishlist</span>' +
-        '<span class="tag is-secondary connect_product" product_id = "' + product_id + '" add_client = "' + add_client + '">Connect</span>' +
+        var actions = '<div class="tags are-medium">' +
+        '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + product_id + '"><span><span><i class="fa fa-shopping-cart"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + product_id + '" add_client = "' + add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
         '</div>';
     }
     if (role == 'admin' || role == 'Admin'){
-        var actions = '<div class="tags are-medium">' +
-        '<span class="tag is-success add_to_cart" product_id = "' + product_id + '">Buy</span>' +
-        '<span class="tag is-primary wishlist_product" product_id = "' + product_id + '">Wishlist</span>' +
-        '<span class="tag is-secondary connect_product" product_id = "' + product_id + '" add_client = "' + add_client + '">Connect</span>' +
-        '<span class="tag is-info edit_product" product_id = "' + product_id + '">Edit</span>' +
-        '<span class="tag is-danger add_to_remove" product_id = "' + product_id + '">Delete</span>' +
-        '</div>';
+        var admin_actions = '' +
+        '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + product_id + '"><span><span><i class="fa fa-shopping-cart"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="tag is-info more fl-l edit_product" product_id = "' + product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="tag is-danger share fl-l add_to_remove" product_id = "' + product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>' +
+        '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + product_id + '" add_client = "' + add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
+        var actions = '<div class="tags are-medium">' + admin_actions + '</div>';        
     }
-    /**var buynow = '<div class="float-left icon_padding_div">' +
-    '<input class="add_to_cart icon_input" product_id = "' + product_id + '" type="radio" name="add_buy' + product_id + '_cart" id="add_buy' + product_id + '_cart">' +
-    '<label class="currencyicon_label" for="add_buy' + product_id + '_cart"><img src="img/shopping-cart.svg" alt=""></label>' +
-    '</div>' + 
-    '<div class="float-left icon_padding_div">' +
-    '<input class="edit_product icon_input" product_id = "' + product_id + '" type="radio" name="add_buy' + product_id + '_edit" id="add_buy' + product_id + '_edit">' +
-    '<label class="currencyicon_label" for="add_buy' + product_id + '_edit"><img src="img/edit.svg" alt=""></label>' +
-    '</div>' +
-    '<div class="float-left icon_padding_div">' +
-    '<input class="add_to_remove icon_input" product_id = "' + product_id + '" type="radio" name="add_buy' + product_id + 'remove_cart" id="add_buy' + product_id + 'remove_cart">' +
-    '<label class="currencyicon_label" for="add_buy' + product_id + 'remove_cart"><img src="img/delete.svg" alt=""></label>' +
-    '</div>'; */
+    
     $("#add_carousel_buynow").html(actions);
 
     $("#add_carousel_desc").html(add_description);
@@ -1854,12 +1840,16 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
     $("#add_fload_id").attr("connect_from", "" + add_client + "");
     $("#add_fload_id").attr("connects_id", "" + product_id + "");
     $("#add_fload_id").attr("connects_time", "" + Date() + "");
-    add_cdiv_cima = 1;
-
-    
+    add_cdiv_cima = 1;    
     other_product_same(product_id); 
-    other_product_same_client(0,8,add_client);
-    agent_location_map(add_client,username);
+    if (add_client_cima != add_client) {
+        add_client_cima = add_client;
+        other_product_same_client(0,8,add_client);
+        agent_location_map(add_client,username);
+    }    
+    //other_product_same_client(0,8,add_client);
+    //agent_location_map(add_client,username);
+    other_similar_products(product_id,add_client);
 }
 $("body").delegate(".div_otherimage","click",function(event){
     event.preventDefault();
@@ -2026,6 +2016,296 @@ function other_product_same_clientmyFunction(item, index) {
         var add_carousel_indicators = '<li data-target="#carouselExampleIndicators" data-slide-to="' + index + '" class="active"></li>';
         $("#add_carousel_indicators").append(add_carousel_indicators);
         
+        /**if (username == item.add_client) {
+            var actions = '<div class="tags are-medium">' + 
+            '<span class="tag is-primary">' +
+            '<a>' +  currency_price_symbal + '</a>' +    
+            '<a>' +  product_price + '</a>' +
+            '</span> ' +
+            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
+            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
+            '</div>';
+        } else {
+            var actions = '<div class="tags are-medium">' +
+            '<span class="tag is-primary">' +
+            '<a>' +  currency_price_symbal + '</a>' +    
+            '<a>' +  product_price + '</a>' +
+            '</span> ' +    
+            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
+            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '</div>';
+        }
+        if (role == 'admin' || role == 'Admin'){
+            var actions = '<div class="tags are-medium">' +
+            '<span class="tag is-primary">' +
+            '<a>' +  currency_price_symbal + '</a>' +    
+            '<a>' +  product_price + '</a>' +
+            '</span> ' +
+            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
+            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
+            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
+            '</div>';
+        } */
+
+        if (username == item.add_client) {
+            var adminactions = '';
+    
+            var actions = '<div class="tags are-medium">' +
+            '<a href="javascript:void(0)" class="tag is-primary share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-info more fl-l edit_product" product_id = "' + item.product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-danger share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>' +
+            '</div>';
+        } else {
+            var adminactions = '';
+            var actions = '<div class="tags are-medium">' +
+            '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+            '</div>';
+        }
+        if (role == 'admin' || role == 'Admin'){
+            var admin_actions = '' +
+            '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-info more fl-l edit_product" product_id = "' + item.product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-danger share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>';
+            var actions = '<div class="tags are-medium">' + admin_actions + '</div>';
+            
+        } 
+        
+        
+        var add_carousel_other  = '<div class="carousel-item active">' +
+        '<img class="d-block w-100 div_cimage" src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
+                
+        '<div class="carousel-caption d-md-block card-title add_divtext add_oer">' + actions +
+        '</div> ' +
+
+        '<div class="card-body">' +
+        '<h5>' + item.product_title + '</h5>' +  
+        '</div> ' +
+                 
+        '</div>';
+        $("#add_carousel_other").append(add_carousel_other);    
+    } else {
+        var add_carousel_indicators = '<li data-target="#carouselExampleIndicators" data-slide-to="' + index + '" class=""></li>';
+        $("#add_carousel_indicators").append(add_carousel_indicators);
+
+        /**if (username == item.add_client) {
+            var actions = '<div class="tags are-medium">' + 
+            '<span class="tag is-primary">' +
+            '<a>' +  currency_price_symbal + '</a>' +    
+            '<a>' +  product_price + '</a>' +
+            '</span> ' +   
+            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
+            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
+            '</div>';
+        } else {
+            var actions = '<div class="tags are-medium">' + 
+            '<span class="tag is-primary">' +
+            '<a>' +  currency_price_symbal + '</a>' +    
+            '<a>' +  product_price + '</a>' +
+            '</span> ' +   
+            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
+            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '</div>';
+        }
+        if (role == 'admin' || role == 'Admin'){
+            var actions = '<div class="tags are-medium">' +
+            '<span class="tag is-primary">' +
+            '<a>' +  currency_price_symbal + '</a>' +    
+            '<a>' +  product_price + '</a>' +
+            '</span> ' +
+            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
+            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
+            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
+            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
+            '</div>';
+        } */
+
+        if (username == item.add_client) {
+            var adminactions = '';
+    
+            var actions = '<div class="tags are-medium">' +
+            '<a href="javascript:void(0)" class="tag is-primary share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-info more fl-l edit_product" product_id = "' + item.product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-danger share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>' +
+            '</div>';
+        } else {
+            var adminactions = '';
+            var actions = '<div class="tags are-medium">' +
+            '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+            '</div>';
+        }
+        if (role == 'admin' || role == 'Admin'){
+            var admin_actions = '' +
+            '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-info more fl-l edit_product" product_id = "' + item.product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-danger share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>';
+            var actions = '<div class="tags are-medium">' + admin_actions + '</div>';
+            
+        }
+
+        var add_carousel_other  = '<div class="carousel-item">' +
+        '<img class="d-block w-100 div_cimage " src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
+       
+        '<div class="carousel-caption d-md-block card-title add_divtext add_oer">' + actions +
+        
+        /**'<a class="buynownow">' +
+        '<div class="float-left icon_padding_div">' +
+        '<input class="add_to_cart icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + '_cart" id="add_' + item.product_id + '_cart">' +
+        '<label class="currencyicon_label" for="add_' + item.product_id + '_cart"><img src="img/shopping-cart.svg" alt=""></label>' +
+        '</div>' +   
+    
+        '<div class="float-left icon_padding_div">' +
+        '<input class="edit_product icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + '_edit" id="add_' + item.product_id + '_edit">' +
+        '<label class="currencyicon_label" for="add_' + item.product_id + '_edit"><img src="img/edit.svg" alt=""></label>' +
+        '</div>' +
+    
+        '<div class="float-left icon_padding_div">' +
+        '<input class="add_to_remove icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + 'remove_cart" id="add_' + item.product_id + 'remove_cart">' +
+        '<label class="currencyicon_label" for="add_' + item.product_id + 'remove_cart"><img src="img/delete.svg" alt=""></label>' +
+        '</div>' + 
+        '</a>' + */ 
+
+
+
+        '</div> ' + 
+        
+        '<div class="card-body">' +
+        '<h5>' + item.product_title + '</h5>' +  
+        '</div> ' +
+
+        '</div>';
+        $("#add_carousel_other").append(add_carousel_other);
+    }
+}
+function other_similar_products(product_id,add_client) {
+    $.ajax({
+        type: "POST", // Type of request to be send, called as
+        dataType: 'json',
+        data: { other_similar_products: 12, product_id:product_id, startlimit: startlimit, endlimit: endlimit, add_client:add_client },
+        processData: true,
+        url: api_server_url + '/cordova/other_similar_products.php',
+        success: function searchSuccess(response) {
+            try {
+                //response.data = JSON.parse(response.data);            
+                if (response.message == "success") {
+                    var products_status = response.products_status;
+                    var products_data = response.products;
+                    if (products_status != "0") { 
+                        $("#other_similar_products_row1").html('');
+                        $("#other_similar_products_row2").html('');
+                        $("#other_similar_products_row3").html('');
+                        $('.product_error_container').hide(500, function(){
+                        }); 
+                        /**$('#other_mySlides1').show(500, function(){});
+                        $('#other_dot1').show(500, function(){});
+                        $('#other_mySlides2').show(500, function(){});
+                        $('#other_dot2').show(500, function(){});
+                        $('#other_mySlides3').show(500, function(){});
+                        $('#other_dot3').show(500, function(){}); */
+                        if (products_data.length < 6) {
+                            $('#other_mySlides1').hide(500, function(){});
+                            $('#other_dot1').hide(500, function(){});
+                        } else if (products_data.length < 12) {
+                            $('#other_mySlides2').hide(500, function(){});
+                            $('#other_dot2').hide(500, function(){});
+                        } else if (products_data.length < 18) {
+                            $('#other_mySlides3').hide(500, function(){});
+                            $('#other_dot3').hide(500, function(){});
+                        }
+                        products_data.forEach(other_similar_productsmyFunction);
+                    }
+                }
+            } catch(e) {
+                
+            }
+          
+        },
+        error: function searchError(xhr, err) {
+          //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+
+        }
+    });
+}
+function other_similar_productsmyFunction(item, index) {
+    var product_image = item.product_img;
+    var product_price = currency_exchange_rate * item.product_price;    
+    product_price = product_price.toFixed(2);
+    var product_title = item.product_title;
+    var product_title_account = "";
+    if (product_title.length <= 30) {
+        product_title_account = product_title;
+    } else {
+        product_title_account = product_title_account;// product_title.substring(0, 30) + "...";
+    }    
+    if (product_image.includes("http", 0)) {
+        var IMAGE_url = product_image + '';
+    } else {
+        var IMAGE_url = IMAGE_url_path_name + product_image + '';
+    }
+
+    /**var other_similar_products = '<div class="mySlides ">' +
+    '<div class="row">' +
+    '<div class="col add_clidduct_column">' +
+    '<img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">' +
+    '</div>' +
+    '<div class="col add_clidduct_column">' +
+    '<img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">' +
+    '</div>' +
+    '<div class="col add_clidduct_column">' +
+    '<img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">' +
+    '</div>' +
+    '<div class="col add_clidduct_column">' +
+    '<img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">' +
+    '</div>' +
+    '<div class="col add_clidduct_column">' +
+    '<img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">' +
+    '</div>' +
+    '<div class="col add_clidduct_column">' +
+    '<img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">' +
+    '</div>' +
+    '</div>' +
+    '</div>'; */
+
+    
+
+    if (index < 6) {
+        var other_similar_products_row1 = '<div class="col add_clidduct_column">' +
+        '<img class="rounded div_cimage" width="100%" height="100%"  src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
+        '</div>';
+        $("#other_similar_products_row1").append(other_similar_products_row1);
+
+    } else if(index < 12){
+        var other_similar_products_row2 = '<div class="col add_clidduct_column">' +
+        '<img class="rounded div_cimage" width="100%" height="100%"  src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
+        '</div>';
+        $("#other_similar_products_row2").append(other_similar_products_row2);
+    } else if(index < 18){
+        var other_similar_products_row3 = '<div class="col add_clidduct_column">' +
+        '<img class="rounded div_cimage" width="100%" height="100%"  src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
+        '</div>';
+        $("#other_similar_products_row3").append(other_similar_products_row3);
+    }
+
+
+
+    /**if (index < 1) {
+        //var add_carousel_indicators = '<li data-target="#carouselExampleIndicators" data-slide-to="' + index + '" class="active"></li>';
+        //$("#other_similar_products").append(other_similar_products);
+        
         if (username == item.add_client) {
             var actions = '<div class="tags are-medium">' + 
             '<span class="tag is-primary">' +
@@ -2068,25 +2348,6 @@ function other_product_same_clientmyFunction(item, index) {
                 
         '<div class="carousel-caption d-md-block card-title add_divtext add_oer">' + actions +
         
-        /**'<a class="buynownow">' +
-        '<div class="float-left icon_padding_div">' +
-        '<input class="add_to_cart icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + '_cart" id="add_' + item.product_id + '_cart">' +
-        '<label class="currencyicon_label" for="add_' + item.product_id + '_cart"><img src="img/shopping-cart.svg" alt=""></label>' +
-        '</div>' +   
-    
-        '<div class="float-left icon_padding_div">' +
-        '<input class="edit_product icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + '_edit" id="add_' + item.product_id + '_edit">' +
-        '<label class="currencyicon_label" for="add_' + item.product_id + '_edit"><img src="img/edit.svg" alt=""></label>' +
-        '</div>' +
-    
-        '<div class="float-left icon_padding_div">' +
-        '<input class="add_to_remove icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + 'remove_cart" id="add_' + item.product_id + 'remove_cart">' +
-        '<label class="currencyicon_label" for="add_' + item.product_id + 'remove_cart"><img src="img/delete.svg" alt=""></label>' +
-        '</div>' + 
-        '</a>' + */ 
-
-
-
         '</div> ' +
 
         '<div class="card-body">' +
@@ -2094,10 +2355,10 @@ function other_product_same_clientmyFunction(item, index) {
         '</div> ' +
                  
         '</div>';
-        $("#add_carousel_other").append(add_carousel_other);    
+        $("#other_similar_products").append(other_similar_products);    
     } else {
-        var add_carousel_indicators = '<li data-target="#carouselExampleIndicators" data-slide-to="' + index + '" class=""></li>';
-        $("#add_carousel_indicators").append(add_carousel_indicators);
+        //var add_carousel_indicators = '<li data-target="#carouselExampleIndicators" data-slide-to="' + index + '" class=""></li>';
+        //$("#add_carousel_indicators").append(add_carousel_indicators);
 
         if (username == item.add_client) {
             var actions = '<div class="tags are-medium">' + 
@@ -2133,30 +2394,12 @@ function other_product_same_clientmyFunction(item, index) {
             '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
             '</div>';
         }
+
         var add_carousel_other  = '<div class="carousel-item">' +
         '<img class="d-block w-100 div_cimage " src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
        
         '<div class="carousel-caption d-md-block card-title add_divtext add_oer">' + actions +
         
-        /**'<a class="buynownow">' +
-        '<div class="float-left icon_padding_div">' +
-        '<input class="add_to_cart icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + '_cart" id="add_' + item.product_id + '_cart">' +
-        '<label class="currencyicon_label" for="add_' + item.product_id + '_cart"><img src="img/shopping-cart.svg" alt=""></label>' +
-        '</div>' +   
-    
-        '<div class="float-left icon_padding_div">' +
-        '<input class="edit_product icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + '_edit" id="add_' + item.product_id + '_edit">' +
-        '<label class="currencyicon_label" for="add_' + item.product_id + '_edit"><img src="img/edit.svg" alt=""></label>' +
-        '</div>' +
-    
-        '<div class="float-left icon_padding_div">' +
-        '<input class="add_to_remove icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + 'remove_cart" id="add_' + item.product_id + 'remove_cart">' +
-        '<label class="currencyicon_label" for="add_' + item.product_id + 'remove_cart"><img src="img/delete.svg" alt=""></label>' +
-        '</div>' + 
-        '</a>' + */ 
-
-
-
         '</div> ' + 
         
         '<div class="card-body">' +
@@ -2164,8 +2407,9 @@ function other_product_same_clientmyFunction(item, index) {
         '</div> ' +
 
         '</div>';
-        $("#add_carousel_other").append(add_carousel_other);
-    }
+
+        $("#other_similar_products").append(other_similar_products);
+    } */
 }
 $("#arrow_add_client_back").click(function(){
     $("#product_add_client_container").hide(100,function(){       
@@ -3974,6 +4218,7 @@ function agent_location_map(add_client,username) {
     document.getElementById("agent_location_map").innerHTML = "";
     //document.getElementById("agent_location_map").innerHTML = '<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/agent_location_map.html" height="400px" width="100%" title="map"></iframe>';
     document.getElementById("agent_location_map").innerHTML = '<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/" height="400px" width="100%" title="map"></iframe>';
+    //document.getElementById("agent_location_map").innerHTML = '<iframe src="http://oramla.onlinewebshop.net/" height="400px" width="100%" title="map"></iframe>';
 
     /**cordova.plugin.google.maps.LocationService.getMyLocation(function(result) {
         alert(["Your current location:\n",

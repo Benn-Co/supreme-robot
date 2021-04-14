@@ -11,7 +11,7 @@
         * Enable inline JS: add 'unsafe-inline' to default-src
     -->
   <!-- Removing 'unsafe-eval'. If needed, I will figure out a way around it -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://developers.google.com https://maps.googleapis.com https://js.api.here.com https://developer.here.com https://image.maps.ls.hereapi.com https://oramla.com http://192.168.0.102 http://localhost https://itunes.apple.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://polyfill.io https://developers.google.com https://maps.googleapis.com https://js.api.here.com https://developer.here.com https://image.maps.ls.hereapi.com https://oramla.com http://192.168.0.102 http://localhost https://itunes.apple.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
 
   <!-- Required meta tags-->
   <meta charset="utf-8">
@@ -242,28 +242,29 @@
       <div id="product_add_client_container" class="product_add_client">
         <ul class="add_ul ">
           <li class="add_li">
-            <a id="add_client_agent" href="#carouselExampleIndicators" class="my-2 my-sm-0 add_arrow add_left">
+            <a id="add_client_agent" href="#carouselExampleIndicators" class="client_text">
               <img src="img/user-svgrepo-com.svg" alt="" width="25px" height="25px">
+              Agent <b id="otheaddl"></b>
             </a>
           </li>
           <li class="add_li">
-            <a id="add_client_rating" class="my-2 my-sm-0 add_arrow add_left">
+            <a id="add_client_rating" class="client_text">
               <i id="rating_num" class="circle_num badge badge-info">0</i>
               <img src="img/best-employee.svg" alt="" width="25px" height="25px">
             </a>
           </li>
           <li class="add_li">
-            <a id="add_client_location" href="#agentlocation" class="my-2 my-sm-0 add_arrow add_left">
+            <a id="add_client_location" href="#agentlocation" class="client_text">
               <img src="img/location-svgrepo-com.svg" alt="" width="25px" height="25px">
             </a>
           </li>
           <li class="add_li">
-            <a id="add_client_delivery" class="my-2 my-sm-0 add_arrow add_left">
+            <a id="add_client_delivery" class="client_text">
               <img src="img/international-delivery.svg" alt="" width="25px" height="25px">
             </a>
           </li>
           <li class="add_li">
-            <a id="add_client_payment" class="my-2 my-sm-0 add_arrow add_left">
+            <a id="add_client_payment" class="client_text">
               <img src="img/payment-methods-svgrepo-com.svg" alt="" width="25px" height="25px">
             </a>
           </li>
@@ -314,11 +315,8 @@
           </div>
         </section>
         <section class="callout  container">
-          <div class=" othetext  row" style="text-align:center">
-            <h6>Other Products from Agent <b id="otheadd"></b></h6>
-          </div>
           <div id="carouselExampleIndicators" class="carousel slide bg-dark text-white  row" data-ride="carousel">
-            
+            <h3 class="text">Other Products from Agent <b id="otheadd"></b></h3>
             <ol id="add_carousel_indicators" class="carousel-indicators _carousel_indicators" style="z-index: 0;">
   
               <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -341,7 +339,6 @@
         </section>
         <section class="callout  container">
           <div id="agentlocation" class="addagenttext  row" style="text-align:center;">
-            <span>Agent <b id="otheaddl"></b> location</span>
           </div>
           <div id="agent_location_map" class="  row">
             
@@ -349,29 +346,92 @@
           </div>
         </section>
         <section class="callout  container">
-          <div class="addagenttext  row" style="text-align:center;">
-            <Strong>Similar products </Strong>
+          <div class="slideshow-container">
+            <h3 class="text">Similar products </h3>
+
+            <div id="other_similar_products" >
+              <div id="other_mySlides1" class="mySlides ">
+                <div id="other_similar_products_row1"  class="row">
+                  <div class="col add_clidduct_column">
+                      <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                </div>
+              </div>
+              
+              <div id="other_mySlides2"  class="mySlides ">
+                <div  id="other_similar_products_row2" class="row">
+                  <div class="col add_clidduct_column">
+                      <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                      <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                      <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                      <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                </div>
+              </div>
+              
+              <div id="other_mySlides3"  class="mySlides ">
+                <div  id="other_similar_products_row3" class="row">
+                  <div class="col add_clidduct_column">
+                      <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                </div>
+              </div>
+            </div>           
+            
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            
           </div>
-          <div id="other_simillor" class="row">
-            <div class="col add_clidduct_column">
-                <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+            <br>
+            
+            <div style="text-align:center">
+              <span id="other_dot1" class="dot" onclick="currentSlide(1)"></span> 
+              <span id="other_dot2" class="dot" onclick="currentSlide(2)"></span> 
+              <span id="other_dot3" class="dot" onclick="currentSlide(3)"></span> 
             </div>
-            <div class="col add_clidduct_column">
-                <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-            </div>
-            <div class="col add_clidduct_column">
-                <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-            </div>
-            <div class="col add_clidduct_column">
-                <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-            </div>
-            <div class="col add_clidduct_column">
-              <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-            </div>
-            <div class="col add_clidduct_column">
-              <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-            </div>
-          </div>
+          
 
           <a id="add_fload_id" connect_from="" connects_id="" connects_time="" class="add_float">
             <input class="bottom_input" type="radio" name="s" id="add_s5">
@@ -380,7 +440,7 @@
         </section>
         
       </div>
-      
+
       <div id="arrow_navigation_container" class="arrow_navigation_cont">
         <ul class="v-effect-link">
           <li id="product_previous">
@@ -406,6 +466,8 @@
           </symbol>
         </svg> 
       </div>
+      
+      
          
     </div>
 

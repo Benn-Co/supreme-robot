@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Street View split-map-panes</title>
+    <title>KML Feature Details</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpPM8vcpY3LhhPJ4CYL6_aZ3lAOJwHTEo&callback=initialize&callback=initialize&libraries=&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpPM8vcpY3LhhPJ4CYL6_aZ3lAOJwHTEo&callback=initMap&libraries=geometry&v=weekly"
       defer
     ></script>
     <style type="text/css">
+      /* Optional: Makes the sample page fill the window. */
       html,
       body {
         height: 100%;
@@ -21,15 +22,56 @@
         height: 100%;
         width: 50%;
       }
+
+      #container {
+        height: 100%;
+        position:relative;
+      }
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: "Roboto", "sans-serif";
+        line-height: 30px;
+        padding-left: 10px;
+      }
+      #sidebar-panel {
+        position: absolute;
+        bottom: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: "Roboto", "sans-serif";
+        line-height: 30px;
+        padding-left: 10px;
+      }
     </style>
     <script src='../ajax/libs/jquery/3.4.1/jquery.min.js'></script>
     <script src='../ajax/libs/popper.js/1.14.7/umd/popper.min.js'></script>
-    <script src="index.js">
-      
-    </script>
+    <script src="index.js"> </script>
   </head>
   <body>
-    <div id="map"></div>
-    <div id="pano"></div>
+    <div id="container">
+      <div id="floating-panel">
+        <input id="agent_location" type="button" value="Navigation" onclick="agent_location();" />
+        <input type="button" value="Navigation" onclick="autonavigate();" />
+        <input type="button" value="Street View" onclick="autoStreetview();" />
+        <input type="button" value="Directions" onclick="directions();" />
+
+      </div>
+      <div id="map"></div>
+      <div id="pano"></div>     
+      <div id="sidebar-panel">
+
+      </div>
+    </div>
   </body>
 </html>

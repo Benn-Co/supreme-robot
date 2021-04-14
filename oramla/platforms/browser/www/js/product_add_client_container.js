@@ -1,32 +1,26 @@
-/**setTimeout(function() {
-    $(document).ready(function() {
-        var arr = $('.product-sku').map(function(index, val) {
-                return $(val).text()
-        });
-    
-        switch (true) {
-                case ($.inArray("LNC-L2850303", arr) !== -1):
-                        $('.popup').removeClass('hidden').addClass('visible');
-                        break;
-    
-                default:
-                        $('.popup').addClass('hidden');
-                        break;
-        }
-    });
-    }, 1000);
-    
-    $(function() {
-    $('[data-popup-open]').load(function(e) {
-        var targeted_popup_class = jQuery(this).attr('data-popup-open');
-        $('[data-popup="popup"]').fadeIn(350);
-    
-        e.preventDefault();
-    });
-    });
-    
-    $(document).ready(function() {
-    $(".popup-close").click(function() {
-        $(".popup").removeClass("visible").addClass("hidden").fadeOut(350);
-    });
-    }); */
+var slideIndex = 1;
+showSlides(slideIndex);
+
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+      dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " active";
+}
