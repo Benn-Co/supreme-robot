@@ -29,9 +29,7 @@
   <meta name="msapplication-TileImage" content="img/favicon-32x32.png">
   <link rel="shortcut icon" href="img/favicon-32x32.png">
 
-  <link rel='stylesheet' href='bootstrap/4.3.1/css/bootstrap.min.css'>
-  <link rel="stylesheet" href="fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
- 
+  
   <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="css/authentication.css">
 
@@ -52,8 +50,10 @@
   <link rel="stylesheet" href="css/orders_container.css">
   <link rel="stylesheet" href="css/order_items_container.css">
   <link rel="stylesheet" href="bulma/css/bulma.css">
-  <link rel="stylesheet" href="foundation-sites@6.6.3/dist/css/foundation.min.css" integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I=" crossorigin="anonymous">
-
+  
+  <link rel='stylesheet' href='bootstrap/4.3.1/css/bootstrap.min.css'>
+  <link rel="stylesheet" href="fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+ 
   
   <title>Oramla</title>
 
@@ -183,7 +183,7 @@
       <input type="checkbox" id="post" class="postToggle" />
       <label for="post" class="postBtn"></label>
       <ul>
-        <li id="add_products_agent" class="text">Add products</li>
+        <li class="text">Add products</li>
         <li class="quote">Orders</li>
         <li class="link">Sell</li>
         <li class="chat">Connects</li>
@@ -199,29 +199,7 @@
     </nav>
     
     <div id="product_container" class="product_main_container container is-fullhd"> 
-      <!--<ul class="wrapper cf">
-        <li class="product fl-l">
-            <div class="container-prod">
-                <div class="image" style="background-image:url('img/noni.png');"></div>
-                  <div class="container-information">
-                    <div class="title">
-                        Splatter hoodie
-                        <a href="javascript:void(0)" class="more close"><i class="fa fa-times"></i></a>                
-                    </div>
-                    <div class="description information">Siebdruck print<br>100% cotton<br>Color available: white on gray<br>Size available: L, XL</div>
-                  </div>
-                  <div class="buttons cf">
-                    <a href="javascript:void(0)" class="more fl-l"><span><span><i class="fa fa-shopping-cart"></i></span></span></a>
-                    <a href="javascript:void(0)" class="more fl-l"><span><span><i class="fa fa-plus"></i></span></span></a>
-                    <a href="javascript:void(0)" class="share fl-l"><span><span><i class="fa fa-share-alt"></span></i></span></a>
-                  </div>
-            </div>
-        </li>
-      </ul>
-    <ul id="newitem" class="wrapper cf">
-        
-      </ul>-->
-      
+           
       <div id="product_error" class="w-full sm:w-1/2 md:w-1/3 flex flex-col p-3 product_error_container">
         <div class="bg-white rounded-lg shadow-lg overflow-hidden flex-1 flex flex-col">
           <div class="bg-cover h-48" style="background-image: url(https://images.unsplash.com/photo-1523978591478-c753949ff840?w=900);"></div>
@@ -240,45 +218,54 @@
       </div>
 
       <div id="product_add_client_container" class="product_add_client">
-        <ul class="add_ul ">
-          <li class="add_li">
-            <a id="add_client_agent" href="#carouselExampleIndicators" class="client_text">
-              <img src="img/user-svgrepo-com.svg" alt="" width="25px" height="25px">
-              Agent <b id="otheaddl"></b>
-            </a>
-          </li>
-          <li class="add_li">
-            <a id="add_client_rating" class="client_text">
-              <i id="rating_num" class="circle_num badge badge-info">0</i>
-              <img src="img/best-employee.svg" alt="" width="25px" height="25px">
-            </a>
-          </li>
-          <li class="add_li">
-            <a id="add_client_location" href="#agentlocation" class="client_text">
-              <img src="img/location-svgrepo-com.svg" alt="" width="25px" height="25px">
-            </a>
-          </li>
-          <li class="add_li">
-            <a id="add_client_delivery" class="client_text">
-              <img src="img/international-delivery.svg" alt="" width="25px" height="25px">
-            </a>
-          </li>
-          <li class="add_li">
-            <a id="add_client_payment" class="client_text">
-              <img src="img/payment-methods-svgrepo-com.svg" alt="" width="25px" height="25px">
-            </a>
-          </li>
+        <!-- not responsive yet -->
 
-          <li class="add_li add_active" style="float:right">
-            <a id="arrow_add_client_back" class="my-2 my-sm-0 arrow left">
-              <i></i>
-              <svg>
-                <use xlink:href="#circle">
-              </svg>
-            </a>
-          </li>
-        </ul>
+        <div  id="add_main" class="header">  
+          <nav>
+              <ul class="cf">
+                  <li>
+                    <a id="add_client_rating" class="dropdown">
+                      <img src="img/user-svgrepo-com.svg" alt="" width="25px" height="25px">
+                      <b id="otheaddl"></b>
+                    </a>
+                    <ul>
+                      <li>
+                        <a id="add_client_rating" class="">
+                          <i id="rating_num" class="circle_num badge badge-info">0</i>
+                          <img src="img/best-employee.svg" alt="" width="25px" height="25px">
+                        </a>                
+                      </li>
+                      <li>
+                        <a id="add_client_location" href="#agentlocation" class="">
+                          <img src="img/location-svgrepo-com.svg" alt="" width="25px" height="25px">
+                        </a>                
+                      </li>
+                      <li>
+                        <a id="add_client_delivery" class="">
+                          <img src="img/international-delivery.svg" alt="" width="25px" height="25px">
+                        </a>                
+                      </li>
+                      <li>
+                        <a id="add_client_payment" class="">
+                          <img src="img/payment-methods-svgrepo-com.svg" alt="" width="25px" height="25px">
+                        </a>                
+                      </li>
+                    </ul>
+                  </li>
+              </ul>
+          </nav>
+        </div>
+        
+        <div class="add_active">
+          <a id="arrow_add_client_back" class="my-2 my-sm-0 arrow left">
+            <i></i>
+            <svg>
+              <use xlink:href="#circle">
+            </svg>
+          </a>
 
+        </div> 
+        
         <section class="buy-grid container">          
           <div class="hero-image-wrapper">
             <img id="add_imageadd_" src="https://www.osprey.com/images/product/hero/arielpro65_side_voyagergrey.jpg" class="hero-image-element" alt="alt">
@@ -301,7 +288,6 @@
             </div> 
             
             <p class="card-price"><span id="add_carousel_currency"></span><span id="add_carousel_price"></span></p>
-            
             
             <button  id="add_carousel_buynow" class="btn btn-primary btn-large btn-full"></button>
 
@@ -340,10 +326,7 @@
         <section class="callout  container">
           <div id="agentlocation" class="addagenttext  row" style="text-align:center;">
           </div>
-          <div id="agent_location_map" class="  row">
-            
-            
-          </div>
+          <div id="agent_location_map" class="row"> </div>
         </section>
         <section class="callout  container">
           <div class="slideshow-container">
@@ -352,70 +335,19 @@
             <div id="other_similar_products" >
               <div id="other_mySlides1" class="mySlides ">
                 <div id="other_similar_products_row1"  class="row">
-                  <div class="col add_clidduct_column">
-                      <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
+                  
                 </div>
               </div>
               
               <div id="other_mySlides2"  class="mySlides ">
                 <div  id="other_similar_products_row2" class="row">
-                  <div class="col add_clidduct_column">
-                      <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                      <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                      <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                      <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                    <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                    <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
+                  
                 </div>
               </div>
               
               <div id="other_mySlides3"  class="mySlides ">
                 <div  id="other_similar_products_row3" class="row">
-                  <div class="col add_clidduct_column">
-                      <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
-                  <div class="col add_clidduct_column">
-                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
-                  </div>
+                  
                 </div>
               </div>
             </div>           
@@ -760,22 +692,16 @@
     </div>
 
     <div id="location_container" class="location_main_container">
-      
-      <div class="flex flex-wrap -m-3"> 
-        <div id="locationinfo"></div>
 
-        <div id="map"></div>
+      <section class="container">
+        <h2>Your delivery Location </h2>
+        <div id="main_heremap" class="  row"> </div>
+      </section>
 
-        <div class="card bg-dark text-white" style="width: 100%;">
-          <img id="main_heremap" class="card-img-top card-img" src="img/jeans3.jpg" alt="Card image cap">
-        </div>
-          
-            
-      </div>
     </div>
 
     <div id="user_container" class="user">
-
+      
       <div id="user_error" class="w-full sm:w-1/2 md:w-1/3 flex flex-col p-3 user_error_container">
         <div class="bg-white rounded-lg shadow-lg overflow-hidden flex-1 flex flex-col">
           <div class="bg-cover h-48" style="background-image: url(https://images.unsplash.com/photo-1523978591478-c753949ff840?w=900);"></div>
@@ -783,6 +709,10 @@
             <h3 id="user_row_h" class="mb-4 text-2xl">Error!</h3>
             <div class="mb-4 text-grey-darker text-sm flex-1">
               <p id="user_row_p"></p>
+            </div>
+            <div class="btn btn-info">
+              <a id="log_out" class="">logout </a>
+      
             </div>
             <a href="https://oramla.com/" class="border-t border-grey-light pt-2 text-xs text-grey hover:text-red uppercase no-underline tracking-wide" >Oramla.com</a>
           </div>
@@ -1027,6 +957,68 @@
      
     </div>
 
+    <div id="contact_information" class="modal"  tabindex="-1" role="dialog" aria-labelledby="contact_informationTitle" aria-hidden="true">
+      <div class="modal-background"></div>
+
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="contact_informationTitle">Contact information</h5>
+            <button id="contact_information_close" class="delete" aria-label="close"></button>          </div>
+          <div class="modal-body">
+            <div class="list-group list-group-horizontal">
+              <div class="form-group float-left">                 
+                <input type="text" class="is-link is-valid input" id="user_first" name="user_first" placeholder="First name">
+                <small id="user_first_help" class="form-text text-muted"></small>            
+                </div>
+              <div class="form-group float-right">
+                <input type="text" class="is-link is-valid input" id="user_last" name="user_last" placeholder="Last name">
+                <small id="user_last_help" class="form-text text-muted"></small>              
+              </div>
+            </div>            
+            <div class="form-group">              
+              <div class="select is-link is-valid float-left">
+                <select id="user_countrycode_phone">
+                  <option class="countrycode_phone" country_code="AR" value="54">Argentina (+54)</option>
+                </select>
+              </div>
+              <div class="float-right">
+                <input type="number" class="form-control is-valid" id="user_phone" name="user_phone" placeholder="#">
+                <small id="user_phone_help" class="form-text text-muted">Provide phone number</small>
+              </div>              
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control is-valid" id="user_address" name="user_address" placeholder="i.e 16th st. south hollad">
+              <small id="user_address_help" class="form-text text-muted">Your address</small>
+            </div>
+            <div class="form-group">
+              <input type="number" class="form-control is-valid" id="user_postal" name="user_postal" placeholder="00901">
+              <small id="user_postal_help" class="form-text text-muted">Postal code</small>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control is-valid" id="user_city" name="user_city" placeholder="Ngewa">
+              <small id="user_city_help" class="form-text text-muted">City</small>
+            </div>
+            <div class="form-group">
+              <div class="select is-link is-valid">
+                <select id="user_country">
+                  <option value="Argentina">Argentina</option>
+                </select>
+              </div>
+              <small id="user_country_help" class="form-text text-muted">Country</small>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="contact_information_footer_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button id="contact_information_save" type="button" class="btn btn-primary">Save changes</button>
+            <small id="contact_information_save_help" class="form-text text-muted"></small>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
     
     <div id="add_products_new" class="modal">
         <div class="modal-background"></div>
@@ -1122,96 +1114,41 @@
 
             <div class="field">
               <label class="label">Product image:</label>
-              <div id="upload_from_url" class="control">
+
+              <div id="upload_from_url" class="control upload_from_url">
                 <button class="button is-link">Upload from URL</button>
               </div>
-              <div id="upload_from_file" class="control">
+
+              <div id="upload_from_file" class="control upload_from_file">
                 <button class="button is-link is-light">Upload from File</button>
               </div>
 
-              <div class="control">
-                <div class="file has-name is-fullwidth is-primary">
-                  <label class="file-label">
-                    <input class="file-input" type="file" name="resume">
-                    <span class="file-cta">
-                      <span class="file-icon">
-                        <i class="fas fa-upload"></i>
-                      </span>
-                      <span class="file-label">
-                        Choose a file…
-                      </span>
-                    </span>
-                    <span class="file-name">
-                      Screen Shot 2017-07-29 at 15.54.25.png
-                    </span>
-                  </label>
-                </div>
+              <div id="upload_from_file_container" class="container upload_from_file_container">
+                <div class="row">
+                  <div class="col imgUp">
+                    <div class="imagePreview"></div>
+                    <label class="btn btn-primary">
+                      Choose file
+                      <input type="file" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">
+                    </label>
+                  </div><!-- col-2 -->
+                  <i class="fa fa-plus imgAdd"></i>
+                </div><!-- row -->
               </div>
 
-              <div class="control has-icons-left has-icons-right">
-                <input class="input is-danger" type="url" placeholder="Enter url i.e http://oramla.com">
-                <span class="icon is-small is-left">
-                  <i class="fas fa-cloud"></i>
-                </span>
-                <span class="icon is-small is-right">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
+              <div id="upload_from_url_container" class="field upload_from_url_container">
+                <div class="row">
+                  <div class="col imgUp">
+                    <div class="imagePreview"></div>
+                    <div class="control"><input type="url" class="uploadFile img input is-success" placeholder="Enter url i.e http://oramla.com" style="width:auto;height:0px;overflow:hidden;"></div>
+                    
+                  </div><!-- col-2 -->
+                  <i class="fa fa-plus imgAdd"></i>
+                </div><!-- row -->
               </div>
            
-            </div>            
+            </div> 
             
-            <div class="field">
-              <div class="control">
-                <label class="checkbox">
-                  <input id="more_pictures_checkbox" type="checkbox">
-                  <a id="more_pictures"> Add more pictures of the same product</a>
-                </label>
-              </div>
-              <div class="control">
-                <a> Select the number of photos you want to add</a>
-                <div class="select is-link">
-                  <select >
-                    <option value="1">1 photos(s)</option>
-                    <option value="2">2 photos(s)</option>
-                    <option value="3">3 photos(s)</option>
-                    <option value="4">4 photos(s)</option>
-                    <option value="5">5 photos(s)</option>
-                    <option value="6">6 photos(s)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="control">
-                <div class="file has-name is-fullwidth is-primary">
-                  <label class="file-label">
-                    <input class="file-input" type="file" name="resume">
-                    <span class="file-cta">
-                      <span class="file-icon">
-                        <i class="fas fa-upload"></i>
-                      </span>
-                      <span class="file-label">
-                        Choose a file…
-                      </span>
-                    </span>
-                    <span class="file-name">
-                      Screen Shot 2017-07-29 at 15.54.25.png
-                    </span>
-                  </label>
-                </div>
-              </div>
-
-              <div class="control has-icons-left has-icons-right">
-                <input class="input is-danger" type="url" placeholder="Enter url i.e http://oramla.com">
-                <span class="icon is-small is-left">
-                  <i class="fas fa-cloud"></i>
-                </span>
-                <span class="icon is-small is-right">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
-              </div>
-
-
-            </div>
 
           </section>
           <footer class="modal-card-foot">            
@@ -1250,7 +1187,33 @@
         </div> 
 
         
-    </div>  
+    </div>
+
+     
+    <!-- <a id="add_products_agent" class="product_float_id">
+      <i class="fas fa-plus-circle"></i>
+    </a> -->
+    <a id="add_products_agent"  class="product_float">
+      <i class="fa fa-plus-circle product_my-float"></i>
+    </a>
+    <div class="product_label-container">
+      <div class="product_label-text">Add products</div>
+      <i class="fa fa-play product_label-arrow"></i>
+    </div>
+
+    
+    <!-- <a id="action_float_id" class="action_float_id">
+       
+    </a> -->
+    <a id="action_float_id" class="float">
+      <i class="fa fa-plus-circle my-float"></i>
+    </a>
+    <div class="label-container">
+      <div class="label-text">You would like to </div>
+      <i class="fa fa-play label-arrow"></i>
+    </div>
+
+    
 
 
   </div> 
@@ -1576,7 +1539,10 @@
   <script src="js/arrow_navigation_container.js"></script>
   <script src="js/menu_container_apps_tab.js"></script>
 
+  
   <script src="js/index.js"></script>
+  <script src="js/modal.js"></script>
+
 
   <script src="js/product_add_client_container.js"></script>
   <script src="js/product_container.js"></script>

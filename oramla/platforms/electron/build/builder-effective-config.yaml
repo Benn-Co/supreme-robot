@@ -1,7 +1,7 @@
 directories:
-  output: 'C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\cordova\bennco\supreme-robot\oramla\platforms\electron\build'
-  buildResources: 'C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\cordova\bennco\supreme-robot\oramla\platforms\electron\build-res'
-  app: 'C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\cordova\bennco\supreme-robot\oramla\platforms\electron\www'
+  output: 'C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\electron\build'
+  buildResources: 'C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\electron\build-res'
+  app: 'C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\electron\www'
 appId: com.benco.org
 productName: Oramla
 electronVersion: 4.0.1

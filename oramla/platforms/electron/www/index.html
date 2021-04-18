@@ -11,7 +11,7 @@
         * Enable inline JS: add 'unsafe-inline' to default-src
     -->
   <!-- Removing 'unsafe-eval'. If needed, I will figure out a way around it -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://oramla.com http://192.168.0.102 http://localhost https://itunes.apple.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://polyfill.io https://developers.google.com https://maps.googleapis.com https://js.api.here.com https://developer.here.com https://image.maps.ls.hereapi.com https://oramla.com http://192.168.0.102 http://localhost https://itunes.apple.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
 
   <!-- Required meta tags-->
   <meta charset="utf-8">
@@ -54,9 +54,9 @@
   <link rel="stylesheet" href="bulma/css/bulma.css">
   <link rel="stylesheet" href="foundation-sites@6.6.3/dist/css/foundation.min.css" integrity="sha256-ogmFxjqiTMnZhxCqVmcqTvjfe1Y/ec4WaRj/aQPvn+I=" crossorigin="anonymous">
 
-
-
+  
   <title>Oramla</title>
+
 </head>
 
 <body>
@@ -198,7 +198,29 @@
       </ul>
     </nav>
     
-    <div id="product_container" class="product_main_container container is-fullhd">                                 
+    <div id="product_container" class="product_main_container container is-fullhd"> 
+      <!--<ul class="wrapper cf">
+        <li class="product fl-l">
+            <div class="container-prod">
+                <div class="image" style="background-image:url('img/noni.png');"></div>
+                  <div class="container-information">
+                    <div class="title">
+                        Splatter hoodie
+                        <a href="javascript:void(0)" class="more close"><i class="fa fa-times"></i></a>                
+                    </div>
+                    <div class="description information">Siebdruck print<br>100% cotton<br>Color available: white on gray<br>Size available: L, XL</div>
+                  </div>
+                  <div class="buttons cf">
+                    <a href="javascript:void(0)" class="more fl-l"><span><span><i class="fa fa-shopping-cart"></i></span></span></a>
+                    <a href="javascript:void(0)" class="more fl-l"><span><span><i class="fa fa-plus"></i></span></span></a>
+                    <a href="javascript:void(0)" class="share fl-l"><span><span><i class="fa fa-share-alt"></span></i></span></a>
+                  </div>
+            </div>
+        </li>
+      </ul>
+    <ul id="newitem" class="wrapper cf">
+        
+      </ul>-->
       
       <div id="product_error" class="w-full sm:w-1/2 md:w-1/3 flex flex-col p-3 product_error_container">
         <div class="bg-white rounded-lg shadow-lg overflow-hidden flex-1 flex flex-col">
@@ -218,35 +240,36 @@
       </div>
 
       <div id="product_add_client_container" class="product_add_client">
-        <ul class="add_ul ">
+        <ul class="add_ul client_text">
           <li class="add_li">
-            <a id="add_client_agent" href="#carouselExampleIndicators" class="my-2 my-sm-0 add_arrow add_left">
+            <a id="add_client_agent" href="#carouselExampleIndicators" class="">
               <img src="img/user-svgrepo-com.svg" alt="" width="25px" height="25px">
+              <b id="otheaddl"></b>
             </a>
           </li>
           <li class="add_li">
-            <a id="add_client_rating" class="my-2 my-sm-0 add_arrow add_left">
+            <a id="add_client_rating" class="">
               <i id="rating_num" class="circle_num badge badge-info">0</i>
               <img src="img/best-employee.svg" alt="" width="25px" height="25px">
             </a>
           </li>
           <li class="add_li">
-            <a id="add_client_location" href="#agentlocation" class="my-2 my-sm-0 add_arrow add_left">
+            <a id="add_client_location" href="#agentlocation" class="">
               <img src="img/location-svgrepo-com.svg" alt="" width="25px" height="25px">
             </a>
           </li>
           <li class="add_li">
-            <a id="add_client_delivery" class="my-2 my-sm-0 add_arrow add_left">
+            <a id="add_client_delivery" class="">
               <img src="img/international-delivery.svg" alt="" width="25px" height="25px">
             </a>
           </li>
           <li class="add_li">
-            <a id="add_client_payment" class="my-2 my-sm-0 add_arrow add_left">
+            <a id="add_client_payment" class="">
               <img src="img/payment-methods-svgrepo-com.svg" alt="" width="25px" height="25px">
             </a>
           </li>
 
-          <li class="add_li add_active" style="float:right">
+          <li class="add_li add_active client_text" style="float:right">
             <a id="arrow_add_client_back" class="my-2 my-sm-0 arrow left">
               <i></i>
               <svg>
@@ -254,98 +277,170 @@
               </svg>
             </a>
           </li>
-        </ul> 
-        
-        <div class="card bg-dark text-white  row" style="width: 100%;">
-          <img id="add_imageadd_" class="card-img-top card-img" src="img/jeans3.jpg" alt="Card image cap">
-          <div class="card-img-overlay add_product_column add_oertag">
-            <h5 class="card-title add_divtext btn btn-primary">
-              
-              <a id="add_carousel_currency" class=""></a>
-              <a id="add_carousel_price" class=""></a>
+        </ul>
 
-            </h5>
-            <div class="add_oer">
-              <h5 class="card-title add_divtext ">
-                
-                <a id="add_carousel_buynow" class="buynownow"></a>
+        <section class="buy-grid container">          
+          <div class="hero-image-wrapper">
+            <img id="add_imageadd_" src="https://www.osprey.com/images/product/hero/arielpro65_side_voyagergrey.jpg" class="hero-image-element" alt="alt">
+            <div id="other_title" class="row">
+                  
+            </div> 
+          </div>
+          <header class="header">
+            <h1 id="add_carousel_title" ></h1>
+          </header>
+          <div class="selection">
+            <div class="selection-row">
+              <div class="rate">
+                <a href="#!" class="active">★</a>
+                <a href="#!" class="active">★</a>
+                <a href="#!" class="active">★</a>
+                <a href="#!">★</a>
+                <a href="#!">★</a>
+               </div>
+            </div> 
+            
+            <p class="card-price"><span id="add_carousel_currency"></span><span id="add_carousel_price"></span></p>
+            
+            
+            <button  id="add_carousel_buynow" class="btn btn-primary btn-large btn-full"></button>
 
-              </h5>
+          </div>
+          <div class="specs-table">
+            <h4>Specifications</h4>
+            <div class="specs-table-row">
+              <div class="spec-table-label">=></div>
+              <div id="add_carousel_desc" class="spec-table-description">This is the description</div>
             </div>
           </div>
-         
-          <div class="card-body">
-            <div class="container" style="width: 100%;">
-              <b id="add_carousel_title"></b> 
-              <br> 
-              <div id="other_title" class="row">
-                
+        </section>
+        <section class="callout  container">
+          <div id="carouselExampleIndicators" class="carousel slide bg-dark text-white  row" data-ride="carousel">
+            <h3 class="text">Other Products from Agent <b id="otheadd"></b></h3>
+            <ol id="add_carousel_indicators" class="carousel-indicators _carousel_indicators" style="z-index: 0;">
+  
+              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  
+            </ol>
+            <div id="add_carousel_other" class="carousel-inner">                  
+  
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </section>
+        <section class="callout  container">
+          <div id="agentlocation" class="addagenttext  row" style="text-align:center;">
+          </div>
+          <div id="agent_location_map" class="  row">
+            
+            
+          </div>
+        </section>
+        <section class="callout  container">
+          <div class="slideshow-container">
+            <h3 class="text">Similar products </h3>
+
+            <div id="other_similar_products" >
+              <div id="other_mySlides1" class="mySlides ">
+                <div id="other_similar_products_row1"  class="row">
+                  <div class="col add_clidduct_column">
+                      <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                </div>
               </div>
-            </div>                    
-            <p id="add_carousel_desc" class="card-text add_cliext"></p>
+              
+              <div id="other_mySlides2"  class="mySlides ">
+                <div  id="other_similar_products_row2" class="row">
+                  <div class="col add_clidduct_column">
+                      <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                      <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                      <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                      <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                </div>
+              </div>
+              
+              <div id="other_mySlides3"  class="mySlides ">
+                <div  id="other_similar_products_row3" class="row">
+                  <div class="col add_clidduct_column">
+                      <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                  <div class="col add_clidduct_column">
+                    <img src="img/sizes.png" class="rounded" width="100%" height="100%" alt="...">
+                  </div>
+                </div>
+              </div>
+            </div>           
+            
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            
           </div>
-        </div>
-        <div class=" othetext  row" style="text-align:center">
-          <h6>Other Products from Agent <b id="otheadd"></b></h6>
-        </div>
-        <div id="carouselExampleIndicators" class="carousel slide bg-dark text-white  row" data-ride="carousel">
+            <br>
+            
+            <div style="text-align:center">
+              <span id="other_dot1" class="dot" onclick="currentSlide(1)"></span> 
+              <span id="other_dot2" class="dot" onclick="currentSlide(2)"></span> 
+              <span id="other_dot3" class="dot" onclick="currentSlide(3)"></span> 
+            </div>
           
-          <ol id="add_carousel_indicators" class="carousel-indicators _carousel_indicators" style="z-index: 0;">
 
-            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-
-          </ol>
-          <div id="add_carousel_other" class="carousel-inner">                  
-
-          </div>
-          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-          </a>
-          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-          </a>
-        </div>
-        <div id="agentlocation" class="addagenttext  row" style="text-align:center;">
-          <span>Agent <b id="otheaddl"></b> location</span>
-        </div>
-        <div class="card bg-dark text-white  row" style="width: 100%;">
-          <img id="add_heremap" class="card-img-top card-img" src="img/jeans3.jpg" alt="Card image cap">
-        </div>
-        <div class="addagenttext  row" style="text-align:center;">
-          <Strong>Similar products </Strong>
-        </div>
-        <div id="other_simillor" class="row">
-          <div class="col add_clidduct_column">
-              <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-          </div>
-          <div class="col add_clidduct_column">
-              <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-          </div>
-          <div class="col add_clidduct_column">
-              <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-          </div>
-          <div class="col add_clidduct_column">
-              <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-          </div>
-          <div class="col add_clidduct_column">
-            <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-          </div>
-          <div class="col add_clidduct_column">
-            <img src="img/jeans3.jpg" class="rounded" width="100%" height="100%" alt="...">
-          </div>
-        </div>
-
-        <a id="add_fload_id" connect_from="" connects_id="" connects_time="" class="add_float">
+          <a id="add_fload_id" connect_from="" connects_id="" connects_time="" class="add_float">
             <input class="bottom_input" type="radio" name="s" id="add_s5">
             <label class="bottom_label" for="add_s5"><img src="img/bubble_chart-24px.svg" alt=""></label>
-        </a>              
+          </a>
+        </section>
         
       </div>
-      
+
       <div id="arrow_navigation_container" class="arrow_navigation_cont">
         <ul class="v-effect-link">
           <li id="product_previous">
@@ -371,6 +466,8 @@
           </symbol>
         </svg> 
       </div>
+      
+      
          
     </div>
 

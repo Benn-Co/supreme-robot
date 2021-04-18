@@ -35,9 +35,9 @@
       "cordova-plugin-statusbar": {}
     },
     "platforms": [
-      "browser",
       "android",
-      "electron"
+      "electron",
+      "browser"
     ]
   }
 }
