@@ -30,9 +30,7 @@
   <link rel="shortcut icon" href="img/favicon-32x32.png">
 
   
-  <link rel="stylesheet" href="css/index.css">
-  <link rel="stylesheet" href="css/authentication.css">
-
+  
   <link rel="stylesheet" href="css/menu_container_top_tab.css">
   <link rel="stylesheet" href="css/menu_container_left_tab.css">
   <link rel="stylesheet" href="css/menu_container_bottom_tab.css">
@@ -53,7 +51,9 @@
   
   <link rel='stylesheet' href='bootstrap/4.3.1/css/bootstrap.min.css'>
   <link rel="stylesheet" href="fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
- 
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/authentication.css">
+
   
   <title>Oramla</title>
 
@@ -181,13 +181,13 @@
 
     <nav id="menu_container_left_tab" role='navigation' class="navigation">
       <input type="checkbox" id="post" class="postToggle" />
-      <label for="post" class="postBtn"></label>
+      <label id="menu_container_orders_count" for="post" class="postBtn"></label>
       <ul>
-        <li class="text">Add products</li>
-        <li class="quote">Orders</li>
-        <li class="link">Sell</li>
-        <li class="chat">Connects</li>
-        <li class="video">Currency</li>
+        <li id="menu_container_pending_orders_count" class="pending_orders text">Add products</li>
+        <li id="menu_container_active_orders_count" class="active_orders quote">Orders</li>
+        <li id="menu_container_confirmed_orders_count" class="confirmed_orders link">Sell</li>
+        <li id="menu_container_complete_orders_count" class="complete_orders chat">Connects</li>
+        <li id="menu_container_role" class="user_orders video">Currency</li>
       </ul>
     </nav>
     
@@ -711,7 +711,7 @@
               <p id="user_row_p"></p>
             </div>
             <div class="btn btn-info">
-              <a id="log_out" class="">logout </a>
+              <a class="logout">logout </a>
       
             </div>
             <a href="https://oramla.com/" class="border-t border-grey-light pt-2 text-xs text-grey hover:text-red uppercase no-underline tracking-wide" >Oramla.com</a>
@@ -719,15 +719,12 @@
         </div>  
       </div>
 
-      <div id="user_row_container" >
-
-        <a class="btn btn-sm btn-secondary left"><b class="">Account</b></a>
-        <a class="btn btn-sm btn-secondary right"><span>Balance</span> <b><span><i id="user_rams_symbol">V </i><b id="user_rams">0.00</b></span></b></a>
-
-        <div class="col raww">                 
-                       
+      <div id="user_row_container" >        
+        <div class="col raww">                       
           <div class="card card-profile shadow raww">
-
+            <a class="btn btn-sm btn-secondary left"><b class="">Account</b></a>
+            <a class="btn btn-sm btn-secondary right"><span>Balance</span> <b><span><i id="user_rams_symbol">V </i><b id="user_rams">0.00</b></span></b></a>
+    
             <div class="row justify-content-center">
               <div class="col-lg-3 order-lg-2">
                 <div class="card-profile-image">
@@ -741,13 +738,13 @@
               <div class="d-flex justify-content-between">
                 
                 
-                <a id="logout" class="btn btn-sm btn-info mr-4">Logout</a>
+                <a id="logout" class="btn btn-sm btn-info mr-4 logout">Logout</a>
                 <a id="track_order" class="btn btn-sm btn-secondary float-right">Track Order(s)</a>
               </div>
             </div>
             <div class="card-body pt-0 pt-md-4">
               <div class="userpt-8 text-center">
-                <h5 id="user_orders" class="mb-0 btn btn-info"><b id="_orders_count" class=""></b> Orders</h5>                        
+                <h5 id="user_orders" class="mb-0 btn btn-info user_orders"><b id="_orders_count" class=""></b> Orders</h5>                        
               </div>
               <div class="row">
                 <div class="col">
@@ -755,10 +752,10 @@
                     
                     <div class="btn-group">
                       
-                      <a id="pending_orders" class="btn btn-warning" role="button"><span id="pending_orders_count" class="heading">0</span>Pending</a>
-                      <a id="active_orders" class="btn btn-success" role="button"><span id="active_orders_count" class="heading">0</span>Active</a>
-                      <a id="confirmed_orders" class="btn btn-danger" role="button"><span id="confirmed_orders_count" class="heading">0</span>Cancelled</a>
-                      <a id="complete_orders" class="btn btn-info" role="button"><span id="complete_orders_count" class="heading">0</span>Complete</a>
+                      <a id="pending_orders" class="pending_orders btn btn-warning" role="button"><span id="pending_orders_count" class="heading">0</span>Pending</a>
+                      <a id="active_orders" class="active_orders btn btn-success" role="button"><span id="active_orders_count" class="heading">0</span>Active</a>
+                      <a id="confirmed_orders" class="confirmed_orders btn btn-danger" role="button"><span id="confirmed_orders_count" class="heading">0</span>Cancelled</a>
+                      <a id="complete_orders" class="complete_orders btn btn-info" role="button"><span id="complete_orders_count" class="heading">0</span>Complete</a>
 
                     </div>
 
@@ -976,7 +973,7 @@
                 <small id="user_last_help" class="form-text text-muted"></small>              
               </div>
             </div>            
-            <div class="form-group">              
+            <div class="list-group list-group-horizontal">              
               <div class="select is-link is-valid float-left">
                 <select id="user_countrycode_phone">
                   <option class="countrycode_phone" country_code="AR" value="54">Argentina (+54)</option>

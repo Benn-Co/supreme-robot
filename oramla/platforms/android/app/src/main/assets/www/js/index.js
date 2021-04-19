@@ -69,7 +69,6 @@ function onDeviceReady() {
 
 function user_container(user,email) {
     $('#app-cover-spin').show(0);
-
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
@@ -77,90 +76,143 @@ function user_container(user,email) {
         processData: true,
         url: api_server_url + '/cordova/user_container.php',
         success: function searchSuccess(response) {
-            try {
-                //response.data = JSON.parse(response.data);
-                if (response.message == "success") {
-                    $('.user_error_container').hide(500, function(){                    
-                    });
-                    $("#user_row_container").show(100);
-                    user_role = response.role;
-                    if (response.role == "customer") {
-                        $("#uersdashro").hide(100);
-                        $("#uersdash").hide(100);
+
+            if (user_co == 1) {
+                user_co = 0;
+                try {
+                    //response.data = JSON.parse(response.data);
+                    if (response.message == "success") {
+                        $('.user_error_container').hide(500, function(){                    
+                        });
+                        $("#user_row_container").show(100);
+                        user_role = response.role;
+                        if (response.role == "customer") {
+                            $("#uersdashro").hide(100);
+                            $("#uersdash").hide(100);
+                        } else {
+                            $("#uersdashro").show(100);
+                            $("#uersdash").show(100);
+                        }
+        
+                        $("#user_name").html("status : " + response.agent_status + "<br>" + response.role + " " + response.username);
+                        $("#user_rating_acc").html(response.rating);
+                        $("#user_review_acc").html(response.review + " <br> Last Update " + response.lastUpdate);
+                        
+                        $("#input-username").val(response.username);
+                        $("#input-first-name").val(response.first_name);
+                        $("#input-last-name").val(response.last_name);
+                        email = response.email;
+                        $("#input-email").val(response.email);
+                        $("#input-phone").val(response.phone_number);
+                        phone = response.phone_number;
+    
+                        first = response.first_name;
+                        last = response.last_name;                    
+                        
+                        var location = JSON.parse(response.location_name);
+                        postal = location.postal;
+                        country = location.country;
+                        city = location.city;
+                        address = location.address;
+    
+                        $("#input-postal-code").val(location.postal);
+                        $("#input-country").val(location.country);
+                        $("#input-city").val(location.city);
+                        $("#input-address").val(location.address);
+                        
+                        $("#pending_orders_count").html(response.pending_orders);
+                        $("#active_orders_count").html(response.active_orders);
+                        $("#confirmed_orders_count").html(response.confirmed_orders);
+                        $("#complete_orders_count").html(response.complete_orders);
+                        $("#_orders_count").html(response.user_orders);
+        
+        //user_rams
+        //user_rams_symbol
+        
+        //user_name_image
+        //user_name_image_src
+        
+        //track_order
+        //logout
+        
+        //confirmed_orders
+        //confirmed_orders_count
+        //active_orders
+        //active_orders_count
+        //pending_orders
+        //pending_orders_count
+        //user_orders
+        
+        //user_products
+        //products_count
+        //in_stock
+        //in_stock_count
+        //products_sold
+        //product_sold_count
+        //user_dashboard
+                       
                     } else {
-                        $("#uersdashro").show(100);
-                        $("#uersdash").show(100);
+                        $('.user_error_container').show(500, function(){
+                            $("#user_row_container").hide(100);
+                            $("#user_row_h").html(response.message);
+                            $("#user_row_p").html(response.login_email + " or " + response.login_password);
+                        });
                     }
-    
-                    $("#user_name").html("status : " + response.agent_status + "<br>" + response.role + " " + response.username);
-                    $("#user_rating_acc").html(response.rating);
-                    $("#user_review_acc").html(response.review + " <br> Last Update " + response.lastUpdate);
-                    
-                    $("#input-username").val(response.username);
-                    $("#input-first-name").val(response.first_name);
-                    $("#input-last-name").val(response.last_name);
-                    email = response.email;
-                    $("#input-email").val(response.email);
-                    $("#input-phone").val(response.phone_number);
-                    phone = response.phone_number;
-    
-                    var location = JSON.parse(response.location_name);
-
-                    postal = location.postal;
-                    country = location.country;
-                    city = location.city;
-                    address = location.address;
-
-                    $("#input-postal-code").val(location.postal);
-                    $("#input-country").val(location.country);
-                    $("#input-city").val(location.city);
-                    $("#input-address").val(location.address);
-                    
-                    $("#pending_orders_count").html(response.pending_orders);
-                    $("#active_orders_count").html(response.active_orders);
-                    $("#confirmed_orders_count").html(response.confirmed_orders);
-                    $("#complete_orders_count").html(response.complete_orders);
-                    $("#_orders_count").html(response.user_orders);
-    
-    //user_rams
-    //user_rams_symbol
-    
-    //user_name_image
-    //user_name_image_src
-    
-    //track_order
-    //logout
-    
-    //confirmed_orders
-    //confirmed_orders_count
-    //active_orders
-    //active_orders_count
-    //pending_orders
-    //pending_orders_count
-    //user_orders
-    
-    //user_products
-    //products_count
-    //in_stock
-    //in_stock_count
-    //products_sold
-    //product_sold_count
-    //user_dashboard
-                   
-                } else {
+                } catch(e) {
                     $('.user_error_container').show(500, function(){
                         $("#user_row_container").hide(100);
-                        $("#user_row_h").html(response.message);
-                        $("#user_row_p").html(response.login_email + " or " + response.login_password);
+                        $("#user_row_h").html('JSON error');
+                        $("#user_row_p").html('JSON parsing error');
                     });
                 }
-            } catch(e) {
-                $('.user_error_container').show(500, function(){
-                    $("#user_row_container").hide(100);
-                    $("#user_row_h").html('JSON error');
-                    $("#user_row_p").html('JSON parsing error');
-                });
+
+            } else {
+                try {if (response.message == "success") {
+                        user_role = response.role;
+                        if (response.role == "customer") {
+                            //$("#uersdashro").hide(100);
+                            //$("#uersdash").hide(100);
+                        } else {
+                            //$("#uersdashro").show(100);
+                            //$("#uersdash").show(100);//user_products
+                            //products_count
+                            //in_stock
+                            //in_stock_count
+                            //
+                            //product_sold_count                            
+                        }
+                        phone = response.phone_number;    
+                        first = response.first_name;
+                        last = response.last_name;                        
+                        var location = JSON.parse(response.location_name);
+                        postal = location.postal;
+                        country = location.country;
+                        city = location.city;
+                        address = location.address;
+
+                        $("#menu_container_role").html('<span class="badge badge-secondary">' + response.role + '</span>');
+                        $("#menu_container_pending_orders_count").html('<span class="badge badge-warning">' + response.pending_orders + '</span>');
+                        $("#menu_container_active_orders_count").html('<span class="badge badge-success">' + response.active_orders + '</span>');
+                        $("#menu_container_confirmed_orders_count").html('<span class="badge badge-danger">' + response.confirmed_orders + '</span>');
+                        $("#menu_container_complete_orders_count").html('<span class="badge badge-info">' + response.complete_orders + '</span>');
+                        $("#menu_container_orders_count").html('<span class="badge badge-secondary">' + response.user_orders + '</span>');
+                    } else {
+                        /**$('.user_error_container').show(500, function(){
+                            $("#user_row_container").hide(100);
+                            $("#user_row_h").html(response.message);
+                            $("#user_row_p").html(response.login_email + " or " + response.login_password);
+                        }); */
+                    }
+                } catch(e) {
+                    /**$('.user_error_container').show(500, function(){
+                        $("#user_row_container").hide(100);
+                        $("#user_row_h").html('JSON error');
+                        $("#user_row_p").html('JSON parsing error');
+                    }); */
+                }
             }
+            
+            
           
         },
         error: function searchError(xhr, err) {
@@ -234,7 +286,7 @@ function userupdate() {
     }
     var error_phone_data = 0;
     var phone_numb = $("#input-phone").val();
-    if ($("#input-phone").val() != "" && $("#input-phone").val() != null && phone_numb.length <= 10) {
+    if ($("#input-phone").val() != "" && $("#input-phone").val() != null && phone_numb.length <= 9) {
         $("#input-phone").removeClass("is-invalid");
         $("#input-phone").addClass("is-valid");
         $("#input-phone_help").html($("#input-phone").val());
@@ -315,7 +367,10 @@ function userupdate() {
     }
     if (error_user_data == 0) {
         //alert(rating_stars);
-        update_user_data(latitude,longitude,user_role,rating_stars,$("#user_review").val(),$("#input-address").val(),$("#input-city").val(),$("#input-country").val(),$("#input-postal-code").val(),$("#input-phone").val(),$("#input-email").val(),$("#input-last-name").val(),$("#input-first-name").val(),$("#input-username").val());
+        action_float_id = 0;
+        location_main_container = 0;
+        contact_information_save = 0;
+        update_user_data(latitude,longitude,role,rating_stars,$("#user_review").val(),$("#input-address").val(),$("#input-city").val(),$("#input-country").val(),$("#input-postal-code").val(),$("#input-phone").val(),$("#input-email").val(),$("#input-last-name").val(),$("#input-first-name").val(),$("#input-username").val());
         $("#update_user_data_help").html("Updating...");
     } else {
         $("#update_user_data_help").html('Correct the error(s)'); 
@@ -329,16 +384,14 @@ $("body").delegate(".give_us_stars","click",function(event){
 });
 function update_user_data(latitude,longitude,user_role,rating,review,address,city,country,postal,user_phone,user_email,last,first,user_name) {
     $('#app-cover-spin').show(0);
-
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
         data: { update_user_data: 12, latitude:latitude, longitude:longitude, user_role:user_role, rating: rating, review: review, address: address, city: city, country: country, postal: postal, user_phone: user_phone, user_email: user_email, last: last, first: first, user_name: user_name},
         processData: true,
         url: api_server_url + '/cordova/update_user_data.php',
-        success: function searchSuccess(response) {            
-            //contact_information_save = 1;
-        //$("#contact_information_save_help").html("Saving...");
+        success: function searchSuccess(response) {
+            //alert('action_float_id ' + action_float_id + " location_main_container " + location_main_container + " contact_information_save " + contact_information_save)
             if (action_float_id == 1) {
                 action_float_id = 0;
                 $("#menu_container_top_tab").show(100);
@@ -370,6 +423,12 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
                 try {
                     latitude = response.latitude;
                     longitude = response.longitude;
+                    var location = JSON.parse(response.location_name);
+                    postal = location.postal;
+                    country = location.country;
+                    city = location.city;
+                    address = location.address;
+
                 } catch(e) {                    
                     alert('JSON parsing error');
                 }
@@ -377,15 +436,22 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
                 contact_information_save = 0;
                 try {
                     if (response.message == "success") {
+                        var location = JSON.parse(response.location_name);
+                        postal = location.postal;
+                        country = location.country;
+                        city = location.city;
+                        address = location.address;
+
                         $("#contact_information_save").removeClass("btn-info");
                         $("#contact_information_save").addClass("btn-success");
                         $("#contact_information_save").html(response.message);
                         $("#contact_information_save_help").html("Done");
-
                         $('#contact_information').hide(2000, function(){ 
                             if (add_products_agent == 1) {
                                 add_products_agent = 0;
                                 $("#add_products_new").show(100);
+                            } else {
+                                checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_total,username);
                             }                   
                         });
                     } else {
@@ -393,7 +459,6 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
                         $("#contact_information_save").addClass("btn-warning");
                         $("#contact_information_save").html(response.message);
                         $("#contact_information_save_help").html("Something went wrong");
-
                     }
                 } catch(e) {   
                     $("#contact_information_save").removeClass("btn-info");
@@ -401,6 +466,7 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
                     $("#contact_information_save").html("JSON error");
                     $("#contact_information_save_help").html('JSON parsing error');                 
                 }
+                
             } else {
                 try {
                     //response.data = JSON.parse(response.data);
@@ -426,9 +492,13 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
                         email = response.email;
                         $("#input-email").val(response.email);
                         $("#input-phone").val(response.phone_number);
-                        phone = response.phone_number;
-                        
+                        phone = response.phone_number;                        
+
                         var location = JSON.parse(response.location_name);
+                        postal = location.postal;
+                        country = location.country;
+                        city = location.city;
+                        address = location.address;
                         $("#input-postal-code").val(location.postal);
                         $("#input-country").val(location.country);
                         $("#input-city").val(location.city);
@@ -461,69 +531,6 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
           });
         }
     });
-
-    /**const options = {
-        method: 'post',
-        data: { update_user_data: 12, user_role:user_role, rating: rating, review: review, address: address, city: city, country: country, postal: postal, user_phone: user_phone, user_email: user_email, last: last, first: first, user_name: user_name},
-        headers: { Authorization: 'OAuth2: token' }
-    };    
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/update_user_data.php', options, function(response) {
-        // prints 200
-        $('#app-cover-spin').hide(0);
-        try {
-            response.data = JSON.parse(response.data);
-            if (response.data.message == "success") {
-                $('.user_error_container').hide(500, function(){                    
-                });
-                $("#user_row_container").show(100);
-                if (response.data.role == "customer") {
-                    $("#uersdashro").hide(100);
-                    $("#uersdash").hide(100);
-                } else {
-                    $("#uersdashro").show(100);
-                    $("#uersdash").show(100);
-                }
-
-                $("#user_name").html("status : " + response.data.agent_status + "<br>" + response.data.role + " " + response.data.username);
-                $("#user_rating_acc").html(response.data.rating);
-                $("#user_review_acc").html(response.data.review + " <br> Last Update " + response.data.lastUpdate);
-                
-                $("#input-username").val(response.data.username);
-                $("#input-first-name").val(response.data.first_name);
-                $("#input-last-name").val(response.data.last_name);
-                email = response.data.email;
-                $("#input-email").val(response.data.email);
-                $("#input-phone").val(response.data.phone_number);
-                phone = response.data.phone_number;
-                
-                var location = JSON.parse(response.data.location_name);
-                $("#input-postal-code").val(location.postal);
-                $("#input-country").val(location.country);
-                $("#input-city").val(location.city);
-                $("#input-address").val(location.address);
-
-            } else {
-                $('.user_error_container').show(500, function(){
-                    $("#user_row_container").hide(100);
-                    $("#user_row_h").html(response.data.message);
-                    $("#user_row_p").html(response.data.login_email + " or " + response.data.login_password);
-                });
-            }
-        } catch(e) {
-            $('.user_error_container').show(500, function(){
-                $("#user_row_container").hide(100);
-                $("#user_row_h").html('JSON error');
-                $("#user_row_p").html('JSON parsing error');
-            });
-        }
-    }, function(response) {
-        $('.user_error_container').show(500, function(){
-            $("#user_row_container").hide(100);
-            $("#user_row_h").html(response.status);
-            $("#user_row_p").html(response.error);
-        });
-
-    }); */
 }
 
 var inputRange = document.getElementsByClassName('range')[0];
@@ -852,9 +859,10 @@ function main() {
         $("#add_products_agent").show(100);        
     }
     product_main_container(startlimit,endlimit,cat_id);
-    apps_categories(username);
+    apps_categories(username);    
     if (username != "") {
         loadconnects();
+        user_container(username,email);
         //setTimeout(loadchat, 3000);
     }    
 }
@@ -984,10 +992,18 @@ function order_id(startlimit,endlimit,status,username,order_id) {
         data: { order_id: 12, startlimit: startlimit, endlimit: endlimit, status:status, username: username, order_id: order_id },
         processData: true,
         url: api_server_url + '/cordova/order_id.php',
-        success: function searchSuccess(response) {
+        success: function searchSuccess(response) {            
             try {
                 //response.data = JSON.parse(response.data);
                 if (response.message == "success") {
+                    window.location.href="#orders_container";
+                    $("#menu_container_top_tab").show(100); 
+                    $("#product_container").hide(100);
+                    $("#menu_container_left_tab").hide(100);
+                    $("#chat_container").hide(100);
+                    $("#connects_chatbar").hide(100);
+                    $("#location_container").hide(100);
+                    $("#user_container").hide(100);
                     var products_status = response.products_status;
                     var products_data = response.products;
                     
@@ -1024,8 +1040,8 @@ function order_id(startlimit,endlimit,status,username,order_id) {
                 
             } catch(e) {
                 $('#app-cover-spin').hide(0);
-                //alert('JSON parsing error');
-                snackbar('JSON parsing error');
+                alert('JSON parsing error');
+                //snackbar('JSON parsing error');
     
                 
             }
@@ -1034,8 +1050,8 @@ function order_id(startlimit,endlimit,status,username,order_id) {
         error: function searchError(xhr, err) {
           //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
           $('#app-cover-spin').hide(0);
-          //alert(response.status + " : " + response.error);
-          snackbar("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+          alert(response.status + " : " + response.error);
+          //snackbar("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
         }
     });
 
@@ -1542,7 +1558,7 @@ function order_datamyFunction(item, index) {
 
 var  _shipping = '0';
 var  _pay = '0';
-
+var checkout_contact_information_save = 0;
 $("#checkout_total").click(function(){
    _shipping =  $("#_shipping").val();
    _pay =  $("#_pay").val();
@@ -1555,17 +1571,29 @@ $("#checkout_total").click(function(){
     $("#_payerror").html('Select your preffered payment option');
    } else {
     $("#_shippingerror").html('');
-    $("#_payerror").html('');    
-    checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_total,username);
+    $("#_payerror").html(''); 
+    //phone = '';
+    if (phone == "") {
+        checkout_contact_information_save = 1;
+        $("#contact_information_save").removeClass("btn-success");
+        $("#contact_information_save").removeClass("btn-warning");
+        $("#contact_information_save").addClass("btn-primary");
+        $("#contact_information_save").html('Save changes');
+        $("#contact_information_save_help").html('');
+        $("#contact_information").show(100);
+    } else {
+        //$("#add_products_new").show(100);
+        checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_total,username);
+    }   
    }  
 });
-$("#user_orders").click(function(){
+$(".user_orders").click(function(){
     /**$("#orders_container").show(10,function(){
             $("#cart_container").hide(10); 
             $('#app-cover-spin').hide(0);
             $("#order_items_container").hide(10);           
         }); */
-    window.location.href="#orders_container";
+    /**window.location.href="#orders_container";
     $("#menu_container_top_tab").show(100);                
 
     $("#product_container").hide(100);
@@ -1573,13 +1601,13 @@ $("#user_orders").click(function(){
     $("#chat_container").hide(100);
     $("#connects_chatbar").hide(100);
     $("#location_container").hide(100);
-    $("#user_container").hide(100);
+    $("#user_container").hide(100); */
 
     order_id(startlimit,endlimit,'user_orders',username,'');
 });
-$("#pending_orders").click(function(){
+$(".pending_orders").click(function(){
     //pending_orders_count
-    window.location.href="#orders_container";
+    /**window.location.href="#orders_container";
     $("#menu_container_top_tab").show(100);                
 
     $("#product_container").hide(100);
@@ -1587,13 +1615,13 @@ $("#pending_orders").click(function(){
     $("#chat_container").hide(100);
     $("#connects_chatbar").hide(100);
     $("#location_container").hide(100);
-    $("#user_container").hide(100);
+    $("#user_container").hide(100); */
 
     order_id(startlimit,endlimit,'pending_orders',username,'');
 });
-$("#active_orders").click(function(){
+$(".active_orders").click(function(){
     //active_orders_count
-    window.location.href="#orders_container";
+    /**window.location.href="#orders_container";
     $("#menu_container_top_tab").show(100);                
 
     $("#product_container").hide(100);
@@ -1601,13 +1629,13 @@ $("#active_orders").click(function(){
     $("#chat_container").hide(100);
     $("#connects_chatbar").hide(100);
     $("#location_container").hide(100);
-    $("#user_container").hide(100);
+    $("#user_container").hide(100); */
 
     order_id(startlimit,endlimit,'active_orders',username,'');
 });
-$("#confirmed_orders").click(function(){
+$(".confirmed_orders").click(function(){
     //confirmed_orders_count
-    window.location.href="#orders_container";
+    /**window.location.href="#orders_container";
     $("#menu_container_top_tab").show(100);                
 
     $("#product_container").hide(100);
@@ -1615,13 +1643,13 @@ $("#confirmed_orders").click(function(){
     $("#chat_container").hide(100);
     $("#connects_chatbar").hide(100);
     $("#location_container").hide(100);
-    $("#user_container").hide(100);
+    $("#user_container").hide(100); */
 
     order_id(startlimit,endlimit,'confirmed_orders',username,'');
 });
-$("#complete_orders").click(function(){
+$(".complete_orders").click(function(){
     //confirmed_orders_count
-    window.location.href="#orders_container";
+    /**window.location.href="#orders_container";
     $("#menu_container_top_tab").show(100);                
 
     $("#product_container").hide(100);
@@ -1629,7 +1657,7 @@ $("#complete_orders").click(function(){
     $("#chat_container").hide(100);
     $("#connects_chatbar").hide(100);
     $("#location_container").hide(100);
-    $("#user_container").hide(100);
+    $("#user_container").hide(100); */
 
     order_id(startlimit,endlimit,'complete_orders',username,'');
 });
@@ -2704,7 +2732,7 @@ function products_datamyFunction(item, index) {
     
 }
 
-$("#log_out").click(function(){
+$(".logout").click(function(){
     $("#menu_container_top_tab").show(100);
     $("#menu_container_left_tab").show(100);
     $("#chat_container").hide(100);
@@ -2849,15 +2877,14 @@ $("#contact_information_save").click(function(){
     
     
     if (user_phone != "" && user_phone != null && user_phone.length >= 9 && user_address != "" && user_address != null && user_postal != "" && user_postal != null && user_city != "" && user_city != null) {
-        phone = user_phone;
         address = user_address;
         postal = user_postal;
         city = user_city;
-        //phone = user_countrycode_phone + "" + phone;
         country = user_country;
         first = user_first;
         last = user_last;
-        //alert(phone);
+        action_float_id = 0;
+        location_main_container = 0;
         contact_information_save = 1;
         $("#contact_information_save").removeClass("btn-primary");
         $("#contact_information_save").removeClass("btn-danger");
@@ -2890,8 +2917,10 @@ $("#action_float_id").click(function(){
             var userrole = "customer";
         }  
         action_float_id = 1;
-             
-        update_user_data(latitude,longitude,userrole,rating,review,address,city,country,postal,user_phone,email,last,first,username);
+        location_main_container = 0;
+        contact_information_save = 0;
+        //alert(phone);  
+        update_user_data(latitude,longitude,userrole,rating,review,address,city,country,postal,phone,email,last,first,username);
     }     
 });
 
@@ -3686,6 +3715,7 @@ $("#s4").click(function(){
     }
     //$("#menu_container_apps_tab").hide(100);
 });
+var user_co = 0;
 function user() {    
     if (username == "") {
         $(".user").hide(100);
@@ -3696,6 +3726,7 @@ function user() {
         $(".main").show(100);
         $(".user").show(100);
         window.location.href="#user_container";
+        user_co = 1;
         user_container(username,email);
 
     }    
@@ -3748,7 +3779,8 @@ function location_container() {
 
         $('<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/location_container.html" height="400px" width="100%" title="map"></iframe>').appendTo('#main_heremap');
 
-        
+        action_float_id = 0;
+        contact_information_save = 0;
         location_main_container = 1;
         update_user_data(latitude,longitude,role,rating,review,address,city,country,postal,user_phone,email,last,first,username);
     
@@ -3889,10 +3921,6 @@ function login_user(login_email,login_password) {
         success: function searchSuccess(response) {
             $('#app-cover-spin').hide(0);
             $("#login_button_help").html(response.message);
-           // alert(response.message);
-            //alert(JSON.parse(response));
-
-
             try {
                // response.data = JSON.parse(response.data);
                 if (response.message == "success") {
@@ -3900,6 +3928,16 @@ function login_user(login_email,login_password) {
                     username = response.username;
                     role = response.role;
                     email = response.email;
+
+                    first = response.first_name;
+                    last = response.last_name;
+                    phone = response.phone_number;
+
+                    var location = JSON.parse(response.location_name);
+                        postal = location.postal;
+                        country = location.country;
+                        city = location.city;
+                        address = location.address;
 
                     localStorage.setItem("username", username);
                     localStorage.setItem("role", role);
@@ -4069,6 +4107,16 @@ function signup_user(signup_username,signup_email,signup_password) {
                     rating = response.rating;
                     role = response.role;
                     email = response.email;
+
+                    first = response.first_name;
+                    last = response.last_name;
+                    phone = response.phone_number;
+
+                    var location = JSON.parse(response.location_name);
+                        postal = location.postal;
+                        country = location.country;
+                        city = location.city;
+                        address = location.address;
 
                     altitude = response.altitude;
                     localStorage.setItem("username", username);
