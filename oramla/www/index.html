@@ -465,12 +465,9 @@
     </div>
     
     <div id="cart_container" class="cart">  
-      <div class="row order_head">
-        <div class="col-sm-4 ">
-            <h2>shopping cart</h2>
-        </div>
-      </div>
+      
       <div id="site-header">
+        <h2>shopping cart</h2>
         <div id="cart_row_container" class="caercontainer order_body">
         
         </div>              
@@ -498,7 +495,7 @@
 
         <div class="cart_shipping">
           <a class="optionsa">Delivery option</a>
-          <select id="_shipping" class="ex3" data-menu>
+          <select id="_shipping" class="input" data-menu>
             <option value="0" selected>Select</option>
             <option value="Pick up">Pick up</option>
             <option value="Door to door">Door to door</option>
@@ -509,7 +506,7 @@
         </div>
         <div class="cart_pay">
           <a class="optionsa">Payment option</a>
-          <select id="_pay" class="ex3" data-menu>
+          <select id="_pay" class="input" data-menu>
             <option value="0" selected>Select</option>
             <option value="M-Pesa">M-Pesa</option>
             <option value="Paypal">Paypal</option>
@@ -602,14 +599,10 @@
     
     </div>
 
-    <div id="orders_container" class="orders_">
-      <div class="row order_head">
-        <div class="col-sm-4">
-            <h2>Order <b>Details</b></h2>
-        </div>
-      </div>
+    <div id="orders_container" class="orders_">      
 
       <table class="table table-striped table-hover order_body">
+        <h2>Order <b>Details</b></h2>
         <thead>
             <tr>
                 <th>Customer</th>
@@ -651,13 +644,9 @@
       
     </div>
 
-    <div id="order_items_container" class="order_items">
-      <div class="row order_head">
-        <div class="col-sm-4 ">
-            <h2>Order <b id="orderid"></b></h2>
-        </div>
-      </div>
-      <div class="tems_container order_body">              
+    <div id="order_items_container" class="order_items">      
+      <div class="tems_container order_body">  
+        <h2>Order <b id="orderid"></b></h2>            
         <div id="orders_items_made" class="caercontainer">
         
         </div>
@@ -968,11 +957,11 @@
             <div class="list-group list-group-horizontal">
               <div class="form-group float-left">                 
                 <input type="text" class="is-link is-valid input" id="user_first" name="user_first" placeholder="First name">
-                <small id="user_first_help" class="form-text text-muted"></small>            
+                <span id="user_first_help" class="form-text text-muted"></span>            
                 </div>
               <div class="form-group float-right">
                 <input type="text" class="is-link is-valid input" id="user_last" name="user_last" placeholder="Last name">
-                <small id="user_last_help" class="form-text text-muted"></small>              
+                <span id="user_last_help" class="form-text text-muted"></span>              
               </div>
             </div>  
 
@@ -983,7 +972,7 @@
                   <option class="countrycode_phone" country_code="AR" value="54">Argentina (+54)</option>
                   <option class="countrycode_phone" country_code="AR" value="54">Argentina (+54)</option>
                 </select>  
-                <small id="user_countrycode_phone_help" class="form-text text-muted"></small>            
+                <span id="user_countrycode_phone_help" class="form-text text-muted"></span>            
               </div> 
               <div class="form-group is-valid float-md-right px-2">
                 <span>Phone number:</span>
@@ -994,15 +983,15 @@
 
             <div class="form-group">
               <input type="text" class="form-control is-valid" id="user_address" name="user_address" placeholder="i.e 16th st. south hollad">
-              <small id="user_address_help" class="form-text text-muted">Your address</small>
+              <span id="user_address_help" class="form-text text-muted">Your address</span>
             </div>
             <div class="form-group">
               <input type="number" class="form-control is-valid" id="user_postal" name="user_postal" placeholder="00901">
-              <small id="user_postal_help" class="form-text text-muted">Postal code</small>
+              <span id="user_postal_help" class="form-text text-muted">Postal code</span>
             </div>
             <div class="form-group">
               <input type="text" class="form-control is-valid" id="user_city" name="user_city" placeholder="Ngewa">
-              <small id="user_city_help" class="form-text text-muted">City</small>
+              <span id="user_city_help" class="form-text text-muted">City</span>
             </div>
             <div class="form-group">
               <div class="select is-link is-valid">
@@ -1010,13 +999,13 @@
                   <option value="Argentina">Argentina</option>
                 </select>
               </div>
-              <small id="user_country_help" class="form-text text-muted">Country</small>
+              <span id="user_country_help" class="form-text text-muted">Country</span>
             </div>
           </div>
           <div class="modal-footer">
             <button id="contact_information_footer_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button id="contact_information_save" type="button" class="btn btn-primary">Save changes</button>
-            <small id="contact_information_save_help" class="form-text text-muted"></small>
+            <span id="contact_information_save_help" class="form-text text-muted"></span>
 
           </div>
         </div>
@@ -1094,6 +1083,10 @@
                   <span id="product_category_help" class="form-text text-muted"></span>            
                 </div>                
               </div>
+
+              <label class="label" for="product_type">Product Type:</label>
+              <input type="text" class="form-control is-valid" id="product_type" name="product_type" placeholder="For example, include Maxi Dresses instead of just Dresses">
+              <span id="product_type_help" class="form-text text-muted">Product category that you define for your product</span>
             </div>
 
             <div class="form-group">
@@ -1143,13 +1136,73 @@
                   <select id="availability_strategy" class="input" >
                     <option value="availability">availability</option>
                     <option value="availability ​​date">availability ​​date</option>
+                    <option value="cost of goods sold">cost of goods sold</option>
+                    <option value="expiration date">expiration date</option>
+                    <option value="sale price effective date">sale price effective date</option>
+                    <option value="unit pricing measure">unit pricing measure</option>
+                    <option value="unit price base measure">unit price base measure</option>
+                    <option value="installment">installment</option>
+                    <option value="subscription cost">subscription cost</option>
+                    <option value="loyalty points">loyalty points</option>
 
                   </select>  
                   <span id="availability_strategy_help" class="form-text text-muted">Accurately submit the product's availability and match the availability from your landing page <br>Supported values<br><b>in stock</b><br><b>out of stock</b><br><b>preorder</b><br><b>backorder</b></span>            
-                </div>                
+                </div> 
               </div>
               <span  id="product_data_specification_help"  class="help"><span class="help is-link">Use this specification to format your product information for Merchant Center programs, such as Shopping ads, free product listings, and Buy on Oramla. Submitting your product data to Oramla in the correct format is important for creating successful ads and free listings for your products. We use this data to make sure that it's matched to the right queries.</span></span>
 
+            </div>
+            <div class="form-group">
+              <span class="heading">Product identifiers:</span>
+              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2">
+                  <span id="product_data_brand_title"> brand:</span>
+                  <input type="text" class="form-control is-valid" id="product_brand" name="product_brand" placeholder="">
+                  <span id="product_brand_help" class="form-text text-muted">i.e oramla </span>
+                </div>
+                <div class="form-group is-valid float-md-right px-2">
+                  <span>Drand strategy:</span>
+                  <select id="brand_strategy" class="input" >
+                    <option value="brand">brand</option>
+                    <option value="gtin">gtin</option>
+                    <option value="MPN">MPN</option>
+                    <option value="identifier exists">identifier exists</option>
+
+                  </select>  
+                  <span id="brand_strategy_help" class="form-text text-muted">Provide the brand name of the product generally recognized by consumers
+                    Only provide your store name as the brand in case you manufacture the product, or your product falls into a generic brand category. For example, you could submit your store name as the brand if you sell white label products or customized jewelry
+                    If the product doesn’t have a brand, submit the manufacturer or supplier name under the brand attribute.
+                    Don't submit values such as N/A, Generic, No brand, or Does not exist.
+                    For compatible products:
+                    Submit the GTIN and brand from the manufacturer who actually built the compatible product
+                    Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product
+                  </span>            
+                </div> 
+              </div>
+              <span  id="product_data_brand_help"  class="help"><span class="help is-link">These attributes are used to provide product identifiers that define the products you're selling in the global marketplace. We use product identifiers to understand what you're selling. When we understand what you're selling, we can help boost the performance of your ads and free listings by adding valuable details about the product and serving it in a more relevant way to users. </span>
+              
+            </div>
+
+            <div class="form-group">
+              <span class="heading">Detailed product description:</span>
+              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2">
+                  <span id="product_data_condition_title"> condition:</span>
+                  <input type="text" class="form-control is-valid" id="product_condition" name="product_condition" placeholder="">
+                  <span id="product_condition_help" class="form-text text-muted">i.e oramla </span>
+                </div>
+                <div class="form-group is-valid float-md-right px-2">
+                  <span>Condition strategy:</span>
+                  <select id="condition_strategy" class="input" >
+                    <option value="condition">condition</option>
+                    <option value="condition">condition</option>
+
+                  </select>  
+                  <span id="condition_strategy_help" class="form-text text-muted">The condition of your product at time of sale</span>            
+                </div> 
+              </div>
+              <span  id="product_data_condition_help"  class="help"><span class="help is-link">These attributes are used to submit particular product characteristics that users commonly search for. The attributes can help you control how your products show when you show products that have variants. These attributes are also used to help potential customers filter by attributes when searching for products on Oramla. </span>
+              
             </div>
 
             <div class="form-group">
