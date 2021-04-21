@@ -964,6 +964,7 @@
             <button id="contact_information_close" class="delete" aria-label="close"></button>
           </div>
           <div class="modal-body">
+
             <div class="list-group list-group-horizontal">
               <div class="form-group float-left">                 
                 <input type="text" class="is-link is-valid input" id="user_first" name="user_first" placeholder="First name">
@@ -973,18 +974,24 @@
                 <input type="text" class="is-link is-valid input" id="user_last" name="user_last" placeholder="Last name">
                 <small id="user_last_help" class="form-text text-muted"></small>              
               </div>
-            </div>            
-            <div class="list-group list-group-horizontal">              
-              <div class="select is-link is-valid float-left">
-                <select id="user_countrycode_phone">
+            </div>  
+
+            <div class="list-group list-group-horizontal">
+              <div class="form-group is-valid float-md-left px-2">
+                <span>Country code:</span>
+                <select id="user_countrycode_phone" class="input" >
                   <option class="countrycode_phone" country_code="AR" value="54">Argentina (+54)</option>
-                </select>
-              </div>
-              <div class="float-right">
+                  <option class="countrycode_phone" country_code="AR" value="54">Argentina (+54)</option>
+                </select>  
+                <small id="user_countrycode_phone_help" class="form-text text-muted"></small>            
+              </div> 
+              <div class="form-group is-valid float-md-right px-2">
+                <span>Phone number:</span>
                 <input type="number" class="form-control is-valid" id="user_phone" name="user_phone" placeholder="#">
-                <small id="user_phone_help" class="form-text text-muted">Provide phone number</small>
-              </div>              
+                <span id="user_phone_help" class="form-text text-muted">Provide phone number</span>
+              </div>             
             </div>
+
             <div class="form-group">
               <input type="text" class="form-control is-valid" id="user_address" name="user_address" placeholder="i.e 16th st. south hollad">
               <small id="user_address_help" class="form-text text-muted">Your address</small>
@@ -1031,64 +1038,92 @@
             <div class="form-group">
               <label class="label" for="product_title">Product Title:</label>
               <input type="text" class="form-control is-valid" id="product_title" name="product_title" placeholder="Enter name ">
-              <small id="product_title_help" class="form-text text-muted"></small>
+              <span id="product_title_help" class="form-text text-muted"></span>
             </div>
 
             <div class="form-group">
               <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
-                <div class="form-group is-valid float-left px-2">
-                  <span>Product Price:</span>
-                  <input type="text" class="form-control is-valid" id="product_price" name="product_price" placeholder="Enter Price ">
-                  <span id="product_price_help" class="form-text text-muted"></span>
+                <div class="form-group is-valid float-md-left px-2">
+                  <span>Price:</span>
+                  <input type="text" class="form-control is-valid" id="product_price" name="product_price" placeholder="#">
+                  <span id="product_price_help" class="form-text text-muted">Enter product price </span>
                 </div>
-                <div class="form-group is-valid float-right px-2">
+                <div class="form-group is-valid float-md-right px-2">
                   <span>Pricing strategy types:</span>
-                  <div class="form-control is-valid">
-                    <select id="pricing_strategy">
-                      <option class="is-link" value="markup_pricing">Markup pricing</option>
-                      <option class="is-link" value="cost_plus_pricing">Cost-plus pricing</option>
-  
-                    </select>
-                  </div>  
-                  <small id="pricing_strategy_help" class="form-text text-muted"></small>            
+                  <select id="pricing_strategy" class="input" >
+                    <option value="markup_pricing">Markup pricing</option>
+                    <option value="cost_plus_pricing">Cost-plus pricing</option>
+                    <option value="charm_pricing">Charm Pricing</option>
+                    <option value="skim_pricing">Skim Pricing</option>
+                    <option value="anchor_pricing">Anchor Pricing</option>
+                    <option value="discounts_and_promotions_pricing">Price for Discounts and Promotions</option>
+                    <option value="multiple_pricing">Multiple pricing</option>
+                    <option value="keystone_pricing">Keystone pricing</option>
+                    <option value="dynamic_segments_pricing">Dynamic pricing in segments</option>
+                    <option value="dynamic_time_pricing">Dynamic pricing by time</option>
+                    <option value="penetration_pricing">Penetration pricing</option>
+                    <option value="repricing">Repricing</option>
+                    <option value="private_labels_pricing">Private Labels</option>
+                    <option value="MSRP">Manufacturer Suggested Retail Price (MSRP)</option>
+                    <option value="stable_pricing">Stable Pricing</option>
+                  </select>  
+                  <span id="pricing_strategy_help" class="form-text text-muted"></span>            
                 </div>                
               </div>
               <span  id="product_price_strategy_help"  class="help"><span class="help is-success">Calculated as (<b id="percent_price"></b>)% of the product price</span></span>
 
-
             </div>
 
-            
-            
-            <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
-              <div class="form-group is-link is-valid float-left px-2">
-                <span>Product Industry/Department:</span>
-                <div class="is-link is-valid input">
-                  <select id="product_industry">
+            <div class="form-group">
+              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2">
+                  <span>Industry/Department:</span>
+                  <select id="product_industry" class="input" >
                     <option class="countrycode_phone is-link" country_code="AR" value="54">Argentina (+54)</option>
                     <option class="countrycode_phone is-link" country_code="AR" value="54">Argentina (+54)</option>
-                    
-                  </select>
+                  </select>  
+                  <span id="product_industry_help" class="form-text text-muted"></span>
                 </div>
-                <small id="product_industry_help" class="form-text text-muted">Industry/Department</small>            
-              </div>
-              <div class="form-group is-link is-valid float-right px-2">
-                <span>Product Category:</span>
-                <div class="is-link is-valid input">
-                  <select id="product_category">
+                <div class="form-group is-valid float-md-right px-2">
+                  <span>Category:</span>
+                  <select id="product_category" class="input" >
                     <option class="countrycode_phone is-link" country_code="AR" value="54">Argentina (+54)</option>
                     <option class="countrycode_phone is-link" country_code="AR" value="54">Argentina (+54)</option>
-                    <option class="countrycode_phone is-link" country_code="AR" value="54">Argentina (+54)</option>
-                    <option class="countrycode_phone is-link" country_code="AR" value="54">Argentina (+54)</option>
-                    <option class="countrycode_phone is-link" country_code="AR" value="54">Argentina (+54)</option>
-                    <option class="countrycode_phone is-link" country_code="AR" value="54">Argentina (+54)</option>
-  
-                  </select>
+                  
+                  </select>  
+                  <span id="product_category_help" class="form-text text-muted"></span>            
                 </div>                
-                <small id="product_category_help" class="form-text text-muted">Category</small>            
-              </div>              
+              </div>
             </div>
 
+            <div class="form-group">
+              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2">
+                  <span>Shipping strategies:</span>
+                  <select id="shipping_strategies" class="input" >
+                    <option class="is-link" value="2-day shipping"> 2-day shipping</option>
+                    <option class="is-link" value="Same-day delivery"> Same-day delivery</option>
+                    <option class="is-link" value="Overnight shipping"> Overnight shipping</option>
+                    <option class="is-link" value="Expedited shipping"> Expedited shipping</option>
+                    <option class="is-link" value="International shipping"> International shipping</option>
+                    <option class="is-link" value="Freight shipping"> Freight shipping</option>                    
+                    <option class="is-link" value="Free in-store pickup"> Free in-store pickup</option>
+                    <option class="is-link" value="Mixed and alternative shipping"> Mixed and alternative shipping</option>
+                  </select>  
+                  <span id="shipping_strategies_help" class="form-text text-muted"></span>
+                </div>
+                <div class="form-group is-valid float-md-right px-2">
+                  <span>Shipping rates:</span>
+                  <select id="shipping_rates" class="input" >
+                    <option class="is-link" value="Flat rate shipping"> Flat rate shipping</option>
+                    <option class="is-link" value="Real-time carrier rates"> Real-time carrier rates</option>
+                    <option class="is-link" value="Offering free shipping"> Offering free shipping</option>
+                  </select>  
+                  <span id="shipping_rates_help" class="form-text text-muted"></span>            
+                </div>                
+              </div>
+            </div>           
+            
             <div class="form-group">
               <label class="label" for="product_description">Product Description:</label>
               <textarea type="text" class="form-control is-valid" id="product_description" name="product_description" placeholder="Describe your product"></textarea>
@@ -1096,14 +1131,36 @@
             </div>
 
             <div class="form-group">
+              <span class="heading">Product data specification:</span>
+              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2">
+                  <span id="product_data_specification_title"> Availability:</span>
+                  <input type="text" class="form-control is-valid" id="product_availability" name="product_availability" placeholder="">
+                  <span id="product_availability_help" class="form-text text-muted">i.e in stock , preorder</span>
+                </div>
+                <div class="form-group is-valid float-md-right px-2">
+                  <span>Availability strategy:</span>
+                  <select id="availability_strategy" class="input" >
+                    <option value="availability">availability</option>
+                    <option value="availability ​​date">availability ​​date</option>
+
+                  </select>  
+                  <span id="availability_strategy_help" class="form-text text-muted">Accurately submit the product's availability and match the availability from your landing page <br>Supported values<br><b>in stock</b><br><b>out of stock</b><br><b>preorder</b><br><b>backorder</b></span>            
+                </div>                
+              </div>
+              <span  id="product_data_specification_help"  class="help"><span class="help is-link">Use this specification to format your product information for Merchant Center programs, such as Shopping ads, free product listings, and Buy on Oramla. Submitting your product data to Oramla in the correct format is important for creating successful ads and free listings for your products. We use this data to make sure that it's matched to the right queries.</span></span>
+
+            </div>
+
+            <div class="form-group">
               <label class="label" for="product_quantity">Product Quantity:</label>
               <input type="text" class="form-control is-valid" id="product_quantity" name="product_quantity" placeholder="#">
               <small id="product_quantity_help" class="form-text text-muted"></small>
             </div>
-            <div class="field">
 
+            <div class="form-group">
               <div class="is-link is-valid input">
-                <label class="label">Product image:</label>
+                <label class="label">Image:</label>
                 <div id="upload_from_url" class="control upload_from_url">
                   <button class="button is-link">Upload from URL</button>
                 </div>
@@ -1111,6 +1168,9 @@
                   <button class="button is-link is-light">Upload from File</button>
                 </div>
               </div>
+            </div>
+            
+            <div class="field">             
 
               <div id="upload_from_file_container" class="container upload_from_file_container">
                 <div class="row">

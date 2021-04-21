@@ -2772,8 +2772,14 @@ $("#add_products_agent").click(function(){
         $("#contact_information_save_help").html('');
 
         $("#contact_information").show(100);
-    } else {
+    } else {        
+        $("#percent_price").html(percent_price);
         $("#add_products_new").show(100);
+        if (percent_pricing_strategy == 'cost_plus_pricing') {
+            $("#pricing_strategy_help").html('Price = total cost of product + gross profit margin');
+        } else if (percent_pricing_strategy == 'markup_pricing') {
+            $("#pricing_strategy_help").html("Markup as a percentage of selling price = (markup/selling price) x 100");
+        }
     }
 });
 $("#contact_information_close").click(function(){
@@ -2923,8 +2929,326 @@ $("#action_float_id").click(function(){
         update_user_data(latitude,longitude,userrole,rating,review,address,city,country,postal,phone,email,last,first,username);
     }     
 });
+var percent_pricing_strategy = 'markup_pricing';
+var product_price = 0;
+var selling_price = 7;
+var buying_price = 5;//100%
+var percent_price = selling_price/buying_price;
+    //percent_price = percent_price*0.1;
+function product_pricing_strategy(list_price) {
+    if (product_price != 0) {
+        
+        
+
+        //Cost-based pricing => Considering the total cost of making a product and adding a markup to that to determine the price of a product.
+        //                   *cost_plus_pricing => Price = total cost of product + gross profit margin
+        //                   *markup_pricing => Markup as a percentage of selling price = (markup/selling price) x 100
+
+        //Value-Based Pricing => Price is a numerical evaluation of how much customers value what you are selling.
+        //                    *private_labels_pricing => Your product’s price is an absolute parameter and should be determined solely by what your customers might want to pay.
+        //                    *penetration_pricing => Pricing strategy that is used to quickly gain market share by setting an initially low price to entice customers to purchase from.
+        //                    *MSRP => Price the manufacturer recommends you use to sell their products to consumers
+        //                    *stable_pricing => To keep the price stable and as close to the market value of the product as possible.
+
+        //Demand-based pricing => Customer demand and perceived value of the product to determine a sale price.
+        //                     *charm_pricing => Removing a penny or two from a rounded price point (i.e. changing a price tag from $20.00 to $19.99).
+        //                     *skim_pricing => Introduce a new product at the highest possible price point and then lower the price over a specified period of time.
+
+        //Competition-based pricing => Utilizes competitor’s pricing data for similar products to set a base price for their own products. 
+        //                          => Rather than focusing on production costs or the value of the item, 
+        //                          => this pricing method relies heavily on market data.
+        //                          *repricing => Price of your product to match the lowest amount at that time.
+        //                          *anchor_pricing => Listing both the original price point and the sale price point to relay perceived value.
+        //                          *discounts_and_promotions_pricing => You may want to consider the possibility that out of necessity in the future.
+        //                                                              => You may want to either discount your item permanently or temporarily, 
+        //                                                              => With timed promotions in order to move your merchandise.
+
+        //Loss-leading pricing => Enticing customers to make a purchase by pricing a product at a loss while encouraging them to buy additional full-priced products.
+        //                     => An advertising tactic that actually offers a specific product at a loss in order to drive consumers to their site or store.
+        //                     *multiple_pricing => Products are bundled to create a higher perceived value at a lower cost, 
+        //                                       => which ideally leads to larger-volume purchases.
+        //                     *keystone_pricing => Pricing your products too high or too low.
+
+         //Dynamic pricing => your price is not static and instead changes based on other factors. 
+        //                => These factors can be for example segments or time.
+        //                *dynamic_segments_pricing => Use algorithms to derive the pricing for different groups based on statistics.
+        //                *dynamic_time_pricing => Cheaper prices on products to match the sales quota, as compared to the start of the month.
+
+        if (percent_pricing_strategy == 'cost_plus_pricing') {
+            var product_costs = product_price;
+            var product_ = 0.5;
+            var labor_ = 0.8;
+            var labor_costs = product_costs * product_;
+            labor_costs = labor_costs.toFixed(2);
+
+            var overhead = labor_costs * labor_;
+            overhead = overhead.toFixed(2);
+
+            //product_price = product_costs + labor_costs + overhead;
+            product_price = (Number(product_costs) + Number(labor_costs) + Number(overhead))
+            product_price = product_price.toFixed(2);
+
+            var margin_price = product_price * percent_price * 0.1;
+            margin_price = margin_price.toFixed(2);
+
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            //alert(sale_price);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Calculated as (Direct material costs <b>' + product_costs + '</b>  + Direct labor costs <b>' + labor_costs + '</b> as ('+ product_*100 +')% of Direct material costs + Allocated overhead <b>' + overhead + '</b> as ('+ labor_*100 +')% of Direct labor costs) * <b>' + percent_price + '</b> % margin</span>');
+            $("#product_price_help").html('<strong>Cost-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+            //alert(sale_price);
+
+        } else if (percent_pricing_strategy == 'markup_pricing') {
+            //var margin_price  = percent_price*product_price*0.1;
+            //product_price = product_price.toFixed(2);
+            var margin_price = product_price * percent_price*0.1;
+            //var list_price = product_price + margin_price;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Markup as a <b>' + percent_price + '</b> %  of product price = <b>' +  currency_price_symbal + ' ' + sale_price + '</b></span>');
+            $("#product_price_help").html('<strong>Cost-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'private_labels_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Your product’s price is an absolute parameter and should be determined <b>solely</> by what your customers might want to pay.</span>');
+            $("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'penetration_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Used to quickly gain market share by setting an initially low price to entice customers to purchase from.</span>');
+            $("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'MSRP') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Price the manufacturer recommends you use to sell their products to consumers</span>');
+            $("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'stable_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> To keep the price stable and as close to the market value of the product as possible.</b></span>');
+            $("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        }
+        else if (percent_pricing_strategy == 'charm_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Removing a penny or two from a rounded price point (i.e. changing a price tag from $20.00 to $19.99)</b></span>');
+            $("#product_price_help").html('<strong>Demand-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'skim_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Introduce a new product at the highest possible price point and then lower the price over a specified period of time.</b></span>');
+            $("#product_price_help").html('<strong>Demand-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'repricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Price of your product to match the lowest amount at that time.</b></span>');
+            $("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'anchor_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Listing both the original price point and the sale price point to relay perceived value.</b></span>');
+            $("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+        } else if (percent_pricing_strategy == 'discounts_and_promotions_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> You may want to consider the possibility that out of necessity in the future.</b></span>');
+            $("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'multiple_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Products are bundled to create a higher perceived value at a lower cost.</b></span>');
+            $("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'keystone_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Pricing your products too high or too low.</b></span>');
+            $("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'dynamic_segments_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Use algorithms to derive the pricing for different groups based on statistics.</b></span>');
+            $("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'dynamic_time_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Cheaper prices on products to match the sales quota, as compared to the start of the month.</b></span>');
+            $("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        }
+        
+        //$("#product_price_help").html('<strong>Cost-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+        $("#product_price").removeClass("is-invalid");
+        $("#product_price").addClass("is-valid");
+    } else {
+        $("#product_price_help").html("Enter a valid price");
+        $("#product_price").removeClass("is-valid");
+        $("#product_price").addClass("is-invalid");
+    }
+}
+const pricing_strategy = document.querySelector('#pricing_strategy');
+pricing_strategy.addEventListener('change', (event) => {
+    percent_pricing_strategy = event.target.value;
+    if (percent_pricing_strategy == 'cost_plus_pricing') {
+        $("#pricing_strategy_help").html('Price = total cost of product + gross profit margin');
+    } else if (percent_pricing_strategy == 'markup_pricing') {
+        $("#pricing_strategy_help").html("Markup as a percentage of selling price = (markup/selling price) x 100");
+    } else if (percent_pricing_strategy == 'private_labels_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Your product’s price is an absolute parameter and should be determined <b>solely</> by what your customers might want to pay.');
+        //$("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'penetration_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Used to quickly gain market share by setting an initially low price to entice customers to purchase from.');
+        //$("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'MSRP') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Price the manufacturer recommends you use to sell their products to consumers');
+        //$("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'stable_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('To keep the price stable and as close to the market value of the product as possible.</b>');
+        //$("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    }
+    else if (percent_pricing_strategy == 'charm_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Removing a penny or two from a rounded price point (i.e. changing a price tag from $20.00 to $19.99)</b>');
+        //$("#product_price_help").html('<strong>Demand-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'skim_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Introduce a new product at the highest possible price point and then lower the price over a specified period of time.</b>');
+        //$("#product_price_help").html('<strong>Demand-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'repricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Price of your product to match the lowest amount at that time.</b>');
+        //$("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'anchor_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Listing both the original price point and the sale price point to relay perceived value.</b>');
+        //$("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'discounts_and_promotions_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('You may want to consider the possibility that out of necessity in the future.</b>');
+        //$("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'multiple_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Products are bundled to create a higher perceived value at a lower cost.</b>');
+        //$("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'keystone_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Pricing your products too high or too low.</b>');
+        //$("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'dynamic_segments_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Use algorithms to derive the pricing for different groups based on statistics.</b>');
+        //$("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'dynamic_time_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Cheaper prices on products to match the sales quota, as compared to the start of the month.</b>');
+        //$("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    }
+    //alert(typeof $("#product_price").val());
+    //alert(isNaN($("#product_price").val()));
+
+    if (isNaN($("#product_price").val()) == false) {
+        product_price = Number($("#product_price").val());
+        var list_price = Number($("#product_price").val());
+        product_pricing_strategy(list_price);        
+    } else {
+        $("#product_price_help").html("Enter a valid price");
+        $("#product_price").removeClass("is-valid");
+        $("#product_price").addClass("is-invalid");
+    }
+    
+});
+const product_price_input = document.querySelector('#product_price');
+product_price_input.addEventListener('input', updateValue);
+function updateValue(e) {
+    if (e.target.value != "" && e.target.value != null) {
+        //alert(typeof e.target.value);
+        //alert(typeof e.target.value === "number");
+        //alert(isNaN(e.target.value));
+
+        if (isNaN(e.target.value) ==  false) {            
+            $("#percent_price").html(percent_price);
+            product_price = Number(e.target.value);
+            var list_price = Number(e.target.value);
+            product_pricing_strategy(list_price);
+        } else {
+            $("#product_price_help").html("Enter a valid price");
+            $("#product_price").removeClass("is-valid");
+            $("#product_price").addClass("is-invalid");
+        }      
+    } else {
+        $("#product_price_help").html("Input price");
+        $("#product_price").removeClass("is-valid");
+        $("#product_price").addClass("is-invalid");
+    }
+}
+
+const product_industry = document.querySelector('#product_industry');
+product_industry.addEventListener('change', (event) => {
+  alert(event.target.value);
+});
+
 
 $("#add_products_close").click(function(){
+    $("#add_products_new").hide(100);
+});
+$("#product_footer_close").click(function(){
     $("#add_products_new").hide(100);
 });
 $("#pr_next").click(function(){

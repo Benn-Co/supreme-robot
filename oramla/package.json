@@ -13,7 +13,7 @@
   "author": "Karitu",
   "license": "Apache-2.0",
   "devDependencies": {
-    "cordova-android": "^9.0.0",
+    "cordova-android": "^9.1.0",
     "cordova-browser": "^6.0.0",
     "cordova-electron": "^1.1.1",
     "cordova-plugin-compat": "^1.2.0",
@@ -35,9 +35,9 @@
       "cordova-plugin-statusbar": {}
     },
     "platforms": [
-      "android",
       "electron",
-      "browser"
+      "browser",
+      "android"
     ]
   }
 }
