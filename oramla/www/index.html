@@ -1023,11 +1023,24 @@
             <button id="add_products_close" class="delete" aria-label="close"></button>
           </div>
           <div class="modal-body">
-
+            <form class="fileToUploadForm" method="post" enctype="multipart/form-data">
+            <div class="form-group" style="display: none;">
+              <input type="text" class="form-control is-valid" id="product_client" name="product_client" value="mopal">
+            </div>
             <div class="form-group">
               <label class="label" for="product_title">Product Title:</label>
               <input type="text" class="form-control is-valid" id="product_title" name="product_title" placeholder="Enter name ">
-              <span id="product_title_help" class="form-text text-muted"></span>
+              <span id="product_title_help" class="form-text text-muted">
+                Required. Your product’s name                
+                Example 
+                Mens Pique Polo Shirt
+                
+                Syntax
+                Max 150 characters
+                
+                Schema.org property
+                Product.name
+              </span>
             </div>
 
             <div class="form-group">
@@ -1113,14 +1126,54 @@
                     <option class="is-link" value="Offering free shipping"> Offering free shipping</option>
                   </select>  
                   <span id="shipping_rates_help" class="form-text text-muted"></span>            
-                </div>                
+                </div> 
+
               </div>
+              <span class="heading">shipping:</span>
+              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2">
+                  <span id="product_data_shipping_title"> shipping:</span>
+                  <input type="text" class="form-control is-valid" id="product_shipping" name="product_shipping" placeholder="">
+                  <span id="product_shipping_help" class="form-text text-muted">i.e US:CA:Overnight:16.00 USD:1:1:2:3 </span>
+                </div>
+                <div class="form-group is-valid float-md-right px-2">
+                  <span>shipping:</span>
+                  <select id="shipping_strategy" class="input" >
+                    <option value="shipping">shipping</option>
+                    <option value="shipping label">shipping label</option>
+                    <option value="shipping weight">shipping weight</option>
+                    <option value="shipping length">shipping length</option>
+                    <option value="shipping width">shipping width</option>
+                    <option value="shipping height">shipping height</option>
+                    <option value="ships from country">ships from country</option>
+                    <option value="transit time label">transit time label</option>
+                    <option value="max handling time">max handling time</option>
+                    <option value="min handling time">min handling time</option>
+
+                  </select>  
+                  <span id="shipping_strategy_help" class="form-text text-muted">Your product's shipping cost, shipping speeds, and the locations your product ships to.</span>            
+                </div> 
+              </div>
+              <span id="product_data_shipping_help" class="help help is-link"><span class="help is-link">Use this setting to override the Merchant Center account shipping settings for an individual product or to specify shipping cost, speed, or additional countries your product ships to.</span>
+              
             </div>           
             
             <div class="form-group">
               <label class="label" for="product_description">Product Description:</label>
               <textarea type="text" class="form-control is-valid" id="product_description" name="product_description" placeholder="Describe your product"></textarea>
-              <small id="product_description_help" class="form-text text-muted"></small>
+              <span id="product_description_help" class="form-text text-muted">Required
+                Your product’s description
+                
+                Example
+                
+                 Made from 100% organic cotton, this classic red men’s polo has a slim fit and signature logo embroidered on the left chest. Machine wash cold; imported.
+                
+                Syntax
+                Max 5000 characters
+                
+                Schema.org property
+                Product.description
+              </span>
             </div>
 
             <div class="form-group">
@@ -1149,9 +1202,10 @@
                   <span id="availability_strategy_help" class="form-text text-muted">Accurately submit the product's availability and match the availability from your landing page <br>Supported values<br><b>in stock</b><br><b>out of stock</b><br><b>preorder</b><br><b>backorder</b></span>            
                 </div> 
               </div>
-              <span  id="product_data_specification_help"  class="help"><span class="help is-link">Use this specification to format your product information for Merchant Center programs, such as Shopping ads, free product listings, and Buy on Oramla. Submitting your product data to Oramla in the correct format is important for creating successful ads and free listings for your products. We use this data to make sure that it's matched to the right queries.</span></span>
+              <span  id="product_data_specification_help"  class="help is-link"><span class="help is-link">Use this specification to format your product information for Merchant Center programs, such as Shopping ads, free product listings, and Buy on Oramla. Submitting your product data to Oramla in the correct format is important for creating successful ads and free listings for your products. We use this data to make sure that it's matched to the right queries.</span></span>
 
             </div>
+
             <div class="form-group">
               <span class="heading">Product identifiers:</span>
               <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
@@ -1179,7 +1233,7 @@
                   </span>            
                 </div> 
               </div>
-              <span  id="product_data_brand_help"  class="help"><span class="help is-link">These attributes are used to provide product identifiers that define the products you're selling in the global marketplace. We use product identifiers to understand what you're selling. When we understand what you're selling, we can help boost the performance of your ads and free listings by adding valuable details about the product and serving it in a more relevant way to users. </span>
+              <span  id="product_data_brand_help"  class="help is-link"><span class="help is-link">These attributes are used to provide product identifiers that define the products you're selling in the global marketplace. We use product identifiers to understand what you're selling. When we understand what you're selling, we can help boost the performance of your ads and free listings by adding valuable details about the product and serving it in a more relevant way to users. </span>
               
             </div>
 
@@ -1189,26 +1243,108 @@
                 <div class="form-group is-valid float-md-left px-2">
                   <span id="product_data_condition_title"> condition:</span>
                   <input type="text" class="form-control is-valid" id="product_condition" name="product_condition" placeholder="">
-                  <span id="product_condition_help" class="form-text text-muted">i.e oramla </span>
+                  <span id="product_condition_help" class="form-text text-muted">i.e new </span>
                 </div>
                 <div class="form-group is-valid float-md-right px-2">
                   <span>Condition strategy:</span>
                   <select id="condition_strategy" class="input" >
                     <option value="condition">condition</option>
-                    <option value="condition">condition</option>
+                    <option value="adult">adult</option>
+                    <option value="multipack">multipack</option>
+                    <option value="is bundle">is bundle</option>
+                    <option value="energy efficiency class">energy efficiency class</option>
+                    <option value="min energy efficiency class">min energy efficiency class</option>
+                    <option value="max energy efficiency class">max energy efficiency class</option>
+                    <option value="age group">age group</option>
+                    <option value="color">color</option>
+                    <option value="gender">gender</option>
+                    <option value="material">material</option>
+                    <option value="pattern">pattern</option>
+                    <option value="size">size</option>
+                    <option value="size system">size system</option>
+                    <option value="item group id">item group id</option>
+                    <option value="product detail">product detail</option>
+                    <option value="product highlight">product highlight</option>
 
                   </select>  
                   <span id="condition_strategy_help" class="form-text text-muted">The condition of your product at time of sale</span>            
                 </div> 
               </div>
-              <span  id="product_data_condition_help"  class="help"><span class="help is-link">These attributes are used to submit particular product characteristics that users commonly search for. The attributes can help you control how your products show when you show products that have variants. These attributes are also used to help potential customers filter by attributes when searching for products on Oramla. </span>
+              <span  id="product_data_condition_help"  class="help is-link"><span class="help is-link">These attributes are used to submit particular product characteristics that users commonly search for. The attributes can help you control how your products show when you show products that have variants. These attributes are also used to help potential customers filter by attributes when searching for products on Oramla. </span>
               
             </div>
 
             <div class="form-group">
+              <span class="heading">Destinations:</span>
+              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2">
+                  <span id="product_data_destinations_title"> destinations:</span>
+                  <input type="text" class="form-control is-valid" id="product_destinations" name="product_destinations" placeholder="">
+                  <span id="product_destinations_help" class="form-text text-muted">i.e new </span>
+                </div>
+                <div class="form-group is-valid float-md-right px-2">
+                  <span>Destinations strategy:</span>
+                  <select id="destinations_strategy" class="input" >
+                    <option value="excluded destination">excluded destination</option>
+                    <option value="included destination">included destination</option>
+                    <option value="shopping ads excluded country">shopping ads excluded country</option>
+
+                  </select>  
+                  <span id="destinations_strategy_help" class="form-text text-muted">A setting that you can use to exclude a product from participating in a specific type of advertising campaign</span>            
+                </div> 
+              </div>
+              <span id="product_data_destinations_help" class="help help is-link"><span class="help is-link">These attributes can be used to control the different locations where your content can appear. For example, you could use this attribute if you want a product to appear in a dynamic remarketing campaign. </span>
+              
+            </div>
+
+            <div class="form-group">
+              <span class="heading">tax:</span>
+              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2">
+                  <span id="product_data_tax_title"> tax:</span>
+                  <input type="text" class="form-control is-valid" id="product_tax" name="product_tax" placeholder="">
+                  <span id="product_tax_help" class="form-text text-muted">i.e US:CA:5.00:y </span>
+                </div>
+                <div class="form-group is-valid float-md-right px-2">
+                  <span>tax strategy:</span>
+                  <select id="tax_strategy" class="input" >
+                    <option value="tax">tax</option>
+                    <option value="tax category">tax category</option>
+
+
+                  </select>  
+                  <span id="tax_strategy_help" class="form-text text-muted">Use this setting only to override the account tax settings for an individual product. We recommend that you submit tax information for all your products using the account settings in Merchant Center
+                    For the US and Canada
+                    Don't include tax in the price attribute. For the US only, include the tax in the tax attribute if you need to override your account settings
+                    For all other countries
+                    Include value added tax (VAT) or Goods and Services Tax (GST) in the price attribute and do not use the tax attribute
+                  </span>            
+                </div> 
+              </div>
+              <span id="product_data_tax_help" class="help help is-link"><span class="help is-link">Required (Available for the US only)
+                Your product’s sales tax rate in percent
+                
+                Example 
+                US:CA:5.00:y
+                
+                Syntax
+                tax uses 4 sub-attributes:
+                
+                rate (required) 
+                Tax rate as a percentage
+                country (optional)
+                ISO 3166 country code 
+                region or postal_​code or location_​id (optional)
+                tax_​ship (optional)
+                Specify if you charge tax on shipping. Accepted values are yes or no
+               </span>
+              
+            </div>            
+
+            <div class="form-group">
               <label class="label" for="product_quantity">Product Quantity:</label>
               <input type="text" class="form-control is-valid" id="product_quantity" name="product_quantity" placeholder="#">
-              <small id="product_quantity_help" class="form-text text-muted"></small>
+              <span id="product_quantity_help" class="form-text text-muted"></span>
             </div>
 
             <div class="form-group">
@@ -1220,42 +1356,55 @@
                 <div id="upload_from_file" class="control upload_from_file">
                   <button class="button is-link is-light">Upload from File</button>
                 </div>
+                <button id="upload_from_help" class="button is-link is-light form-text text-muted"></button>
+
               </div>
             </div>
             
             <div class="field">             
 
               <div id="upload_from_file_container" class="container upload_from_file_container">
+                                      
+
                 <div class="row">
                   <div class="col imgUp">
                     <div class="imagePreview"></div>
-                    <label class="btn btn-primary">
-                      Choose file
-                      <input type="file" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">
-                    </label>
+                      <label class="btn btn-primary">
+                        Choose file 
+                        <input type="file" name="fileToUpload[]" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">
+                      </label>                    
                   </div>
                   <i class="fa fa-plus imgAdd"></i>
                 </div>
+
               </div>
 
               <div id="upload_from_url_container" class="field upload_from_url_container">
                 <div class="row">
                   <div class="col imgUp">
                     <div class="imagePreview"></div>
-                    <div class="control"><input type="url" class="uploadFile img input is-success" placeholder="Enter url i.e http://oramla.com" style="width:auto;height:0px;overflow:hidden;"></div>
+                    <div class="control"><input type="url" class="uploadUrl img input is-success" placeholder="Enter url i.e http://oramla.com" style="width:auto;height:0px;overflow:hidden;"></div>
                     
                   </div>
                   <i class="fa fa-plus imgAdd"></i>
                 </div>
+                <span class="form-text text-muted">The URL of your product’s main image
+
+                  Example 
+                  http://​www.example.​com/​image1.​jpg
+                  
+                  Schema.org property
+                  Product.image
+                </span>
               </div>
-           
+
             </div> 
-            
+            </form>
           </div>
           <div class="modal-footer">
             <button id="product_footer_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button id="product_save" type="button" class="btn btn-primary">Add</button>
-            <small id="product__help" class="form-text text-muted"></small>
+            <small id="product_help" class="form-text text-muted"></small>
 
           </div>
         </div>
