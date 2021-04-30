@@ -1,6 +1,6 @@
 .location_main_container {
-    margin: 0;
-    min-height: 100vh;
+    padding-top: 100px;
+    min-height: 100%;
     font-family: 'Open Sans';
     background-color: rgb(34, 18, 36);
     display: none;

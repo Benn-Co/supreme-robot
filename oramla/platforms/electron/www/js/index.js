@@ -27,6 +27,13 @@ document.addEventListener('deviceready', onDeviceReady, false);
 var username = "";
 var email = "";
 var phone = "";
+var last = ""
+var first = ""
+
+var postal =  "";
+var country =  "";
+var city =  "";
+var address =  "";
 
 var timestamp =  "";
 var latitude =  52.5159;
@@ -45,216 +52,187 @@ var datab = null;
 var api_server_url = "https://oramla.com";
 //var api_server_url = "http://192.168.0.102";
 //var api_server_url = "http://169.254.249.58";
-//var api_server_url = "http://192.168.0.103";
-//var api_server_url = "http://localhost";
+//var api_server_url = "http://192.168.43.16";
+var api_server_url = "http://localhost";
+//var api_server_url = "http://192.168.43.16";
 
 
 //var devicePlatform = device.platform;
 function onDeviceReady() {
     //console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     //document.getElementById('deviceready').classList.add('ready');
-    
+    username = localStorage.getItem("username");
+    role = localStorage.getItem("role");
+    email = localStorage.getItem("email");
+
     authentication(username);
 }
 
-function user_container(user) {
+function user_container(user,email) {
     $('#app-cover-spin').show(0);
-
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
-        data: { user_container: 12, user: user},
+        data: { user_container: 12, user: user, email: email},
         processData: true,
         url: api_server_url + '/cordova/user_container.php',
         success: function searchSuccess(response) {
-            try {
-                //response.data = JSON.parse(response.data);
-                if (response.message == "success") {
-                    $('.user_error_container').hide(500, function(){                    
-                    });
-                    $("#user_row_container").show(100);
-                    user_role = response.role;
-                    if (response.role == "customer") {
-                        $("#uersdashro").hide(100);
-                        $("#uersdash").hide(100);
+
+            if (user_co == 1) {
+                user_co = 0;
+                try {
+                    //response.data = JSON.parse(response.data);
+                    if (response.message == "success") {
+                        $('.user_error_container').hide(100, function(){                    
+                        });
+                        $("#user_row_container").show(100);
+                        user_role = response.role;
+                        if (response.role == "customer") {
+                            $("#uersdashro").hide(100);
+                            $("#uersdash").hide(100);
+                        } else {
+                            $("#uersdashro").show(100);
+                            $("#uersdash").show(100);
+                        }
+        
+                        $("#user_name").html("status : " + response.agent_status + "<br>" + response.role + " " + response.username);
+                        $("#user_rating_acc").html(response.rating);
+                        $("#user_review_acc").html(response.review + " <br> Last Update " + response.lastUpdate);
+                        
+                        $("#input-username").val(response.username);
+                        $("#input-first-name").val(response.first_name);
+                        $("#input-last-name").val(response.last_name);
+                        email = response.email;
+                        $("#input-email").val(response.email);
+                        $("#input-phone").val(response.phone_number);
+                        phone = response.phone_number;
+    
+                        first = response.first_name;
+                        last = response.last_name;                    
+                        
+                        var location = JSON.parse(response.location_name);
+                        postal = location.postal;
+                        country = location.country;
+                        city = location.city;
+                        address = location.address;
+    
+                        $("#input-postal-code").val(location.postal);
+                        $("#input-country").val(location.country);
+                        $("#input-city").val(location.city);
+                        $("#input-address").val(location.address);
+                        
+                        $("#pending_orders_count").html(response.pending_orders);
+                        $("#active_orders_count").html(response.active_orders);
+                        $("#confirmed_orders_count").html(response.confirmed_orders);
+                        $("#complete_orders_count").html(response.complete_orders);
+                        $("#_orders_count").html(response.user_orders);
+
+
+                        $('#app-cover-spin').hide(0);
+        
+        //user_rams
+        //user_rams_symbol
+        
+        //user_name_image
+        //user_name_image_src
+        
+        //track_order
+        //logout
+        
+        //confirmed_orders
+        //confirmed_orders_count
+        //active_orders
+        //active_orders_count
+        //pending_orders
+        //pending_orders_count
+        //user_orders
+        
+        //user_products
+        //products_count
+        //in_stock
+        //in_stock_count
+        //products_sold
+        //product_sold_count
+        //user_dashboard
+                       
                     } else {
-                        $("#uersdashro").show(100);
-                        $("#uersdash").show(100);
+                        $('.user_error_container').show(100, function(){
+                            $("#user_row_container").hide(100);
+                            $("#user_row_h").html(response.message);
+                            $("#user_row_p").html(response.login_email + " or " + response.login_password);
+                            $('#app-cover-spin').hide(0);
+
+                        });
                     }
-    
-                    $("#user_name").html("status : " + response.agent_status + "<br>" + response.role + " " + response.username);
-                    $("#user_rating_acc").html(response.rating);
-                    $("#user_review_acc").html(response.review + " <br> Last Update " + response.lastUpdate);
-                    
-                    $("#input-username").val(response.username);
-                    $("#input-first-name").val(response.first_name);
-                    $("#input-last-name").val(response.last_name);
-                    email = response.email;
-                    $("#input-email").val(response.email);
-                    $("#input-phone").val(response.phone_number);
-                    phone = response.phone_number;
-    
-                    var location = JSON.parse(response.location_name);
-                    $("#input-postal-code").val(location.postal);
-                    $("#input-country").val(location.country);
-                    $("#input-city").val(location.city);
-                    $("#input-address").val(location.address);
-                    
-                    $("#pending_orders_count").html(response.pending_orders);
-                    $("#active_orders_count").html(response.active_orders);
-                    $("#confirmed_orders_count").html(response.confirmed_orders);
-                    $("#complete_orders_count").html(response.complete_orders);
-                    $("#_orders_count").html(response.user_orders);
-    
-    //user_rams
-    //user_rams_symbol
-    
-    //user_name_image
-    //user_name_image_src
-    
-    //track_order
-    //logout
-    
-    //confirmed_orders
-    //confirmed_orders_count
-    //active_orders
-    //active_orders_count
-    //pending_orders
-    //pending_orders_count
-    //user_orders
-    
-    //user_products
-    //products_count
-    //in_stock
-    //in_stock_count
-    //products_sold
-    //product_sold_count
-    //user_dashboard
-                   
-                } else {
-                    $('.user_error_container').show(500, function(){
+                } catch(e) {
+                    $('.user_error_container').show(100, function(){
                         $("#user_row_container").hide(100);
-                        $("#user_row_h").html(response.message);
-                        $("#user_row_p").html(response.login_email + " or " + response.login_password);
+                        $("#user_row_h").html('JSON error');
+                        $("#user_row_p").html('JSON parsing error');
+                        $('#app-cover-spin').hide(0);
                     });
                 }
-            } catch(e) {
-                $('.user_error_container').show(500, function(){
-                    $("#user_row_container").hide(100);
-                    $("#user_row_h").html('JSON error');
-                    $("#user_row_p").html('JSON parsing error');
-                });
+
+            } else {
+                try {if (response.message == "success") {
+                        user_role = response.role;
+                        if (response.role == "customer") {
+                            //$("#uersdashro").hide(100);
+                            //$("#uersdash").hide(100);
+                        } else {
+                            //$("#uersdashro").show(100);
+                            //$("#uersdash").show(100);//user_products
+                            //products_count
+                            //in_stock
+                            //in_stock_count
+                            //
+                            //product_sold_count                            
+                        }
+                        phone = response.phone_number;    
+                        first = response.first_name;
+                        last = response.last_name;                        
+                        var location = JSON.parse(response.location_name);
+                        postal = location.postal;
+                        country = location.country;
+                        city = location.city;
+                        address = location.address;
+
+                        $("#menu_container_role").html('<span class="badge badge-secondary">' + response.role + '</span>');
+                        $("#menu_container_pending_orders_count").html('<span class="badge badge-warning">' + response.pending_orders + '</span>');
+                        $("#menu_container_active_orders_count").html('<span class="badge badge-success">' + response.active_orders + '</span>');
+                        $("#menu_container_confirmed_orders_count").html('<span class="badge badge-danger">' + response.confirmed_orders + '</span>');
+                        $("#menu_container_complete_orders_count").html('<span class="badge badge-info">' + response.complete_orders + '</span>');
+                        $("#menu_container_orders_count").html('<span class="badge badge-secondary">' + response.user_orders + '</span>');
+                    } else {
+                        /**$('.user_error_container').show(100, function(){
+                            $("#user_row_container").hide(100);
+                            $("#user_row_h").html(response.message);
+                            $("#user_row_p").html(response.login_email + " or " + response.login_password);
+                        }); */
+                    }
+                } catch(e) {
+                    /**$('.user_error_container').show(100, function(){
+                        $("#user_row_container").hide(100);
+                        $("#user_row_h").html('JSON error');
+                        $("#user_row_p").html('JSON parsing error');
+                    }); */
+                }
             }
+            
+            
           
         },
         error: function searchError(xhr, err) {
-          //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
           $('#app-cover-spin').hide(0);
-          $('.user_error_container').show(500, function(){
+          $('.user_error_container').show(100, function(){
             $("#user_row_container").hide(100);
             $("#user_row_h").html("Error on ajax call: " + err );
             $("#user_row_p").html(JSON.stringify(xhr));
           });
         }
     });
-
-    /**const options = {
-        method: 'post',
-        data: { user_container: 12, user: user},
-        headers: { Authorization: 'OAuth2: token' }
-    };    
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/user_container.php', options, function(response) {
-        // prints 200
-        $('#app-cover-spin').hide(0);
-        //alert(response.data);
-        try {
-            response.data = JSON.parse(response.data);
-            if (response.data.message == "success") {
-                $('.user_error_container').hide(500, function(){                    
-                });
-                $("#user_row_container").show(100);
-                user_role = response.data.role;
-                if (response.data.role == "customer") {
-                    $("#uersdashro").hide(100);
-                    $("#uersdash").hide(100);
-                } else {
-                    $("#uersdashro").show(100);
-                    $("#uersdash").show(100);
-                }
-
-                $("#user_name").html("status : " + response.data.agent_status + "<br>" + response.data.role + " " + response.data.username);
-                $("#user_rating_acc").html(response.data.rating);
-                $("#user_review_acc").html(response.data.review + " <br> Last Update " + response.data.lastUpdate);
-                
-                $("#input-username").val(response.data.username);
-                $("#input-first-name").val(response.data.first_name);
-                $("#input-last-name").val(response.data.last_name);
-                email = response.data.email;
-                $("#input-email").val(response.data.email);
-                $("#input-phone").val(response.data.phone_number);
-                phone = response.data.phone_number;
-
-                var location = JSON.parse(response.data.location_name);
-                $("#input-postal-code").val(location.postal);
-                $("#input-country").val(location.country);
-                $("#input-city").val(location.city);
-                $("#input-address").val(location.address);
-                
-                $("#pending_orders_count").html(response.data.pending_orders);
-                $("#active_orders_count").html(response.data.active_orders);
-                $("#confirmed_orders_count").html(response.data.confirmed_orders);
-                $("#complete_orders_count").html(response.data.complete_orders);
-                $("#_orders_count").html(response.data.user_orders);
-
-//user_rams
-//user_rams_symbol
-
-//user_name_image
-//user_name_image_src
-
-//track_order
-//logout
-
-//confirmed_orders
-//confirmed_orders_count
-//active_orders
-//active_orders_count
-//pending_orders
-//pending_orders_count
-//user_orders
-
-//user_products
-//products_count
-//in_stock
-//in_stock_count
-//products_sold
-//product_sold_count
-//user_dashboard
-               
-            } else {
-                $('.user_error_container').show(500, function(){
-                    $("#user_row_container").hide(100);
-                    $("#user_row_h").html(response.data.message);
-                    $("#user_row_p").html(response.data.login_email + " or " + response.data.login_password);
-                });
-            }
-        } catch(e) {
-            $('.user_error_container').show(500, function(){
-                $("#user_row_container").hide(100);
-                $("#user_row_h").html('JSON error');
-                $("#user_row_p").html('JSON parsing error');
-            });
-        }
-    }, function(response) {
-        $('.user_error_container').show(500, function(){
-            $("#user_row_container").hide(100);
-            $("#user_row_h").html(response.status);
-            $("#user_row_p").html(response.error);
-        });
-
-    }); */
 }
-var user_role = "";
+var user_role = role;
 $("#update_user_data").keypress(function (e){
     if(e.keyCode == 13){
         userupdate();
@@ -315,7 +293,7 @@ function userupdate() {
     }
     var error_phone_data = 0;
     var phone_numb = $("#input-phone").val();
-    if ($("#input-phone").val() != "" && $("#input-phone").val() != null && phone_numb.length <= 10) {
+    if ($("#input-phone").val() != "" && $("#input-phone").val() != null && phone_numb.length <= 9) {
         $("#input-phone").removeClass("is-invalid");
         $("#input-phone").addClass("is-valid");
         $("#input-phone_help").html($("#input-phone").val());
@@ -396,7 +374,10 @@ function userupdate() {
     }
     if (error_user_data == 0) {
         //alert(rating_stars);
-        update_user_data(user_role,rating_stars,$("#user_review").val(),$("#input-address").val(),$("#input-city").val(),$("#input-country").val(),$("#input-postal-code").val(),$("#input-phone").val(),$("#input-email").val(),$("#input-last-name").val(),$("#input-first-name").val(),$("#input-username").val());
+        action_float_id = 0;
+        location_main_container = 0;
+        contact_information_save = 0;
+        update_user_data(latitude,longitude,role,rating_stars,$("#user_review").val(),$("#input-address").val(),$("#input-city").val(),$("#input-country").val(),$("#input-postal-code").val(),$("#input-phone").val(),$("#input-email").val(),$("#input-last-name").val(),$("#input-first-name").val(),$("#input-username").val());
         $("#update_user_data_help").html("Updating...");
     } else {
         $("#update_user_data_help").html('Correct the error(s)'); 
@@ -408,137 +389,155 @@ $("body").delegate(".give_us_stars","click",function(event){
     event.preventDefault();
     rating_stars = $(this).attr('star');   
 });
-function update_user_data(user_role,rating,review,address,city,country,postal,user_phone,user_email,last,first,user_name) {
+function update_user_data(latitude,longitude,user_role,rating,review,address,city,country,postal,user_phone,user_email,last,first,user_name) {
     $('#app-cover-spin').show(0);
-
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
-        data: { update_user_data: 12, user_role:user_role, rating: rating, review: review, address: address, city: city, country: country, postal: postal, user_phone: user_phone, user_email: user_email, last: last, first: first, user_name: user_name},
+        data: { update_user_data: 12, latitude:latitude, longitude:longitude, user_role:user_role, rating: rating, review: review, address: address, city: city, country: country, postal: postal, user_phone: user_phone, user_email: user_email, last: last, first: first, user_name: user_name},
         processData: true,
         url: api_server_url + '/cordova/update_user_data.php',
         success: function searchSuccess(response) {
-            try {
-                //response.data = JSON.parse(response.data);
-                if (response.message == "success") {
-                    $('.user_error_container').hide(500, function(){                    
-                    });
-                    $("#user_row_container").show(100);
-                    if (response.role == "customer") {
-                        $("#uersdashro").hide(100);
-                        $("#uersdash").hide(100);
-                    } else {
-                        $("#uersdashro").show(100);
-                        $("#uersdash").show(100);
-                    }
-    
-                    $("#user_name").html("status : " + response.agent_status + "<br>" + response.role + " " + response.username);
-                    $("#user_rating_acc").html(response.rating);
-                    $("#user_review_acc").html(response.review + " <br> Last Update " + response.lastUpdate);
-                    
-                    $("#input-username").val(response.username);
-                    $("#input-first-name").val(response.first_name);
-                    $("#input-last-name").val(response.last_name);
-                    email = response.email;
-                    $("#input-email").val(response.email);
-                    $("#input-phone").val(response.phone_number);
-                    phone = response.phone_number;
-                    
+            //alert('action_float_id ' + action_float_id + " location_main_container " + location_main_container + " contact_information_save " + contact_information_save)
+            if (action_float_id == 1) {
+                action_float_id = 0;
+                $("#menu_container_top_tab").show(100);
+                $("#menu_container_left_tab").show(100);
+                $("#chat_container").hide(100);
+                $("#connects_chatbar").hide(100);
+                $("#orders_container").hide(100);
+                $("#order_items_container").hide(10);
+                $("#cart_container").hide(100);
+                $("#location_container").hide(100);
+                $("#user_container").hide(100);
+                $("#top_menu").show(100,function(){       
+                    $("#search").hide(100);
+                    $("#top_slider").hide(100);
+            
+                });
+                $("#product_add_client_container").hide(100,function(){       
+                    $("#product_error").hide(100);
+                });
+                if (_apps_tab != 0) {
+                    document.body.classList.toggle('nav-is-toggled');
+                    _apps_tab =0;
+                }
+                role = response.role;
+                localStorage.setItem("role", role); 
+                main();
+            } else if (location_main_container == 1) {
+                location_main_container = 0;
+                try {
+                    latitude = response.latitude;
+                    longitude = response.longitude;
                     var location = JSON.parse(response.location_name);
-                    $("#input-postal-code").val(location.postal);
-                    $("#input-country").val(location.country);
-                    $("#input-city").val(location.city);
-                    $("#input-address").val(location.address);
-    
-                } else {
-                    $('.user_error_container').show(500, function(){
+                    postal = location.postal;
+                    country = location.country;
+                    city = location.city;
+                    address = location.address;
+
+                } catch(e) {                    
+                    alert('JSON parsing error');
+                }
+            } else if (contact_information_save == 1) {
+                contact_information_save = 0;
+                try {
+                    if (response.message == "success") {
+                        var location = JSON.parse(response.location_name);
+                        postal = location.postal;
+                        country = location.country;
+                        city = location.city;
+                        address = location.address;
+
+                        $("#contact_information_save").removeClass("btn-info");
+                        $("#contact_information_save").addClass("btn-success");
+                        $("#contact_information_save").html(response.message);
+                        $("#contact_information_save_help").html("Done");
+                        $('#contact_information').hide(2000, function(){ 
+                            if (add_products_agent == 1) {
+                                add_products_agent = 0;
+                                $("#add_products_new").show(100);
+                            } else {
+                                checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_total,username);
+                            }                   
+                        });
+                    } else {
+                        $("#contact_information_save").removeClass("btn-info");
+                        $("#contact_information_save").addClass("btn-warning");
+                        $("#contact_information_save").html(response.message);
+                        $("#contact_information_save_help").html("Something went wrong");
+                    }
+                } catch(e) {   
+                    $("#contact_information_save").removeClass("btn-info");
+                    $("#contact_information_save").addClass("btn-warning");
+                    $("#contact_information_save").html("JSON error");
+                    $("#contact_information_save_help").html('JSON parsing error');                 
+                }
+                
+            } else {
+                try {
+                    //response.data = JSON.parse(response.data);
+                    if (response.message == "success") {
+                        $('.user_error_container').hide(100, function(){                    
+                        });
+                        $("#user_row_container").show(100);
+                        if (response.role == "customer") {
+                            $("#uersdashro").hide(100);
+                            $("#uersdash").hide(100);
+                        } else {
+                            $("#uersdashro").show(100);
+                            $("#uersdash").show(100);
+                        }
+        
+                        $("#user_name").html("status : " + response.agent_status + "<br>" + response.role + " " + response.username);
+                        $("#user_rating_acc").html(response.rating);
+                        $("#user_review_acc").html(response.review + " <br> Last Update " + response.lastUpdate);
+                        
+                        $("#input-username").val(response.username);
+                        $("#input-first-name").val(response.first_name);
+                        $("#input-last-name").val(response.last_name);
+                        email = response.email;
+                        $("#input-email").val(response.email);
+                        $("#input-phone").val(response.phone_number);
+                        phone = response.phone_number;                        
+
+                        var location = JSON.parse(response.location_name);
+                        postal = location.postal;
+                        country = location.country;
+                        city = location.city;
+                        address = location.address;
+                        $("#input-postal-code").val(location.postal);
+                        $("#input-country").val(location.country);
+                        $("#input-city").val(location.city);
+                        $("#input-address").val(location.address);
+        
+                    } else {
+                        $('.user_error_container').show(100, function(){
+                            $("#user_row_container").hide(100);
+                            $("#user_row_h").html(response.message);
+                            $("#user_row_p").html(response.login_email + " or " + response.login_password);
+                        });
+                    }
+                } catch(e) {
+                    $('.user_error_container').show(100, function(){
                         $("#user_row_container").hide(100);
-                        $("#user_row_h").html(response.message);
-                        $("#user_row_p").html(response.login_email + " or " + response.login_password);
+                        $("#user_row_h").html('JSON error');
+                        $("#user_row_p").html('JSON parsing error');
                     });
                 }
-            } catch(e) {
-                $('.user_error_container').show(500, function(){
-                    $("#user_row_container").hide(100);
-                    $("#user_row_h").html('JSON error');
-                    $("#user_row_p").html('JSON parsing error');
-                });
             }
           
         },
         error: function searchError(xhr, err) {
           //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
           $('#app-cover-spin').hide(0);
-          $('.user_error_container').show(500, function(){
+          $('.user_error_container').show(100, function(){
             $("#user_row_container").hide(100);
             $("#user_row_h").html(err);
             $("#user_row_p").html(JSON.stringify(xhr));
           });
         }
     });
-
-    /**const options = {
-        method: 'post',
-        data: { update_user_data: 12, user_role:user_role, rating: rating, review: review, address: address, city: city, country: country, postal: postal, user_phone: user_phone, user_email: user_email, last: last, first: first, user_name: user_name},
-        headers: { Authorization: 'OAuth2: token' }
-    };    
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/update_user_data.php', options, function(response) {
-        // prints 200
-        $('#app-cover-spin').hide(0);
-        try {
-            response.data = JSON.parse(response.data);
-            if (response.data.message == "success") {
-                $('.user_error_container').hide(500, function(){                    
-                });
-                $("#user_row_container").show(100);
-                if (response.data.role == "customer") {
-                    $("#uersdashro").hide(100);
-                    $("#uersdash").hide(100);
-                } else {
-                    $("#uersdashro").show(100);
-                    $("#uersdash").show(100);
-                }
-
-                $("#user_name").html("status : " + response.data.agent_status + "<br>" + response.data.role + " " + response.data.username);
-                $("#user_rating_acc").html(response.data.rating);
-                $("#user_review_acc").html(response.data.review + " <br> Last Update " + response.data.lastUpdate);
-                
-                $("#input-username").val(response.data.username);
-                $("#input-first-name").val(response.data.first_name);
-                $("#input-last-name").val(response.data.last_name);
-                email = response.data.email;
-                $("#input-email").val(response.data.email);
-                $("#input-phone").val(response.data.phone_number);
-                phone = response.data.phone_number;
-                
-                var location = JSON.parse(response.data.location_name);
-                $("#input-postal-code").val(location.postal);
-                $("#input-country").val(location.country);
-                $("#input-city").val(location.city);
-                $("#input-address").val(location.address);
-
-            } else {
-                $('.user_error_container').show(500, function(){
-                    $("#user_row_container").hide(100);
-                    $("#user_row_h").html(response.data.message);
-                    $("#user_row_p").html(response.data.login_email + " or " + response.data.login_password);
-                });
-            }
-        } catch(e) {
-            $('.user_error_container').show(500, function(){
-                $("#user_row_container").hide(100);
-                $("#user_row_h").html('JSON error');
-                $("#user_row_p").html('JSON parsing error');
-            });
-        }
-    }, function(response) {
-        $('.user_error_container').show(500, function(){
-            $("#user_row_container").hide(100);
-            $("#user_row_h").html(response.status);
-            $("#user_row_p").html(response.error);
-        });
-
-    }); */
 }
 
 var inputRange = document.getElementsByClassName('range')[0];
@@ -590,7 +589,7 @@ $("#radio-0").click(function(){
 });
 
 $("#radio-2").click(function(){  
-    $('.product_main_container').show(500, function(){
+    $('.product_main_container').show(100, function(){
         window.location.href="#product_container";
         $("#menu_container_left_tab").show(100);
         $("#chat_container").hide(100);
@@ -603,6 +602,7 @@ $("#radio-2").click(function(){
         $("#top_menu").hide(100,function(){       
             $("#top_slider").show(100);
         });
+        
         var onSuccess = function(position) {
             latitude = position.coords.latitude;
             longitude = position.coords.longitude;
@@ -639,7 +639,7 @@ function geoshop(latitude,longitude,gradius,startlimit,endlimit) {
                     var products_status = response.products_status;
                     var products_data = response.products;
                     if (products_status != "0") {  
-                        $('.product_error_container').hide(500, function(){
+                        $('.product_error_container').hide(100, function(){
                             //window.location.href="#product_container";
                             $("#product_row_container").show(100);
                             $("#arrow_navigation_container").show(100);
@@ -651,7 +651,7 @@ function geoshop(latitude,longitude,gradius,startlimit,endlimit) {
                         cat_id != '';
                         products_data.forEach(products_datamyFunction);
                     } else {
-                        $('.product_error_container').show(500, function(){
+                        $('.product_error_container').show(100, function(){
                             //window.location.href="#product_container";
                             $("#product_row_container").hide(100);
                             $("#arrow_navigation_container").hide(100);
@@ -662,7 +662,7 @@ function geoshop(latitude,longitude,gradius,startlimit,endlimit) {
                     }
                 }
                 else {
-                    $('.product_error_container').show(500, function(){
+                    $('.product_error_container').show(100, function(){
                         //window.location.href="#product_container";
                         $("#product_row_container").hide(100);
                         $("#arrow_navigation_container").hide(100);
@@ -672,7 +672,7 @@ function geoshop(latitude,longitude,gradius,startlimit,endlimit) {
                     });
                 }
             } catch(e) {
-                $('.product_error_container').show(500, function(){
+                $('.product_error_container').show(100, function(){
                     //window.location.href="#product_container";
                     $("#product_row_container").hide(100);
                     $("#arrow_navigation_container").hide(100);
@@ -685,7 +685,7 @@ function geoshop(latitude,longitude,gradius,startlimit,endlimit) {
         },
         error: function searchError(xhr, err) {
           $('#app-cover-spin').hide(0);
-          $('.product_error_container').show(500, function(){
+          $('.product_error_container').show(100, function(){
             window.location.href="#product_container";
             $("#product_row_container").hide(100);
             $("#arrow_navigation_container").hide(100);
@@ -728,7 +728,7 @@ function search_button() {
         $("#top_menu").show(100);
         search_value = $("#search_value").val();
         if (search_value != '' && search_value != null) {
-            $('.product_main_container').show(500, function(){
+            $('.product_main_container').show(100, function(){
                 //window.location.href="#product_container";
                 $("#menu_container_left_tab").show(100);
                 $("#chat_container").hide(100);
@@ -763,7 +763,7 @@ function search(search_params,startlimit,endlimit) {
                     var products_status = response.products_status;
                     var products_data = response.products;
                     if (products_status != "0") {
-                        $('.product_error_container').hide(500, function(){
+                        $('.product_error_container').hide(100, function(){
                             $("#product_row_container").show(100);
                             $("#arrow_navigation_container").show(100);
                         });  
@@ -774,7 +774,7 @@ function search(search_params,startlimit,endlimit) {
                         cat_id != '';
                         products_data.forEach(products_datamyFunction);
                     } else {
-                        $('.product_error_container').show(500, function(){
+                        $('.product_error_container').show(100, function(){
                             $("#product_row_container").hide(100);
                             $("#arrow_navigation_container").hide(100);
                             $("#product_row_h").html(response.message);
@@ -784,7 +784,7 @@ function search(search_params,startlimit,endlimit) {
                     }
                 }
                 else {
-                    $('.product_error_container').show(500, function(){
+                    $('.product_error_container').show(100, function(){
                         $("#product_row_container").hide(100);
                         $("#arrow_navigation_container").hide(100);
                         $("#product_row_h").html(response.message);
@@ -793,7 +793,7 @@ function search(search_params,startlimit,endlimit) {
                     });
                 }
             } catch(e) {
-                $('.product_error_container').show(500, function(){
+                $('.product_error_container').show(100, function(){
                     $("#product_row_container").hide(100);
                     $("#arrow_navigation_container").hide(100);
                     $("#product_row_h").html(response.message);
@@ -803,7 +803,7 @@ function search(search_params,startlimit,endlimit) {
             }          
         },
         error: function searchError(xhr, err) {
-          $('.product_error_container').show(500, function(){
+          $('.product_error_container').show(100, function(){
               $("#product_row_container").hide(100);
               $("#arrow_navigation_container").hide(100);
               $("#product_row_p").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
@@ -817,13 +817,17 @@ function authentication(username) {
     $("#app-cover-spin").removeClass("app-cover");
 
     //alert(devicePlatform);
+    //localStorage.setItem("username", username);
     if (username == "") {
         $(".main").hide(100);
         $(".authentication").show(100);
     } else {
         $(".authentication").hide(100);
         $(".main").show(100);
-        datab = window.sqlitePlugin.openDatabase({
+        localStorage.setItem("username", username);
+        localStorage.setItem("role", role);
+
+        /**datab = window.sqlitePlugin.openDatabase({
             name: 'my.db',
             location: 'default',
         });
@@ -834,7 +838,7 @@ function authentication(username) {
            alert('Transaction ERROR: ' + error.message);
           }, function() {
             alert('Populated database OK');
-          });
+          }); */
         main();
     }     
 }
@@ -842,8 +846,8 @@ function authentication(username) {
 var imgUri = "https://oramla.com/products.html";
 
 function main() {
-    $('.authentication').hide(500, function(){
-        $(".main").show(500);
+    $('.authentication').hide(100, function(){
+        $(".main").show(100);
         $(".product_main_container").show(100);
     });
     //var cat_id = "";
@@ -852,20 +856,41 @@ function main() {
     search_value != '';
     geoshop_value != '';
     cat_id != '';
+    //alert(role);
+    //alert(username);
+    if (role == 'customer' || role == '' || role == null) {
+        $("#action_float_id").html('<i class="fa  fa-invision my-float">Sell</i>');
+        $("#add_products_agent").hide(100);
+    } else {
+        $("#action_float_id").html('<i class="fa fa-invision my-float">Buy</i>');
+        $("#add_products_agent").show(100);        
+    }
     product_main_container(startlimit,endlimit,cat_id);
-    apps_categories(username);
+    apps_categories(username);    
     if (username != "") {
         loadconnects();
+        user_container(username,email);
         //setTimeout(loadchat, 3000);
-    }
-    
+    }    
 }
 var conectset = 0;
+var messageauto = 0;
 function loadconnects() {
     conectset = 1;
     //alert(connect_from);
-    contact(username,connect_from,"","");
-    setTimeout(loadconnects, 3000);
+    //contact(connect_from,username,conn_id,'Hello ' + username + ', My name is ' + connect_from + '. How can i help you?');
+    //messageauto = 0; 
+    if (username == "") {
+        $(".main").hide(100);
+        $(".authentication").show(100);
+    } else{
+        //connects_datalengthnow = 0;  
+        //connect_from = '';  
+        //connect_product = 0; 
+        contact(username,"","","");
+        setTimeout(loadconnects, 3000);
+    }                
+    
 }
 var startlimit = 0;
 var endlimit = 24;
@@ -896,45 +921,69 @@ var connect_product = 0;
 $("body").delegate(".connect_product","click",function(event){
     event.preventDefault();
     conta = 1;
-    chat_ = 1;
-    window.location.href="#center_top_id"; 
-    $("#menu_container_top_tab").hide(100);                
-    $("#center_top_id").show(100);                
+    chat_ = 1;                    
 
     if (username == "") {
         $(".main").hide(100);
         $(".authentication").show(100);
-    } else {        
+    } else { 
+        
+        //alert($(this).attr('add_client'));
+        if ($(this).attr('add_client') != '' && $(this).attr('add_client') != "undefined" && $(this).attr('add_client') != null )  {
+            window.location.href="#center_top_id"; 
+            $("#menu_container_top_tab").hide(100);                
+            $("#center_top_id").show(100);
 
-        $("#contactname").html($(this).attr('add_client'));
-        $("#cotacttime").html($(this).attr(Date()));
-        var IMAGE_url = 'img/jeans3.jpg';
-        $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
-        var chat_message = '';
-        connect_product = 1;
-        //alert(connect_from);
-        connect_from = $(this).attr('add_client');
-        //connects_datalengthnow = 0;
-        connects_datalength = 0;
-        //$("#chat").html('');
-        contact(username,$(this).attr('add_client'),$(this).attr('product_id'),chat_message);
+            $("#contactname").html($(this).attr('add_client'));
+            $("#cotacttime").html($(this).attr(Date()));
+            var IMAGE_url = 'img/jeans3.jpg';
+            $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
+            var chat_message = '';
+            connect_product = 1;
+            //alert(connect_from);
+            connect_from = $(this).attr('add_client');
+            //connects_datalengthnow = 0;
+            connects_datalength = 0;
+            //$("#chat").html('');
+            messageauto = 1;
+            var chat_product = "I'm interested in " + $(this).attr('product_title') + ".";
+            $("#chat_message").val(chat_product);
+            $("#chat").attr("style", "background-image: url('" + $(this).attr('product_url') + "');background-repeat: no-repeat;background-size:cover;");
+            
+            connects_datalengthnow = 0;
+            $("#chat").html('loading ...');
+            contact(username,$(this).attr('add_client'),$(this).attr('product_id'),chat_message);
+
+            $("#connects_chatbar").show(100);
+            $("#product_container").hide(100);
+            $("#menu_container_left_tab").hide(100);
+            $("#orders_container").hide(100);
+            $("#order_items_container").hide(10);
+            $("#cart_container").hide(100);
+            $("#location_container").hide(100);
+            $("#user_container").hide(100);
+            $("#top_menu").show(100,function(){       
+                $("#search").hide(100);
+                $("#top_slider").hide(100);
     
-        $("#connects_chatbar").show(100);
-        $("#product_container").hide(100);
-        $("#menu_container_left_tab").hide(100);
-        $("#orders_container").hide(100);
-        $("#order_items_container").hide(10);
-        $("#cart_container").hide(100);
-        $("#location_container").hide(100);
-        $("#user_container").hide(100);
-        $("#top_menu").show(100,function(){       
-            $("#search").hide(100);
-            $("#top_slider").hide(100);
+            });
+            $("#connects_contacts").show(100,function(){       
+                $("#connects_messages").hide(100);                
+            });
+            if (messageauto == 1) {
+                messageauto = 0; 
+                $(".chat_main_container").show(100)
+                $("#connects_contacts").hide(100,function(){       
+                    $("#connects_messages").show(100); 
+                    $("#menu_container_top_tab").hide(100);                
+                    //$("#menu_container_bottom_tab").hide(100);
+                    $("#center_top_id").hide(100);                
+    
+                });
+                //$("#chat").html('loading ...');
+            }
+        }    
 
-        });
-        $("#connects_contacts").show(100,function(){       
-            $("#connects_messages").hide(100);                
-        });
     }
     $("#product_add_client_container").hide(100,function(){       
         $("#product_error").hide(100);
@@ -986,10 +1035,18 @@ function order_id(startlimit,endlimit,status,username,order_id) {
         data: { order_id: 12, startlimit: startlimit, endlimit: endlimit, status:status, username: username, order_id: order_id },
         processData: true,
         url: api_server_url + '/cordova/order_id.php',
-        success: function searchSuccess(response) {
+        success: function searchSuccess(response) {            
             try {
                 //response.data = JSON.parse(response.data);
                 if (response.message == "success") {
+                    //window.location.href="#orders_container";
+                    $("#menu_container_top_tab").show(100); 
+                    $("#product_container").hide(100);
+                    $("#menu_container_left_tab").hide(100);
+                    $("#chat_container").hide(100);
+                    $("#connects_chatbar").hide(100);
+                    $("#location_container").hide(100);
+                    $("#user_container").hide(100);
                     var products_status = response.products_status;
                     var products_data = response.products;
                     
@@ -997,12 +1054,12 @@ function order_id(startlimit,endlimit,status,username,order_id) {
                     if (status == "active" || status == "cancelled" || status == "shipped") {
                         $("#orders_items_made").html('');
                         $("#orderid").html(order_id);
-                        window.location.href="#order_items_container";
+                        //window.location.href="#order_items_container";
                         data_len = products_data.length;
                         products_data.forEach(order_items_datamyFunction);
                     } else {
                         $("#orders_made").html('');
-                        window.location.href="#order_container";
+                        //window.location.href="#order_container";
                         data_len = products_data.length;
                         if (status == "pending_orders") {
                             $("#pending_orders_count").html(products_data.length);
@@ -1026,8 +1083,8 @@ function order_id(startlimit,endlimit,status,username,order_id) {
                 
             } catch(e) {
                 $('#app-cover-spin').hide(0);
-                //alert('JSON parsing error');
-                snackbar('JSON parsing error');
+                alert('JSON parsing error');
+                //snackbar('JSON parsing error');
     
                 
             }
@@ -1036,8 +1093,8 @@ function order_id(startlimit,endlimit,status,username,order_id) {
         error: function searchError(xhr, err) {
           //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
           $('#app-cover-spin').hide(0);
-          //alert(response.status + " : " + response.error);
-          snackbar("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+          alert(response.status + " : " + response.error);
+          //snackbar("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
         }
     });
 
@@ -1100,7 +1157,6 @@ function order_id(startlimit,endlimit,status,username,order_id) {
     }); */
 }
 
-
 function product_id(startlimit,endlimit,action,username,product_id) {
     $('#app-cover-spin').show(0);
     $.ajax({
@@ -1126,6 +1182,8 @@ function product_id(startlimit,endlimit,action,username,product_id) {
     
                     if (products_status == "add_to_cart") {                    
                         $("#shopping_cart_num").html(products_data.length);
+                        $('#app-cover-spin').hide(0);
+
                     } else if (products_status == "edit_product") {
                         $("#product_row_container").html(''); 
                         product_row_container_index = products_data.length;        
@@ -1137,57 +1195,102 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                         product_row_container_index = products_data.length;
                         $("#product_row_container").html(''); 
                         $('#app-cover-spin').hide(0); 
+                        
                         products_data.forEach(products_datamyFunction);
                     } else if (products_status == "cart_to_remove") {                    
-                        $('.cart_error_container').hide(500, function(){
+                        $('.cart_error_container').hide(100, function(){
                             //window.location.href="#cart_container";
                             $("#cart_row_container").show(100);
                         });
                         $("#cart_row_container").html('');
                         $("#shopping_cart_num").html(products_data.length);
+                        $('#app-cover-spin').hide(0);
+                        if (products_data.length < 12) {
+                            $("#cart_next").hide(10); 
+                            $('#cart_previous').hide(10);
+                        } else {
+                            $("#cart_next").hide(10); 
+                            $('#cart_previous').show(10);
+                        }
                         products_data.forEach(cart_datamyFunction);
                     } else if (products_status == "qt-minus") {                    
-                        $('.cart_error_container').hide(500, function(){
+                        $('.cart_error_container').hide(100, function(){
                             //window.location.href="#cart_container";
                             $("#cart_row_container").show(100);
                         });
                         $("#cart_row_container").html('');
                         $("#shopping_cart_num").html(products_data.length);
+                        $('#app-cover-spin').hide(0);
+                        if (products_data.length < 12) {
+                            $("#cart_next").hide(10); 
+                            $('#cart_previous').hide(10);
+                        } else {
+                            $("#cart_next").hide(10); 
+                            $('#cart_previous').show(10);
+                        }
                         products_data.forEach(cart_datamyFunction);
                     } else if (products_status == "qt-plus") {                    
-                        $('.cart_error_container').hide(500, function(){
+                        $('.cart_error_container').hide(100, function(){
                             //window.location.href="#cart_container";
                             $("#cart_row_container").show(100);
                         });
                         $("#cart_row_container").html('');
                         $("#shopping_cart_num").html(products_data.length);
+                        $('#app-cover-spin').hide(0);
+                        if (products_data.length < 12) {
+                            $("#cart_next").hide(10); 
+                            $('#cart_previous').hide(10);
+                        } else {
+                            $("#cart_next").hide(10); 
+                            $('#cart_previous').show(10);
+                        }
                         products_data.forEach(cart_datamyFunction);
                     } else if (products_status == "qt") {                    
-                        $('.cart_error_container').hide(500, function(){
+                        $('.cart_error_container').hide(100, function(){
                             //window.location.href="#cart_container";
                             $("#cart_row_container").show(100);
                         });
                         $("#cart_row_container").html('');
                         $("#shopping_cart_num").html(products_data.length);
+                        $('#app-cover-spin').hide(0);
+                        if (products_data.length < 12) {
+                            $("#cart_next").hide(10); 
+                            $('#cart_previous').hide(10);
+                        } else {
+                            $("#cart_next").hide(10); 
+                            $('#cart_previous').show(10);
+                        }
                         products_data.forEach(cart_datamyFunction);
                     } else if (products_status == "0") {
     
-                        $('.cart_error_container').show(500, function(){
-                            window.location.href="#cart_container";
+                        //if (data_i < 12) {
+                            $("#cart_next").hide(10); 
+                            $('#cart_previous').hide(10);
+                        $('.cart_error_container').show(100, function(){
+                            //window.location.href="#cart_container";
                             $("#cart_row_container").hide(100);
                             $("#cart_row_h").html(response.message);
                             $("#shopping_cart_num").html(products_data.length);
                             $("#cart_row_p").html('Your cart is empty. Add products to your cart.');
+                            $('#app-cover-spin').hide(0);
                         });
     
                     } else {
-                        window.location.href="#cart_container";
+                        //window.location.href="#cart_container";
                         $("#cart_row_container").html('');
                         $("#shopping_cart_num").html(products_data.length);
+                        $('#app-cover-spin').hide(0);
+                        if (products_data.length < 12) {
+                            $("#cart_next").hide(10); 
+                            $('#cart_previous').hide(10);
+                        } else {
+                            $("#cart_next").hide(10); 
+                            $('#cart_previous').show(10);
+                        }
                         products_data.forEach(cart_datamyFunction);
                         $("#shopping_cart_num").html(products_data.length);
-                        $('.cart_error_container').hide(500, function(){
-                            window.location.href="#cart_container";
+                        $('.cart_error_container').hide(100, function(){
+                            //window.location.href="#cart_container";
                             $("#cart_row_container").show(100);
                         });
                         $("#orders_container").hide(100);
@@ -1196,11 +1299,12 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                     }                
                 }
             } catch(e) {
-                $('.cart_error_container').show(500, function(){
-                    window.location.href="#cart_container";
+                $('.cart_error_container').show(100, function(){
+                    //window.location.href="#cart_container";
                     $("#cart_row_container").hide(100);
                     $("#cart_row_h").html(response.message);
                     $("#cart_row_p").html('JSON parsing error');
+                    $('#app-cover-spin').hide(0);
                 });
             }
           
@@ -1208,8 +1312,8 @@ function product_id(startlimit,endlimit,action,username,product_id) {
         error: function searchError(xhr, err) {
           //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
           $('#app-cover-spin').hide(0);
-          $('.cart_error_container').show(500, function(){
-            window.location.href="#cart_container";
+          $('.cart_error_container').show(100, function(){
+            //window.location.href="#cart_container";
             $("#cart_row_container").hide(100);
             $("#cart_row_p").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
           });
@@ -1246,7 +1350,7 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                     $("#product_row_container").html(''); 
                     products_data.forEach(products_datamyFunction);
                 } else if (products_status == "cart_to_remove") {                    
-                    $('.cart_error_container').hide(500, function(){
+                    $('.cart_error_container').hide(100, function(){
                         //window.location.href="#cart_container";
                         $("#cart_row_container").show(100);
                     });
@@ -1254,7 +1358,7 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                     $("#shopping_cart_num").html(products_data.length);
                     products_data.forEach(cart_datamyFunction);
                 } else if (products_status == "qt-minus") {                    
-                    $('.cart_error_container').hide(500, function(){
+                    $('.cart_error_container').hide(100, function(){
                         //window.location.href="#cart_container";
                         $("#cart_row_container").show(100);
                     });
@@ -1262,7 +1366,7 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                     $("#shopping_cart_num").html(products_data.length);
                     products_data.forEach(cart_datamyFunction);
                 } else if (products_status == "qt-plus") {                    
-                    $('.cart_error_container').hide(500, function(){
+                    $('.cart_error_container').hide(100, function(){
                         //window.location.href="#cart_container";
                         $("#cart_row_container").show(100);
                     });
@@ -1270,7 +1374,7 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                     $("#shopping_cart_num").html(products_data.length);
                     products_data.forEach(cart_datamyFunction);
                 } else if (products_status == "qt") {                    
-                    $('.cart_error_container').hide(500, function(){
+                    $('.cart_error_container').hide(100, function(){
                         //window.location.href="#cart_container";
                         $("#cart_row_container").show(100);
                     });
@@ -1279,7 +1383,7 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                     products_data.forEach(cart_datamyFunction);
                 } else if (products_status == "0") {
 
-                    $('.cart_error_container').show(500, function(){
+                    $('.cart_error_container').show(100, function(){
                         window.location.href="#cart_container";
                         $("#cart_row_container").hide(100);
                         $("#cart_row_h").html(response.data.message);
@@ -1293,7 +1397,7 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                     $("#shopping_cart_num").html(products_data.length);
                     products_data.forEach(cart_datamyFunction);
                     $("#shopping_cart_num").html(products_data.length);
-                    $('.cart_error_container').hide(500, function(){
+                    $('.cart_error_container').hide(100, function(){
                         window.location.href="#cart_container";
                         $("#cart_row_container").show(100);
                     });
@@ -1303,7 +1407,7 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                 }                
             }
         } catch(e) {
-            $('.cart_error_container').show(500, function(){
+            $('.cart_error_container').show(100, function(){
                 window.location.href="#cart_container";
                 $("#cart_row_container").hide(100);
                 $("#cart_row_h").html(response.data.message);
@@ -1312,7 +1416,7 @@ function product_id(startlimit,endlimit,action,username,product_id) {
         }
     }, function(response) {
         $('#app-cover-spin').hide(0);
-        $('.cart_error_container').show(500, function(){
+        $('.cart_error_container').show(100, function(){
             window.location.href="#cart_container";
             $("#cart_row_container").hide(100);
             $("#cart_row_p").html(response.status + " : " + response.error);
@@ -1332,9 +1436,11 @@ function cart_datamyFunction(item, index) {
     var product_image = item.product_image;
     var product_price = currency_exchange_rate * item.price;    
     product_price = product_price.toFixed(2);
-    var total_ = product_price * item.quantity;
+    var total_ = Number(product_price) * Number(item.quantity);
     //total_ = total_.toFixed(2);
-    total_pay = total_pay + total_;
+    total_pay = Number(total_pay) + Number(total_);
+    total_pay = total_pay.toFixed(2);
+
     var product_title = item.product_title;
     var product_title_account = "";
     if (product_title.length <= 30) {
@@ -1350,44 +1456,61 @@ function cart_datamyFunction(item, index) {
     }
     //var IMAGE_url = 'img/jeans3.jpg';
     //currency_price_symbal = '$';
-    var actions = '<div class="tags are-medium">' +
+    var actions = '<div class="float-left icon_padding_div icon_cartdelete tags are-medium">' +
     '<span class="tag is-danger icon_remove_cart" product_id = "' + item.product_id + '">Remove</span>' +
     '</div>';
-    product_row_container = '<div class="cart_productitem"> ' + 
-    '<div class="cart_menu">' +
-    '<img src="' + IMAGE_url + '" alt="' + item.product_image + '">' +
+    product_row_container = '<div class="cart_productitem columns is-multiline is-mobile block"> ' + 
+    
+    '<div class="column image card"  style="background-image:url(' + IMAGE_url + ');" >' +
+    //'<div class="cart_menu column image" style="background-image:url(' + IMAGE_url + ');" >' +
+    //'<img class="img-fluid" src="' + IMAGE_url + '" alt="' + item.product_image + '">' +
+    //'</div>' +     
     '</div>' +           
-    '<div class="cart_main">' +
-    '<b>' + product_title_account + '</b>' +
-    '<div class="price">' +
+
+    '<div class="column is-6 bg-light card">' +
+    '<span class="text-dark">' + product_title_account + '</span>' +
+    
+    '<div class="row">' +
+
+    '<div class="price ">' +
     '' +  currency_price_symbal + '' +  product_price + '' +
     '</div>' +
-    '<div class="quantynumber">' + 
-    '<span class="qt-minus" product_id = "' + item.product_id + '">-</span>' +
-    '<span class="qt" quantit="' + item.quantity + '">' +
-    '<input class="qt qtinput" product_id = "' + item.product_id + '" type="number" name="' + item.product_id + 'qt_cart" id="' + item.product_id + 'qt_cart" value="' + item.quantity + '">' +
-    '</span>' +
-    '<span class="qt-plus" product_id = "' + item.product_id + '">+</span>' +
-    '</div>' + actions + 
 
-    /**'<div class="float-left icon_padding_div icon_cartdelete">' +
-    '<input class="icon_remove_cart icon_input" product_id = "' + item.product_id + '" type="radio" name="' + item.product_id + 'remove_cart" id="' + item.product_id + 'remove_cart">' +
-    '<label class="currencyicon_label" for="' + item.product_id + 'remove_cart"><img src="img/delete.svg" alt=""></label>' +
-    '</div>' + */   
-      
-    '<div class="full-price">' +
+    '<div class="quantynumber buttons">' + 
+    '<span class="qt-minus button is-light" product_id = "' + item.product_id + '">-</span>' +
+    '<span class="qt button is-link" quantit="' + item.quantity + '">' +
+    '<input class="qt qtinput " product_id = "' + item.product_id + '" type="number" name="' + item.product_id + 'qt_cart" id="' + item.product_id + 'qt_cart" value="' + item.quantity + '">' +
+    '</span>' +
+    '<span class="qt-plus button is-dar" product_id = "' + item.product_id + '">+</span>' +
+    '</div>' +
+
+    '</div>' +
+
+    '<div class="row buttons">' +
+
+    '<div class="float-left icon_padding_div icon_cartdelete button is-danger">' +
+    '<span class="tag is-danger icon_remove_cart" product_id = "' + item.product_id + '"><i class="fa fa-trash"></i></span>' +
+    '</div>' +
+    
+    '<div class="full-price button is-info float-right">' +
     '' +  currency_price_symbal + '' +  total_ + '' +
     '</div>' +
+
+    '</div>' +
+
+
+
     '</div>' +
     '</div>';
 
     
 
-    total_tax = total_pay*0.01*_tax;
+    total_tax = Number(total_pay)*0.01*Number(_tax);
+
     //total_tax = total_tax.toFixed(2);
-    total_shipping =gradius*1*_delivery;
+    total_shipping =Number(gradius)*1*Number(_delivery);
     //total_shipping = total_shipping.toFixed(2);
-    var all_total = total_pay + total_tax + total_shipping;
+    var all_total = Number(total_pay) + Number(total_tax) + Number(total_shipping);
     total_total = all_total;
     total_total = total_total.toFixed(2);
     $("#cart_row_container").append(product_row_container);
@@ -1459,14 +1582,15 @@ function order_items_datamyFunction(item, index) {
         var oreder = '<span type="button" product_id="' + item.product_id + '" status="' + item.status_items + '" class="btn btn-danger order_items_view">' + item.product_id + '</span>';
     }
     
-    product_row_container = '<div class="cart_productitem"> ' + 
-    '<div class="cart_menu">' +
-    '<img src="' + IMAGE_url + '" alt="' + item.product_img + '">' +
+    product_row_container = '<div class="cart_productitem columns is-multiline is-mobile block"> ' + 
+    '<div class="column image card"  style="background-image:url(' + IMAGE_url + ');" >' +
+    //'<img src="' + IMAGE_url + '" alt="' + item.product_img + '">' +
     '</div>' +           
-    '<div class="cart_main">' +
+    '<div class="column is-6 bg-light card">' +
     '<span class="badge badge-info">' + item.product_quantity + '</span> '+
     '<b>' + product_title_account + '</b>, From ' + add_client + '<br>Status ' + status + '' +
-    '<br>' +
+    
+    '<div class="row">' +
 
     '<div class="price">' +
     '' +  currency_price_symbal + '' +  product_price + '' +
@@ -1474,8 +1598,9 @@ function order_items_datamyFunction(item, index) {
     '<div class="full-price">' +
     '' +  currency_price_symbal + '' +  total_ + '' +
     '</div>' +  
+    '</div>' +  
 
-    '<b class="btn-group btn-group-sm order_action">' + oreder + '</b>' + 
+    '<b class="btn-group btn-group-sm">' + oreder + '</b>' + 
 
     '</div>' +
     '</div>';
@@ -1486,8 +1611,16 @@ function order_items_datamyFunction(item, index) {
     if (data_i == index) { 
          $("#order_items_container").show(10,function(){
             $("#orders_container").hide(10); 
+            //alert(data_len);
             $('#app-cover-spin').hide(0);           
-        });        
+        });
+        if (data_i < 12) {
+            $("#orders_items_next").hide(10); 
+            $('#orders_items_previous').hide(10);
+        } else {
+            $("#orders_items_next").hide(10); 
+            $('#orders_items_previous').show(10);
+        }        
     }
     
 }
@@ -1536,16 +1669,25 @@ function order_datamyFunction(item, index) {
     if (data_i == index) {        
         $("#orders_container").show(10,function(){
             $("#cart_container").hide(10); 
-            $('#app-cover-spin').hide(0);
-            $("#order_items_container").hide(10);           
-        });        
+            //$('#app-cover-spin').hide(0);
+            $("#order_items_container").hide(10);
+            //alert(data_i + " " + index);
+            $('#app-cover-spin').hide(0);           
+        });  
+        if (data_i < 12) {
+            $("#order_next").hide(10); 
+            $('#order_previous').hide(10);
+        } else {
+            $("#order_next").hide(10); 
+            $('#order_previous').show(10);
+        }      
     }
 
 }
 
 var  _shipping = '0';
 var  _pay = '0';
-
+var checkout_contact_information_save = 0;
 $("#checkout_total").click(function(){
    _shipping =  $("#_shipping").val();
    _pay =  $("#_pay").val();
@@ -1558,17 +1700,29 @@ $("#checkout_total").click(function(){
     $("#_payerror").html('Select your preffered payment option');
    } else {
     $("#_shippingerror").html('');
-    $("#_payerror").html('');    
-    checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_total,username);
+    $("#_payerror").html(''); 
+    //phone = '';
+    if (phone == "") {
+        checkout_contact_information_save = 1;
+        $("#contact_information_save").removeClass("btn-success");
+        $("#contact_information_save").removeClass("btn-warning");
+        $("#contact_information_save").addClass("btn-primary");
+        $("#contact_information_save").html('Save changes');
+        $("#contact_information_save_help").html('');
+        $("#contact_information").show(100);
+    } else {
+        //$("#add_products_new").show(100);
+        checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_total,username);
+    }   
    }  
 });
-$("#user_orders").click(function(){
+$(".user_orders").click(function(){
     /**$("#orders_container").show(10,function(){
             $("#cart_container").hide(10); 
             $('#app-cover-spin').hide(0);
             $("#order_items_container").hide(10);           
         }); */
-    window.location.href="#orders_container";
+    /**window.location.href="#orders_container";
     $("#menu_container_top_tab").show(100);                
 
     $("#product_container").hide(100);
@@ -1576,13 +1730,13 @@ $("#user_orders").click(function(){
     $("#chat_container").hide(100);
     $("#connects_chatbar").hide(100);
     $("#location_container").hide(100);
-    $("#user_container").hide(100);
+    $("#user_container").hide(100); */
 
     order_id(startlimit,endlimit,'user_orders',username,'');
 });
-$("#pending_orders").click(function(){
+$(".pending_orders").click(function(){
     //pending_orders_count
-    window.location.href="#orders_container";
+    /**window.location.href="#orders_container";
     $("#menu_container_top_tab").show(100);                
 
     $("#product_container").hide(100);
@@ -1590,13 +1744,13 @@ $("#pending_orders").click(function(){
     $("#chat_container").hide(100);
     $("#connects_chatbar").hide(100);
     $("#location_container").hide(100);
-    $("#user_container").hide(100);
+    $("#user_container").hide(100); */
 
     order_id(startlimit,endlimit,'pending_orders',username,'');
 });
-$("#active_orders").click(function(){
+$(".active_orders").click(function(){
     //active_orders_count
-    window.location.href="#orders_container";
+    /**window.location.href="#orders_container";
     $("#menu_container_top_tab").show(100);                
 
     $("#product_container").hide(100);
@@ -1604,13 +1758,13 @@ $("#active_orders").click(function(){
     $("#chat_container").hide(100);
     $("#connects_chatbar").hide(100);
     $("#location_container").hide(100);
-    $("#user_container").hide(100);
+    $("#user_container").hide(100); */
 
     order_id(startlimit,endlimit,'active_orders',username,'');
 });
-$("#confirmed_orders").click(function(){
+$(".confirmed_orders").click(function(){
     //confirmed_orders_count
-    window.location.href="#orders_container";
+    /**window.location.href="#orders_container";
     $("#menu_container_top_tab").show(100);                
 
     $("#product_container").hide(100);
@@ -1618,13 +1772,13 @@ $("#confirmed_orders").click(function(){
     $("#chat_container").hide(100);
     $("#connects_chatbar").hide(100);
     $("#location_container").hide(100);
-    $("#user_container").hide(100);
+    $("#user_container").hide(100); */
 
     order_id(startlimit,endlimit,'confirmed_orders',username,'');
 });
-$("#complete_orders").click(function(){
+$(".complete_orders").click(function(){
     //confirmed_orders_count
-    window.location.href="#orders_container";
+    /**window.location.href="#orders_container";
     $("#menu_container_top_tab").show(100);                
 
     $("#product_container").hide(100);
@@ -1632,7 +1786,7 @@ $("#complete_orders").click(function(){
     $("#chat_container").hide(100);
     $("#connects_chatbar").hide(100);
     $("#location_container").hide(100);
-    $("#user_container").hide(100);
+    $("#user_container").hide(100); */
 
     order_id(startlimit,endlimit,'complete_orders',username,'');
 });
@@ -1648,6 +1802,7 @@ $("#user_products").click(function(){
 });
 
 function checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_total,username) {
+    //alert();
     $('#app-cover-spin').show(0);
     $.ajax({
         type: "POST", // Type of request to be send, called as
@@ -1685,82 +1840,24 @@ function checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_
                     
     
                 } else {
-                    $('#app-cover-spin').hide(0);
+                   // $('#app-cover-spin').hide(0);
                     alert(response.message);
                 }
             } catch(e) {
-                $('#app-cover-spin').hide(0);
-                snackbar('JSON parsing error');
-               // alert('JSON parsing error');
+                //$('#app-cover-spin').hide(0);
+                //snackbar('JSON parsing error');
+                alert('JSON parsing error');
                 
             }
           
         },
         error: function searchError(xhr, err) {
-          //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-          $('#app-cover-spin').hide(0);
-          snackbar(response.status + " : " + response.error);
+          alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+          //$('#app-cover-spin').hide(0);
+          //snackbar(response.status + " : " + response.error);
         }
     });
 
-    /**const options = {
-        method: 'post',
-        data: { checkout_total: 12, _shipping: _shipping, _pay: _pay, total_pay: total_pay, total_tax: total_tax, total_shipping: total_shipping, total_total: total_total, username: username },
-        headers: { Authorization: 'OAuth2: token' }
-    };      
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/checkout_total.php', options, function(response) {
-        //alert(response.data);
-        try {
-            response.data = JSON.parse(response.data);
-            if (response.data.message == "success") {
-                var products_status = response.data.products_status;
-                var products_data = response.data.products;                
-                $("#shopping_cart_num").html(0);
-                total_pay = 0.00;
-                total_total = 0.00;
-                total_tax = 0.00;
-                total_shipping =gradius*1*_delivery;
-                $("#total_pay").html('Subtotal: ' +  currency_price_symbal + '<span>' +  total_pay + '</span>');
-                $("#total_tax").html('Taxes ('+_tax+'%): ' +  currency_price_symbal + '<span>' +  total_tax + '</span>');
-                $("#total_shipping").html('Delivery (' +  currency_price_symbal + ''+_delivery+'/km): ' +  currency_price_symbal + '<span>' +  total_shipping + ' in ' + gradius + ' km radius</span>');
-                $("#total_total").html('Total: ' +  currency_price_symbal + '<span>' +  total_total + '</span>');
-                //alert(products_data);
-                if (products_status != "0") {
-                    $("#orders_made").html('');
-                    window.location.href="#order_container";
-                    data_len = products_data.length;
-                    products_data.forEach(order_datamyFunction);
-                }
-                
-                //$("#orders_container").hide(100);
-                $("#order_items_container").hide(10);
-                //alert(products_data);
-                
-                
-
-            } else {
-                $('#app-cover-spin').hide(0);
-                alert(response.data.message);
-            }
-        } catch(e) {
-            $('#app-cover-spin').hide(0);
-            snackbar('JSON parsing error');
-           // alert('JSON parsing error');
-            
-        }
-    }, function(response) {
-        $('#app-cover-spin').hide(0);
-        snackbar(response.status + " : " + response.error);
-
-        //alert();
-        
-
-
-    
-    }); */
-    /**$("#product_add_client_container").hide(100,function(){       
-        $("#orders_container").show(100);
-    }); */
 }
 
 $("body").delegate(".div_cimage","click",function(event){
@@ -1817,8 +1914,8 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
         var actions = '<div class="tags are-medium">' +
         '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + product_id + '"><span><span><i class="fa fa-shopping-cart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
-        '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + product_id + '" add_client = "' + add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
-        '</div>';
+        '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + product_id + '" product_url="' + IMAGE_url + '" product_title="' + product_title + '" add_client = "' + add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+        '</div>';//product_url="' + IMAGE_url + '" product_title="' + product_title + '"
     }
     if (role == 'admin' || role == 'Admin'){
         var admin_actions = '' +
@@ -1826,7 +1923,7 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
         '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="tag is-info more fl-l edit_product" product_id = "' + product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="tag is-danger share fl-l add_to_remove" product_id = "' + product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>' +
-        '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + product_id + '" add_client = "' + add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
+        '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + product_id + '" product_url="' + IMAGE_url + '" product_title="' + product_title + '" add_client = "' + add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
         var actions = '<div class="tags are-medium">' + admin_actions + '</div>';        
     }
     
@@ -1874,7 +1971,7 @@ function other_product_same(product_id) {
                     $("#other_title").html('');
                     if (products_status != "0") { 
                         $("#other_title").html('');
-                        $('.product_error_container').hide(500, function(){
+                        $('.product_error_container').hide(100, function(){
                         });                   
                         products_data.forEach(other_product_samemyFunction);
                     }
@@ -1904,7 +2001,7 @@ function other_product_same(product_id) {
                 $("#other_title").html('');
                 if (products_status != "0") { 
                     $("#other_title").html('');
-                    $('.product_error_container').hide(500, function(){
+                    $('.product_error_container').hide(100, function(){
                     });                   
                     products_data.forEach(other_product_samemyFunction);
                 }
@@ -1948,7 +2045,7 @@ function other_product_same_client(startlimit,endlimit,add_client) {
                     if (products_status != "0") { 
                         $("#add_carousel_indicators").html('');
                         $("#add_carousel_other").html('');
-                        $('.product_error_container').hide(500, function(){
+                        $('.product_error_container').hide(100, function(){
                         });                   
                         products_data.forEach(other_product_same_clientmyFunction);
                     }
@@ -1978,7 +2075,7 @@ function other_product_same_client(startlimit,endlimit,add_client) {
                 if (products_status != "0") { 
                     $("#add_carousel_indicators").html('');
                     $("#add_carousel_other").html('');
-                    $('.product_error_container').hide(500, function(){
+                    $('.product_error_container').hide(100, function(){
                     });                   
                     products_data.forEach(other_product_same_clientmyFunction);
                 }
@@ -2034,7 +2131,7 @@ function other_product_same_clientmyFunction(item, index) {
             '</span> ' +    
             '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
             '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
             '</div>';
         }
         if (role == 'admin' || role == 'Admin'){
@@ -2045,7 +2142,7 @@ function other_product_same_clientmyFunction(item, index) {
             '</span> ' +
             '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
             '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
             '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
             '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
             '</div>';
@@ -2064,7 +2161,7 @@ function other_product_same_clientmyFunction(item, index) {
             var actions = '<div class="tags are-medium">' +
             '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
-            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
             '</div>';
         }
         if (role == 'admin' || role == 'Admin'){
@@ -2072,7 +2169,7 @@ function other_product_same_clientmyFunction(item, index) {
             '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-info more fl-l edit_product" product_id = "' + item.product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
-            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-danger share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>';
             var actions = '<div class="tags are-medium">' + admin_actions + '</div>';
             
@@ -2113,7 +2210,7 @@ function other_product_same_clientmyFunction(item, index) {
             '</span> ' +   
             '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
             '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
             '</div>';
         }
         if (role == 'admin' || role == 'Admin'){
@@ -2124,7 +2221,7 @@ function other_product_same_clientmyFunction(item, index) {
             '</span> ' +
             '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
             '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
             '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
             '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
             '</div>';
@@ -2143,7 +2240,7 @@ function other_product_same_clientmyFunction(item, index) {
             var actions = '<div class="tags are-medium">' +
             '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
-            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
             '</div>';
         }
         if (role == 'admin' || role == 'Admin'){
@@ -2151,7 +2248,7 @@ function other_product_same_clientmyFunction(item, index) {
             '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-info more fl-l edit_product" product_id = "' + item.product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
-            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-danger share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>';
             var actions = '<div class="tags are-medium">' + admin_actions + '</div>';
             
@@ -2208,23 +2305,23 @@ function other_similar_products(product_id,add_client) {
                         $("#other_similar_products_row1").html('');
                         $("#other_similar_products_row2").html('');
                         $("#other_similar_products_row3").html('');
-                        $('.product_error_container').hide(500, function(){
+                        $('.product_error_container').hide(100, function(){
                         }); 
-                        /**$('#other_mySlides1').show(500, function(){});
-                        $('#other_dot1').show(500, function(){});
-                        $('#other_mySlides2').show(500, function(){});
-                        $('#other_dot2').show(500, function(){});
-                        $('#other_mySlides3').show(500, function(){});
-                        $('#other_dot3').show(500, function(){}); */
+                        /**$('#other_mySlides1').show(100, function(){});
+                        $('#other_dot1').show(100, function(){});
+                        $('#other_mySlides2').show(100, function(){});
+                        $('#other_dot2').show(100, function(){});
+                        $('#other_mySlides3').show(100, function(){});
+                        $('#other_dot3').show(100, function(){}); */
                         if (products_data.length < 6) {
-                            $('#other_mySlides1').hide(500, function(){});
-                            $('#other_dot1').hide(500, function(){});
+                            $('#other_mySlides1').hide(100, function(){});
+                            $('#other_dot1').hide(100, function(){});
                         } else if (products_data.length < 12) {
-                            $('#other_mySlides2').hide(500, function(){});
-                            $('#other_dot2').hide(500, function(){});
+                            $('#other_mySlides2').hide(100, function(){});
+                            $('#other_dot2').hide(100, function(){});
                         } else if (products_data.length < 18) {
-                            $('#other_mySlides3').hide(500, function(){});
-                            $('#other_dot3').hide(500, function(){});
+                            $('#other_mySlides3').hide(100, function(){});
+                            $('#other_dot3').hide(100, function(){});
                         }
                         products_data.forEach(other_similar_productsmyFunction);
                     }
@@ -2324,7 +2421,7 @@ function other_similar_productsmyFunction(item, index) {
             '</span> ' +    
             '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
             '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
             '</div>';
         }
         if (role == 'admin' || role == 'Admin'){
@@ -2335,7 +2432,7 @@ function other_similar_productsmyFunction(item, index) {
             '</span> ' +
             '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
             '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
             '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
             '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
             '</div>';
@@ -2378,7 +2475,7 @@ function other_similar_productsmyFunction(item, index) {
             '</span> ' +   
             '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
             '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
             '</div>';
         }
         if (role == 'admin' || role == 'Admin'){
@@ -2389,7 +2486,7 @@ function other_similar_productsmyFunction(item, index) {
             '</span> ' +
             '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
             '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
+            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
             '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
             '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
             '</div>';
@@ -2425,7 +2522,7 @@ $("body").delegate(".category","click",function(event){
     var add_client = $(this).attr('add_client');
     startlimit = 0;
     endlimit = 24;
-    $('.product_main_container').show(500, function(){
+    $('.product_main_container').show(100, function(){
         $("#menu_container_left_tab").show(100);
         $("#chat_container").hide(100);
         $("#connects_chatbar").hide(100);
@@ -2548,7 +2645,7 @@ function product_main_container(startlimit,endlimit,cat_id) {
                     var products_status = response.products_status;
                     var products_data = response.products;
                     if (products_status != "0") { 
-                        $('.product_error_container').hide(500, function(){
+                        $('.product_error_container').hide(100, function(){
                             $("#product_row_container").show(100);
                             $("#arrow_navigation_container").show(100);
                         });
@@ -2557,7 +2654,7 @@ function product_main_container(startlimit,endlimit,cat_id) {
                         $('#app-cover-spin').hide(0);                 
                         products_data.forEach(products_datamyFunction);
                     } else {
-                        $('.product_error').show(500, function(){
+                        $('.product_error').show(100, function(){
                             $("#product_row_container").hide(100);
                             $("#arrow_navigation_container").hide(100);
                             $("#product_row_h").html(response.message);
@@ -2567,7 +2664,7 @@ function product_main_container(startlimit,endlimit,cat_id) {
                     }
                 }
                 else {
-                    $('.product_error_container').show(500, function(){
+                    $('.product_error_container').show(100, function(){
                         $("#product_row_container").hide(100);
                         $("#arrow_navigation_container").hide(100);
                         $("#product_row_h").html(response.message);
@@ -2576,7 +2673,7 @@ function product_main_container(startlimit,endlimit,cat_id) {
                     });
                 }
             } catch(e) {
-                $('.product_error_container').show(500, function(){
+                $('.product_error_container').show(100, function(){
                     $("#product_row_container").hide(100);
                     $("#arrow_navigation_container").hide(100);
                     $("#product_row_h").html(response.message);
@@ -2586,7 +2683,7 @@ function product_main_container(startlimit,endlimit,cat_id) {
             }          
         },
         error: function searchError(xhr, err) {
-            $('.product_error_container').show(500, function(){
+            $('.product_error_container').show(100, function(){
               $("#product_row_container").hide(100);
               $("#arrow_navigation_container").hide(100);
               $("#product_row_p").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
@@ -2617,71 +2714,30 @@ function products_datamyFunction(item, index) {
     } else {
         var IMAGE_url = IMAGE_url_path_name + product_image + '';
     }
-
-    //var IMAGE_url = 'img/noni.png';
-
+    
     if (username == item.add_client) {
-        /**var actions = '<div class="tags are-medium">' +    
-        '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-        '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
-        '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-        '</div>'; */
         var adminactions = '';
-
         var actions = '' +
         '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="more fl-l edit_product" product_id = "' + item.product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
-        '<a href="javascript:void(0)" class="share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>';
+        '<a href="javascript:void(0)" class="share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></i></span></a>';
     } else {
-        /**var actions = '<div class="tags are-medium">' +    
-        '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-        '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-        '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
-        '</div>'; */
         var adminactions = '';
         var actions = '' +
         '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
-        '<a href="javascript:void(0)" class="share fl-l connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
-    }
+        '<a href="javascript:void(0)" class="share fl-l connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
+    }//product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" 
     if (role == 'admin' || role == 'Admin'){
-        /**var actions = '<div class="tags are-medium">' +
-        '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-        '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-        '<span class="tag is-secondary connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '">Connect</span>' +
-        '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
-        '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-        '</div>'; */
         var admin_actions = '' +
         '<a href="javascript:void(0)" class="more fl-l edit_product" product_id = "' + item.product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>';
         var adminactions = '<div class="buttons cf">' + admin_actions + '</div><br>';
-
         var actions = '' +
         '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
-        '<a href="javascript:void(0)" class="share fl-l connect_product" product_id = "' + item.product_id + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
-        
-    } 
-    /**var product_row_container = '<div class="product_column">' +
-    '<div class="card">' +
-    '<div class="card-section">' +
-    '<img class="div_cimage" src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
-    '</div>' +
-    '<div class="card-section">' +    
-    '<p class="card-text"><b style="height: auto;">' + product_title_account + '</b></p>' +
-    '<div class="btn btn-primary">' +
-    '<a>' +  currency_price_symbal + '</a>' +    
-    '<a>' +  product_price + '</a>' +
-    '</div> ' + 
-    '<p class="card-text">From ' + item.add_client + '</p>' +
-    '</div>' +    
-    '<footer class="card-footer">' + actions + '</footer>' +
-    '</div>' +
-    '</div>'; */ 
-
-
-
+        '<a href="javascript:void(0)" class="share fl-l connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
+    }
     var product_container = '<div class="container-prod">' +
     '<div class="image div_cimage" style="background-image:url(' + IMAGE_url + ');" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" ></div>' +
     '<div class="container-information">' +
@@ -2691,45 +2747,15 @@ function products_datamyFunction(item, index) {
     '</div>' +
     '<div class="description"><p>From ' + item.add_client + '</p><br>' + item.add_description + '<br>Ratings : ' + item.add_rating + '<br>' + adminactions + '</div>' +
     '</div>' +
-    
-    
-
     '<div class="buttons cf">' + actions + '</div>' +
     '</div>';
-
-
     var product_row_container = '<div class="product_column">' +
     '<div class="card">' + product_container + '</div>' +
     '</div>';
-
-
-
-    var newitem = '<li class="product fl-l">' +
-    '<div class="container-prod">' +
-    '<div class="image" style="background-image:url(' + IMAGE_url + ');"></div>' +
-    '<div class="container-information">' +
-    '<div class="title">' +
-    'Splatter hoodie' +
-    '<a href="javascript:void(0)" class="more close"><i class="fa fa-times"></i></a>' +                
-    '</div>' +
-    '<div class="description information">Siebdruck print<br>100% cotton<br>Color available: white on gray<br>Size available: L, XL</div>' +
-    '</div>' +
-    '<div class="buttons cf">' +
-    '<a href="javascript:void(0)" class="more fl-l"><span><span><i class="fa fa-shopping-cart"></i></span></span></a>' +
-    '<a href="javascript:void(0)" class="more fl-l"><span><span><i class="fa fa-plus"></i></span></span></a>' +
-    '<a href="javascript:void(0)" class="share fl-l"><span><span><i class="fa fa-share-alt"></span></i></span></a>' +
-    '</div>' +
-    '</div>' +
-    '</li>';
-
-
-
+    
     if (index >= startlimit) {
-        //$("#product_row_container").append(newitem);
-
         $("#product_row_container").append(product_row_container);
     }
-
     if (startlimit > 0) {
         var ger = product_row_index - startlimit;
         if (ger < 24) {
@@ -2753,13 +2779,1611 @@ function products_datamyFunction(item, index) {
     
 }
 
-$("#add_products_agent").click(function(){
-    $("#add_products_new").show(100);
+$(".logout").click(function(){
+    $("#menu_container_top_tab").show(100);
+    $("#menu_container_left_tab").show(100);
+    $("#chat_container").hide(100);
+    $("#connects_chatbar").hide(100);
+    $("#orders_container").hide(100);
+    $("#order_items_container").hide(10);
+    $("#cart_container").hide(100);
+    $("#location_container").hide(100);
+    $("#user_container").hide(100);
+    $("#top_menu").show(100,function(){       
+        $("#search").hide(100);
+        $("#top_slider").hide(100);
+
+    });
+    $("#product_add_client_container").hide(100,function(){       
+        $("#product_error").hide(100);
+    });
+    if (_apps_tab != 0) {
+        document.body.classList.toggle('nav-is-toggled');
+        _apps_tab =0;
+    }
+    username = '';
+    role = '';
+    localStorage.setItem("username", username);
+    localStorage.setItem("role", role); 
+    authentication(username);     
 });
+var add_products_agent = 0;
+$("#add_products_agent").click(function(){
+    //phone = '';
+    $("#product_client").val(username);
+    if (phone == "") {
+        add_products_agent = 1;
+        $("#contact_information_save").removeClass("btn-success");
+        $("#contact_information_save").removeClass("btn-warning");
+        $("#contact_information_save").addClass("btn-primary");
+        $("#contact_information_save").html('Save changes');
+        $("#contact_information_save_help").html('');
+
+        $("#contact_information").show(100);
+    } else {    
+        $("#product_save").removeClass("btn-danger");
+        $("#product_save").removeClass("btn-success");
+        $("#product_save").removeClass("btn-info");
+        $("#product_save").removeClass("btn-warning");
+    
+        $("#product_save").addClass("btn-primary");
+        $("#product_save").html('Add');
+        $("#upload_from_help").html('');
+        
+        $("#percent_price").html(percent_price);
+        $("#add_products_new").show(100);
+        if (percent_pricing_strategy == 'cost_plus_pricing') {
+            $("#pricing_strategy_help").html('Price = total cost of product + gross profit margin');
+        } else if (percent_pricing_strategy == 'markup_pricing') {
+            $("#pricing_strategy_help").html("Markup as a percentage of selling price = (markup/selling price) x 100");
+        }
+    }
+});
+$("#contact_information_close").click(function(){
+    $("#contact_information").hide(100);
+});
+$("#contact_information_footer_close").click(function(){
+    $("#contact_information").hide(100);
+});
+var contact_information_save = 0;
+$("#contact_information_save").click(function(){
+    var user_countrycode_phone = $("#user_countrycode_phone").val();
+    if (user_countrycode_phone != "" && user_countrycode_phone != null) {
+        $("#user_countrycode_phone").removeClass("is-invalid");
+        $("#user_countrycode_phone").addClass("is-valid");       
+    } else {
+        $("#user_countrycode_phone").removeClass("is-valid");
+        $("#user_countrycode_phone").addClass("is-invalid");
+    }
+    var user_phone = $("#user_phone").val();
+    if (user_phone != "" && user_phone != null) {
+        if (user_phone.length >= 9) {
+            if ( user_phone.indexOf("0") == 0) {
+                user_phone = user_phone.slice(1,user_phone.length);
+            }
+            phone = user_countrycode_phone + "" + user_phone;
+            $("#user_phone_help").html(phone);
+            $("#user_phone").removeClass("is-invalid");
+            $("#user_phone").addClass("is-valid");
+        } else {
+            $("#user_phone_help").html("Phone number should be atleast 9 characters");
+            $("#user_phone").removeClass("is-valid");
+            $("#user_phone").addClass("is-invalid");
+        }        
+    } else {
+        $("#user_phone_help").html("Input phone nmber");
+        $("#user_phone").removeClass("is-valid");
+        $("#user_phone").addClass("is-invalid");
+    }
+    var user_address = $("#user_address").val();
+    if (user_address != "" && user_address != null) {
+        $("#user_address_help").html(user_address);
+        $("#user_address").removeClass("is-invalid");
+        $("#user_address").addClass("is-valid");       
+    } else {
+        $("#user_address_help").html("Input address");
+        $("#user_address").removeClass("is-valid");
+        $("#user_address").addClass("is-invalid");
+    }
+    var user_postal = $("#user_postal").val();
+    if (user_postal != "" && user_postal != null) {
+        $("#user_postal_help").html(user_postal);
+        $("#user_postal").removeClass("is-invalid");
+        $("#user_postal").addClass("is-valid");       
+    } else {
+        $("#user_postal_help").html("Input postal code");
+        $("#user_postal").removeClass("is-valid");
+        $("#user_postal").addClass("is-invalid");
+    }
+    var user_city = $("#user_city").val();
+    if (user_city != "" && user_city != null) {
+        $("#user_city_help").html(user_city);
+        $("#user_city").removeClass("is-invalid");
+        $("#user_city").addClass("is-valid");       
+    } else {
+        $("#user_city_help").html("Input city");
+        $("#user_city").removeClass("is-valid");
+        $("#user_city").addClass("is-invalid");
+    }
+
+    var user_country = $("#user_country").val();
+    if (user_country != "" && user_country != null) {
+        $("#user_country_help").html(user_country);
+        $("#user_country").removeClass("is-invalid");
+        $("#user_country").addClass("is-valid");       
+    } else {
+        $("#user_country_help").html("Input city");
+        $("#user_country").removeClass("is-valid");
+        $("#user_country").addClass("is-invalid");
+    }
+
+    var user_last = $("#user_last").val();
+    if (user_last != "" && user_last != null) {
+        $("#user_last_help").html(user_last);
+        $("#user_last").removeClass("is-invalid");
+        $("#user_last").addClass("is-valid");       
+    } else {
+        $("#user_last_help").html("Input last name");
+        $("#user_last").removeClass("is-valid");
+        $("#user_last").addClass("is-invalid");
+    }
+    var user_first = $("#user_first").val();
+    if (user_first != "" && user_first != null) {
+        $("#user_first_help").html(user_first);
+        $("#user_first").removeClass("is-invalid");
+        $("#user_first").addClass("is-valid");       
+    } else {
+        $("#user_first_help").html("Input first name");
+        $("#user_first").removeClass("is-valid");
+        $("#user_first").addClass("is-invalid");
+    }
+    
+    
+    if (user_phone != "" && user_phone != null && user_phone.length >= 9 && user_address != "" && user_address != null && user_postal != "" && user_postal != null && user_city != "" && user_city != null) {
+        address = user_address;
+        postal = user_postal;
+        city = user_city;
+        country = user_country;
+        first = user_first;
+        last = user_last;
+        action_float_id = 0;
+        location_main_container = 0;
+        contact_information_save = 1;
+        $("#contact_information_save").removeClass("btn-primary");
+        $("#contact_information_save").removeClass("btn-danger");
+        $("#contact_information_save").addClass("btn-info");
+        $("#contact_information_save").html("Saving...");
+        $("#contact_information_save_help").html("please wait");
+        update_user_data(latitude,longitude,role,rating,review,address,city,country,postal,phone,email,last,first,username);
+    } else {
+        $("#contact_information_save").removeClass("btn-primary");
+        $("#contact_information_save").addClass("btn-danger");
+        $("#contact_information_save_help").html("Correct the error(s)");
+    }
+    
+
+});
+var action_float_id = 0;
+$("#action_float_id").click(function(){
+    //alert(username);
+    if (username == "") {
+        $(".main").hide(100);
+        $(".authentication").show(100);
+    } else {
+        $(".authentication").hide(100);
+        $(".main").show(100);
+        //localStorage.setItem("username", username);
+        //localStorage.setItem("role", role); 
+        if (role == "customer") {
+            var userrole = "agent";
+        } else {
+            var userrole = "customer";
+        }  
+        action_float_id = 1;
+        location_main_container = 0;
+        contact_information_save = 0;
+        //alert(phone);  
+        update_user_data(latitude,longitude,userrole,rating,review,address,city,country,postal,phone,email,last,first,username);
+    }     
+});
+
+var percent_pricing_strategy = 'markup_pricing';
+var product_price = 0;
+var selling_price = 7;
+var buying_price = 5;//100%
+var percent_price = selling_price/buying_price;
+    //percent_price = percent_price*0.1;
+function product_pricing_strategy(list_price) {
+    if (product_price != 0) {
+        
+        
+
+        //Cost-based pricing => Considering the total cost of making a product and adding a markup to that to determine the price of a product.
+        //                   *cost_plus_pricing => Price = total cost of product + gross profit margin
+        //                   *markup_pricing => Markup as a percentage of selling price = (markup/selling price) x 100
+
+        //Value-Based Pricing => Price is a numerical evaluation of how much customers value what you are selling.
+        //                    *private_labels_pricing => Your product’s price is an absolute parameter and should be determined solely by what your customers might want to pay.
+        //                    *penetration_pricing => Pricing strategy that is used to quickly gain market share by setting an initially low price to entice customers to purchase from.
+        //                    *MSRP => Price the manufacturer recommends you use to sell their products to consumers
+        //                    *stable_pricing => To keep the price stable and as close to the market value of the product as possible.
+
+        //Demand-based pricing => Customer demand and perceived value of the product to determine a sale price.
+        //                     *charm_pricing => Removing a penny or two from a rounded price point (i.e. changing a price tag from $20.00 to $19.99).
+        //                     *skim_pricing => Introduce a new product at the highest possible price point and then lower the price over a specified period of time.
+
+        //Competition-based pricing => Utilizes competitor’s pricing data for similar products to set a base price for their own products. 
+        //                          => Rather than focusing on production costs or the value of the item, 
+        //                          => this pricing method relies heavily on market data.
+        //                          *repricing => Price of your product to match the lowest amount at that time.
+        //                          *anchor_pricing => Listing both the original price point and the sale price point to relay perceived value.
+        //                          *discounts_and_promotions_pricing => You may want to consider the possibility that out of necessity in the future.
+        //                                                              => You may want to either discount your item permanently or temporarily, 
+        //                                                              => With timed promotions in order to move your merchandise.
+
+        //Loss-leading pricing => Enticing customers to make a purchase by pricing a product at a loss while encouraging them to buy additional full-priced products.
+        //                     => An advertising tactic that actually offers a specific product at a loss in order to drive consumers to their site or store.
+        //                     *multiple_pricing => Products are bundled to create a higher perceived value at a lower cost, 
+        //                                       => which ideally leads to larger-volume purchases.
+        //                     *keystone_pricing => Pricing your products too high or too low.
+
+         //Dynamic pricing => your price is not static and instead changes based on other factors. 
+        //                => These factors can be for example segments or time.
+        //                *dynamic_segments_pricing => Use algorithms to derive the pricing for different groups based on statistics.
+        //                *dynamic_time_pricing => Cheaper prices on products to match the sales quota, as compared to the start of the month.
+
+        if (percent_pricing_strategy == 'cost_plus_pricing') {
+            var product_costs = product_price;
+            var product_ = 0.5;
+            var labor_ = 0.8;
+            var labor_costs = product_costs * product_;
+            labor_costs = labor_costs.toFixed(2);
+
+            var overhead = labor_costs * labor_;
+            overhead = overhead.toFixed(2);
+
+            //product_price = product_costs + labor_costs + overhead;
+            product_price = (Number(product_costs) + Number(labor_costs) + Number(overhead))
+            product_price = product_price.toFixed(2);
+
+            var margin_price = product_price * percent_price * 0.1;
+            margin_price = margin_price.toFixed(2);
+
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            //alert(sale_price);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Calculated as (Direct material costs <b>' + product_costs + '</b>  + Direct labor costs <b>' + labor_costs + '</b> as ('+ product_*100 +')% of Direct material costs + Allocated overhead <b>' + overhead + '</b> as ('+ labor_*100 +')% of Direct labor costs) * <b>' + percent_price + '</b> % margin</span>');
+            $("#product_price_help").html('<strong>Cost-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+            //alert(sale_price);
+
+        } else if (percent_pricing_strategy == 'markup_pricing') {
+            //var margin_price  = percent_price*product_price*0.1;
+            //product_price = product_price.toFixed(2);
+            var margin_price = product_price * percent_price*0.1;
+            //var list_price = product_price + margin_price;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Markup as a <b>' + percent_price + '</b> %  of product price = <b>' +  currency_price_symbal + ' ' + sale_price + '</b></span>');
+            $("#product_price_help").html('<strong>Cost-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'private_labels_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Your product’s price is an absolute parameter and should be determined <b>solely</> by what your customers might want to pay.</span>');
+            $("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'penetration_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Used to quickly gain market share by setting an initially low price to entice customers to purchase from.</span>');
+            $("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'MSRP') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Price the manufacturer recommends you use to sell their products to consumers</span>');
+            $("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'stable_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> To keep the price stable and as close to the market value of the product as possible.</b></span>');
+            $("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        }
+        else if (percent_pricing_strategy == 'charm_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Removing a penny or two from a rounded price point (i.e. changing a price tag from $20.00 to $19.99)</b></span>');
+            $("#product_price_help").html('<strong>Demand-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'skim_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Introduce a new product at the highest possible price point and then lower the price over a specified period of time.</b></span>');
+            $("#product_price_help").html('<strong>Demand-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'repricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Price of your product to match the lowest amount at that time.</b></span>');
+            $("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'anchor_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Listing both the original price point and the sale price point to relay perceived value.</b></span>');
+            $("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+        } else if (percent_pricing_strategy == 'discounts_and_promotions_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> You may want to consider the possibility that out of necessity in the future.</b></span>');
+            $("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'multiple_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Products are bundled to create a higher perceived value at a lower cost.</b></span>');
+            $("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'keystone_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Pricing your products too high or too low.</b></span>');
+            $("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'dynamic_segments_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Use algorithms to derive the pricing for different groups based on statistics.</b></span>');
+            $("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        } else if (percent_pricing_strategy == 'dynamic_time_pricing') {
+            //product_price = percent_price*product_price;
+            var margin_price = product_price * percent_price*0.1;
+            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = sale_price.toFixed(2);
+            $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Cheaper prices on products to match the sales quota, as compared to the start of the month.</b></span>');
+            $("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
+
+        }
+        
+        //$("#product_price_help").html('<strong>Cost-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+        $("#product_price").removeClass("is-invalid");
+        $("#product_price").addClass("is-valid");
+    } else {
+        $("#product_price_help").html("Enter a valid price");
+        $("#product_price").removeClass("is-valid");
+        $("#product_price").addClass("is-invalid");
+    }
+}
+const pricing_strategy = document.querySelector('#pricing_strategy');
+pricing_strategy.addEventListener('change', (event) => {
+    percent_pricing_strategy = event.target.value;
+    if (percent_pricing_strategy == 'cost_plus_pricing') {
+        $("#pricing_strategy_help").html('Price = total cost of product + gross profit margin');
+    } else if (percent_pricing_strategy == 'markup_pricing') {
+        $("#pricing_strategy_help").html("Markup as a percentage of selling price = (markup/selling price) x 100");
+    } else if (percent_pricing_strategy == 'private_labels_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Your product’s price is an absolute parameter and should be determined <b>solely</> by what your customers might want to pay.');
+        //$("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'penetration_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Used to quickly gain market share by setting an initially low price to entice customers to purchase from.');
+        //$("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'MSRP') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Price the manufacturer recommends you use to sell their products to consumers');
+        //$("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'stable_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('To keep the price stable and as close to the market value of the product as possible.</b>');
+        //$("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    }
+    else if (percent_pricing_strategy == 'charm_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Removing a penny or two from a rounded price point (i.e. changing a price tag from $20.00 to $19.99)</b>');
+        //$("#product_price_help").html('<strong>Demand-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'skim_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Introduce a new product at the highest possible price point and then lower the price over a specified period of time.</b>');
+        //$("#product_price_help").html('<strong>Demand-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'repricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Price of your product to match the lowest amount at that time.</b>');
+        //$("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'anchor_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Listing both the original price point and the sale price point to relay perceived value.</b>');
+        //$("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'discounts_and_promotions_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('You may want to consider the possibility that out of necessity in the future.</b>');
+        //$("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'multiple_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Products are bundled to create a higher perceived value at a lower cost.</b>');
+        //$("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'keystone_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Pricing your products too high or too low.</b>');
+        //$("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'dynamic_segments_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Use algorithms to derive the pricing for different groups based on statistics.</b>');
+        //$("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    } else if (percent_pricing_strategy == 'dynamic_time_pricing') {
+        //product_price = percent_price*product_price;
+        $("#pricing_strategy_help").html('Cheaper prices on products to match the sales quota, as compared to the start of the month.</b>');
+        //$("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
+
+    }
+    //alert(typeof $("#product_price").val());
+    //alert(isNaN($("#product_price").val()));
+
+    if (isNaN($("#product_price").val()) == false) {
+        product_price = Number($("#product_price").val());
+        var list_price = Number($("#product_price").val());
+        product_pricing_strategy(list_price);        
+    } else {
+        $("#product_price_help").html("Enter a valid price");
+        $("#product_price").removeClass("is-valid");
+        $("#product_price").addClass("is-invalid");
+    }
+    
+});
+const product_price_input = document.querySelector('#product_price');
+product_price_input.addEventListener('input', updateValue);
+function updateValue(e) {
+    if (e.target.value != "" && e.target.value != null) {
+        //alert(typeof e.target.value);
+        //alert(typeof e.target.value === "number");
+        //alert(isNaN(e.target.value));
+
+        if (isNaN(e.target.value) ==  false) {            
+            $("#percent_price").html(percent_price);
+            product_price = Number(e.target.value);
+            var list_price = Number(e.target.value);
+            product_pricing_strategy(list_price);
+        } else {
+            $("#product_price_help").html("Enter a valid price");
+            $("#product_price").removeClass("is-valid");
+            $("#product_price").addClass("is-invalid");
+        }      
+    } else {
+        $("#product_price_help").html("Input price");
+        $("#product_price").removeClass("is-valid");
+        $("#product_price").addClass("is-invalid");
+    }
+}
+
+
+
+
+var availability = '';// availability_strategy_help => Accurately submit the product's availability and match the availability from your landing page
+                      // product_data_specification_help => <span class="text-danger">Required </span> Your product’s availability. <span class="text-dark">Example</span> <span class="text-danger">in stock</span>. Supported values <span class="text-danger">in stock</span>, <span class="text-danger">out of stock</span>, <span class="text-danger">preorder</span>, <span class="text-danger">backorder</span>. Schema.org property <span class="text-info">Offer.​availability</span>
+
+var availability_date = '';// Use this attribute if your product’s availability is <span class="text-danger">preorder </span> or <span class="text-danger">backorder </span>
+                           // <span class="text-danger">Required </span> if product availability is <span class="text-danger">preorder</span> or <span class="text-danger">backorder</span>. The date a preordered or backordered product becomes available for delivery. Example (For UTC+1) <span class="text-danger">2016-02-24T11:07+0100</span>. Syntax Max 25 alphanumeric characters ISO 8601 <span class="text-danger">YYYY-MM-DDThh:mm [+hhmm]</span>, <span class="text-danger">YYYY-MM-DDThh:mmZ</span>. Schema.org <span class="text-info">Offer.​availabilityStart</span>s
+
+var cost_of_goods_sold = '';// The costs associated with the sale of a particular product as defined by the accounting convention you set up. These costs may include <span class="text-danger">material </span>, <span class="text-danger">labor </span>, <span class="text-danger">freight </span>, or other <span class="text-danger">overhead </span> expenses.
+                            // By submitting the COGS for your products, you gain insights about other metrics, such as your gross margin and the amount of revenue generated by your ads and free listings.
+
+var expiration_date = '';// Use a date less than 30 days in the future
+                         // The date that your product should stop showing. Example (For UTC+1) <span class="text-danger">2016-02-24T11:07+0100 </span>. Syntax Max 25 alphanumeric characters ISO 8601 <span class="text-danger">YYYY-MM-DDThh:mm [+hhmm] </span>, <span class="text-danger">YYYY-MM-DDThh:mmZ </span>
+               
+var sale_price_effective_date = '';// Use together with  <span class="text-info">sale ​price </span>. If you don't submit <span class="text-info">sale ​price ​effective ​date </span>, the <span class="text-info">sale ​price </span> always applies. Use a start date before the end date
+                                   // <span class="text-warning">Optional </span>. The date range during which the product’s  <span class="text-info">sale ​price </span> applies. Example (For UTC+1)   <span class="text-danger">2016-02-24T11:07+0100 / 2016-02-29T23:07+0100 </span>. Syntax Max 51 alphanumeric characters. ISO 8601   <span class="text-danger">YYYY-MM-DDThh:mm [+hhmm] </span>, <span class="text-danger">YYYY-MM-DDThh:mmZ </span>. Separate start date and end date with   <span class="text-info">/ </span>
+
+var unit_pricing_measure = '';// Use the measure or dimension of the product without packaging. Use a positive number. For variants. Include with the same value for <span class="text-info">item group id </span> and different values for <span class="text-info">unit pricing measure</span>
+                              // <span class="text-warning">Optional (except when required by local laws or regulations)</span>. The measure and dimension of your product as it is sold. Example <span class="text-danger">1.5kg</span>. Syntax Numerical value + unit. Supported units <span class="text-dark">Weight: </span><span class="text-danger">oz</span>, <span class="text-danger">lb</span>, <span class="text-danger">mg</span>, <span class="text-danger">g</span>, <span class="text-danger">kg</span>. <span class="text-dark">Volume US imperial: </span><span class="text-danger">floz</span>, <span class="text-danger">pt</span>, <span class="text-danger">qt</span>, <span class="text-danger">gal</span>. <span class="text-dark">Volume metric: </span><span class="text-danger">ml</span>, <span class="text-danger">cl</span>, <span class="text-danger">l</span>, <span class="text-danger">cbm</span>. <span class="text-dark">Length: </span><span class="text-danger">in</span>, <span class="text-danger">ft</span>, <span class="text-danger">yd</span>, <span class="text-danger">cm</span>, <span class="text-danger">m</span>. <span class="text-dark">Area: </span><span class="text-danger">sqft</span>, <span class="text-danger">sqm</span>. <span class="text-dark">Per unit:</span> <span class="text-danger">ct</span>
+
+var unit_price_base_measure = '';// <span class="text-warning">Optional</span> when you submit <span class="text-info">unit ​​pricing ​​measure</span>. Use the same unit of measure for both <span class="text-info">unit ​​pricing ​​measure</span> and <span class="text-info">unit pricing ​base ​measure</span>. Keep in mind that the <span class="text-info">price</span> (or sale price, if active) is used to calculate the unit price of the product. For example, if price is 3 USD, <span class="text-info">unit ​​pricing ​​measure</span> is <span class="text-danger">150ml</span>, and <span class="text-info">unit ​pricing ​base ​measure</span> is <span class="text-danger">100ml</span>, the unit price is 2 USD / 100ml
+                                 // <span class="text-warning">Optional (except when required by local laws or regulations)</span>. The product’s base measure for pricing (e.g. 100ml means the price is calculated based on a 100ml units). Example <span class="text-danger">100g</span>. Syntax Integer + unit. Supported integers <span class="text-danger">1</span>, <span class="text-danger">10</span>, <span class="text-danger">100</span>, <span class="text-danger">2</span>, <span class="text-danger">4</span>, <span class="text-danger">8</span>. Supported units <span class="text-dark">Weight: </span><span class="text-danger">oz</span>, <span class="text-danger">lb</span>, <span class="text-danger">mg</span>, <span class="text-danger">g</span>, <span class="text-danger">kg</span>. <span class="text-dark">Volume US imperial: </span><span class="text-danger">floz</span>, <span class="text-danger">pt</span>, <span class="text-danger">qt</span>, <span class="text-danger">gal</span>. <span class="text-dark">Volume metric: </span><span class="text-danger">ml</span>, <span class="text-danger">cl</span>, <span class="text-danger">l</span>, <span class="text-danger">cbm</span>. <span class="text-dark">Length: </span><span class="text-danger">in</span>, <span class="text-danger">ft</span>, <span class="text-danger">yd</span>, <span class="text-danger">cm</span>, <span class="text-danger">m</span>. <span class="text-dark">Area: </span><span class="text-danger">sqft</span>, <span class="text-danger">sqm</span>. <span class="text-dark">Per unit: </span><span class="text-danger">ct</span>. Additional supported metric integer + unit combinations <span class="text-danger">75cl</span>, <span class="text-danger">750ml</span>, <span class="text-danger">50kg</span>, <span class="text-danger">1000kg</span>
+
+var installment = '';// Match the installment option that’s visible on your landing page. Don’t require a loyalty card. For Latin America, make sure the price attribute is the total price when paid in full up-front and use the installment attribute to indicate an alternative payment option using installments. For other countries, use the price attribute (as low as 0) as the up-front payment (including any device down payment and activation fees), and the installment attribute for additional monthly installment payments.
+                     // <span class="text-warning">Optional (Available in Latin America for all product categories and in certain other countries for showing wireless products and services only)</span>. Details of an installment payment plan. Example <span class="text-danger">6, 50 USD </span>. Syntax installment uses 2 sub-attributes: <span class="text-danger">months (required) Integer</span>, the number of installments the buyer has to pay. <span class="text-danger">amount (required) ISO 4217</span>, the amount the buyer has to pay per month
+
+var subscription_cost = '';// Submit the price attribute with the total amount due at checkout (including down payment and activation fee). Match the communications payment plan that you display on your landing page. The plan must be easy to find on the landing page.
+                           // <span class="text-warning">Optional (Available in certain countries for showing wireless products and services only)</span>. Details a monthly or annual payment plan that bundles a communications service contract with a wireless product. Example <span class="text-danger">month:12:35.00 USD</span>. Syntax The <span class="text-info">subscription cost</span> attribute uses 3 sub-attributes: <span class="text-danger">period (required)</span>, The duration of a single subscription period. Either “month” or “year”. <span class="text-danger">period length (required) Integer</span>, the number of subscription periods (months or years) that the buyer must pay. <span class="text-danger">amount (required) ISO 4217</span>, the amount the buyer must pay per month. When displaying this amount, we may round up to the nearest whole unit of local currency to save space. The provided value must still exactly match the amount as shown on your site.
+
+var  loyalty_points = '';// Only submit loyalty points with a specific monetary value
+                         // <span class="text-warning">Optional (Available for Kenya only)</span>. The number and type of loyalty points a customer receives when buying a product. Example <span class="text-danger">Program A, 100, 1.5</span>. Syntax <span class="text-info">loyalty ​points</span> uses 3 sub-attributes: <span class="text-danger">points value (required)</span>, Number of points earned for the product. <span class="text-warning">name (optional)</span>, Name of the loyalty points program, 12 full-width characters or 24 roman characters. <span class="text-warning">ratio (optional)Number</span>, the ratio of a point when converted to currency
+
+ 
+var product_availability_strategy = 'availability';
+function availability_strategy_data(strategy_data) {
+    if (product_availability_strategy == 'availability') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html("Accurately submit the product's availability and match the availability from your landing page");
+
+        $("#product_data_specification_help").html('<span class="text-danger">Required </span> Your product’s availability. <span class="text-dark">Example</span> <span class="text-danger">in stock</span>. Supported values <span class="text-danger">in stock</span>, <span class="text-danger">out of stock</span>, <span class="text-danger">preorder</span>, <span class="text-danger">backorder</span>. Schema.org property <span class="text-info">Offer.​availability</span>');
+        $("#product_availability_help").html(strategy_data);
+        availability = strategy_data;
+    } else if (product_availability_strategy == 'availability ​​date') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('Use this attribute if your product’s availability is <span class="text-danger">preorder </span> or <span class="text-danger">backorder </span>');
+       
+        $("#product_data_specification_help").html('<span class="text-danger">Required </span> if product availability is <span class="text-danger">preorder</span> or <span class="text-danger">backorder</span>. The date a preordered or backordered product becomes available for delivery. Example (For UTC+1) <span class="text-danger">2016-02-24T11:07+0100</span>. Syntax Max 25 alphanumeric characters ISO 8601 <span class="text-danger">YYYY-MM-DDThh:mm [+hhmm]</span>, <span class="text-danger">YYYY-MM-DDThh:mmZ</span>. Schema.org <span class="text-info">Offer.​availabilityStarts</span>');
+        $("#product_availability_help").html(strategy_data);
+        availability_date = strategy_data;
+    } else if (product_availability_strategy == 'cost of goods sold') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('The costs associated with the sale of a particular product as defined by the accounting convention you set up. These costs may include <span class="text-danger">material </span>, <span class="text-danger">labor </span>, <span class="text-danger">freight </span>, or other <span class="text-danger">overhead </span> expenses.');
+       
+        $("#product_data_specification_help").html("By submitting the COGS for your products, you gain insights about other metrics, such as your gross margin and the amount of revenue generated by your ads and free listings.");
+        $("#product_availability_help").html(strategy_data);
+        cost_of_goods_sold = strategy_data;
+    } else if (product_availability_strategy == 'expiration date') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html("Use a date less than 30 days in the future");
+       
+        $("#product_data_specification_help").html('The date that your product should stop showing. Example (For UTC+1) <span class="text-danger">2016-02-24T11:07+0100 </span>. Syntax Max 25 alphanumeric characters ISO 8601 <span class="text-danger">YYYY-MM-DDThh:mm [+hhmm] </span>, <span class="text-danger">YYYY-MM-DDThh:mmZ </span>');
+        $("#product_availability_help").html(strategy_data);
+        expiration_date = strategy_data;
+    } else if (product_availability_strategy == 'sale price effective date') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('Use together with  <span class="text-info">sale ​price </span>. If you don’t submit <span class="text-info">sale ​price ​effective ​date </span>, the <span class="text-info">sale ​price </span> always applies. Use a start date before the end date');
+       
+        $("#product_data_specification_help").html(' <span class="text-warning">Optional </span>. The date range during which the product’s  <span class="text-info">sale ​price </span> applies. Example (For UTC+1)   <span class="text-danger">2016-02-24T11:07+0100 / 2016-02-29T23:07+0100 </span>. Syntax Max 51 alphanumeric characters. ISO 8601   <span class="text-danger">YYYY-MM-DDThh:mm [+hhmm] </span>, <span class="text-danger">YYYY-MM-DDThh:mmZ </span>. Separate start date and end date with <span class="text-info">/ </span>');
+        $("#product_availability_help").html(strategy_data);
+        sale_price_effective_date = strategy_data;
+    } else if (product_availability_strategy == 'unit pricing measure') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('Use the measure or dimension of the product without packaging. Use a positive number. For variants. Include with the same value for <span class="text-info">item group id </span> and different values for <span class="text-info">unit pricing measure</span>');
+       
+        $("#product_data_specification_help").html('<span class="text-warning">Optional (except when required by local laws or regulations)</span>. The measure and dimension of your product as it is sold. Example <span class="text-danger">1.5kg</span>. Syntax Numerical value + unit. Supported units <span class="text-dark">Weight: </span><span class="text-danger">oz</span>, <span class="text-danger">lb</span>, <span class="text-danger">mg</span>, <span class="text-danger">g</span>, <span class="text-danger">kg</span>. <span class="text-dark">Volume US imperial: </span><span class="text-danger">floz</span>, <span class="text-danger">pt</span>, <span class="text-danger">qt</span>, <span class="text-danger">gal</span>. <span class="text-dark">Volume metric: </span><span class="text-danger">ml</span>, <span class="text-danger">cl</span>, <span class="text-danger">l</span>, <span class="text-danger">cbm</span>. <span class="text-dark">Length: </span><span class="text-danger">in</span>, <span class="text-danger">ft</span>, <span class="text-danger">yd</span>, <span class="text-danger">cm</span>, <span class="text-danger">m</span>. <span class="text-dark">Area: </span><span class="text-danger">sqft</span>, <span class="text-danger">sqm</span>. <span class="text-dark">Per unit:</span> <span class="text-danger">ct</span>');
+        $("#product_availability_help").html(strategy_data);
+        unit_pricing_measure = strategy_data;
+    } else if (product_availability_strategy == 'unit price base measure') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('<span class="text-warning">Optional</span> when you submit <span class="text-info">unit ​​pricing ​​measure</span>. Use the same unit of measure for both <span class="text-info">unit ​​pricing ​​measure</span> and <span class="text-info">unit pricing ​base ​measure</span>. Keep in mind that the <span class="text-info">price</span> (or sale price, if active) is used to calculate the unit price of the product. For example, if price is 3 USD, <span class="text-info">unit ​​pricing ​​measure</span> is <span class="text-danger">150ml</span>, and <span class="text-info">unit ​pricing ​base ​measure</span> is <span class="text-danger">100ml</span>, the unit price is 2 USD / 100ml');
+       
+        $("#product_data_specification_help").html('<span class="text-warning">Optional (except when required by local laws or regulations)</span>. The product’s base measure for pricing (e.g. 100ml means the price is calculated based on a 100ml units). Example <span class="text-danger">100g</span>. Syntax Integer + unit. Supported integers <span class="text-danger">1</span>, <span class="text-danger">10</span>, <span class="text-danger">100</span>, <span class="text-danger">2</span>, <span class="text-danger">4</span>, <span class="text-danger">8</span>. Supported units <span class="text-dark">Weight: </span><span class="text-danger">oz</span>, <span class="text-danger">lb</span>, <span class="text-danger">mg</span>, <span class="text-danger">g</span>, <span class="text-danger">kg</span>. <span class="text-dark">Volume US imperial: </span><span class="text-danger">floz</span>, <span class="text-danger">pt</span>, <span class="text-danger">qt</span>, <span class="text-danger">gal</span>. <span class="text-dark">Volume metric: </span><span class="text-danger">ml</span>, <span class="text-danger">cl</span>, <span class="text-danger">l</span>, <span class="text-danger">cbm</span>. <span class="text-dark">Length: </span><span class="text-danger">in</span>, <span class="text-danger">ft</span>, <span class="text-danger">yd</span>, <span class="text-danger">cm</span>, <span class="text-danger">m</span>. <span class="text-dark">Area: </span><span class="text-danger">sqft</span>, <span class="text-danger">sqm</span>. <span class="text-dark">Per unit: </span><span class="text-danger">ct</span>. Additional supported metric integer + unit combinations <span class="text-danger">75cl</span>, <span class="text-danger">750ml</span>, <span class="text-danger">50kg</span>, <span class="text-danger">1000kg</span>');
+        $("#product_availability_help").html(strategy_data);
+        unit_price_base_measure = strategy_data;
+    } else if (product_availability_strategy == 'installment') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('Match the installment option that’s visible on your landing page. Don’t require a loyalty card. For Latin America, make sure the price attribute is the total price when paid in full up-front and use the installment attribute to indicate an alternative payment option using installments. For other countries, use the price attribute (as low as 0) as the up-front payment (including any device down payment and activation fees), and the installment attribute for additional monthly installment payments.');
+       
+        $("#product_data_specification_help").html('<span class="text-warning">Optional (Available in Latin America for all product categories and in certain other countries for showing wireless products and services only)</span>. Details of an installment payment plan. Example <span class="text-danger">6, 50 USD </span>. Syntax installment uses 2 sub-attributes: <span class="text-danger">months (required) Integer</span>, the number of installments the buyer has to pay. <span class="text-danger">amount (required) ISO 4217</span>, the amount the buyer has to pay per month');
+        $("#product_availability_help").html(strategy_data);
+        installment = strategy_data;
+    } else if (product_availability_strategy == 'subscription cost') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('Submit the price attribute with the total amount due at checkout (including down payment and activation fee). Match the communications payment plan that you display on your landing page. The plan must be easy to find on the landing page.');
+       
+        $("#product_data_specification_help").html(' <span class="text-warning">Optional (Available in certain countries for showing wireless products and services only)</span>. Details a monthly or annual payment plan that bundles a communications service contract with a wireless product. Example <span class="text-danger">month:12:35.00 USD</span>. Syntax The <span class="text-info">subscription cost</span> attribute uses 3 sub-attributes: <span class="text-danger">period (required)</span>, The duration of a single subscription period. Either “month” or “year”. <span class="text-danger">period length (required) Integer</span>, the number of subscription periods (months or years) that the buyer must pay. <span class="text-danger">amount (required) ISO 4217</span>, the amount the buyer must pay per month. When displaying this amount, we may round up to the nearest whole unit of local currency to save space. The provided value must still exactly match the amount as shown on your site.');
+        $("#product_availability_help").html(strategy_data);
+        subscription_cost = strategy_data;
+    } else if (product_availability_strategy == 'loyalty points') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html("Only submit loyalty points with a specific monetary value");
+       
+        $("#product_data_specification_help").html('<span class="text-warning">Optional (Available for Kenya only)</span>. The number and type of loyalty points a customer receives when buying a product. Example <span class="text-danger">Program A, 100, 1.5</span>. Syntax <span class="text-info">loyalty ​points</span> uses 3 sub-attributes: <span class="text-danger">points value (required)</span>, Number of points earned for the product. <span class="text-warning">name (optional)</span>, Name of the loyalty points program, 12 full-width characters or 24 roman characters. <span class="text-warning">ratio (optional)Number</span>, the ratio of a point when converted to currency');
+        $("#product_availability_help").html(strategy_data);
+        loyalty_points = strategy_data;
+    }
+    
+}
+const availability_strategy = document.querySelector('#availability_strategy');
+availability_strategy.addEventListener('change', (event) => {
+    //$("#product_availability").val() = '';
+    product_availability_strategy = event.target.value;
+    var i_e = '';
+    if (product_availability_strategy == 'availability') {
+        $("#availability_strategy_help").html("Accurately submit the product's availability and match the availability from your landing page");
+
+        $("#product_data_specification_help").html('<span class="text-danger">Required </span> Your product’s availability. <span class="text-dark">Example</span> <span class="text-danger">in stock</span>. Supported values <span class="text-danger">in stock</span>, <span class="text-danger">out of stock</span>, <span class="text-danger">preorder</span>, <span class="text-danger">backorder</span>. Schema.org property <span class="text-info">Offer.​availability</span>');
+        i_e = 'i.e <span class="text-danger">in stock</span>';
+        //$("#product_availability_help").html(strategy_data);
+        //availability = strategy_data;
+    } else if (product_availability_strategy == 'availability ​​date') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('Use this attribute if your product’s availability is <span class="text-danger">preorder </span> or <span class="text-danger">backorder </span>');
+       
+        $("#product_data_specification_help").html('<span class="text-danger">Required </span> if product availability is <span class="text-danger">preorder</span> or <span class="text-danger">backorder</span>. The date a preordered or backordered product becomes available for delivery. Example (For UTC+1) <span class="text-danger">2016-02-24T11:07+0100</span>. Syntax Max 25 alphanumeric characters ISO 8601 <span class="text-danger">YYYY-MM-DDThh:mm [+hhmm]</span>, <span class="text-danger">YYYY-MM-DDThh:mmZ</span>. Schema.org <span class="text-info">Offer.​availabilityStarts</span>');
+        i_e = 'i.e <span class="text-danger">2016-02-24T11:07+0100</span>';
+        //$("#product_availability_help").html(strategy_data);
+        //availability_date = strategy_data;
+    } else if (product_availability_strategy == 'cost of goods sold') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('The costs associated with the sale of a particular product as defined by the accounting convention you set up. These costs may include <span class="text-danger">material </span>, <span class="text-danger">labor </span>, <span class="text-danger">freight </span>, or other <span class="text-danger">overhead </span> expenses.');
+       
+        $("#product_data_specification_help").html("By submitting the COGS for your products, you gain insights about other metrics, such as your gross margin and the amount of revenue generated by your ads and free listings.");
+        i_e = 'i.e <span class="text-danger">$ 20</span>';
+        //$("#product_availability_help").html(strategy_data);
+        //cost_of_goods_sold = strategy_data;
+    } else if (product_availability_strategy == 'expiration date') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html("Use a date less than 30 days in the future");
+       
+        $("#product_data_specification_help").html('The date that your product should stop showing. Example (For UTC+1) <span class="text-danger">2016-02-24T11:07+0100 </span>. Syntax Max 25 alphanumeric characters ISO 8601 <span class="text-danger">YYYY-MM-DDThh:mm [+hhmm] </span>, <span class="text-danger">YYYY-MM-DDThh:mmZ </span>');
+        i_e = 'i.e <span class="text-danger">2016-02-24T11:07+0100 </span>';
+
+        //$("#product_availability_help").html(strategy_data);
+        //expiration_date = strategy_data;
+    } else if (product_availability_strategy == 'sale price effective date') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('Use together with  <span class="text-info">sale ​price </span>. If you don’t submit <span class="text-info">sale ​price ​effective ​date </span>, the <span class="text-info">sale ​price </span> always applies. Use a start date before the end date');
+       
+        $("#product_data_specification_help").html(' <span class="text-warning">Optional </span>. The date range during which the product’s  <span class="text-info">sale ​price </span> applies. Example (For UTC+1)   <span class="text-danger">2016-02-24T11:07+0100 / 2016-02-29T23:07+0100 </span>. Syntax Max 51 alphanumeric characters. ISO 8601   <span class="text-danger">YYYY-MM-DDThh:mm [+hhmm] </span>, <span class="text-danger">YYYY-MM-DDThh:mmZ </span>. Separate start date and end date with <span class="text-info">/ </span>');
+        i_e = 'i.e <span class="text-danger">2016-02-24T11:07+0100 / 2016-02-29T23:07+0100</span>';
+
+        //$("#product_availability_help").html(strategy_data);
+        //sale_price_effective_date = strategy_data;
+    } else if (product_availability_strategy == 'unit pricing measure') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('Use the measure or dimension of the product without packaging. Use a positive number. For variants. Include with the same value for <span class="text-info">item group id </span> and different values for <span class="text-info">unit pricing measure</span>');
+       
+        $("#product_data_specification_help").html('<span class="text-warning">Optional (except when required by local laws or regulations)</span>. The measure and dimension of your product as it is sold. Example <span class="text-danger">1.5kg</span>. Syntax Numerical value + unit. Supported units <span class="text-dark">Weight: </span><span class="text-danger">oz</span>, <span class="text-danger">lb</span>, <span class="text-danger">mg</span>, <span class="text-danger">g</span>, <span class="text-danger">kg</span>. <span class="text-dark">Volume US imperial: </span><span class="text-danger">floz</span>, <span class="text-danger">pt</span>, <span class="text-danger">qt</span>, <span class="text-danger">gal</span>. <span class="text-dark">Volume metric: </span><span class="text-danger">ml</span>, <span class="text-danger">cl</span>, <span class="text-danger">l</span>, <span class="text-danger">cbm</span>. <span class="text-dark">Length: </span><span class="text-danger">in</span>, <span class="text-danger">ft</span>, <span class="text-danger">yd</span>, <span class="text-danger">cm</span>, <span class="text-danger">m</span>. <span class="text-dark">Area: </span><span class="text-danger">sqft</span>, <span class="text-danger">sqm</span>. <span class="text-dark">Per unit:</span> <span class="text-danger">ct</span>');
+        i_e = 'i.e <span class="text-danger">1.5kg</span>';
+
+        //$("#product_availability_help").html(strategy_data);
+        //unit_pricing_measure = strategy_data;
+    } else if (product_availability_strategy == 'unit price base measure') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('<span class="text-warning">Optional</span> when you submit <span class="text-info">unit ​​pricing ​​measure</span>. Use the same unit of measure for both <span class="text-info">unit ​​pricing ​​measure</span> and <span class="text-info">unit pricing ​base ​measure</span>. Keep in mind that the <span class="text-info">price</span> (or sale price, if active) is used to calculate the unit price of the product. For example, if price is 3 USD, <span class="text-info">unit ​​pricing ​​measure</span> is <span class="text-danger">150ml</span>, and <span class="text-info">unit ​pricing ​base ​measure</span> is <span class="text-danger">100ml</span>, the unit price is 2 USD / 100ml');
+       
+        $("#product_data_specification_help").html('<span class="text-warning">Optional (except when required by local laws or regulations)</span>. The product’s base measure for pricing (e.g. 100ml means the price is calculated based on a 100ml units). Example <span class="text-danger">100g</span>. Syntax Integer + unit. Supported integers <span class="text-danger">1</span>, <span class="text-danger">10</span>, <span class="text-danger">100</span>, <span class="text-danger">2</span>, <span class="text-danger">4</span>, <span class="text-danger">8</span>. Supported units <span class="text-dark">Weight: </span><span class="text-danger">oz</span>, <span class="text-danger">lb</span>, <span class="text-danger">mg</span>, <span class="text-danger">g</span>, <span class="text-danger">kg</span>. <span class="text-dark">Volume US imperial: </span><span class="text-danger">floz</span>, <span class="text-danger">pt</span>, <span class="text-danger">qt</span>, <span class="text-danger">gal</span>. <span class="text-dark">Volume metric: </span><span class="text-danger">ml</span>, <span class="text-danger">cl</span>, <span class="text-danger">l</span>, <span class="text-danger">cbm</span>. <span class="text-dark">Length: </span><span class="text-danger">in</span>, <span class="text-danger">ft</span>, <span class="text-danger">yd</span>, <span class="text-danger">cm</span>, <span class="text-danger">m</span>. <span class="text-dark">Area: </span><span class="text-danger">sqft</span>, <span class="text-danger">sqm</span>. <span class="text-dark">Per unit: </span><span class="text-danger">ct</span>. Additional supported metric integer + unit combinations <span class="text-danger">75cl</span>, <span class="text-danger">750ml</span>, <span class="text-danger">50kg</span>, <span class="text-danger">1000kg</span>');
+        i_e = 'i.e <span class="text-danger">100g</span>';
+
+        //$("#product_availability_help").html(strategy_data);
+        //unit_price_base_measure = strategy_data;
+    } else if (product_availability_strategy == 'installment') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('Match the installment option that’s visible on your landing page. Don’t require a loyalty card. For Latin America, make sure the price attribute is the total price when paid in full up-front and use the installment attribute to indicate an alternative payment option using installments. For other countries, use the price attribute (as low as 0) as the up-front payment (including any device down payment and activation fees), and the installment attribute for additional monthly installment payments.');
+       
+        $("#product_data_specification_help").html('<span class="text-warning">Optional (Available in Latin America for all product categories and in certain other countries for showing wireless products and services only)</span>. Details of an installment payment plan. Example <span class="text-danger">6, 50 USD </span>. Syntax installment uses 2 sub-attributes: <span class="text-danger">months (required) Integer</span>, the number of installments the buyer has to pay. <span class="text-danger">amount (required) ISO 4217</span>, the amount the buyer has to pay per month');
+        i_e = 'i.e <span class="text-danger">6, 50 USD </span>';
+
+        //$("#product_availability_help").html(strategy_data);
+        //installment = strategy_data;
+    } else if (product_availability_strategy == 'subscription cost') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html('Submit the price attribute with the total amount due at checkout (including down payment and activation fee). Match the communications payment plan that you display on your landing page. The plan must be easy to find on the landing page.');
+       
+        $("#product_data_specification_help").html(' <span class="text-warning">Optional (Available in certain countries for showing wireless products and services only)</span>. Details a monthly or annual payment plan that bundles a communications service contract with a wireless product. Example <span class="text-danger">month:12:35.00 USD</span>. Syntax The <span class="text-info">subscription cost</span> attribute uses 3 sub-attributes: <span class="text-danger">period (required)</span>, The duration of a single subscription period. Either “month” or “year”. <span class="text-danger">period length (required) Integer</span>, the number of subscription periods (months or years) that the buyer must pay. <span class="text-danger">amount (required) ISO 4217</span>, the amount the buyer must pay per month. When displaying this amount, we may round up to the nearest whole unit of local currency to save space. The provided value must still exactly match the amount as shown on your site.');
+        i_e = 'i.e <span class="text-danger">month:12:35.00 USD</span>';
+
+        //$("#product_availability_help").html(strategy_data);
+        //subscription_cost = strategy_data;
+    } else if (product_availability_strategy == 'loyalty points') {
+        $("#product_data_specification_title").html(product_availability_strategy + ":");
+        $("#availability_strategy_help").html("Only submit loyalty points with a specific monetary value");
+       
+        $("#product_data_specification_help").html('<span class="text-warning">Optional (Available for Kenya only)</span>. The number and type of loyalty points a customer receives when buying a product. Example <span class="text-danger">Program A, 100, 1.5</span>. Syntax <span class="text-info">loyalty ​points</span> uses 3 sub-attributes: <span class="text-danger">points value (required)</span>, Number of points earned for the product. <span class="text-warning">name (optional)</span>, Name of the loyalty points program, 12 full-width characters or 24 roman characters. <span class="text-warning">ratio (optional)Number</span>, the ratio of a point when converted to currency');
+        i_e = 'i.e <span class="text-danger">Program A, 100, 1.5</span>';
+
+        //$("#product_availability_help").html(strategy_data);
+        ///loyalty_points = strategy_data;
+    }
+    if ($("#product_availability").val() != '' && $("#product_availability").val() != null) {
+        $("#product_availability_help").html($("#product_availability").val());
+        $("#product_availability").removeClass("is-invalid");
+        $("#product_availability").addClass("is-valid"); 
+        availability_strategy_data($("#product_availability").val());       
+    } else {
+        $("#product_availability_help").html("Input " + product_availability_strategy + " " + i_e);
+        $("#product_availability").removeClass("is-valid");
+        $("#product_availability").addClass("is-invalid");
+    }    
+});
+const product_availability_input = document.querySelector('#product_availability');
+product_availability_input.addEventListener('input', product_availability);
+function product_availability(e) {
+    if (e.target.value != "" && e.target.value != null) {
+        $("#product_availability_help").html(e.target.value);
+        $("#product_availability").removeClass("is-invalid");
+        $("#product_availability").addClass("is-valid");
+        availability_strategy_data(e.target.value);      
+    } else {
+        $("#product_availability_help").html("Input " + product_availability_strategy + "");
+        $("#product_availability").removeClass("is-valid");
+        $("#product_availability").addClass("is-invalid");
+    }
+}
+
+
+
+
+var brand = '';// Provide the brand name of the product generally recognized by consumers<br>Only provide your store name as the brand in case you manufacture the product, or your product falls into a generic brand category. For example, you could submit your store name as the brand if you sell white label products or customized jewelry<br>If the product doesn’t have a brand, submit the manufacturer or supplier name under the brand attribute.<br>Don't submit values such as N/A, Generic, No brand, or Does not exist.<br>For compatible products:<br>Submit the GTIN and brand from the manufacturer who actually built the compatible product<br>Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product
+               // Required (For all new products, except movies, books, and musical recording brands)<br>Optional for all other products <br>Your product’s brand name<br>Example<br>Oramla<br>Syntax<br>Max 70 characters<br>Schema.org property<br>Product.brand
+
+var gtin = '';// Exclude dashes and spaces<br>Submit only valid GTINs as defined in the official GS1 validation guide, which includes these requirements: The checksum digit is present and correct<br>The GTIN is not restricted (GS1 prefix ranges 02, 04, 2)<br>The GTIN is not a coupon (GS1 prefix ranges 98 - 99)<br>For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product<br>Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product<br>For multipacks: Use the product identifiers that relates to the multipack<br>For bundles: Use the product identifiers for the main product in the bundle <br>If you offer customization, engraving, or other personalization of a product that's been assigned a GTIN by the manufacturer: Submit the GTIN and use the is_​bundle attribute to let us know that the product includes customization
+              // Required (For all new products with a GTIN assigned by the manufacturer)<br>Optional (strongly recommended) for all other products <br>Your product’s Global Trade Item Number (GTIN) <br>Example 3234567890126 <br>Syntax Max 50 numeric characters (max 14 per value - added spaces and dashes are ignored) <br>Supported values UPC (in North America / GTIN-12) <br>12-digit number like 323456789012 8-digit UPC-E codes should be converted to 12-digit codes EAN (in Europe / GTIN-13) 13-digit number like 3001234567892 JAN (in Japan / GTIN-13) 8 or 13-digit number like 49123456 or 4901234567894 ISBN (for books) 10 or 13-digit number like 1455582344 or 978-1455582341. If you have both, only include the 13-digit number. ISBN-10 are deprecated and should be converted to ISBN-13 ITF-14 (for multipacks / GTIN-14) 14-digit number like 10856435001702<br> Schema.org property Product.isbn Product.gtin8 Product.gtin12 Product.gtin13 Product.gtin14
+
+var MPN = '';// Only submit MPNs assigned by a manufacturer<br>Use the most specific MPN possible. For example, different colors of a product should have different MPNs.              
+             // Required (Only if your new product does not have a manufacturer assigned GTIN)<br>Optional for all other products <br>Your product’s Manufacturer Part Number (mpn) <br>Example OR12345AMLA <br>Syntax Max 70 alphanumeric characters <br>Schema.org property Product.mpn
+
+var identifier_exists = '';// If you don't submit the attribute, the default is yes<br>Your product’s category type determines which UPIs (GTIN, MPN, brand) are required.<br>If your product is a media item and the GTIN is unavailable:<br>Submit identifier_​exists attribute with a value of no<br>Note: ISBN and SBN codes are accepted as GTINs. <br>If your product is an apparel (clothing) item and the brand is unavailable:<br>Submit identifier_​exists attribute with a value of no<br>In all other categories, if your product doesn’t have a GTIN, or a combination of MPN and brand: <br>Submit identifier_​exists attribute with a value of no
+                           // Optional <br>Use to indicate whether or not the unique product identifiers (UPIs) GTIN, MPN, and brand are available for your product.<br>Example no <br>Supported values<br> yes Product identifiers are assigned to the new product by the manufacturer <br> no Product lacks a brand, GTIN, or MPN (see requirements to the right). If set to no, still provide the UPIs you have.
+
+var product_brand_strategy = 'brand';
+function brand_strategy_data(strategy_data) {
+    if (product_brand_strategy == 'brand') {
+        $("#product_data_brand_title").html(product_brand_strategy + ":");
+        $("#brand_strategy_help").html("Provide the brand name of the product generally recognized by consumers<br>Only provide your store name as the brand in case you manufacture the product, or your product falls into a generic brand category. For example, you could submit your store name as the brand if you sell white label products or customized jewelry<br>If the product doesn’t have a brand, submit the manufacturer or supplier name under the brand attribute.<br>Don't submit values such as N/A, Generic, No brand, or Does not exist.<br>For compatible products:<br>Submit the GTIN and brand from the manufacturer who actually built the compatible product<br>Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product");
+       
+        $("#product_data_brand_help").html("Required (For all new products, except movies, books, and musical recording brands)<br>Optional for all other products <br>Your product’s brand name<br>Example<br>Oramla<br>Syntax<br>Max 70 characters<br>Schema.org property<br>Product.brand");
+        $("#product_brand_help").html(strategy_data);
+        brand = strategy_data;
+    } else if (product_brand_strategy == 'gtin') {
+        $("#product_data_brand_title").html(product_brand_strategy + ":");
+        $("#brand_strategy_help").html("Exclude dashes and spaces<br>Submit only valid GTINs as defined in the official GS1 validation guide, which includes these requirements: The checksum digit is present and correct<br>The GTIN is not restricted (GS1 prefix ranges 02, 04, 2)<br>The GTIN is not a coupon (GS1 prefix ranges 98 - 99)<br>For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product<br>Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product<br>For multipacks: Use the product identifiers that relates to the multipack<br>For bundles: Use the product identifiers for the main product in the bundle <br>If you offer customization, engraving, or other personalization of a product that's been assigned a GTIN by the manufacturer: Submit the GTIN and use the is_​bundle attribute to let us know that the product includes customization");
+       
+        $("#product_data_brand_help").html("Required (For all new products with a GTIN assigned by the manufacturer)<br>Optional (strongly recommended) for all other products <br>Your product’s Global Trade Item Number (GTIN) <br>Example 3234567890126 <br>Syntax Max 50 numeric characters (max 14 per value - added spaces and dashes are ignored) <br>Supported values UPC (in North America / GTIN-12) <br>12-digit number like 323456789012 8-digit UPC-E codes should be converted to 12-digit codes EAN (in Europe / GTIN-13) 13-digit number like 3001234567892 JAN (in Japan / GTIN-13) 8 or 13-digit number like 49123456 or 4901234567894 ISBN (for books) 10 or 13-digit number like 1455582344 or 978-1455582341. If you have both, only include the 13-digit number. ISBN-10 are deprecated and should be converted to ISBN-13 ITF-14 (for multipacks / GTIN-14) 14-digit number like 10856435001702<br> Schema.org property Product.isbn Product.gtin8 Product.gtin12 Product.gtin13 Product.gtin14");
+        $("#product_brand_help").html(strategy_data);
+        gtin = strategy_data;
+    } else if (product_brand_strategy == 'MPN') {
+        $("#product_data_brand_title").html(product_brand_strategy + ":");
+        $("#brand_strategy_help").html("Only submit MPNs assigned by a manufacturer<br>Use the most specific MPN possible. For example, different colors of a product should have different MPNs. ");
+       
+        $("#product_data_brand_help").html("Required (Only if your new product does not have a manufacturer assigned GTIN)<br>Optional for all other products <br>Your product’s Manufacturer Part Number (mpn) <br>Example OR12345AMLA <br>Syntax Max 70 alphanumeric characters <br>Schema.org property Product.mpn");
+        $("#product_brand_help").html(strategy_data);
+        MPN = strategy_data;
+    } else if (product_brand_strategy == 'identifier exists') {
+        $("#product_data_brand_title").html(product_brand_strategy + ":");
+        $("#brand_strategy_help").html("If you don't submit the attribute, the default is yes<br>Your product’s category type determines which UPIs (GTIN, MPN, brand) are required.<br>If your product is a media item and the GTIN is unavailable:<br>Submit identifier_​exists attribute with a value of no<br>Note: ISBN and SBN codes are accepted as GTINs. <br>If your product is an apparel (clothing) item and the brand is unavailable:<br>Submit identifier_​exists attribute with a value of no<br>In all other categories, if your product doesn’t have a GTIN, or a combination of MPN and brand: <br>Submit identifier_​exists attribute with a value of no");
+       
+        $("#product_data_brand_help").html("Optional <br>Use to indicate whether or not the unique product identifiers (UPIs) GTIN, MPN, and brand are available for your product.<br>Example no <br>Supported values<br> yes Product identifiers are assigned to the new product by the manufacturer <br> no Product lacks a brand, GTIN, or MPN (see requirements to the right). If set to no, still provide the UPIs you have.");
+        $("#product_brand_help").html(strategy_data);
+        identifier_exists = strategy_data;
+    }
+    
+    
+}
+const brand_strategy = document.querySelector('#brand_strategy');
+brand_strategy.addEventListener('change', (event) => {
+    //$("#product_availability").val() = '';
+    product_brand_strategy = event.target.value;
+    if (product_brand_strategy == 'brand') {
+        $("#product_data_brand_title").html(product_brand_strategy + ":");
+        $("#brand_strategy_help").html("Provide the brand name of the product generally recognized by consumers<br>Only provide your store name as the brand in case you manufacture the product, or your product falls into a generic brand category. For example, you could submit your store name as the brand if you sell white label products or customized jewelry<br>If the product doesn’t have a brand, submit the manufacturer or supplier name under the brand attribute.<br>Don't submit values such as N/A, Generic, No brand, or Does not exist.<br>For compatible products:<br>Submit the GTIN and brand from the manufacturer who actually built the compatible product<br>Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product");
+       
+        $("#product_data_brand_help").html("Required (For all new products, except movies, books, and musical recording brands)<br>Optional for all other products <br>Your product’s brand name<br>Example<br>Oramla<br>Syntax<br>Max 70 characters<br>Schema.org property<br>Product.brand");
+        //$("#product_brand_help").html(strategy_data);
+        //var brand = strategy_data;
+    } else if (product_brand_strategy == 'gtin') {
+        $("#product_data_brand_title").html(product_brand_strategy + ":");
+        $("#brand_strategy_help").html("Exclude dashes and spaces<br>Submit only valid GTINs as defined in the official GS1 validation guide, which includes these requirements: The checksum digit is present and correct<br>The GTIN is not restricted (GS1 prefix ranges 02, 04, 2)<br>The GTIN is not a coupon (GS1 prefix ranges 98 - 99)<br>For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product<br>Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product<br>For multipacks: Use the product identifiers that relates to the multipack<br>For bundles: Use the product identifiers for the main product in the bundle <br>If you offer customization, engraving, or other personalization of a product that's been assigned a GTIN by the manufacturer: Submit the GTIN and use the is_​bundle attribute to let us know that the product includes customization");
+       
+        $("#product_data_brand_help").html("Required (For all new products with a GTIN assigned by the manufacturer)<br>Optional (strongly recommended) for all other products <br>Your product’s Global Trade Item Number (GTIN) <br>Example 3234567890126 <br>Syntax Max 50 numeric characters (max 14 per value - added spaces and dashes are ignored) <br>Supported values UPC (in North America / GTIN-12) <br>12-digit number like 323456789012 8-digit UPC-E codes should be converted to 12-digit codes EAN (in Europe / GTIN-13) 13-digit number like 3001234567892 JAN (in Japan / GTIN-13) 8 or 13-digit number like 49123456 or 4901234567894 ISBN (for books) 10 or 13-digit number like 1455582344 or 978-1455582341. If you have both, only include the 13-digit number. ISBN-10 are deprecated and should be converted to ISBN-13 ITF-14 (for multipacks / GTIN-14) 14-digit number like 10856435001702<br> Schema.org property Product.isbn Product.gtin8 Product.gtin12 Product.gtin13 Product.gtin14");
+        //$("#product_brand_help").html(strategy_data);
+        //var gtin = strategy_data;
+    } else if (product_brand_strategy == 'MPN') {
+        $("#product_data_brand_title").html(product_brand_strategy + ":");
+        $("#brand_strategy_help").html("Only submit MPNs assigned by a manufacturer<br>Use the most specific MPN possible. For example, different colors of a product should have different MPNs. ");
+       
+        $("#product_data_brand_help").html("Required (Only if your new product does not have a manufacturer assigned GTIN)<br>Optional for all other products <br>Your product’s Manufacturer Part Number (mpn) <br>Example OR12345AMLA <br>Syntax Max 70 alphanumeric characters <br>Schema.org property Product.mpn");
+        //$("#product_brand_help").html(strategy_data);
+        //var MPN = strategy_data;
+    } else if (product_brand_strategy == 'identifier exists') {
+        $("#product_data_brand_title").html(product_brand_strategy + ":");
+        $("#brand_strategy_help").html("If you don't submit the attribute, the default is yes<br>Your product’s category type determines which UPIs (GTIN, MPN, brand) are required.<br>If your product is a media item and the GTIN is unavailable:<br>Submit identifier_​exists attribute with a value of no<br>Note: ISBN and SBN codes are accepted as GTINs. <br>If your product is an apparel (clothing) item and the brand is unavailable:<br>Submit identifier_​exists attribute with a value of no<br>In all other categories, if your product doesn’t have a GTIN, or a combination of MPN and brand: <br>Submit identifier_​exists attribute with a value of no");
+       
+        $("#product_data_brand_help").html("Optional <br>Use to indicate whether or not the unique product identifiers (UPIs) GTIN, MPN, and brand are available for your product.<br>Example no <br>Supported values<br> yes Product identifiers are assigned to the new product by the manufacturer <br> no Product lacks a brand, GTIN, or MPN (see requirements to the right). If set to no, still provide the UPIs you have.");
+        //$("#product_brand_help").html(strategy_data);
+        //var identifier_exists = strategy_data;
+    }
+    
+    if ($("#product_brand").val() != '' && $("#product_brand").val() != null) {
+        $("#product_brand_help").html($("#product_brand").val());
+        $("#product_brand").removeClass("is-invalid");
+        $("#product_brand").addClass("is-valid"); 
+        brand_strategy_data($("#product_brand").val());       
+    } else {
+        $("#product_brand_help").html("Input " + product_brand_strategy + "");
+        $("#product_brand").removeClass("is-valid");
+        $("#product_brand").addClass("is-invalid");
+    }    
+});
+const product_brand_input = document.querySelector('#product_brand');
+product_brand_input.addEventListener('input', product_brand);
+function product_brand(e) {
+    if (e.target.value != "" && e.target.value != null) {
+        $("#product_brand_help").html(e.target.value);
+        $("#product_brand").removeClass("is-invalid");
+        $("#product_brand").addClass("is-valid");
+        brand_strategy_data(e.target.value);      
+    } else {
+        $("#product_brand_help").html("Input " + product_brand_strategy + "");
+        $("#product_brand").removeClass("is-valid");
+        $("#product_brand").addClass("is-invalid");
+    }
+}
+
+
+
+var condition = '';// The condition of your product at time of sale
+                   // Required if your product is used or refurbished <br>Optional for new products<br>Example new<br>Supported values new, Brand new, original, unopened packaging, refurbished, Professionally restored to working order, comes with a warranty, may or may not have the original packaging, used, Previously used, original packaging opened or missing<br>Schema.org property Offer.​itemCondition
+
+var adult = '';// Submit yes if this individual product contains nudity or sexually suggestive content. If you don't submit the attribute, the default is no.
+               // Required (If a product contains adult content). Indicate a product includes sexually suggestive content <br>Example yes <br>Supported values yes no
+
+var multipack = '';// Submit this attribute if you defined a custom group of identical products and are selling them as a single unit of sale. For example, you're selling 6 bars of soap together <br>Submit the number of products in your multipack. If you don't submit the attribute, the default is 0 <br>If the product's manufacturer assembled the multipack instead of you, don't submit this attribute
+                   // Required (For multipack products in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US) <br>Required for enhanced free listings on Google if you’ve created a multipack <br>Optional for all other products and countries of sale <br>The number of identical products sold within a merchant-defined multipack <br>Example 6 <br>Syntax Integer
+                   
+var is_bundle = '';// Submit yes if you're selling a custom bundle of different products that you created, and the bundle includes a main product. For example, a camera combined with a lens and bag. If you don't submit the attribute, the default is no <br>Don't use this attribute for bundles without a clear main product. For example, a gift basket containing cheese and crackers
+                   // Required (For bundles in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)<br>Required for enhanced free listings on Google if you’ve created a bundle containing a main product<br>Optional for all other products and countries of sale<br>Indicates a product is a merchant-defined custom group of different products featuring one main product<br>Example yes<br>Supported values yes, no
+
+var energy_efficiency_class = '';// Include the legally required energy label<br>To be used in combination with min_energy_​​efficiency_​​class and max_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to G).
+                                 // Optional (except when required by local law or regulations) <br>Your product’s energy label<br>Example A+ <br>Supported values A+++, A++, A+, A, B, C, D, E, F, G
+
+var min_energy_efficiency_class = '';// Include the legally required energy label<br>To be used in combination with energy_​​efficiency_class and max_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to D).
+                                     // Optional (except when required by local laws or regulations) <br>Available for EU & CH only<br>Your product’s energy label<br>Example A+++ <br>Supported values A+++, A++, A, B, C, D, E, F, G
+
+var max_energy_efficiency_class = '';// Include the legally required energy label <br>To be used in combination with energy_​​efficiency_​​class and min_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to D).
+                                     // Optional (except when required by local laws or regulations)<br>Available for EU & CH only<br>Your product’s energy label<br>Example D<br>Supported values A+++, A++, A, B, C, D, E, F, G
+
+var age_group = '';// Include one value per product <br>For variants Include with the same value for item_​group_​id and different values for age_​group
+                   // Required (For all apparel products that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products with assigned age groups)<br>Required for enhanced free listings for all Apparel & Accessories (166) products <br>Optional for all other products and countries of sale<br>The demographic for which your product is intended<br>Example infant<br>Supported values <br>newborn Up to 3 months old <br>infant Between 3-12 months old <br>toddler Between 1-5 years old<br>kids Between 5-13 years old <br>adult Typically teens or older <br>Schema.org property Product.​audience.​suggestedMinAge Product.​audience.​suggestedMaxAge
+
+var color = '';// Don’t use a number such as 0 2 4 6 8<br>Don’t use characters that aren’t alphanumeric such as #fff000<br>Don’t use only 1 letter such as R (For Chinese, Japanese, or Korean languages, you can include a single character such as 红)<br>Don’t reference the product or image such as “see image”<br>Don't combine several color names into 1 word, such as RedPinkBlue. Instead, separate them with a /, such as Red/Pink/Blue. Don’t use a value that isn’t a color, such as multicolor, various, variety, men's, women's, or N/A.<br>If your product features multiple colors, list the primary color first.<br>For variants <br>Include with the same value for item_​group_​id and different values for color
+               // Required (For all apparel products in feeds that are targeted to Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different colors)<br>Required for enhanced free listings for all Apparel & Accessories (166) products<br>Optional for all other products and countries of sale<br>Your product’s color(s)<br>Example Black <br>Syntax Max 100 alphanumeric characters (max 40 characters per color) <br>Schema.org property Product.color
+
+var gender = '';// For some Apparel & Accessories (166) categories like Shoelaces (1856), this attribute is recommended instead of required since these categories aren't dependent on gender<br>For variants Include with the same value for item_​group_​id and different values for gender
+                // Required (Required for all apparel items in feeds that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all gender-specific products)<br>Required for enhanced free listings for all Oramla Apparel & Accessories (166) products <br>Optional for all other products and countries of sale <br>The gender for which your product is intended<br>Example Unisex <br>Supported values male, female, unisex, <br>Schema.org property Product.​audience.​suggested​Gender
+
+var material = '';// To indicate multiple materials for a single product (not variants), add a primary material, followed by up to 2 secondary materials, separated by a /. For example, instead of CottonPolyesterElastane, use cotton/polyester/elastane <br>For variants Include with the same value for item_​group_​id and different values for material
+                  // Required (if relevant for distinguishing different products in a set of variants)<br>Optional for all other products <br>Your product’s fabric or material <br>Example leather <br>Syntax Max 200 characters <br> Schema.org property Product.material
+                  
+var pattern = '';// For variants Include with the same value for item_​group_​id and different values for pattern
+                 // Required (if relevant for distinguishing different products in a set of variants) <br>Optional for all other products <br>Your product’s pattern or graphic print <br>Example striped, polka dot, paisley <br>Syntax Max 100 characters<br>Schema.org property Product.pattern
+
+var size = '';// For variants: Include with the same value for item_​group_​id and different values for size<br>If sizes contain multiple dimensions, condense them into 1 value. For example, "16/34 Tall" for neck size 16 inches, sleeve length 34 inches, and “Tall” fit<br>If your item is one size fits all or one size fits most, you can use one size, OS, one size fits all, OSFA, one size fits most, or OSFM<br>For merchant-defined multipack products, submit the multipack quantity using the multipack attribute. Do not submit the multipack quantity under size.
+              // Required (Required for all apparel products in Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) product categories targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different sizes)<br>Required for enhanced free listings for all Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) products.<br>Optional for all other products and countries of sale<br>Your product’s size<br>Example XL<br>Syntax Max 100 characters <br>Schema.org property Product.size
+
+var size_system = '';// If you don't submit the attribute, the default is your country of sale
+                     // Optional (Available for apparel products only)<br>The country of the size system used by your product<br>Example US<br>Supported values US, UK, EU, DE, FR, JP, CN (China), IT, BR, MEX, AU, 
+
+var item_group_id = '';// Use a unique value for each group of variants. Use the parent SKU where possible<br>Keep the value the same when updating your product data<br>Use only valid unicode characters<br>Use an item group ID for a set of products that differ by one or more of these attributes: color, size, pattern, material, age group, gender <br>Include the same attributes for each product in the item group. For example, if a product varies by size and color, submit size and color for every product that share the same value for item_​group_​id <br>If your products differ by design elements that aren't represented by the attributes above, don't use item_​group_​id
+                       // Required (Brazil, France, Germany, Japan, the United Kingdom, and the US if the product is a variant)<br>Required for enhanced free listings for all product variants<br>Optional for all other products and countries of sale<br>ID for a group of products that come in different versions (variants)<br>Example AB12345 <br>Syntax Max 50 alphanumeric characters <br>Schema.org property Product.​inProductGroupWithID
+
+var product_detail = '';// Don't add information covered in other attributes, all capital letters, gimmicky foreign characters, promotion text, or list keywords or search terms<br>Don’t add information such as price, sale price, sale dates, shipping, delivery date, other time-related information, or your company’s name<br>Only provide an attribute name and value when the value is confirmed. For example, provide “Vegetarian=False” if a food product is not vegetarian, and not just because False is the default value for Boolean attributes.
+                        // Optional Technical specifications or additional details of your product <br>Example General:Product Type:Digital player <br>Syntax product_detail uses 3 sub-attributes: section_name: Max 140 characters attribute_name: Max 140 characters attribute_value: Max 1000 characters
+
+var product_highlight = '';// Use between 2 and 10 product highlights <br>Describe only the product itself. Don't list keywords or search terms .Don’t include promotional text, all capital letters, or gimmicky foreign characters
+                           // Optional The most relevant highlights of your products <br>Example Supports thousands of apps, including Netflix, YouTube, and HBO Max <br>Syntax Max 150 characters
+
+var product_condition_strategy = 'condition';
+function condition_strategy_data(strategy_data) {
+    if (product_condition_strategy == 'condition') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("The condition of your product at time of sale");
+       
+        $("#product_data_condition_help").html("Required if your product is used or refurbished <br>Optional for new products<br>Example new<br>Supported values new, Brand new, original, unopened packaging, refurbished, Professionally restored to working order, comes with a warranty, may or may not have the original packaging, used, Previously used, original packaging opened or missing<br>Schema.org property Offer.​itemCondition");
+        $("#product_condition_help").html(strategy_data);
+        condition = strategy_data;
+    } else if (product_condition_strategy == 'adult') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Submit yes if this individual product contains nudity or sexually suggestive content. If you don't submit the attribute, the default is no.");
+       
+        $("#product_data_condition_help").html("Required (If a product contains adult content). Indicate a product includes sexually suggestive content <br>Example yes <br>Supported values yes no.");
+        $("#product_condition_help").html(strategy_data);
+        adult = strategy_data;
+    } else if (product_condition_strategy == 'multipack') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Submit this attribute if you defined a custom group of identical products and are selling them as a single unit of sale. For example, you're selling 6 bars of soap together <br>Submit the number of products in your multipack. If you don't submit the attribute, the default is 0 <br>If the product's manufacturer assembled the multipack instead of you, don't submit this attribute");
+       
+        $("#product_data_condition_help").html("Required (For multipack products in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US) <br>Required for enhanced free listings on Google if you’ve created a multipack <br>Optional for all other products and countries of sale <br>The number of identical products sold within a merchant-defined multipack <br>Example 6 <br>Syntax Integer");
+        $("#product_condition_help").html(strategy_data);
+        multipack = strategy_data;
+    } else if (product_condition_strategy == 'is bundle') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Submit yes if you're selling a custom bundle of different products that you created, and the bundle includes a main product. For example, a camera combined with a lens and bag. If you don't submit the attribute, the default is no <br>Don't use this attribute for bundles without a clear main product. For example, a gift basket containing cheese and crackers");
+       
+        $("#product_data_condition_help").html("Required (For bundles in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)<br>Required for enhanced free listings on Google if you’ve created a bundle containing a main product<br>Optional for all other products and countries of sale<br>Indicates a product is a merchant-defined custom group of different products featuring one main product<br>Example yes<br>Supported values yes, no");
+        $("#product_condition_help").html(strategy_data);
+        is_bundle = strategy_data;
+    } else if (product_condition_strategy == 'energy efficiency class') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Include the legally required energy label<br>To be used in combination with min_energy_​​efficiency_​​class and max_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to G).");
+       
+        $("#product_data_condition_help").html("Optional (except when required by local law or regulations) <br>Your product’s energy label<br>Example A+ <br>Supported values A+++, A++, A+, A, B, C, D, E, F, G");
+        $("#product_condition_help").html(strategy_data);
+        energy_efficiency_class = strategy_data;
+    } else if (product_condition_strategy == 'min energy efficiency class') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Include the legally required energy label<br>To be used in combination with energy_​​efficiency_class and max_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to D).");
+       
+        $("#product_data_condition_help").html("Optional (except when required by local laws or regulations) <br>Available for EU & CH only<br>Your product’s energy label<br>Example A+++ <br>Supported values A+++, A++, A, B, C, D, E, F, G");
+        $("#product_condition_help").html(strategy_data);
+        min_energy_efficiency_class = strategy_data;
+    } else if (product_condition_strategy == 'max energy efficiency class') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Include the legally required energy label <br>To be used in combination with energy_​​efficiency_​​class and min_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to D).");
+       
+        $("#product_data_condition_help").html("Optional (except when required by local laws or regulations)<br>Available for EU & CH only<br>Your product’s energy label<br>Example D<br>Supported values A+++, A++, A, B, C, D, E, F, G");
+        $("#product_condition_help").html(strategy_data);
+        max_energy_efficiency_class = strategy_data;
+    } else if (product_condition_strategy == 'age group') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Include one value per product <br>For variants Include with the same value for item_​group_​id and different values for age_​group");
+       
+        $("#product_data_condition_help").html("Required (For all apparel products that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products with assigned age groups)<br>Required for enhanced free listings for all Apparel & Accessories (166) products <br>Optional for all other products and countries of sale<br>The demographic for which your product is intended<br>Example infant<br>Supported values <br>newborn Up to 3 months old <br>infant Between 3-12 months old <br>toddler Between 1-5 years old<br>kids Between 5-13 years old <br>adult Typically teens or older <br>Schema.org property Product.​audience.​suggestedMinAge Product.​audience.​suggestedMaxAge");
+        $("#product_condition_help").html(strategy_data);
+        age_group = strategy_data;
+    } else if (product_condition_strategy == 'color') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Don’t use a number such as 0 2 4 6 8<br>Don’t use characters that aren’t alphanumeric such as #fff000<br>Don’t use only 1 letter such as R (For Chinese, Japanese, or Korean languages, you can include a single character such as 红)<br>Don’t reference the product or image such as “see image”<br>Don't combine several color names into 1 word, such as RedPinkBlue. Instead, separate them with a /, such as Red/Pink/Blue. Don’t use a value that isn’t a color, such as multicolor, various, variety, men's, women's, or N/A.<br>If your product features multiple colors, list the primary color first.<br>For variants <br>Include with the same value for item_​group_​id and different values for color");
+       
+        $("#product_data_condition_help").html("Required (For all apparel products in feeds that are targeted to Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different colors)<br>Required for enhanced free listings for all Apparel & Accessories (166) products<br>Optional for all other products and countries of sale<br>Your product’s color(s)<br>Example Black <br>Syntax Max 100 alphanumeric characters (max 40 characters per color) <br>Schema.org property Product.color");
+        $("#product_condition_help").html(strategy_data);
+        color = strategy_data;
+    } else if (product_condition_strategy == 'gender') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("For some Apparel & Accessories (166) categories like Shoelaces (1856), this attribute is recommended instead of required since these categories aren't dependent on gender<br>For variants Include with the same value for item_​group_​id and different values for gender");
+       
+        $("#product_data_condition_help").html("Required (Required for all apparel items in feeds that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all gender-specific products)<br>Required for enhanced free listings for all Oramla Apparel & Accessories (166) products <br>Optional for all other products and countries of sale <br>The gender for which your product is intended<br>Example Unisex <br>Supported values male, female, unisex, <br>Schema.org property Product.​audience.​suggested​Gender");
+        $("#product_condition_help").html(strategy_data);
+        gender = strategy_data;
+    } else if (product_condition_strategy == 'material') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("To indicate multiple materials for a single product (not variants), add a primary material, followed by up to 2 secondary materials, separated by a /. For example, instead of CottonPolyesterElastane, use cotton/polyester/elastane <br>For variants Include with the same value for item_​group_​id and different values for material");
+       
+        $("#product_data_condition_help").html("Required (if relevant for distinguishing different products in a set of variants)<br>Optional for all other products <br>Your product’s fabric or material <br>Example leather <br>Syntax Max 200 characters <br> Schema.org property Product.material");
+        $("#product_condition_help").html(strategy_data);
+        material = strategy_data;
+    } else if (product_condition_strategy == 'pattern') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("For variants Include with the same value for item_​group_​id and different values for pattern");
+       
+        $("#product_data_condition_help").html("Required (if relevant for distinguishing different products in a set of variants) <br>Optional for all other products <br>Your product’s pattern or graphic print <br>Example striped, polka dot, paisley <br>Syntax Max 100 characters<br>Schema.org property Product.pattern");
+        $("#product_condition_help").html(strategy_data);
+        pattern = strategy_data;
+    } else if (product_condition_strategy == 'size') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("For variants: Include with the same value for item_​group_​id and different values for size<br>If sizes contain multiple dimensions, condense them into 1 value. For example, '16/34 Tall' for neck size 16 inches, sleeve length 34 inches, and “Tall” fit<br>If your item is one size fits all or one size fits most, you can use one size, OS, one size fits all, OSFA, one size fits most, or OSFM<br>For merchant-defined multipack products, submit the multipack quantity using the multipack attribute. Do not submit the multipack quantity under size.");
+       
+        $("#product_data_condition_help").html("Required (Required for all apparel products in Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) product categories targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different sizes)<br>Required for enhanced free listings for all Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) products.<br>Optional for all other products and countries of sale<br>Your product’s size<br>Example XL<br>Syntax Max 100 characters <br>Schema.org property Product.size");
+        $("#product_condition_help").html(strategy_data);
+        size = strategy_data;
+    } else if (product_condition_strategy == 'size system') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("If you don't submit the attribute, the default is your country of sale");
+       
+        $("#product_data_condition_help").html("Optional (Available for apparel products only)<br>The country of the size system used by your product<br>Example US<br>Supported values US, UK, EU, DE, FR, JP, CN (China), IT, BR, MEX, AU, ");
+        $("#product_condition_help").html(strategy_data);
+        size_system = strategy_data;
+    } else if (product_condition_strategy == 'item group id') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Use a unique value for each group of variants. Use the parent SKU where possible<br>Keep the value the same when updating your product data<br>Use only valid unicode characters<br>Use an item group ID for a set of products that differ by one or more of these attributes: color, size, pattern, material, age group, gender <br>Include the same attributes for each product in the item group. For example, if a product varies by size and color, submit size and color for every product that share the same value for item_​group_​id <br>If your products differ by design elements that aren't represented by the attributes above, don't use item_​group_​id");
+       
+        $("#product_data_condition_help").html("Required (Brazil, France, Germany, Japan, the United Kingdom, and the US if the product is a variant)<br>Required for enhanced free listings for all product variants<br>Optional for all other products and countries of sale<br>ID for a group of products that come in different versions (variants)<br>Example AB12345 <br>Syntax Max 50 alphanumeric characters <br>Schema.org property Product.​inProductGroupWithID");
+        $("#product_condition_help").html(strategy_data);
+        item_group_id = strategy_data;
+    } else if (product_condition_strategy == 'product detail') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Don't add information covered in other attributes, all capital letters, gimmicky foreign characters, promotion text, or list keywords or search terms<br>Don’t add information such as price, sale price, sale dates, shipping, delivery date, other time-related information, or your company’s name<br>Only provide an attribute name and value when the value is confirmed. For example, provide “Vegetarian=False” if a food product is not vegetarian, and not just because False is the default value for Boolean attributes.");
+       
+        $("#product_data_condition_help").html("Optional Technical specifications or additional details of your product <br>Example General:Product Type:Digital player <br>Syntax product_detail uses 3 sub-attributes: section_name: Max 140 characters attribute_name: Max 140 characters attribute_value: Max 1000 characters");
+        $("#product_condition_help").html(strategy_data);
+        product_detail = strategy_data;
+    } else if (product_condition_strategy == 'product highlight') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Use between 2 and 10 product highlights <br>Describe only the product itself. Don't list keywords or search terms .Don’t include promotional text, all capital letters, or gimmicky foreign characters");
+       
+        $("#product_data_condition_help").html("Optional The most relevant highlights of your products <br>Example Supports thousands of apps, including Netflix, YouTube, and HBO Max <br>Syntax Max 150 characters");
+        $("#product_condition_help").html(strategy_data);
+        product_highlight = strategy_data;
+    } 
+
+}
+const condition_strategy = document.querySelector('#condition_strategy');
+condition_strategy.addEventListener('change', (event) => {
+    product_condition_strategy = event.target.value;
+    if (product_condition_strategy == 'condition') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("The condition of your product at time of sale");
+       
+        $("#product_data_condition_help").html("Required if your product is used or refurbished <br>Optional for new products<br>Example new<br>Supported values new, Brand new, original, unopened packaging, refurbished, Professionally restored to working order, comes with a warranty, may or may not have the original packaging, used, Previously used, original packaging opened or missing<br>Schema.org property Offer.​itemCondition");
+        //$("#product_brand_help").html(strategy_data);
+        //var brand = strategy_data;
+    } else if (product_condition_strategy == 'adult') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Submit yes if this individual product contains nudity or sexually suggestive content. If you don't submit the attribute, the default is no.");
+       
+        $("#product_data_condition_help").html("Required (If a product contains adult content). Indicate a product includes sexually suggestive content <br>Example yes <br>Supported values yes no.");
+        //$("#product_condition_help").html(strategy_data);
+        //var adult = strategy_data;
+    } else if (product_condition_strategy == 'multipack') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Submit this attribute if you defined a custom group of identical products and are selling them as a single unit of sale. For example, you're selling 6 bars of soap together <br>Submit the number of products in your multipack. If you don't submit the attribute, the default is 0 <br>If the product's manufacturer assembled the multipack instead of you, don't submit this attribute");
+       
+        $("#product_data_condition_help").html("Required (For multipack products in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US) <br>Required for enhanced free listings on Google if you’ve created a multipack <br>Optional for all other products and countries of sale <br>The number of identical products sold within a merchant-defined multipack <br>Example 6 <br>Syntax Integer");
+        //$("#product_condition_help").html(strategy_data);
+        //var multipack = strategy_data;
+    } else if (product_condition_strategy == 'is bundle') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Submit yes if you're selling a custom bundle of different products that you created, and the bundle includes a main product. For example, a camera combined with a lens and bag. If you don't submit the attribute, the default is no <br>Don't use this attribute for bundles without a clear main product. For example, a gift basket containing cheese and crackers");
+       
+        $("#product_data_condition_help").html("Required (For bundles in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)<br>Required for enhanced free listings on Google if you’ve created a bundle containing a main product<br>Optional for all other products and countries of sale<br>Indicates a product is a merchant-defined custom group of different products featuring one main product<br>Example yes<br>Supported values yes, no");
+        //$("#product_condition_help").html(strategy_data);
+        //var is_bundle = strategy_data;
+    } else if (product_condition_strategy == 'energy efficiency class') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Include the legally required energy label<br>To be used in combination with min_energy_​​efficiency_​​class and max_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to G).");
+       
+        $("#product_data_condition_help").html("Optional (except when required by local law or regulations) <br>Your product’s energy label<br>Example A+ <br>Supported values A+++, A++, A+, A, B, C, D, E, F, G");
+        //$("#product_condition_help").html(strategy_data);
+        //var energy_efficiency_class = strategy_data;
+    } else if (product_condition_strategy == 'min energy efficiency class') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Include the legally required energy label<br>To be used in combination with energy_​​efficiency_class and max_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to D).");
+       
+        $("#product_data_condition_help").html("Optional (except when required by local laws or regulations) <br>Available for EU & CH only<br>Your product’s energy label<br>Example A+++ <br>Supported values A+++, A++, A, B, C, D, E, F, G");
+        //$("#product_condition_help").html(strategy_data);
+        //var min_energy_efficiency_class = strategy_data;
+    } else if (product_condition_strategy == 'max energy efficiency class') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Include the legally required energy label <br>To be used in combination with energy_​​efficiency_​​class and min_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to D).");
+       
+        $("#product_data_condition_help").html("Optional (except when required by local laws or regulations)<br>Available for EU & CH only<br>Your product’s energy label<br>Example D<br>Supported values A+++, A++, A, B, C, D, E, F, G");
+        //$("#product_condition_help").html(strategy_data);
+        //var max_energy_efficiency_class = strategy_data;
+    } else if (product_condition_strategy == 'age group') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Include one value per product <br>For variants Include with the same value for item_​group_​id and different values for age_​group");
+       
+        $("#product_data_condition_help").html("Required (For all apparel products that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products with assigned age groups)<br>Required for enhanced free listings for all Apparel & Accessories (166) products <br>Optional for all other products and countries of sale<br>The demographic for which your product is intended<br>Example infant<br>Supported values <br>newborn Up to 3 months old <br>infant Between 3-12 months old <br>toddler Between 1-5 years old<br>kids Between 5-13 years old <br>adult Typically teens or older <br>Schema.org property Product.​audience.​suggestedMinAge Product.​audience.​suggestedMaxAge");
+        //$("#product_condition_help").html(strategy_data);
+        //var age_group = strategy_data;
+    } else if (product_condition_strategy == 'color') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Don’t use a number such as 0 2 4 6 8<br>Don’t use characters that aren’t alphanumeric such as #fff000<br>Don’t use only 1 letter such as R (For Chinese, Japanese, or Korean languages, you can include a single character such as 红)<br>Don’t reference the product or image such as “see image”<br>Don't combine several color names into 1 word, such as RedPinkBlue. Instead, separate them with a /, such as Red/Pink/Blue. Don’t use a value that isn’t a color, such as multicolor, various, variety, men's, women's, or N/A.<br>If your product features multiple colors, list the primary color first.<br>For variants <br>Include with the same value for item_​group_​id and different values for color");
+       
+        $("#product_data_condition_help").html("Required (For all apparel products in feeds that are targeted to Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different colors)<br>Required for enhanced free listings for all Apparel & Accessories (166) products<br>Optional for all other products and countries of sale<br>Your product’s color(s)<br>Example Black <br>Syntax Max 100 alphanumeric characters (max 40 characters per color) <br>Schema.org property Product.color");
+        //$("#product_condition_help").html(strategy_data);
+        //var color = strategy_data;
+    } else if (product_condition_strategy == 'gender') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("For some Apparel & Accessories (166) categories like Shoelaces (1856), this attribute is recommended instead of required since these categories aren't dependent on gender<br>For variants Include with the same value for item_​group_​id and different values for gender");
+       
+        $("#product_data_condition_help").html("Required (Required for all apparel items in feeds that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all gender-specific products)<br>Required for enhanced free listings for all Oramla Apparel & Accessories (166) products <br>Optional for all other products and countries of sale <br>The gender for which your product is intended<br>Example Unisex <br>Supported values male, female, unisex, <br>Schema.org property Product.​audience.​suggested​Gender");
+        //$("#product_condition_help").html(strategy_data);
+        //var gender = strategy_data;
+    } else if (product_condition_strategy == 'material') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("To indicate multiple materials for a single product (not variants), add a primary material, followed by up to 2 secondary materials, separated by a /. For example, instead of CottonPolyesterElastane, use cotton/polyester/elastane <br>For variants Include with the same value for item_​group_​id and different values for material");
+       
+        $("#product_data_condition_help").html("Required (if relevant for distinguishing different products in a set of variants)<br>Optional for all other products <br>Your product’s fabric or material <br>Example leather <br>Syntax Max 200 characters <br> Schema.org property Product.material");
+        //$("#product_condition_help").html(strategy_data);
+        //var material = strategy_data;
+    } else if (product_condition_strategy == 'pattern') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("For variants Include with the same value for item_​group_​id and different values for pattern");
+       
+        $("#product_data_condition_help").html("Required (if relevant for distinguishing different products in a set of variants) <br>Optional for all other products <br>Your product’s pattern or graphic print <br>Example striped, polka dot, paisley <br>Syntax Max 100 characters<br>Schema.org property Product.pattern");
+        //$("#product_condition_help").html(strategy_data);
+        //var condition = strategy_data;
+    } else if (product_condition_strategy == 'size') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("For variants: Include with the same value for item_​group_​id and different values for size<br>If sizes contain multiple dimensions, condense them into 1 value. For example, '16/34 Tall' for neck size 16 inches, sleeve length 34 inches, and “Tall” fit<br>If your item is one size fits all or one size fits most, you can use one size, OS, one size fits all, OSFA, one size fits most, or OSFM<br>For merchant-defined multipack products, submit the multipack quantity using the multipack attribute. Do not submit the multipack quantity under size.");
+       
+        $("#product_data_condition_help").html("Required (Required for all apparel products in Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) product categories targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different sizes)<br>Required for enhanced free listings for all Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) products.<br>Optional for all other products and countries of sale<br>Your product’s size<br>Example XL<br>Syntax Max 100 characters <br>Schema.org property Product.size");
+        //$("#product_condition_help").html(strategy_data);
+        //var size = strategy_data;
+    } else if (product_condition_strategy == 'size system') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("If you don't submit the attribute, the default is your country of sale");
+       
+        $("#product_data_condition_help").html("Optional (Available for apparel products only)<br>The country of the size system used by your product<br>Example US<br>Supported values US, UK, EU, DE, FR, JP, CN (China), IT, BR, MEX, AU, ");
+        //$("#product_condition_help").html(strategy_data);
+        //var size_system = strategy_data;
+    } else if (product_condition_strategy == 'item group id') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Use a unique value for each group of variants. Use the parent SKU where possible<br>Keep the value the same when updating your product data<br>Use only valid unicode characters<br>Use an item group ID for a set of products that differ by one or more of these attributes: color, size, pattern, material, age group, gender <br>Include the same attributes for each product in the item group. For example, if a product varies by size and color, submit size and color for every product that share the same value for item_​group_​id <br>If your products differ by design elements that aren't represented by the attributes above, don't use item_​group_​id");
+       
+        $("#product_data_condition_help").html("Required (Brazil, France, Germany, Japan, the United Kingdom, and the US if the product is a variant)<br>Required for enhanced free listings for all product variants<br>Optional for all other products and countries of sale<br>ID for a group of products that come in different versions (variants)<br>Example AB12345 <br>Syntax Max 50 alphanumeric characters <br>Schema.org property Product.​inProductGroupWithID");
+        //$("#product_condition_help").html(strategy_data);
+        //var item_group_id = strategy_data;
+    } else if (product_condition_strategy == 'product detail') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Don't add information covered in other attributes, all capital letters, gimmicky foreign characters, promotion text, or list keywords or search terms<br>Don’t add information such as price, sale price, sale dates, shipping, delivery date, other time-related information, or your company’s name<br>Only provide an attribute name and value when the value is confirmed. For example, provide “Vegetarian=False” if a food product is not vegetarian, and not just because False is the default value for Boolean attributes.");
+       
+        $("#product_data_condition_help").html("Optional Technical specifications or additional details of your product <br>Example General:Product Type:Digital player <br>Syntax product_detail uses 3 sub-attributes: section_name: Max 140 characters attribute_name: Max 140 characters attribute_value: Max 1000 characters");
+        //$("#product_condition_help").html(strategy_data);
+        //var product_detail = strategy_data;
+    } else if (product_condition_strategy == 'product highlight') {
+        $("#product_data_condition_title").html(product_condition_strategy + ":");
+        $("#condition_strategy_help").html("Use between 2 and 10 product highlights <br>Describe only the product itself. Don't list keywords or search terms .Don’t include promotional text, all capital letters, or gimmicky foreign characters");
+       
+        $("#product_data_condition_help").html("Optional The most relevant highlights of your products <br>Example Supports thousands of apps, including Netflix, YouTube, and HBO Max <br>Syntax Max 150 characters");
+        //$("#product_condition_help").html(strategy_data);
+        //var product_highlight = strategy_data;
+    }
+    
+    if ($("#product_condition").val() != '' && $("#product_condition").val() != null) {
+        $("#product_condition_help").html($("#product_condition").val());
+        $("#product_condition").removeClass("is-invalid");
+        $("#product_condition").addClass("is-valid"); 
+        condition_strategy_data($("#product_condition").val());       
+    } else {
+        $("#product_condition_help").html("Input " + product_condition_strategy + "");
+        $("#product_condition").removeClass("is-valid");
+        $("#product_condition").addClass("is-invalid");
+    }    
+});
+const product_condition_input = document.querySelector('#product_condition');
+product_condition_input.addEventListener('input', product_condition);
+function product_condition(e) {
+    if (e.target.value != "" && e.target.value != null) {
+        $("#product_condition_help").html(e.target.value);
+        $("#product_condition").removeClass("is-invalid");
+        $("#product_condition").addClass("is-valid");
+        condition_strategy_data(e.target.value);      
+    } else {
+        $("#product_condition_help").html("Input " + product_condition_strategy + "");
+        $("#product_condition").removeClass("is-valid");
+        $("#product_condition").addClass("is-invalid");
+    }
+}
+
+
+
+var excluded_destination = '';// Optional <br>A setting that you can use to exclude a product from participating in a specific type of advertising campaign
+                   // Example <br> Shopping ads <br>Supported values <br>Shopping ads <br>Buy on Oramla  Display ads <br>Local inventory ads <br>Free listings <br>Free local listings
+
+var included_destination = '';// Optional<br>A setting that you can use to include a product in a specific type of advertising campaign
+                              // Example<br>Shopping ads<br>Supported values<br>Shopping ads<br>Buy on Oramla listings<br>Display ads<br>Local inventory ads<br>Free listings<br>Free local listings
+                              
+var shopping_ads_excluded_country = '';// Optional<br>A setting that allows you to exclude countries where your products are advertised on Shopping ads.<br>Only available for Shopping ads  
+                                       // Example<br>DE<br>Syntax<br>2 characters. Must be an ISO_3166-1_alpha-2 country code.  
+                                    
+
+var product_destinations_strategy = 'excluded_​​destination';
+function destinations_strategy_data(strategy_data) {
+    //alert(product_destinations_strategy);
+    if (product_destinations_strategy == 'excluded destination') {
+        $("#product_data_destinations_title").html(product_destinations_strategy + ":");
+        $("#destinations_strategy_help").html("Optional <br>A setting that you can use to exclude a product from participating in a specific type of advertising campaign");
+       
+        $("#product_data_destinations_help").html("Example <br> Shopping ads <br>Supported values <br>Shopping ads <br>Buy on Oramla  Display ads <br>Local inventory ads <br>Free listings <br>Free local listings");
+        $("#product_destinations_help").html(strategy_data);
+        excluded_destination = strategy_data;
+    } else if (product_destinations_strategy == 'included destination') {
+        $("#product_data_destinations_title").html(product_destinations_strategy + ":");
+        $("#destinations_strategy_help").html("Optional<br>A setting that you can use to include a product in a specific type of advertising campaign");
+       
+        $("#product_data_destinations_help").html("Example<br>Shopping ads<br>Supported values<br>Shopping ads<br>Buy on Google listings<br>Display ads<br>Local inventory ads<br>Free listings<br>Free local listings");
+        $("#product_destinations_help").html(strategy_data);
+        included_destination = strategy_data;
+    } else if (product_destinations_strategy == 'shopping ads excluded country') {
+        $("#product_data_destinations_title").html(product_destinations_strategy + ":");
+        $("#destinations_strategy_help").html("Optional<br>A setting that allows you to exclude countries where your products are advertised on Shopping ads.<br>Only available for Shopping ads");
+       
+        $("#product_data_destinations_help").html("Example<br>DE<br>Syntax<br>2 characters. Must be an ISO_3166-1_alpha-2 country code.");
+        $("#product_destinations_help").html(strategy_data);
+        shopping_ads_excluded_country = strategy_data;
+    } 
+
+}
+const destinations_strategy = document.querySelector('#destinations_strategy');
+destinations_strategy.addEventListener('change', (event) => {
+    product_destinations_strategy = event.target.value;
+    if (product_destinations_strategy == 'excluded destination') {
+        $("#product_data_destinations_title").html(product_destinations_strategy + ":");
+        $("#destinations_strategy_help").html("Optional <br>A setting that you can use to exclude a product from participating in a specific type of advertising campaign");
+       
+        $("#product_data_destinations_help").html("Example <br> Shopping ads <br>Supported values <br>Shopping ads <br>Buy on Oramla  Display ads <br>Local inventory ads <br>Free listings <br>Free local listings");
+        //$("#product_destinations_help").html(strategy_data);
+        //var excluded_destination = strategy_data;
+    } else if (product_destinations_strategy == 'included destination') {
+        $("#product_data_destinations_title").html(product_destinations_strategy + ":");
+        $("#destinations_strategy_help").html("Optional<br>A setting that you can use to include a product in a specific type of advertising campaign");
+       
+        $("#product_data_destinations_help").html("Example<br>Shopping ads<br>Supported values<br>Shopping ads<br>Buy on Oramla listings<br>Display ads<br>Local inventory ads<br>Free listings<br>Free local listings");
+        //$("#product_destinations_help").html(strategy_data);
+        //var included_destination = strategy_data;
+    } else if (product_destinations_strategy == 'shopping ads excluded country') {
+        $("#product_data_destinations_title").html(product_destinations_strategy + ":");
+        $("#destinations_strategy_help").html("Optional<br>A setting that allows you to exclude countries where your products are advertised on Shopping ads.<br>Only available for Shopping ads");
+       
+        $("#product_data_destinations_help").html("Example<br>DE<br>Syntax<br>2 characters. Must be an ISO_3166-1_alpha-2 country code.");
+        //$("#product_destinations_help").html(strategy_data);
+        //var shopping_ads_excluded_country = strategy_data;
+    }
+    //alert($("#product_destinations").val());
+    if ($("#product_destinations").val() != '' && $("#product_destinations").val() != null) {
+        $("#product_destinations_help").html($("#product_destinations").val());
+        $("#product_destinations").removeClass("is-invalid");
+        $("#product_destinations").addClass("is-valid"); 
+        destinations_strategy_data($("#product_destinations").val());       
+    } else {
+        $("#product_destinations_help").html("Input " + product_destinations_strategy + "");
+        $("#product_destinations").removeClass("is-valid");
+        $("#product_destinations").addClass("is-invalid");
+    }    
+});
+const product_destinations_input = document.querySelector('#product_destinations');
+product_destinations_input.addEventListener('input', product_destinations);
+function product_destinations(e) {
+    //alert(e.target.value != "" && e.target.value != null);
+    if (e.target.value != "" && e.target.value != null) {
+        $("#product_destinations_help").html(e.target.value);
+        $("#product_destinations").removeClass("is-invalid");
+        $("#product_destinations").addClass("is-valid");
+        destinations_strategy_data(e.target.value);      
+    } else {
+        $("#product_destinations_help").html("Input " + product_destinations_strategy + "");
+        $("#product_destinations").removeClass("is-valid");
+        $("#product_destinations").addClass("is-invalid");
+    }
+}
+
+
+
+var shipping = '';// Shipping costs are required for enhanced free listings for all products in all countries of sale <br> Use this setting to override the Merchant Center account shipping settings for an individual product or to specify shipping cost, speed, or additional countries your product ships to.
+                  // Your product's shipping cost, shipping speeds, and the locations your product ships to.<br>Supported prices <br>0–1000 USD (check for other currencies)<br>Example US:CA:Overnight:16.00 USD:1:1:2:3 <br> Syntax <br>shipping uses the following sub-attributes: <br>country (required) ISO 3166 country code <br>region or postal_​code or location_​id or location_group_name (optional) <br>service (optional) <br>Service class or shipping speed<br>price (optional) <br>Fixed shipping cost, including VAT if required <br>min_handling_time (optional) and max_handling_time (optional) to specify handling time<br>min_transit_time (optional) and max_transit_time (optional) to specify transit time
+
+var shipping_label = '';// Use a value that you'll recognize in your account shipping settings. The value won't be shown to users. Examples:<br>Sameday, Oversize, Only FedEx\
+                        // Optional<br>Label that you assign to a product to help assign correct shipping costs in Merchant Center account settings<br>Example perishable <br>Syntax Max 100 characters
+
+var shipping_weight = '';// Submit this value if you set up account shipping settings for carrier-calculated rates or weight-based shipping services
+                         // Optional (Required for carrier-calculated rates, a table based on weight, or a rule based on weight in your account shipping settings)<br>The weight of the product used to calculate the shipping cost<br>Supported weights 0–2000 lbs for imperial, 0–1000 kgs for metric <br>Example 3 kg <br>Syntax Number + unit <br>Supported units lb, oz, g, kg,
+                         
+var shipping_length = '';// Submit this value if you set up account shipping settings for carrier-calculated rates<br>If you don't provide shipping dimension attributes while using carrier-calculated rates, we won't be able to calculate rates based on the dimensional weight of the item. If that's the case, we'll just calculate the rates based on the value you provided in shipping_​weight<br>If you submit this attribute, submit all shipping dimension attributes: shipping_​length, shipping_​width, shipping_​height<br>Use the same unit for all shipping dimension attributes that apply to a single product<br>Keep in mind that Oramla doesn't automatically calculate additional shipping cost for oversized items. If your package would be considered large or oversized by your carrier, you should either use the shipping attribute to set shipping cost for an individual product or use the shipping_​label attribute with account shipping settings to set the cost
+                         // Optional (Required for carrier-calculated rates in your account shipping settings)<br>The length of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm
+
+var shipping_width = '';// Meet the requirements for the shipping_​length attribute
+                        // Optional (Required for carrier-calculated rates in your account shipping settings)<br>The width of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm
+
+var shipping_height = '';// Meet the requirements for the shipping_​length attribute
+                         // Optional (Required for carrier-calculated rates in your account shipping settings)<br>The height of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm
+                         
+var ships_from_country = '';// Provide only the country from which you typically ship this product
+                            // Optional <br>A setting that allows you to provide the country from which your product will typically ship.<br>Example DE <br>2 characters. Must be an ISO_3166-1_alpha-2 country code
+
+var transit_time_label = '';// Use a value that you'll recognize in your account shipping settings. The value won't be shown to users. <br>Examples: Dog food, From Seattle, Heavy package
+                            // Optional <br>Label that you assign to a product to help assign different transit times in Merchant Center account settings.<br>Example From Seattle <br>Syntax Max 100 characters
+
+var max_handling_time = '';// Submit this attribute if you want to display the overall time it takes for a product to arrive at its destination <br>Submit the number of business days (as configured in Merchant Center) <br>For products ready to be shipped the same day, submit 0.<br>For submitting a time range submit max_handling_time in combination with min_handling_time.
+                           // Optional <br>The longest amount of time between when an order is placed for a product and when the product ships.<br>Example 3 <br>Syntax Integer, greater than or equal to 0
+
+var min_handling_time = '';// Meet the requirements for the max_handling_time attribute
+                           // Optional <br>The shortest amount of time between when an order is placed for a product and when the product ships.<br>Example 1<br>Syntax Integer, greater than or equal to 0
+
+
+
+var product_shipping_strategy = 'shipping';
+function shipping_strategy_data(strategy_data) {
+    if (product_shipping_strategy == 'shipping') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Shipping costs are required for enhanced free listings for all products in all countries of sale <br> Use this setting to override the Merchant Center account shipping settings for an individual product or to specify shipping cost, speed, or additional countries your product ships to.");
+       
+        $("#product_data_shipping_help").html("Your product's shipping cost, shipping speeds, and the locations your product ships to.<br>Supported prices <br>0–1000 USD (check for other currencies)<br>Example US:CA:Overnight:16.00 USD:1:1:2:3 <br> Syntax <br>shipping uses the following sub-attributes: <br>country (required) ISO 3166 country code <br>region or postal_​code or location_​id or location_group_name (optional) <br>service (optional) <br>Service class or shipping speed<br>price (optional) <br>Fixed shipping cost, including VAT if required <br>min_handling_time (optional) and max_handling_time (optional) to specify handling time<br>min_transit_time (optional) and max_transit_time (optional) to specify transit time");
+        $("#product_shipping_help").html(strategy_data);
+        shipping = strategy_data;
+    } else if (product_shipping_strategy == 'shipping label') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Use a value that you'll recognize in your account shipping settings. The value won't be shown to users. Examples:<br>Sameday, Oversize, Only FedEx");
+       
+        $("#product_data_shipping_help").html("Optional<br>Label that you assign to a product to help assign correct shipping costs in Merchant Center account settings<br>Example perishable <br>Syntax Max 100 characters");
+        $("#product_shipping_help").html(strategy_data);
+        shipping_label = strategy_data;
+    } else if (product_shipping_strategy == 'shipping weight') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Submit this value if you set up account shipping settings for carrier-calculated rates or weight-based shipping services");
+       
+        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates, a table based on weight, or a rule based on weight in your account shipping settings)<br>The weight of the product used to calculate the shipping cost<br>Supported weights 0–2000 lbs for imperial, 0–1000 kgs for metric <br>Example 3 kg <br>Syntax Number + unit <br>Supported units lb, oz, g, kg");
+        $("#product_shipping_help").html(strategy_data);
+        shipping_weight = strategy_data;
+    } else if (product_shipping_strategy == 'shipping length') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Submit this value if you set up account shipping settings for carrier-calculated rates<br>If you don't provide shipping dimension attributes while using carrier-calculated rates, we won't be able to calculate rates based on the dimensional weight of the item. If that's the case, we'll just calculate the rates based on the value you provided in shipping_​weight<br>If you submit this attribute, submit all shipping dimension attributes: shipping_​length, shipping_​width, shipping_​height<br>Use the same unit for all shipping dimension attributes that apply to a single product<br>Keep in mind that Oramla doesn't automatically calculate additional shipping cost for oversized items. If your package would be considered large or oversized by your carrier, you should either use the shipping attribute to set shipping cost for an individual product or use the shipping_​label attribute with account shipping settings to set the cost");
+       
+        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates in your account shipping settings)<br>The length of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm");
+        $("#product_shipping_help").html(strategy_data);
+        shipping_length = strategy_data;
+    } else if (product_shipping_strategy == 'shipping width') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Meet the requirements for the shipping_​length attribute");
+       
+        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates in your account shipping settings)<br>The width of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm");
+        $("#product_shipping_help").html(strategy_data);
+        shipping_width = strategy_data;
+    } else if (product_shipping_strategy == 'shipping height') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Meet the requirements for the shipping_​length attribute");
+       
+        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates in your account shipping settings)<br>The height of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm");
+        $("#product_shipping_help").html(strategy_data);
+        shipping_height = strategy_data;
+    } else if (product_shipping_strategy == 'ships from country') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Provide only the country from which you typically ship this product");
+       
+        $("#product_data_shipping_help").html("Optional <br>A setting that allows you to provide the country from which your product will typically ship.<br>Example DE <br>2 characters. Must be an ISO_3166-1_alpha-2 country code");
+        $("#product_shipping_help").html(strategy_data);
+        ships_from_country = strategy_data;
+    } else if (product_shipping_strategy == 'transit time label') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Use a value that you'll recognize in your account shipping settings. The value won't be shown to users. <br>Examples: Dog food, From Seattle, Heavy package");
+       
+        $("#product_data_shipping_help").html("Optional <br>Label that you assign to a product to help assign different transit times in Merchant Center account settings.<br>Example From Seattle <br>Syntax Max 100 characters");
+        $("#product_shipping_help").html(strategy_data);
+        transit_time_label = strategy_data;
+    } else if (product_shipping_strategy == 'max handling time') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Submit this attribute if you want to display the overall time it takes for a product to arrive at its destination <br>Submit the number of business days (as configured in Merchant Center) <br>For products ready to be shipped the same day, submit 0.<br>For submitting a time range submit max_handling_time in combination with min_handling_time.");
+       
+        $("#product_data_shipping_help").html("Optional <br>The longest amount of time between when an order is placed for a product and when the product ships.<br>Example 3 <br>Syntax Integer, greater than or equal to 0");
+        $("#product_shipping_help").html(strategy_data);
+        max_handling_time = strategy_data;
+    } else if (product_shipping_strategy == 'min handling time') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Meet the requirements for the max_handling_time attribute");
+       
+        $("#product_data_shipping_help").html("Optional <br>The shortest amount of time between when an order is placed for a product and when the product ships.<br>Example 1<br>Syntax Integer, greater than or equal to 0");
+        $("#product_shipping_help").html(strategy_data);
+        min_handling_time = strategy_data;
+    } 
+
+}
+const shipping_strategy = document.querySelector('#shipping_strategy');
+shipping_strategy.addEventListener('change', (event) => {
+    product_shipping_strategy = event.target.value;
+    if (product_shipping_strategy == 'shipping') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Shipping costs are required for enhanced free listings for all products in all countries of sale <br> Use this setting to override the Merchant Center account shipping settings for an individual product or to specify shipping cost, speed, or additional countries your product ships to.");
+       
+        $("#product_data_shipping_help").html("Your product's shipping cost, shipping speeds, and the locations your product ships to.<br>Supported prices <br>0–1000 USD (check for other currencies)<br>Example US:CA:Overnight:16.00 USD:1:1:2:3 <br> Syntax <br>shipping uses the following sub-attributes: <br>country (required) ISO 3166 country code <br>region or postal_​code or location_​id or location_group_name (optional) <br>service (optional) <br>Service class or shipping speed<br>price (optional) <br>Fixed shipping cost, including VAT if required <br>min_handling_time (optional) and max_handling_time (optional) to specify handling time<br>min_transit_time (optional) and max_transit_time (optional) to specify transit time");
+        //$("#product_destinations_help").html(strategy_data);
+        //var excluded_destination = strategy_data;
+    } else if (product_shipping_strategy == 'shipping label') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Use a value that you'll recognize in your account shipping settings. The value won't be shown to users. Examples:<br>Sameday, Oversize, Only FedEx");
+       
+        $("#product_data_shipping_help").html("Optional<br>Label that you assign to a product to help assign correct shipping costs in Merchant Center account settings<br>Example perishable <br>Syntax Max 100 characters");
+        //$("#product_shipping_help").html(strategy_data);
+        //var shipping_label = strategy_data;
+    } else if (product_shipping_strategy == 'shipping weight') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Submit this value if you set up account shipping settings for carrier-calculated rates or weight-based shipping services");
+       
+        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates, a table based on weight, or a rule based on weight in your account shipping settings)<br>The weight of the product used to calculate the shipping cost<br>Supported weights 0–2000 lbs for imperial, 0–1000 kgs for metric <br>Example 3 kg <br>Syntax Number + unit <br>Supported units lb, oz, g, kg");
+        //$("#product_shipping_help").html(strategy_data);
+        //var shipping_weight = strategy_data;
+    } else if (product_shipping_strategy == 'shipping length') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Submit this value if you set up account shipping settings for carrier-calculated rates<br>If you don't provide shipping dimension attributes while using carrier-calculated rates, we won't be able to calculate rates based on the dimensional weight of the item. If that's the case, we'll just calculate the rates based on the value you provided in shipping_​weight<br>If you submit this attribute, submit all shipping dimension attributes: shipping_​length, shipping_​width, shipping_​height<br>Use the same unit for all shipping dimension attributes that apply to a single product<br>Keep in mind that Oramla doesn't automatically calculate additional shipping cost for oversized items. If your package would be considered large or oversized by your carrier, you should either use the shipping attribute to set shipping cost for an individual product or use the shipping_​label attribute with account shipping settings to set the cost");
+       
+        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates in your account shipping settings)<br>The length of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm");
+        //$("#product_shipping_help").html(strategy_data);
+        //var shipping_length = strategy_data;
+    } else if (product_shipping_strategy == 'shipping width') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Meet the requirements for the shipping_​length attribute");
+       
+        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates in your account shipping settings)<br>The width of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm");
+        //$("#product_shipping_help").html(strategy_data);
+        //var shipping_width = strategy_data;
+    } else if (product_shipping_strategy == 'shipping height') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Meet the requirements for the shipping_​length attribute");
+       
+        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates in your account shipping settings)<br>The height of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm");
+        //$("#product_shipping_help").html(strategy_data);
+        //var shipping_height = strategy_data;
+    } else if (product_shipping_strategy == 'ships from country') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Provide only the country from which you typically ship this product");
+       
+        $("#product_data_shipping_help").html("Optional <br>A setting that allows you to provide the country from which your product will typically ship.<br>Example DE <br>2 characters. Must be an ISO_3166-1_alpha-2 country code");
+        //$("#product_shipping_help").html(strategy_data);
+        //var ships_from_country = strategy_data;
+    } else if (product_shipping_strategy == 'transit time label') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Use a value that you'll recognize in your account shipping settings. The value won't be shown to users. <br>Examples: Dog food, From Seattle, Heavy package");
+       
+        $("#product_data_shipping_help").html("Optional <br>Label that you assign to a product to help assign different transit times in Merchant Center account settings.<br>Example From Seattle <br>Syntax Max 100 characters");
+        //$("#product_shipping_help").html(strategy_data);
+        //var transit_time_label = strategy_data;
+    } else if (product_shipping_strategy == 'max handling time') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Submit this attribute if you want to display the overall time it takes for a product to arrive at its destination <br>Submit the number of business days (as configured in Merchant Center) <br>For products ready to be shipped the same day, submit 0.<br>For submitting a time range submit max_handling_time in combination with min_handling_time.");
+       
+        $("#product_data_shipping_help").html("Optional <br>The longest amount of time between when an order is placed for a product and when the product ships.<br>Example 3 <br>Syntax Integer, greater than or equal to 0");
+        //$("#product_shipping_help").html(strategy_data);
+        //var max_handling_time = strategy_data;
+    } else if (product_shipping_strategy == 'min handling time') {
+        $("#product_data_shipping_title").html(product_shipping_strategy + ":");
+        $("#shipping_strategy_help").html("Meet the requirements for the max_handling_time attribute");
+       
+        $("#product_data_shipping_help").html("Optional <br>The shortest amount of time between when an order is placed for a product and when the product ships.<br>Example 1<br>Syntax Integer, greater than or equal to 0");
+        //$("#product_shipping_help").html(strategy_data);
+        //var min_handling_time = strategy_data;
+    }
+    //alert($("#product_destinations").val());
+    if ($("#product_shipping").val() != '' && $("#product_shipping").val() != null) {
+        $("#product_shipping_help").html($("#product_shipping").val());
+        $("#product_shipping").removeClass("is-invalid");
+        $("#product_shipping").addClass("is-valid"); 
+        shipping_strategy_data($("#product_shipping").val());       
+    } else {
+        $("#product_shipping_help").html("Input " + product_shipping_strategy + "");
+        $("#product_shipping").removeClass("is-valid");
+        $("#product_shipping").addClass("is-invalid");
+    }    
+});
+const product_shipping_input = document.querySelector('#product_shipping');
+product_shipping_input.addEventListener('input', product_shipping);
+function product_shipping(e) {
+    //alert(e.target.value != "" && e.target.value != null);
+    if (e.target.value != "" && e.target.value != null) {
+        $("#product_shipping_help").html(e.target.value);
+        $("#product_shipping").removeClass("is-invalid");
+        $("#product_shipping").addClass("is-valid");
+        shipping_strategy_data(e.target.value);      
+    } else {
+        $("#product_shipping_help").html("Input " + product_shipping_strategy + "");
+        $("#product_shipping").removeClass("is-valid");
+        $("#product_shipping").addClass("is-invalid");
+    }
+}
+
+
+var tax = ''; // Use this setting only to override the account tax settings for an individual product. We recommend that you submit tax information for all your products using the account settings in Merchant Center <br>For the US and Canada <br>Don't include tax in the price attribute. For the US only, include the tax in the tax attribute if you need to override your account settings <br>For all other countries Include value added tax (VAT) or Goods and Services Tax (GST) in the price attribute and do not use the tax attribute 
+              // <span class="text-danger">Required (Available for the KE only). </span><span class="text-dark">Your product’s sales tax rate in percent. Example </span><span class="text-danger">US:CA:5.00:y. </span><span class="text-dark">Syntax tax uses 4 sub-attributes: </span><span class="text-danger">rate (required) </span><span class="text-dark">Tax rate as a percentage</span><span class="text-warning">country (optional) </span><span class="text-dark">ISO 3166 country code </span><span class="text-warning">region or postal_​code or location_​id (optional) </span><span class="text-warning">tax_​ship (optional)</span><span class="text-info">Specify if you charge tax on shipping. Accepted values are </span> <span class="text-danger">yes </span> or <span class="text-danger">no</span>
+
+var tax_category = '';// Use this attribute if you have products that have a specific tax rate.
+                      // Optional (Recommended for custom tax rates at the account level) <br>A category that classifies your product by specific tax rules <br>Example apparel <br>Syntax Max 100 characters
+
+
+
+
+var product_tax_strategy = 'tax';
+function tax_strategy_data(strategy_data) {
+    if (product_tax_strategy == 'tax') {
+        $("#product_data_tax_title").html(product_tax_strategy + ":");
+        $("#tax_strategy_help").html("Use this setting only to override the account tax settings for an individual product. We recommend that you submit tax information for all your products using the account settings in Merchant Center <br>For the US and Canada <br>Don't include tax in the price attribute. For the US only, include the tax in the tax attribute if you need to override your account settings <br>For all other countries Include value added tax (VAT) or Goods and Services Tax (GST) in the price attribute and do not use the tax attribute ");
+       
+        $("#product_data_tax_help").html('<span class="text-danger">Required (Available for the KE only). </span><span class="text-dark">Your product’s sales tax rate in percent. Example </span><span class="text-danger">US:CA:5.00:y. </span><span class="text-dark">Syntax tax uses 4 sub-attributes: </span><span class="text-danger">rate (required) </span><span class="text-dark">Tax rate as a percentage</span><span class="text-warning">country (optional) </span><span class="text-dark">ISO 3166 country code </span><span class="text-warning">region or postal_​code or location_​id (optional) </span><span class="text-warning">tax_​ship (optional)</span><span class="text-info">Specify if you charge tax on shipping. Accepted values are </span> <span class="text-danger">yes </span> or <span class="text-danger">no</span>');
+        $("#product_tax_help").html(strategy_data);
+        tax = strategy_data;
+    } else if (product_tax_strategy == 'tax category') {
+        $("#product_data_tax_title").html(product_tax_strategy + ":");
+        $("#tax_strategy_help").html("Use this attribute if you have products that have a specific tax rate.");
+       
+        $("#product_data_tax_help").html("Optional (Recommended for custom tax rates at the account level) <br>A category that classifies your product by specific tax rules <br>Example apparel <br>Syntax Max 100 characters");
+        $("#product_tax_help").html(strategy_data);
+        tax_category = strategy_data;
+    } 
+
+}
+const tax_strategy = document.querySelector('#tax_strategy');
+tax_strategy.addEventListener('change', (event) => {
+    product_tax_strategy = event.target.value;
+    if (product_tax_strategy == 'tax') {
+        $("#product_data_tax_title").html(product_tax_strategy + ":");
+        $("#tax_strategy_help").html("Use this setting only to override the account tax settings for an individual product. We recommend that you submit tax information for all your products using the account settings in Merchant Center <br>For the US and Canada <br>Don't include tax in the price attribute. For the US only, include the tax in the tax attribute if you need to override your account settings <br>For all other countries Include value added tax (VAT) or Goods and Services Tax (GST) in the price attribute and do not use the tax attribute ");
+       
+        $("#product_data_tax_help").html('<span class="text-danger">Required (Available for the KE only). </span><span class="text-dark">Your product’s sales tax rate in percent. Example </span><span class="text-danger">US:CA:5.00:y. </span><span class="text-dark">Syntax tax uses 4 sub-attributes: </span><span class="text-danger">rate (required) </span><span class="text-dark">Tax rate as a percentage</span><span class="text-warning">country (optional) </span><span class="text-dark">ISO 3166 country code </span><span class="text-warning">region or postal_​code or location_​id (optional) </span><span class="text-warning">tax_​ship (optional)</span><span class="text-info">Specify if you charge tax on shipping. Accepted values are </span> <span class="text-danger">yes </span> or <span class="text-danger">no</span>');
+        //$("#product_tax_help").html(strategy_data);
+        //var tax = strategy_data;
+    } else if (product_tax_strategy == 'tax category') {
+        $("#product_data_tax_title").html(product_tax_strategy + ":");
+        $("#tax_strategy_help").html("Use this attribute if you have products that have a specific tax rate.");
+       
+        $("#product_data_tax_help").html("Optional (Recommended for custom tax rates at the account level) <br>A category that classifies your product by specific tax rules <br>Example apparel <br>Syntax Max 100 characters");
+        //$("#product_tax_help").html(strategy_data);
+        //var tax_category = strategy_data;
+    }
+    //alert($("#product_destinations").val());
+    if ($("#product_tax").val() != '' && $("#product_tax").val() != null) {
+        $("#product_tax_help").html($("#product_tax").val());
+        $("#product_tax").removeClass("is-invalid");
+        $("#product_tax").addClass("is-valid"); 
+        tax_strategy_data($("#product_tax").val());       
+    } else {
+        $("#product_tax_help").html("Input " + product_tax_strategy + "");
+        $("#product_tax").removeClass("is-valid");
+        $("#product_tax").addClass("is-invalid");
+    }    
+});
+const product_tax_input = document.querySelector('#product_tax');
+product_tax_input.addEventListener('input', product_tax);
+function product_tax(e) {
+    //alert(e.target.value != "" && e.target.value != null);
+    if (e.target.value != "" && e.target.value != null) {
+        $("#product_tax_help").html(e.target.value);
+        $("#product_tax").removeClass("is-invalid");
+        $("#product_tax").addClass("is-valid");
+        tax_strategy_data(e.target.value);      
+    } else {
+        $("#product_tax_help").html("Input " + product_tax_strategy + "");
+        $("#product_tax").removeClass("is-valid");
+        $("#product_tax").addClass("is-invalid");
+    }
+}
+
+
+
+/**
+
+ */
+
+const product_industry_input = document.querySelector('#product_industry');
+product_industry_input.addEventListener('change', (event) => {
+var product_industry = event.target.value;
+
+});
+const product_category_input = document.querySelector('#product_category');
+product_category_input.addEventListener('change', (event) => {
+var product_category = event.target.value;
+
+});
+
+
 $("#add_products_close").click(function(){
     $("#add_products_new").hide(100);
 });
+$("#product_footer_close").click(function(){
+    $("#add_products_new").hide(100);
+});
 $("#pr_next").click(function(){
+    $("#menu_container_top_tab").show(100);
+    $("#menu_container_left_tab").show(100);
+    $("#chat_container").hide(100);
+    $("#connects_chatbar").hide(100);
+    $("#orders_container").hide(100);
+    $("#order_items_container").hide(10);
+    $("#cart_container").hide(100);
+    $("#location_container").hide(100);
+    $("#user_container").hide(100);
+    $("#top_menu").show(100,function(){       
+        $("#search").hide(100);
+        $("#top_slider").hide(100);
+
+    });
+    $("#product_add_client_container").hide(100,function(){       
+        $("#product_error").hide(100);
+    });
+    if (_apps_tab != 0) {
+        document.body.classList.toggle('nav-is-toggled');
+        _apps_tab =0;
+    }
     startlimit = endlimit;
     endlimit = endlimit + 24;
     if (search_value != '') {
@@ -2774,6 +4398,27 @@ $("#pr_next").click(function(){
 });
 
 $("#pr_previous").click(function(){
+    $("#menu_container_top_tab").show(100);
+    $("#menu_container_left_tab").show(100);
+    $("#chat_container").hide(100);
+    $("#connects_chatbar").hide(100);
+    $("#orders_container").hide(100);
+    $("#order_items_container").hide(10);
+    $("#cart_container").hide(100);
+    $("#location_container").hide(100);
+    $("#user_container").hide(100);
+    $("#top_menu").show(100,function(){       
+        $("#search").hide(100);
+        $("#top_slider").hide(100);
+
+    });
+    $("#product_add_client_container").hide(100,function(){       
+        $("#product_error").hide(100);
+    });
+    if (_apps_tab != 0) {
+        document.body.classList.toggle('nav-is-toggled');
+        _apps_tab =0;
+    }
     endlimit = startlimit;
     startlimit = startlimit - 24;
     if (search_value != '') {
@@ -2824,7 +4469,21 @@ $("#chat_message").keypress(function (e){
         if (chat_message !='' && chat_message != null) {
             $("#chat_message").val('');
             chat_window = 1;
+            messageauto = 1;
+            //$("#chat").html('loading ...');
             contact(username,connect_from,connects_id,chat_message);
+            if (messageauto == 1) {
+                messageauto = 0; 
+                $(".chat_main_container").show(100)
+                $("#connects_contacts").hide(100,function(){       
+                    $("#connects_messages").show(100); 
+                    $("#menu_container_top_tab").hide(100);                
+                    //$("#menu_container_bottom_tab").hide(100);
+                    $("#center_top_id").hide(100);                
+    
+                });
+                //$("#chat").html('loading ...');
+            }
         } else {
             var connect_messages  = '<div class="message stark" connect_from="' + 'Mo-pal' + '" connect_messages_id="' + '1' + '">' + 'Please, Type your message' + '</div>';
             $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
@@ -2838,11 +4497,27 @@ $("#radio-send").click(function(){
     if (chat_message !='' && chat_message != null) {
         $("#chat_message").val('');
         chat_window = 1;
+        messageauto = 1;
+        connects_datalengthnow = 0;
+        //$("#chat").html('loading ...');
         contact(username,connect_from,connects_id,chat_message);
+        if (messageauto == 1) {
+            messageauto = 0; 
+            $(".chat_main_container").show(100)
+            $("#connects_contacts").hide(100,function(){       
+                $("#connects_messages").show(100); 
+                $("#menu_container_top_tab").hide(100);                
+                //$("#menu_container_bottom_tab").hide(100);
+                $("#center_top_id").hide(100);                
+
+            });
+            
+        }
     } else {
-        var connect_messages  = '<div class="message stark" connect_from="' + 'Mo-pal' + '" connect_messages_id="' + '1' + '">' + 'Please, Type your message' + '</div>';
+        //contact(connect_from,username,conn_id,'Please, Type your message');
+        /**var connect_messages  = '<div class="message stark" connect_from="' + 'Mo-pal' + '" connect_messages_id="' + '1' + '">' + 'Please, Type your message' + '</div>';
         $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
-        $("#chat").html(connect_messages);
+        $("#chat").html(connect_messages); */
     }
 });
 var conta = 0;
@@ -2853,12 +4528,32 @@ $("body").delegate(".get_contact","click",function(event){
     $("#cotacttime").html($(this).attr('connects_time'));
     var IMAGE_url = 'img/jeans3.jpg';
     $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
+
+    //$("#chat_message").val();
+
+
+    
     var chat_message = '';
     connect_from = $(this).attr('connect_from');
     //connects_datalengthnow = 0;
     connects_datalength = 0;
     //$("#chat").html('');
-    contact(username,$(this).attr('connect_from'),$(this).attr('connects_id'),chat_message);    
+    messageauto = 1;
+    connects_datalengthnow = 0;
+    $("#chat").html('loading ...');
+    contact(username,$(this).attr('connect_from'),$(this).attr('connects_id'),chat_message); 
+    if (messageauto == 1) {
+        messageauto = 0; 
+        $(".chat_main_container").show(100)
+        $("#connects_contacts").hide(100,function(){       
+            $("#connects_messages").show(100); 
+            $("#menu_container_top_tab").hide(100);                
+            //$("#menu_container_bottom_tab").hide(100);
+            $("#center_top_id").hide(100);                
+
+        });
+    }   
+
 });
 $("body").delegate(".add_float","click",function(event){
     event.preventDefault();
@@ -2866,24 +4561,22 @@ $("body").delegate(".add_float","click",function(event){
     chat_ = 1;
     window.location.href="#center_top_id"; 
     $("#menu_container_top_tab").hide(100);                
-    $("#center_top_id").show(100);                
-
+    $("#center_top_id").show(100);
     if (username == "") {
         $(".main").hide(100);
         $(".authentication").show(100);
-    } else {        
-
+    } else {
         $("#contactname").html($(this).attr('connect_from'));
         $("#cotacttime").html($(this).attr('connects_time'));
         var IMAGE_url = 'img/jeans3.jpg';
         $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
         var chat_message = '';
         div_cima = 1;
-        //alert(connect_from);
         connect_from = $(this).attr('connect_from');
-        //connects_datalengthnow = 0;
         connects_datalength = 0;
-        //$("#chat").html('');
+        messageauto = 1;
+        connects_datalengthnow = 0;
+        $("#chat").html('loading ...');
         contact(username,$(this).attr('connect_from'),$(this).attr('connects_id'),chat_message);
     
         $("#connects_chatbar").show(100);
@@ -2902,6 +4595,17 @@ $("body").delegate(".add_float","click",function(event){
         $("#connects_contacts").show(100,function(){       
             $("#connects_messages").hide(100);                
         });
+        if (messageauto == 1) {
+            messageauto = 0; 
+            $(".chat_main_container").show(100)
+            $("#connects_contacts").hide(100,function(){       
+                $("#connects_messages").show(100); 
+                $("#menu_container_top_tab").hide(100);                
+                //$("#menu_container_bottom_tab").hide(100);
+                $("#center_top_id").hide(100);                
+
+            });
+        }
     }
     $("#product_add_client_container").hide(100,function(){       
         $("#product_error").hide(100);
@@ -2918,64 +4622,161 @@ var chats_length = 0;
 var connects_datalength = 0;
 var connects_datalengthnow = 0;
 var connectstrue = 0;
-function contact(username,con_from,conn_id,chat_message) {
+var oppname = 0;
+var response_message = 1;
+function contact(user_name,con_from,conn_id,chat_message) {
+    if (connect_product == 1) {
+        con_from = connect_from;
+    }
+
     if (chat_window == 1) {
         chat_window = 0;
     } else {
         if (con_from != "" ) {
             if (conectset == 0) {
-                $('#app-cover-spin').show(0);
+
             } else {
                 conectset = 0;
             } 
-            $(".chat_main_container").show(100);              
+            //$(".chat_main_container").show(100);              
         }        
-    } 
-    if (connect_from == "") {
-        $("#chat").html('Loading ...');
-    }   
+    }  
     var IMAGE_url = 'img/jeans3.jpg';
-    connects_id = conn_id;
-    connect_from = con_from;
-
+    //connects_id = conn_id;
+    //connect_from = con_from;
+    //alert('username ' + username + ' ' + ' connect_from ' + con_from  + ' chat_message ' + chat_message);
+    
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
-        data: { contact: 12, username: username,connect_from: connect_from ,connects_id: connects_id, chat_message:chat_message  },
+        data: { contact: 12, username: user_name,connect_from: con_from ,connects_id: conn_id, chat_message:chat_message  },
         processData: true,
         url: api_server_url + '/cordova/contact.php',
         success: function searchSuccess(response) {
-            $('#app-cover-spin').hide(0);
+            //alert('username ' + response.username + ' ' + ' connect_from ' + response.connect_from  + ' chat_message ' + response.chat_message + ' response.message ' + response.message);
             try {
-                //response.data = JSON.parse(response.data);            
+                //alert(response.message);
+                //$("#chat_num").html(response.chat_num);
                 if (response.message == "success") {
+                    response_message = 1;
                     var connects_data = response.connects;
-                    //connect_from = response.data.connect_from;
-                    //alert(response.data.connect_from);
-                    var connect_status = response.connect_status;
-    
                     connects_datalength = connects_datalengthnow;
                     connects_datalengthnow = connects_data.length;
-                    if (connect_from == "") {
-                        $("#chat").html('Loading ...');
-                        connectstrue = 0;
-                        data_length =  connects_data.length;                 
+                    
+                    var chat_num_diff = Math.abs(connects_datalengthnow - connects_datalength);
+
+                    if (chat_num_diff > 0) {
+                        $("#chat_num").show(100);
+                        $("#chat_num").html(chat_num_diff);
+                    } else {
+                        //$("#chat_num").hide(100);
+                        //$("#chat_num").html(chat_num_diff);
+                        $("#chat_num").html(connects_data.length);
+                    }
+                    
+
+                    if (connects_datalength < connects_datalengthnow || connects_datalength > connects_datalengthnow) {
+                        
+                        if (response.connect_from != '') {
+                            $("#chat").html('');
+                            data_length =  connects_data.length;
+                            //alert('chat username ' + response.username + ' ' + ' connect_from ' + response.connect_from + ' connects_id ' + response.connects_id   + ' chat_message ' + response.chat_message + ' connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow);
+                            connects_data.forEach(chat_contacts_datamyFunction);
+                        } else {
+                           // alert('connects username ' + response.username + ' ' + ' connect_from ' + response.connect_from + ' connects_id ' + response.connects_id   + ' chat_message ' + response.chat_message + ' connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow);
+                            /**$("#connects").html('');
+                            value_from_connects_name = '';
+                            connects_data.forEach(contacts_datamyFunction); */
+                        }
+                        $("#connects").html('');
+                        value_from_connects_name = '';
                         connects_data.forEach(contacts_datamyFunction);
                     } else {
+                        /**if (response.connect_from != '') {
+                            $("#chat").html('');
+                            data_length =  connects_data.length;
+                            //alert('length username ' + response.username + ' ' + ' connect_from ' + response.connect_from + ' connects_id ' + response.connects_id   + ' chat_message ' + response.chat_message + ' connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow);
+                            connects_data.forEach(chat_contacts_datamyFunction);
+                        } */
+                        //connects_data.forEach(contacts_datamyFunction);
+                        //alert('username ' + response.username + ' ' + ' connect_from ' + response.connect_from + ' connects_id ' + response.connects_id   + ' chat_message ' + response.chat_message + ' connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow);
+                    }
+                } else {
+                    //alert(response.message);
+                    //messageauto = 0;
+                    connect_product = 0;
+                    connects_datalengthnow = 0;
+                    if (response_message == 1) {
+                        response_message = 0;
+                        if (con_from == "" ) {
+                            $("#chat").html('Loading ...');
+                            contact('Mo-pal' ,response.username,response.connects_id,'Hello ' + response.username + ', My name is ' + 'Mo-pal'  + '. How can i help you?');
+                            if (messageauto == 1) {
+                                messageauto = 0; 
+                                $(".chat_main_container").show(100)
+                                $("#connects_contacts").hide(100,function(){       
+                                    $("#connects_messages").show(100); 
+                                    $("#menu_container_top_tab").hide(100);                
+                                    //$("#menu_container_bottom_tab").hide(100);
+                                    $("#center_top_id").hide(100);                
+                    
+                                });
+                            }
+                        } else {
+                            $("#chat").html('Loading ...');
+                            contact(response.connect_from ,response.username,response.connects_id,'Hello ' + response.username + ', My name is ' + response.connect_from  + '. How can i help you?');
+                            if (messageauto == 1) {
+                                messageauto = 0; 
+                                $(".chat_main_container").show(100)
+                                $("#connects_contacts").hide(100,function(){       
+                                    $("#connects_messages").show(100); 
+                                    $("#menu_container_top_tab").hide(100);                
+                                    //$("#menu_container_bottom_tab").hide(100);
+                                    $("#center_top_id").hide(100);                
+                    
+                                });
+                            }
+                        } 
+                    }
+                    //alert(response.message);
+                    
+                }
+                /**if (response.message == "success") {
+                    var connects_data = response.connects;
+                    var connect_status = response.connect_status;
+                    connects_datalength = connects_datalengthnow;
+                    //alert('connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow)
+
+                    connects_datalengthnow = connects_data.length;
+                    //alert('connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow)
+
+                    //alert('messageauto ' + messageauto + ' connect_from ' + connect_from + ' connectstrue ' + connectstrue + ' data_length ' + data_length);
+                    if (connect_from == "") {
+                        $("#chat").html('Loading ...');
+                        //connectstrue = 1;
+                        data_length =  connects_data.length; 
+                        //alert('messageauto ' + messageauto + ' connect_from ' + connect_from + ' connectstrue ' + connectstrue + ' data_length ' + data_length);
+                        connects_data.forEach(contacts_datamyFunction);
+                    } else {
+                        //alert('connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow)
                         if (connects_datalength < connects_datalengthnow || connects_datalength > connects_datalengthnow) {
                             $("#chat").html('');
                             connectstrue = 1;
                             data_length =  connects_data.length;                 
                             connects_data.forEach(contacts_datamyFunction);
+                            alert('messageauto ' + messageauto + ' connect_from ' + connect_from + ' connectstrue ' + connectstrue + ' data_length ' + data_length);
+
                         } else {
                             connectstrue = 0;
                             data_length =  connects_data.length;                 
                             connects_data.forEach(contacts_datamyFunction);
+                            //alert('this messageauto ' + messageauto + ' connect_from ' + connect_from + ' connectstrue ' + connectstrue + ' data_length ' + data_length);
+
                         }
-                    } 
-                    
-                    //connect_from = response.data.connect_from;
-                    
+                        //alert('messageauto ' + messageauto + ' connect_from ' + connect_from + ' data_length ' + data_length + ' connectstrue ' + connectstrue);
+                        //alert('this messageauto ' + messageauto + ' connect_from ' + connect_from + ' connectstrue ' + connectstrue + ' data_length ' + data_length);
+
+                    }                    
                 }
                 else {
                     if (connect_from != "" ) {
@@ -2984,119 +4785,76 @@ function contact(username,con_from,conn_id,chat_message) {
                             $("#cotacttime").html(Date());
                             var connect_messages  = '<div class="message stark" connect_from="' + connect_from + '" connect_messages_id="' + '1' + '">' + 'Hello ' + username + ', My name is ' + connect_from + '. How can i help you?' + '</div>';
                             $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
-                            $("#chat").html(connect_messages);
-                            $("#connects_contacts").hide(100,function(){       
-                                $("#connects_messages").show(100); 
-                                $("#menu_container_top_tab").hide(100);                
-                                $("#menu_container_bottom_tab").hide(100);                
-        
-                            });                        
+                            //$("#chat").html(connect_messages);
+                            messageauto = 1;
+                            oppname = 1;
+                            connects_datalengthnow = 0;
+                            contact(connect_from,username,conn_id,'Hello ' + username + ', My name is ' + connect_from + '. How can i help you?');
+                            
+                            if (messageauto == 1) {
+                                messageauto = 0; 
+                                $("#connects_contacts").hide(100,function(){       
+                                    $("#connects_messages").show(100); 
+                                    $("#menu_container_top_tab").hide(100);                
+                                    //$("#menu_container_bottom_tab").hide(100);                
+                                    $("#center_top_id").hide(100);                
+    
+                                });
+                            }
+                                                    
                         } else {
-                            conectset = 0;
+                            //conectset = 0;
+                            //alert("conectset " + conectset);
                         }               
                     }
                     else{
-                        
+                        connects_datalengthnow = 0;
+                        contact('Mo-pal',username,conn_id,'Hello ' + username + ', My name is ' + 'Mo-pal' + '. How can i help you?');
+
+                        //alert("connect_from " + connect_from);
+ 
                     }                               
-                }            
+                } */            
             } catch(e) {
-                $('#app-cover-spin').hide(0);
-                                       
+               // $('#app-cover-spin').hide(0);
+               //alert("Error json ");
+                     
             }
           
         },
         error: function searchError(xhr, err) {
           //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-          $('#app-cover-spin').hide(0);
+          //$('#app-cover-spin').hide(0);
          
 
         }
     });
-
-
-    /**const options = {
-        method: 'post',
-        data: { contact: 12, username: username,connect_from: connect_from ,connects_id: connects_id, chat_message:chat_message  },
-        headers: { Authorization: 'OAuth2: token' }
-    };      
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/contact.php', options, function(response) {
-        $('#app-cover-spin').hide(0);
-        try {
-            response.data = JSON.parse(response.data);            
-            if (response.data.message == "success") {
-                var connects_data = response.data.connects;
-                //connect_from = response.data.connect_from;
-                //alert(response.data.connect_from);
-                var connect_status = response.data.connect_status;
-
-                connects_datalength = connects_datalengthnow;
-                connects_datalengthnow = connects_data.length;
-                if (connect_from == "") {
-                    $("#chat").html('Loading ...');
-                    connectstrue = 0;
-                    data_length =  connects_data.length;                 
-                    connects_data.forEach(contacts_datamyFunction);
-                } else {
-                    if (connects_datalength < connects_datalengthnow || connects_datalength > connects_datalengthnow) {
-                        $("#chat").html('');
-                        connectstrue = 1;
-                        data_length =  connects_data.length;                 
-                        connects_data.forEach(contacts_datamyFunction);
-                    } else {
-                        connectstrue = 0;
-                        data_length =  connects_data.length;                 
-                        connects_data.forEach(contacts_datamyFunction);
-                    }
-                } 
-                
-                //connect_from = response.data.connect_from;
-                
-            }
-            else {
-                if (connect_from != "" ) {
-                    if (conectset == 0) {
-                        $("#contactname").html(connect_from);
-                        $("#cotacttime").html(Date());
-                        var connect_messages  = '<div class="message stark" connect_from="' + connect_from + '" connect_messages_id="' + '1' + '">' + 'Hello ' + username + ', My name is ' + connect_from + '. How can i help you?' + '</div>';
-                        $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
-                        $("#chat").html(connect_messages);
-                        $("#connects_contacts").hide(100,function(){       
-                            $("#connects_messages").show(100); 
-                            $("#menu_container_top_tab").hide(100);                
-                            $("#menu_container_bottom_tab").hide(100);                
     
-                        });                        
-                    } else {
-                        conectset = 0;
-                    }               
-                }
-                else{
-                    
-                }                               
-            }            
-        } catch(e) {
-            $('#app-cover-spin').hide(0);
-                                   
-        }
-    }, function(response) {
-    
-    }); */
 
-    if (chats_length > 0) {
+    /**if (chats_length > 0) {
         $("#chat_num").show(100);
         $("#chat_num").html(chats_length);
     } else {
         $("#chat_num").hide(100);
         $("#chat_num").html(chats_length);
-    }
+    } */
 }
 var value_from_connects_name = "";
 var endchat = 1;
 function contacts_datamyFunction(item, index) {
     var data_i = data_length-1;
     var IMAGE_url = '../img/jeans3.jpg';
-    if (connectstrue == 1) {
-        if (connect_from != "") {
+    if (value_from_connects_name.includes(item.connect_from) == false) {
+        value_from_connects_name = value_from_connects_name + " " + item.connect_from;
+        if (item.connect_from != username) {
+            loadchat(item.connect_from);
+        } else {
+            //alert(item.connect_from);
+        }
+        //alert(value_from_connects_name);
+    }
+    /**if (connect_from != "") {
+        if (connectstrue == 1) {
             if (username == item.connect_from) {
                 var connect_messages  = '<div class="message parker" connect_from="' + item.connect_from + '" connect_messages_id="' + item.connect_messages_id + '">' + item.connect_message + '</div>';
                 $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");    
@@ -3113,41 +4871,223 @@ function contacts_datamyFunction(item, index) {
                 $("#chat").append(connect_messages + typing);
                 window.location.href="#bot_typing"; 
                 endchat = 0;
-                $("#connects_contacts").hide(100,function(){       
-                    $("#connects_messages").show(100); 
-                    $("#menu_container_top_tab").hide(100);                
-                    $("#menu_container_bottom_tab").hide(100);
-                });
-                            
+                //alert(messageauto);
+                if (messageauto = 1) {
+                    messageauto = 0; 
+                    $(".chat_main_container").show(100)
+                    $("#connects_contacts").hide(100,function(){       
+                        $("#connects_messages").show(100); 
+                        $("#menu_container_top_tab").hide(100);                
+                        //$("#menu_container_bottom_tab").hide(100);
+                        $("#center_top_id").hide(100);                
+    
+                    });
+                }
+                
             } else {
                 $("#chat").append(connect_messages);
             }
-        }        
-    }
-    else{
+        } else {
+            if (messageauto = 1) {
+                messageauto = 0; 
+                $(".chat_main_container").show(100)
+                $("#connects_contacts").hide(100,function(){       
+                    $("#connects_messages").show(100); 
+                    $("#menu_container_top_tab").hide(100);                
+                    //$("#menu_container_bottom_tab").hide(100);
+                    $("#center_top_id").hide(100);                
+
+                });
+            }
+        }
+        
+    } else{
         if (value_from_connects_name.includes(item.connect_from) == false) {
             value_from_connects_name = value_from_connects_name + " " + item.connect_from;
             loadchat(item.connect_from);
         }
-    }
+        //alert('connectstrue ' + connectstrue);
+    } */
+    //alert('value_from_connects_name ' + value_from_connects_name);
+
        
 }
+function chat_contacts_datamyFunction(item, index) {
+    var data_i = data_length-1;
+    var IMAGE_url = '../img/jeans3.jpg';
+
+    if (username == item.connect_from) {
+        var connect_messages  = '<div class="message parker" connect_from="' + item.connect_from + '" connect_messages_id="' + item.connect_messages_id + '">' + item.connect_message + '</div>';
+        $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");    
+    } else {
+        var connect_messages  = '<div class="message stark" connect_from="' + item.connect_from + '" connect_messages_id="' + item.connect_messages_id + '">' + item.connect_message + '</div>';
+        $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
+    }
+    //alert(item.connect_message);
+    if (data_i == index) {
+        var typing = '<div id="bot_typing" class="message stark">' +
+        '<div class="typing typing-1"></div>' +
+        '<div class="typing typing-2"></div>' +
+        '<div class="typing typing-3"></div>' +
+        '</div>';
+        
+        $("#chat").append(connect_messages + typing);
+
+        //$("#chat").append(connect_messages + typing + inpuy);
+        window.location.href="#bot_typing"; 
+        //endchat = 0;
+        //alert(messageauto);
+        /**if (messageauto == 1) {
+            messageauto = 0; 
+            $(".chat_main_container").show(100)
+            $("#connects_contacts").hide(100,function(){       
+                $("#connects_messages").show(100); 
+                $("#menu_container_top_tab").hide(100);                
+                //$("#menu_container_bottom_tab").hide(100);
+                $("#center_top_id").hide(100);                
+
+            });
+        } */
+        
+    } else {
+        $("#chat").append(connect_messages);
+    }
+    /**if (connect_from != "") {
+        if (connectstrue == 1) {
+            if (username == item.connect_from) {
+                var connect_messages  = '<div class="message parker" connect_from="' + item.connect_from + '" connect_messages_id="' + item.connect_messages_id + '">' + item.connect_message + '</div>';
+                $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");    
+            } else {
+                var connect_messages  = '<div class="message stark" connect_from="' + item.connect_from + '" connect_messages_id="' + item.connect_messages_id + '">' + item.connect_message + '</div>';
+                $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
+            }
+            if (data_i == index) {
+                var typing = '<div id="bot_typing" class="message stark">' +
+                '<div class="typing typing-1"></div>' +
+                '<div class="typing typing-2"></div>' +
+                '<div class="typing typing-3"></div>' +
+                '</div>';
+                $("#chat").append(connect_messages + typing);
+                window.location.href="#bot_typing"; 
+                endchat = 0;
+                //alert(messageauto);
+                if (messageauto = 1) {
+                    messageauto = 0; 
+                    $(".chat_main_container").show(100)
+                    $("#connects_contacts").hide(100,function(){       
+                        $("#connects_messages").show(100); 
+                        $("#menu_container_top_tab").hide(100);                
+                        //$("#menu_container_bottom_tab").hide(100);
+                        $("#center_top_id").hide(100);                
+    
+                    });
+                }
+                
+            } else {
+                $("#chat").append(connect_messages);
+            }
+        } else {
+            if (messageauto = 1) {
+                messageauto = 0; 
+                $(".chat_main_container").show(100)
+                $("#connects_contacts").hide(100,function(){       
+                    $("#connects_messages").show(100); 
+                    $("#menu_container_top_tab").hide(100);                
+                    //$("#menu_container_bottom_tab").hide(100);
+                    $("#center_top_id").hide(100);                
+
+                });
+            }
+        }
+        
+    } else{
+        if (value_from_connects_name.includes(item.connect_from) == false) {
+            value_from_connects_name = value_from_connects_name + " " + item.connect_from;
+            loadchat(item.connect_from);
+        }
+        //alert('connectstrue ' + connectstrue);
+    } */
+    //alert('value_from_connects_name ' + value_from_connects_name);
+
+       
+}
+$("#order_items_back").click(function(){
+    $("#order_items_container").hide(100,function(){
+    }); 
+    $("#orders_container").show(100);   
+});
+$("#order_back").click(function(){
+    $("#menu_container_top_tab").show(100);
+    $("#menu_container_left_tab").show(100);
+    $("#chat_container").hide(100);
+    $("#connects_chatbar").hide(100);
+    $("#orders_container").hide(100);
+    $("#order_items_container").hide(10);
+    $("#cart_container").hide(100);
+    $("#location_container").hide(100);
+    $("#user_container").hide(100);
+    $("#top_menu").show(100,function(){       
+        $("#search").hide(100);
+        $("#top_slider").hide(100);
+
+    });
+    $("#product_add_client_container").hide(100,function(){       
+        $("#product_error").hide(100);
+    });
+    if (_apps_tab != 0) {
+        document.body.classList.toggle('nav-is-toggled');
+        _apps_tab =0;
+    }
+    //$("#menu_container_apps_tab").hide(100);
+    $(".main").show(100);
+    $(".product_main_container").show(100);
+    //main();   
+});
+$("#cart_back").click(function(){
+    $("#menu_container_top_tab").show(100);
+    $("#menu_container_left_tab").show(100);
+    $("#chat_container").hide(100);
+    $("#connects_chatbar").hide(100);
+    $("#orders_container").hide(100);
+    $("#order_items_container").hide(10);
+    $("#cart_container").hide(100);
+    $("#location_container").hide(100);
+    $("#user_container").hide(100);
+    $("#top_menu").show(100,function(){       
+        $("#search").hide(100);
+        $("#top_slider").hide(100);
+
+    });
+    $("#product_add_client_container").hide(100,function(){       
+        $("#product_error").hide(100);
+    });
+    if (_apps_tab != 0) {
+        document.body.classList.toggle('nav-is-toggled');
+        _apps_tab =0;
+    }
+    //$("#menu_container_apps_tab").hide(100);
+    $(".main").show(100);
+    $(".product_main_container").show(100);
+    //main();  
+});
 $("#connects_back").click(function(){
+    //alert(connect_product);
+
     connect_from = "";
     if (connect_product == 1) {
         connect_product = 0; 
         connect_from = "";
-        $("#chat_container").hide(500,function(){
+        $("#chat_container").hide(100,function(){
             $("#product_container").show(100);
             //$("#product_row_container").hide(100);   
             $("#product_error").hide(100);  
             //$("#product_add_client_container").show(100);
         });               
     }
-    $("#menu_container_top_tab").show(500,function(){
+    $("#menu_container_top_tab").show(100,function(){
         $("#menu_container_bottom_tab").show(100);
-        $("#connects_messages").hide(500);      
-        $("#connects_contacts").show(500);
+        $("#connects_messages").hide(100);      
+        $("#connects_contacts").show(100);
         $("#center_top_id").hide(100); 
     });    
 });
@@ -3156,18 +5096,24 @@ $("#contacts_back").click(function(){
     if (connect_product == 1) {
         connect_product = 0; 
         connect_from = "";
-        $("#chat_container").hide(500,function(){
+        $("#chat_container").hide(100,function(){
             $("#product_container").show(100);
             //$("#product_row_container").hide(100);   
             $("#product_error").hide(100);  
             //$("#product_add_client_container").show(100);
         });               
     }
-    $("#menu_container_top_tab").show(500,function(){
+    $("#menu_container_top_tab").show(100,function(){
         $("#menu_container_bottom_tab").show(100);
-        $("#connects_messages").hide(500);      
-        $("#connects_contacts").show(500); 
+        $("#connects_messages").hide(100);      
+        $("#connects_contacts").show(100); 
         $("#center_top_id").hide(100);
+        $("#chat_container").hide(100,function(){
+            $("#product_container").show(100);
+            //$("#product_row_container").hide(100);   
+            $("#product_error").hide(100);  
+            //$("#product_add_client_container").show(100);
+        });
     });
 });
 var chat_ = 0;
@@ -3187,9 +5133,9 @@ $("#s5").click(function(){
         $("#connects_chatbar").show(100);
         $("#product_container").hide(100);
         $("#menu_container_left_tab").hide(100);
-       $("#orders_container").hide(100);
-   $("#order_items_container").hide(10);
-               $("#cart_container").hide(100);
+        $("#orders_container").hide(100);
+        $("#order_items_container").hide(10);
+        $("#cart_container").hide(100);
         $("#location_container").hide(100);
         $("#user_container").hide(100);
         $("#top_menu").show(100,function(){       
@@ -3225,14 +5171,16 @@ function connects_datamyFunction(item, index) {
     } else {
         product_title_account = messag.substring(0, 30) + "...";
     }
+    //alert(item.connect_from + ' message ' + item.connect_message);
     if (item.connect_status == "unread") {
-        get_connect_from = item.connect_from;
-        unread = unread + 1;
+        //get_connect_from = item.connect_from;
+
+        //unread = unread + 1;
         var connect_messages  = '<div class="contact get_contact" connect_from="' + item.connect_from + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
         '<div class="pic rogers rogers_'+ index +'"></div>' +
         '<div class="badge">' +
         '  ' + bum + '' +
-        '</div>' +
+        '</div><i class="fa fa-check-circle float-right" aria-hidden="true">' + item.connect_status + '</i>' +
         '<div class="name">' +
         '  ' + item.connect_from + '' +
         '</div>' +
@@ -3241,9 +5189,12 @@ function connects_datamyFunction(item, index) {
         '</div>' +
         '</div>';        
     } else {
-        bum = 0;
+        //bum = 0;
         var connect_messages  = '<div class="contact get_contact" connect_from="' + item.connect_from + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
-        '<div class="pic rogers rogers_'+ index +'"></div>' +        
+        '<div class="pic rogers rogers_'+ index +'"></div>' + 
+        '<div class="badge badge-info">' +
+        '  ' + bum + '' +
+        '</div><i class="fa fa-check-circle float-right" aria-hidden="true">' + item.connect_status + '</i>' +       
         '<div class="name">' +
         '  ' + item.connect_from + '' +
         '</div>' +
@@ -3254,15 +5205,24 @@ function connects_datamyFunction(item, index) {
     }
     
     $(".rogers_" + index + "").attr("style", "background-image: url('" + IMAGE_url + "')");
+    
+    //alert(item.connect_from + ' message ' + item.connect_message + ' status ' + item.connect_status);
+
     $("#connects").append(connect_messages);
 }
 var connects_data_from = "";
 function chat_main_container() {
     $(".chat_main_container").show(100);
-    $('#app-cover-spin').show(0);
-    window.location.href="#center_top_id"; 
+    //$('#app-cover-spin').show(0);
+    //window.location.href="#center_top_id";
+    //contact(connect_from,username,conn_id,'Hello ' + username + ', My name is ' + connect_from + '. How can i help you?');
+    connects_datalengthnow = 0;  
+    //connect_from = '';  
+    connect_product = 0; 
+    $("#chat").html('loading ...');                  
+    contact(username,"","","");
 }
-function loadchat(item_connect_from) {
+function loadchat(item_connect_from) {    
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
@@ -3270,10 +5230,17 @@ function loadchat(item_connect_from) {
         processData: true,
         url: api_server_url + '/cordova/chat_main_container.php',
         success: function searchSuccess(response) {
-            $('#app-cover-spin').hide(0);
             try {
-                //response.data = JSON.parse(response.data);
                 if (response.message == "success") {
+                    var connects_data = response.connects;
+                    bum = response.data_returned;
+                    connects_data.forEach(connects_datamyFunction);
+                } else {
+                    //alert('response.message ' + response.message);
+
+                }
+                //alert('username ' + username + ' item_connect_from ' + item_connect_from + ' response.message ' + response.message);
+                /**if (response.message == "success") {
                     var connect_status = response.connect_status;
                     var connects_data = response.connects;
                     bum = response.data_returned;                
@@ -3287,43 +5254,18 @@ function loadchat(item_connect_from) {
                     }
                 }
                 else {
-                    unread++;
-                    var connect_messages  = '<div class="contact get_contact" connect_from="' + 'Mo-pal' + '" connects_id="' + 'Mo-pal' + '" connects_time="' + Date() + '">' +
-                        '<div class="pic rogers"></div>' +
-                        '<div class="badge">' +
-                        '  ' + unread +'' +
-                        '</div>' +
-                        '<div class="name">' +
-                        '  ' + 'Mo-pal' + '' +
-                        '</div>' +
-                        '<div class="message">' +
-                        '  connect_from ' + connect_from + response.message + '' +
-                        '</div>' +
-                        '</div>';
-                    $("#connects").append(connect_messages);
-                }
+                    connects_datalengthnow = 0;
+                    contact('Mo-pal',username,conn_id,'  connect_from ' + item_connect_from + ' '  + response.message + '');
+                } */
             } catch(e) {
-                unread++;
-                var connect_messages  = '<div class="contact get_contact" connect_from="' + 'Mo-pal' + '" connects_id="' + 'Mo-pal' + '" connects_time="' + Date() + '">' +
-                    '<div class="pic rogers"></div>' +
-                    '<div class="badge">' +
-                    '  ' + unread +'' +
-                    '</div>' +
-                    '<div class="name">' +
-                    '  ' + 'Mo-pal' + '' +
-                    '</div>' +
-                    '<div class="message">' +
-                    '  connect_from ' + 'Json persing error' + '' +
-                    '</div>' +
-                    '</div>';
-                $("#connects").append(connect_messages);
-            }
-          
+                //alert('Json persing error');
+                //connects_datalengthnow = 0;
+                //contact('Mo-pal',username,conn_id,'Json persing error');
+            }          
         },
         error: function searchError(xhr, err) {
-          //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-          $('#app-cover-spin').hide(0);
-          unread++;
+            //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+          /**unread++;
           var connect_messages  = '<div class="contact get_contact" connect_from="' + 'Mo-pal' + '" connects_id="' + 'Mo-pal' + '" connects_time="' + Date() + '">' +
               '<div class="pic rogers"></div>' +
               '<div class="badge">' +
@@ -3336,83 +5278,38 @@ function loadchat(item_connect_from) {
               '  connect_from ' + "Error on ajax call: " + err  + " " + JSON.stringify(xhr) + '' +
               '</div>' +
               '</div>';
-          $("#connects").append(connect_messages);
+          $("#connects").append(connect_messages); */
 
         }
     });
-
-
-    /**const options = {
-        method: 'post',
-        data: { chat_main_container: 12, username: username, item_connect_from: item_connect_from },
-        headers: { Authorization: 'OAuth2: token' }
-    };      
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/chat_main_container.php', options, function(response) {
-        $('#app-cover-spin').hide(0);
-        try {
-            response.data = JSON.parse(response.data);
-            if (response.data.message == "success") {
-                var connect_status = response.data.connect_status;
-                var connects_data = response.data.connects;
-                bum = response.data.data_returned;                
-                if (connect_from == "") {
-                    if (connect_status != "0") { 
-                        unread = 0;
-                        connects_data.forEach(connects_datamyFunction);    
-                    } else {
-
-                    }
-                }
-            }
-            else {
-                unread++;
-                var connect_messages  = '<div class="contact get_contact" connect_from="' + 'Mo-pal' + '" connects_id="' + 'Mo-pal' + '" connects_time="' + Date() + '">' +
-                    '<div class="pic rogers"></div>' +
-                    '<div class="badge">' +
-                    '  ' + unread +'' +
-                    '</div>' +
-                    '<div class="name">' +
-                    '  ' + 'Mo-pal' + '' +
-                    '</div>' +
-                    '<div class="message">' +
-                    '  connect_from ' + connect_from + response.data.message + '' +
-                    '</div>' +
-                    '</div>';
-                $("#connects").append(connect_messages);
-            }
-        } catch(e) {
-            
-        }
-    }, function(response) {
-        $('#app-cover-spin').hide(0);
-    }); */
+    
 }
 document.addEventListener('backbutton', function(){
     connect_from = "";
     if (chat_ == 1) {
         chat_ = 0;
         connect_from = "";
-        $("#menu_container_top_tab").show(500,function(){
+        $("#menu_container_top_tab").show(100,function(){
             $("#menu_container_bottom_tab").show(100);
-            $("#connects_messages").hide(500);      
-            $("#connects_contacts").show(500); 
+            $("#connects_messages").hide(100);      
+            $("#connects_contacts").show(100); 
             $("#center_top_id").hide(100);    
         });        
     }
     if (conta == 1) {
         conta = 0;
         connect_from = "";
-        $("#menu_container_top_tab").show(500,function(){
+        $("#menu_container_top_tab").show(100,function(){
             $("#menu_container_bottom_tab").show(100);
-            $("#connects_messages").hide(500);      
-            $("#connects_contacts").show(500);
+            $("#connects_messages").hide(100);      
+            $("#connects_contacts").show(100);
             $("#center_top_id").hide(100);     
         });        
     }
     if (div_cima == 1 && chat_ == 0) {
         div_cima = 0; 
         connect_from = "";
-        $("#chat_container").hide(500,function(){
+        $("#chat_container").hide(100,function(){
             $("#product_container").show(100);
             $("#product_row_container").hide(100);   
             $("#product_error").hide(100);  
@@ -3422,7 +5319,7 @@ document.addEventListener('backbutton', function(){
     if (connect_product == 1) {
         connect_product = 0; 
         connect_from = "";
-        $("#chat_container").hide(500,function(){
+        $("#chat_container").hide(100,function(){
             $("#product_container").show(100);
             //$("#product_row_container").hide(100);   
             $("#product_error").hide(100);  
@@ -3443,7 +5340,7 @@ $("#s2").click(function(){
     search_value != '';
     geoshop_value != '';
     cat_id != '';
-    window.location.href="#cart_container";
+    //window.location.href="#cart_container";
     $("#menu_container_top_tab").show(100);                
 
     $("#product_container").hide(100);
@@ -3487,14 +5384,13 @@ $("#s4").click(function(){
     $("#menu_container_left_tab").hide(100);
     $("#chat_container").hide(100);
     $("#connects_chatbar").hide(100);
-   $("#orders_container").hide(100);
-   $("#order_items_container").hide(10);
-               $("#cart_container").hide(100);
+    $("#orders_container").hide(100);
+    $("#order_items_container").hide(10);
+    $("#cart_container").hide(100);
     $("#location_container").hide(100);
     $("#top_menu").show(100,function(){       
         $("#search").hide(100);
         $("#top_slider").hide(100);
-
     });
     user();
     $("#product_add_client_container").hide(100,function(){       
@@ -3506,6 +5402,7 @@ $("#s4").click(function(){
     }
     //$("#menu_container_apps_tab").hide(100);
 });
+var user_co = 0;
 function user() {    
     if (username == "") {
         $(".user").hide(100);
@@ -3516,7 +5413,8 @@ function user() {
         $(".main").show(100);
         $(".user").show(100);
         window.location.href="#user_container";
-        user_container(username);
+        user_co = 1;
+        user_container(username,email);
 
     }    
 }
@@ -3551,8 +5449,35 @@ $("#s3").click(function(){
     }
     //$("#menu_container_apps_tab").hide(100);
 });
+var location_main_container = 0;
 function location_container() {
-    heremapview(latitude,longitude);  
+    $(".location_main_container").show(100);
+    window.location.href="#location_container";
+    navigator.geolocation.getCurrentPosition(onSuccess, onError, {
+        timeout: 30000
+    });
+
+    function onSuccess(position) {
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        localStorage.setItem("latitude", position.coords.latitude);
+        localStorage.setItem("longitude", position.coords.longitude);
+        document.getElementById("main_heremap").innerHTML = "";
+
+        $('<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/location_container.html" height="400px" width="100%" title="map"></iframe>').appendTo('#main_heremap');
+
+        action_float_id = 0;
+        contact_information_save = 0;
+        location_main_container = 1;
+        update_user_data(latitude,longitude,role,rating,review,address,city,country,postal,user_phone,email,last,first,username);
+    
+    }
+
+    function onError(error) {
+        alert('code: ' + error.code + '\n' +
+            'message: ' + error.message + '\n');
+    }
+    //heremapview(latitude,longitude);  
     /**$.ajax({
         url: 'https://image.maps.ls.hereapi.com/mia/1.6/mapview',
         type: 'GET',
@@ -3570,19 +5495,22 @@ function location_container() {
         }
     }); */
 
-    $(".location_main_container").show(100);
+    /**$(".location_main_container").show(100);
     window.location.href="#location_container";    
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
     var onSuccess = function(position) {
         latitude = position.coords.latitude;
         longitude = position.coords.longitude;
-        heremapview(latitude,longitude);        
+        alert('latitude: ' + latitude + ' longitude: ' + longitude + '');
+        //heremapview(latitude,longitude);        
     };
     function onError(error) {
-        heremapview(latitude,longitude);  
-        $("#location_container").html('code: ' + error.code + 'message: ' + error.message + '');
-    }
-    navigator.geolocation.getCurrentPosition(onSuccess, onError); 
+        //heremapview(latitude,longitude); 
+        //$("#location_container").html('code: ' + error.code + 'message: ' + error.message + '');
+ 
+        alert('code: ' + error.code + 'message: ' + error.message + '');
+    } */
+    //navigator.geolocation.getCurrentPosition(onSuccess, onError); 
 }
 function heremapview(latitude,longitude) {
     $('#app-cover-spin').show(0);
@@ -3680,16 +5608,28 @@ function login_user(login_email,login_password) {
         success: function searchSuccess(response) {
             $('#app-cover-spin').hide(0);
             $("#login_button_help").html(response.message);
-           // alert(response.message);
-            //alert(JSON.parse(response));
-
-
             try {
                // response.data = JSON.parse(response.data);
                 if (response.message == "success") {
                     $("#login_button_help").html("Welcome " + response.username);
                     username = response.username;
                     role = response.role;
+                    email = response.email;
+
+                    first = response.first_name;
+                    last = response.last_name;
+                    phone = response.phone_number;
+
+                    var location = JSON.parse(response.location_name);
+                        postal = location.postal;
+                        country = location.country;
+                        city = location.city;
+                        address = location.address;
+
+                    localStorage.setItem("username", username);
+                    localStorage.setItem("role", role);
+                    localStorage.setItem("email", email);
+
                     main();
                 } else {
                     $("#login_button_help").html(response.login_email + " or " + response.login_password);
@@ -3831,7 +5771,6 @@ $("#signup_button").click(function(){
 });
 function signup_user(signup_username,signup_email,signup_password) {
     $('#app-cover-spin').show(0);
-
     $.ajax({
         type: "POST", // Type of request to be send, called as 
         dataType: 'json',
@@ -3854,7 +5793,23 @@ function signup_user(signup_username,signup_email,signup_password) {
                     review = response.review;
                     rating = response.rating;
                     role = response.role;
+                    email = response.email;
+
+                    first = response.first_name;
+                    last = response.last_name;
+                    phone = response.phone_number;
+
+                    var location = JSON.parse(response.location_name);
+                        postal = location.postal;
+                        country = location.country;
+                        city = location.city;
+                        address = location.address;
+
                     altitude = response.altitude;
+                    localStorage.setItem("username", username);
+                    localStorage.setItem("role", role);
+                    localStorage.setItem("email", email);
+
                     main();
                 }
                 else if(response.message == "fail validate"){
@@ -4215,11 +6170,43 @@ function agent_location_map(add_client,username) {
     localStorage.setItem("add_client", add_client);
     localStorage.setItem("username", username);
 
+    /**navigator.geolocation.getCurrentPosition(onSuccess, onError, {
+        timeout: 30000
+    });
+
+    function onSuccess(position) {
+        var lat = position.coords.latitude;
+        var lang = position.coords.longitude;
+        alert('latitude: ' + position.coords.latitude + '\n' +
+        'longitude: ' + position.coords.longitude + '\n');
+        //Google Maps
+        var myLatlng = new google.maps.LatLng(lat, lang);
+        var mapOptions = {
+            zoom: 4,
+            center: myLatlng
+        }
+        var map = new google.maps.Map(document.getElementById('agent_location_map'), mapOptions);
+        var marker = new google.maps.Marker({
+            position: myLatlng,
+            map: map
+        });
+    }
+
+    function onError(error) {
+        alert('code: ' + error.code + '\n' +
+            'message: ' + error.message + '\n');
+    } */
+    //google.maps.event.addDomListener(window, 'load', onSuccess);
+
+
+    //alert('' + path_protocol + '//' + host_name + ':' + port + '/map/');
     document.getElementById("agent_location_map").innerHTML = "";
     //document.getElementById("agent_location_map").innerHTML = '<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/agent_location_map.html" height="400px" width="100%" title="map"></iframe>';
-    //document.getElementById("agent_location_map").innerHTML = '<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/" height="400px" width="100%" title="map"></iframe>';
+    document.getElementById("agent_location_map").innerHTML = '<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/" height="400px" width="100%" title="map"></iframe>';
     //document.getElementById("agent_location_map").innerHTML = '<iframe src="http://oramla.onlinewebshop.net/" height="400px" width="100%" title="map"></iframe>';
-    $('<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/" height="400px" width="100%" title="map"></iframe>').appendTo('#agent_location_map');
+    //var ref = ;
+
+    //$(cordova.InAppBrowser.open(path_protocol + '//' + host_name + ':' + port + '/map/', '_self', 'useWideViewPort=yes,fullscreen=no')).appendTo('#agent_location_map');
     /**cordova.plugin.google.maps.LocationService.getMyLocation(function(result) {
         alert(["Your current location:\n",
             "latitude:" + location.latLng.lat.toFixed(3),
@@ -4241,6 +6228,275 @@ function agent_location_map(add_client,username) {
         main();        
     });*/
 }
+var upload_from_url = 0;
+var upload_from_file = 1;
+$("#upload_from_url").click(function(){
+    $("#upload_from_url").hide();
+    $("#upload_from_file_container").hide();
+    $("#upload_from_file").show();
+    $("#upload_from_url_container").show();
+    upload_from_url = 1;
+    upload_from_file = 0;
+    $("#product_save").removeClass("btn-danger");
+    $("#product_save").removeClass("btn-success");
+    $("#product_save").removeClass("btn-info");
+    $("#product_save").removeClass("btn-warning");
+
+    $("#product_save").addClass("btn-primary");
+    $("#product_save").html('Add');
+    $("#upload_from_help").html('');
+
+
+});
+$("#upload_from_file").click(function(){
+    $("#upload_from_file").hide();
+    $("#upload_from_url_container").hide();
+    $("#upload_from_url").show();
+    $("#upload_from_file_container").show();
+    upload_from_url = 0;
+    upload_from_file = 1;
+    $("#product_save").removeClass("btn-danger");
+    $("#product_save").removeClass("btn-success");
+    $("#product_save").removeClass("btn-info");
+    $("#product_save").removeClass("btn-warning");
+
+    $("#product_save").addClass("btn-primary");
+    $("#product_save").html('Add');
+    $("#upload_from_help").html('');
+
+
+});
+$(".imgAdd").click(function(){
+    if (upload_from_file == 1) {
+        $(this).closest(".row").find('.imgAdd').before('<div class="col imgUp"><div class="imagePreview"></div>' +
+        '<label class="btn btn-primary">' +
+          'Choose file ' +
+          '<input type="file" name="fileToUpload[]" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">' +
+        '</label> <i class="fa fa-times del"></i></div>');
+    } else {
+        $(this).closest(".row").find('.imgAdd').before('<div class="col imgUp"><div class="imagePreview"></div><div class="control"><input type="url" class="uploadUrl img input is-success" placeholder="Enter url i.e http://oramla.com" style="width:auto;height:0px;overflow:hidden;"></div><i class="fa fa-times del"></i></div>');
+    }
+});
+$(document).on("click", "i.del" , function() {
+    $(this).parent().remove();
+});
+$(function() {
+      $(document).on("change",".uploadFile", function() {
+        $("#product_save").removeClass("btn-danger");
+        $("#product_save").removeClass("btn-success");
+        $("#product_save").removeClass("btn-info");
+        $("#product_save").removeClass("btn-warning");
+    
+        $("#product_save").addClass("btn-primary");
+        $("#product_save").html('Add');
+        $("#upload_from_help").html('');
+          var uploadFile = $(this);
+          if (upload_from_file == 1) {
+            var files = !!this.files ? this.files : [];
+            if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
+     
+            if (/^image/.test( files[0].type)){ // only image file
+                var reader = new FileReader(); // instance of the FileReader
+                reader.readAsDataURL(files[0]); // read the local file
+     
+                reader.onloadend = function(){ // set image data as background of div
+                  //alert(uploadFile.closest(".upimage").find('.imagePreview').length);
+                  uploadFile.closest(".imgUp").find('.imagePreview').css("background-image", "url("+this.result+")");
+                }
+            }
+          } else {
+           // uploadFile.closest(".imgUp").find('.imagePreview').css("background-image", "url("+$(this).val()+")");
+
+          }
+          
+      });
+      $(document).on("change",".uploadUrl", function() {
+        $("#product_save").removeClass("btn-danger");
+        $("#product_save").removeClass("btn-success");
+        $("#product_save").removeClass("btn-info");
+        $("#product_save").removeClass("btn-warning");
+    
+        $("#product_save").addClass("btn-primary");
+        $("#product_save").html('Add');
+        $("#upload_from_help").html('');
+        var uploadUrl = $(this);
+        if (upload_from_file == 1) {
+          
+        } else {
+            uploadUrl.closest(".imgUp").find('.imagePreview').css("background-image", "url("+$(this).val()+")");
+
+        }
+        
+    });
+});
+
+$("#product_save").click(function(){
+    var product_tax = $("#product_tax").val();
+    var product_shipping = $("#product_shipping").val();
+    var product_destinations = $("#product_destinations").val();
+    var product_condition = $("#product_condition").val();
+    var product_brand = $("#product_brand").val();
+    var product_availability = $("#product_availability").val();
+    var product_price = $("#product_price").val();
+    var product_quantity = $("#product_quantity").val();
+    var product_description = $("#product_description").val();
+    var product_shipping = $("#product_shipping").val();
+    var product_type = $("#product_type").val();
+    var product_title = $("#product_title").val();
+    var product_industry = $("#product_industry").val();
+    var product_category = $("#product_category").val();
+    
+    if (upload_from_file == 1) {
+        var uploadFile_arr = $('.uploadFile').map(function(){ return  $(this).val() }).get()
+        var i;
+        var upload_from_check = 0;
+        for (i = 0; i < uploadFile_arr.length; i++) {
+            if (uploadFile_arr[i] != '') {
+                upload_from_check = 1;      
+            } else {
+                upload_from_check = 0;
+            }
+        }
+        if (upload_from_check == 1) {
+            $("#product_save").removeClass("btn-primary");
+            $("#product_save").removeClass("btn-success");
+            $("#product_save").removeClass("btn-danger");
+            $("#product_save").removeClass("btn-warning");
+
+            $("#product_save").addClass("btn-info");
+            $("#product_save").html('Uploading...');
+            $("#upload_from_help").html('Please wait...');
+            upload_image_from_file(uploadFile_arr);      
+        } else {
+            $("#product_save").removeClass("btn-primary");
+            $("#product_save").removeClass("btn-success");
+            $("#product_save").removeClass("btn-danger");
+            $("#product_save").removeClass("btn-info");
+
+            $("#product_save").addClass("btn-warning");
+            $("#product_save").html('Error');
+            $("#upload_from_help").html("No file selected");
+        }        
+        
+    } else {
+        var uploadUrl_arr = $('.uploadUrl').map(function(){ return  $(this).val() }).get();
+        var i;
+        var upload_from_check = 0;
+        for (i = 0; i < uploadUrl_arr.length; i++) {
+            if (uploadUrl_arr[i] != '') {
+                upload_from_check = 1;      
+            } else {
+                upload_from_check = 0;
+            }
+        }
+        if (upload_from_check == 1) {
+            upload_image_from_url(uploadUrl_arr);      
+        } else {
+            $("#upload_from_help").html("No Url To the image");
+        }
+    }
+    
+});
+
+
+function upload_image_from_url(uploadUrl_arr) {
+    
+}
+
+function upload_image_from_file(uploadFile_arr) {
+    $('#app-cover-spin').show(0);
+    // Create an FormData object 
+    var formData = $(".fileToUploadForm").submit(function (e) {
+        return;
+    });
+    //formData[0] contain form data only 
+    // You can directly make object via using form id but it require all ajax operation inside $("form").submit(<!-- Ajax Here   -->)
+    var formData = new FormData(formData[0]);
+    $.ajax({
+        url: api_server_url + '/cordova/upload_image_from_file.php',
+        type: 'POST',
+        data: formData,
+        success: function (response) {
+            try {
+                if (response.message == "success") {
+                    if (response.uploadFile_arr.message == "success") {
+                        $("#product_save").removeClass("btn-primary");
+                        $("#product_save").removeClass("btn-info");
+                        $("#product_save").removeClass("btn-danger");
+                        $("#product_save").removeClass("btn-warning");
+
+                        $("#product_save").addClass("btn-success");
+                        $('#app-cover-spin').hide(0);
+                        $("#product_save").html(response.uploadFile_arr.message);
+                        $("#upload_from_help").html('Uploaded successfuly');
+                    } else {                        
+                        $("#product_save").removeClass("btn-primary");
+                        $("#product_save").removeClass("btn-success");
+                        $("#product_save").removeClass("btn-info");
+                        $("#product_save").removeClass("btn-warning");
+
+                        $("#product_save").addClass("btn-danger");
+                        $('#app-cover-spin').hide(0);
+                        $("#product_save").html('fail');
+                        if (response.uploadOk == 0) {
+                            $("#upload_from_help").html(response.uploadFile_arr);
+                        } else {
+                            $("#upload_from_help").html(response.uploadFile_arr.message);
+                        }
+                    }
+                } else {
+                    $('#app-cover-spin').hide(0);
+                    $("#upload_from_help").html(response.message);
+                }
+            } catch(e) {
+                $('#app-cover-spin').hide(0);
+                $("#upload_from_help").html('JSON parsing error');
+            }
+        },
+        error: function searchError(xhr, err) {
+            $('#app-cover-spin').hide(0);
+            $("#upload_from_help").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+        },
+        contentType: false,
+        processData: false,
+        cache: false
+    });
+    return false;
+
+    /**$.ajax({
+        type: "POST", // Type of request to be send, called as 
+        dataType: 'json',
+        data: { upload_image_from_file: 12, uploadFile_arr: uploadFile_arr, username:username},
+        processData: true,
+        url: api_server_url + '/cordova/upload_image_from_file.php',
+        success: function searchSuccess(response) {
+            $('#app-cover-spin').hide(0);
+            try {
+                if (response.message == "success") {
+
+                    alert(response.uploadFile_arr);
+                    //$("#new_password_button_help").html(forgot_login_email);
+
+                    //$("#new_password").removeClass("active");
+                    //$("#login").addClass("active");
+
+                    //$("#new_password_button_help").html(response.validate_message);
+
+                } else {
+                    $("#upload_from_help").html(response.message);
+                }
+            } catch(e) {
+                $("#upload_from_help").html('JSON parsing error');
+            }          
+        },
+        error: function searchError(xhr, err) {
+          $('#app-cover-spin').hide(0);
+          $("#upload_from_help").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+        }
+    }); */
+}
+
+
 
 
 /**function edit_add_items_name() {

@@ -230,6 +230,20 @@ cordova.define('cordova/plugin_list', function (require, exports, module) {
         "id": "cordova-plugin-statusbar.StatusBarProxy",
         "pluginId": "cordova-plugin-statusbar",
         "runs": true
+    },
+    {
+        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+        "id": "cordova-plugin-inappbrowser.inappbrowser",
+        "pluginId": "cordova-plugin-inappbrowser",
+        "clobbers": [
+            "cordova.InAppBrowser.open"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-inappbrowser/src/browser/InAppBrowserProxy.js",
+        "id": "cordova-plugin-inappbrowser.InAppBrowserProxy",
+        "pluginId": "cordova-plugin-inappbrowser",
+        "runs": true
     }
 ];
 
@@ -242,7 +256,8 @@ cordova.define('cordova/plugin_list', function (require, exports, module) {
     "cordova-plugin-media": "5.0.3",
     "cordova-plugin-splashscreen": "6.0.0",
     "cordova-plugin-statusbar": "2.4.3",
-    "cordova-plugin-whitelist": "1.3.4"
+    "cordova-plugin-whitelist": "1.3.4",
+    "cordova-plugin-inappbrowser": "5.0.0"
 }
             // BOTTOM OF METADATA
         });

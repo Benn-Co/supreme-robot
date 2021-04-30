@@ -167,17 +167,18 @@ let panorama;
                   if (response.message == "success") {
                     add_client = response.add_client;
                     //alert("add_client " + add_client);      
-                    //add_client_latitude = response.add_client_latitude;
-                    //add_client_longitude = response.add_client_longitude;
+                    add_client_latitude = response.add_client_latitude;
+                    add_client_longitude = response.add_client_longitude;
                     add_client_location_name = response.add_client_location_name;
   
                     username = response.username;
-                    //alert("username " + username);      
-                    //username_latitude = response.username_latitude;
-                    //username_longitude = response.username_longitude;
+                    username_latitude = response.username_latitude;
+                    username_longitude = response.username_longitude;
                     username_location_name = response.username_location_name;      
-                    //center_latitude = add_client_latitude;
-                    //center_longitude = add_client_longitude;
+                    center_latitude = add_client_latitude;
+                    center_longitude = add_client_longitude;
+                    //alert("username_latitude " + username_latitude);      
+
                     showMap();
                     autoStreetview();                       
                   }

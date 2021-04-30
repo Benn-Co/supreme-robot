@@ -168,9 +168,15 @@ li {
   background-color: rgb(34, 18, 36);
   width: auto;
 }*/
+.header_header{
+  color: rgb(34, 18, 36);
+  margin-right: 25px !important;
+
+}
 .header{
   color: rgb(34, 18, 36);
   background-color: #bbb;
+
 }
 
 nav ul {

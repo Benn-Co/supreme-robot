@@ -44,7 +44,8 @@ body {
     padding:0px;
     /* Padding to avoid the "unsafe" areas behind notches in the screen */
     padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
-    text-transform:uppercase;
+    text-transform:initial;
+    text-decoration: solid;
     width:100%;
 }
 
@@ -174,4 +175,185 @@ body {
 @keyframes fadeout {
   from {bottom: 30px; opacity: 1;}
   to {bottom: 0; opacity: 0;}
+}
+
+
+
+.label-container{
+	position:fixed;
+	bottom:14%;
+	right:95px;
+	display:table;
+	visibility: hidden;
+}
+
+.label-text{
+	color:#FFF;
+	background:rgba(51,51,51,0.5);
+	display:table-cell;
+	vertical-align:middle;
+	padding:10px;
+	border-radius:3px;
+}
+
+.label-arrow{
+	display:table-cell;
+	vertical-align:middle;
+	color:#333;
+	opacity:0.5;
+}
+
+.float{
+	position:fixed;
+	width:55px;
+	height:55px;
+	bottom:14%;
+	right:10px;
+	background-color:rgb(224, 228, 226);
+	color:rgb(2, 0, 0);
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+
+.my-float{
+	font-size:24px;
+	margin-top:18px;
+}
+
+a.float + div.label-container {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s ease;
+}
+
+a.float:hover + div.label-container{
+  visibility: visible;
+  opacity: 1;
+}
+
+.product_label-container{
+	position:fixed;
+	bottom:28%;
+	right:95px;
+	display:table;
+	visibility: hidden;
+}
+
+.product_label-text{
+	color:#FFF;
+	background:rgba(51,51,51,0.5);
+	display:table-cell;
+	vertical-align:middle;
+	padding:10px;
+	border-radius:3px;
+}
+
+.product_label-arrow{
+	display:table-cell;
+	vertical-align:middle;
+	color:#333;
+	opacity:0.5;
+}
+
+.product_float{
+	position:fixed;
+	width:55px;
+	height:55px;
+	bottom:28%;
+	right:10px;
+	background-color:rgb(224, 228, 226);
+	color:rgb(2, 0, 0);
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+
+.product_my-float{
+	font-size:24px;
+	margin-top:18px;
+}
+
+a.product_float + div.product_label-container {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s ease;
+}
+
+a.product_float:hover + div.product_label-container{
+  visibility: visible;
+  opacity: 1;
+}
+
+
+.upload_from_file{
+  display: none;
+}
+.upload_from_url_container{
+  display: none;
+}
+
+
+
+.imagePreview {
+  width: 100%;
+  height: 180px;
+  background-position: center center;
+  background-image:url(https://sc01.alicdn.com/kf/H1690d98489d84e6a8699cfbbe4133814l.jpg);
+  background-color:#fff;
+  background-size: cover;
+  background-repeat:no-repeat;
+  display: inline-block;
+  box-shadow:0px -3px 6px 2px rgba(0,0,0,0.2);
+}
+.btn-primary
+{
+display:block;
+border-radius:0px;
+box-shadow:0px 4px 6px 2px rgba(0,0,0,0.2);
+margin-top:-5px;
+}
+.imgUp
+{
+margin-bottom:15px;
+}
+.del
+{
+position:absolute;
+top:0px;
+right:15px;
+width:30px;
+height:30px;
+text-align:center;
+line-height:30px;
+background-color:rgba(255,255,255,0.6);
+cursor:pointer;
+}
+.imgAdd
+{
+width:30px;
+height:30px;
+border-radius:50%;
+background-color:#4bd7ef;
+color:#fff;
+box-shadow:0px 0px 2px 1px rgba(0,0,0,0.2);
+text-align:center;
+line-height:30px;
+margin-top:0px;
+cursor:pointer;
+font-size:15px;
+}
+
+
+.input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+.input {
+  width: 100%;
+  padding: auto;
+  margin: auto;
+  box-sizing: border-box;
 }
