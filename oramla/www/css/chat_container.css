@@ -77,6 +77,8 @@
 }
 .contact .name {
   font-weight: 500;
+  font-weight: bold;
+  font-size: 16px;
   margin-bottom: 0.125rem;
 }
 .contact .message, .contact .seen {
@@ -96,6 +98,26 @@
   left: 2.5rem;
   background: #333;
   color: white;
+}
+
+.contact .status {
+  box-sizing: border-box;
+  position: absolute;
+  text-align: center;
+  font-size: 0.9rem;
+  padding-top: 0.125rem;
+  bottom: 0;
+  right: auto;
+}
+
+.contact .time {
+  box-sizing: border-box;
+  position: absolute;
+  text-align: center;
+  font-size: 0.9rem;
+  padding-top: 0.125rem;
+  top: 0;
+  right: auto;
 }
 
 .contacts {
