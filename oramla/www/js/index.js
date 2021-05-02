@@ -4669,11 +4669,11 @@ function contact(user_name,con_from,conn_id,chat_message) {
                         if (response_message_from < 1) {
                             response_message_from = 1;
                             connects_datalengthnow = 0;
-                            contact(response.connect_from ,response.username,response.connects_id,'Hello ' + response.username + ', My name is ' + response.connect_from  + '. How can i help you?');
+                            contact(con_from ,user_name,conn_id,'Hello ' + user_name + ', My name is ' + con_from  + '. How can i help you?');
                         }                    
                     }           
                 } catch(e) {
-                    $("#chat").html('<div class="message stark">Error json</div>');
+                    $("#chat").html('<div class="message stark">Json persing error</div>');
                 }
             },
             error: function searchError(xhr, err) {
