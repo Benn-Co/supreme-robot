@@ -38,7 +38,7 @@
   
 }
 .center_connects {
-  margin-top: auto !important;
+  margin-top: 70px !important;
   padding-top: 10px !important;
 
 }
@@ -77,6 +77,8 @@
 }
 .contact .name {
   font-weight: 500;
+  font-weight: bold;
+  font-size: 16px;
   margin-bottom: 0.125rem;
 }
 .contact .message, .contact .seen {
@@ -96,6 +98,26 @@
   left: 2.5rem;
   background: #333;
   color: white;
+}
+
+.contact .status {
+  box-sizing: border-box;
+  position: absolute;
+  text-align: center;
+  font-size: 0.9rem;
+  padding-top: 0.125rem;
+  bottom: 0;
+  right: auto;
+}
+
+.contact .time {
+  box-sizing: border-box;
+  position: absolute;
+  text-align: center;
+  font-size: 0.9rem;
+  padding-top: 0.125rem;
+  top: 0;
+  right: auto;
 }
 
 .contacts {
@@ -141,7 +163,7 @@
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  height: 100 vh;
+  height: 100%;
   z-index: 0;
   box-sizing: border-box;
   border-radius: 1rem;
@@ -237,7 +259,7 @@
   display: flex;
   background-color: rgb(34, 36, 18);*/
   width: auto;
-  max-width: 70%;
+  max-width: 50%;
   align-items: center;
   padding: 1.5rem 0.5rem 0.5rem 1.5rem;
   margin-bottom: 100px !important;

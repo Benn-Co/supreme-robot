@@ -53,7 +53,7 @@ var api_server_url = "https://oramla.com";
 //var api_server_url = "http://192.168.0.102";
 //var api_server_url = "http://169.254.249.58";
 //var api_server_url = "http://192.168.43.16";
-var api_server_url = "http://localhost";
+//var api_server_url = "http://localhost";
 //var api_server_url = "http://192.168.43.16";
 
 
@@ -108,7 +108,7 @@ function user_container(user,email) {
                         phone = response.phone_number;
     
                         first = response.first_name;
-                        last = response.last_name;                    
+                        last = response.last_name;  
                         
                         var location = JSON.parse(response.location_name);
                         postal = location.postal;
@@ -116,10 +116,10 @@ function user_container(user,email) {
                         city = location.city;
                         address = location.address;
     
-                        $("#input-postal-code").val(location.postal);
-                        $("#input-country").val(location.country);
-                        $("#input-city").val(location.city);
-                        $("#input-address").val(location.address);
+                        $("#input-postal-code").val(postal);
+                        $("#input-country").val(country);
+                        $("#input-city").val(city);
+                        $("#input-address").val(address);
                         
                         $("#pending_orders_count").html(response.pending_orders);
                         $("#active_orders_count").html(response.active_orders);
@@ -868,6 +868,7 @@ function main() {
     product_main_container(startlimit,endlimit,cat_id);
     apps_categories(username);    
     if (username != "") {
+        count_time_out = 0;
         loadconnects();
         user_container(username,email);
         //setTimeout(loadchat, 3000);
@@ -887,7 +888,8 @@ function loadconnects() {
         //connects_datalengthnow = 0;  
         //connect_from = '';  
         //connect_product = 0; 
-        contact(username,"","","");
+        //contact(username,connect_from,"","");
+        loadchat('');
         setTimeout(loadconnects, 3000);
     }                
     
@@ -935,8 +937,8 @@ $("body").delegate(".connect_product","click",function(event){
             $("#center_top_id").show(100);
 
             $("#contactname").html($(this).attr('add_client'));
-            $("#cotacttime").html($(this).attr(Date()));
-            var IMAGE_url = 'img/jeans3.jpg';
+            $("#cotacttime").html(Date());
+            var IMAGE_url = $(this).attr('connect_image_url');
             $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
             var chat_message = '';
             connect_product = 1;
@@ -952,6 +954,8 @@ $("body").delegate(".connect_product","click",function(event){
             
             connects_datalengthnow = 0;
             $("#chat").html('loading ...');
+            //contact_from = 0;
+            response_message_from = 0;
             contact(username,$(this).attr('add_client'),$(this).attr('product_id'),chat_message);
 
             $("#connects_chatbar").show(100);
@@ -1914,7 +1918,7 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
         var actions = '<div class="tags are-medium">' +
         '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + product_id + '"><span><span><i class="fa fa-shopping-cart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
-        '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + product_id + '" product_url="' + IMAGE_url + '" product_title="' + product_title + '" add_client = "' + add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + product_id + '" connect_image_url="' + IMAGE_url + '" product_url="' + IMAGE_url + '" product_title="' + product_title + '" add_client = "' + add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
         '</div>';//product_url="' + IMAGE_url + '" product_title="' + product_title + '"
     }
     if (role == 'admin' || role == 'Admin'){
@@ -1923,7 +1927,7 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
         '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="tag is-info more fl-l edit_product" product_id = "' + product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="tag is-danger share fl-l add_to_remove" product_id = "' + product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>' +
-        '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + product_id + '" product_url="' + IMAGE_url + '" product_title="' + product_title + '" add_client = "' + add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
+        '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_id = "' + product_id + '" connect_image_url="' + IMAGE_url + '" product_url="' + IMAGE_url + '" product_title="' + product_title + '" add_client = "' + add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
         var actions = '<div class="tags are-medium">' + admin_actions + '</div>';        
     }
     
@@ -2161,7 +2165,7 @@ function other_product_same_clientmyFunction(item, index) {
             var actions = '<div class="tags are-medium">' +
             '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
-            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" connect_image_url="' + IMAGE_url + '" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
             '</div>';
         }
         if (role == 'admin' || role == 'Admin'){
@@ -2169,7 +2173,7 @@ function other_product_same_clientmyFunction(item, index) {
             '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-info more fl-l edit_product" product_id = "' + item.product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
-            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" connect_image_url="' + IMAGE_url + '" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-danger share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>';
             var actions = '<div class="tags are-medium">' + admin_actions + '</div>';
             
@@ -2240,7 +2244,7 @@ function other_product_same_clientmyFunction(item, index) {
             var actions = '<div class="tags are-medium">' +
             '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
-            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" connect_image_url="' + IMAGE_url + '" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
             '</div>';
         }
         if (role == 'admin' || role == 'Admin'){
@@ -2248,7 +2252,7 @@ function other_product_same_clientmyFunction(item, index) {
             '<a href="javascript:void(0)" class="tag is-success share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-primary more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-info more fl-l edit_product" product_id = "' + item.product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
-            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
+            '<a href="javascript:void(0)" class="tag is-secondary share fl-l connect_product" connect_image_url="' + IMAGE_url + '" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>' +
             '<a href="javascript:void(0)" class="tag is-danger share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>';
             var actions = '<div class="tags are-medium">' + admin_actions + '</div>';
             
@@ -2726,7 +2730,7 @@ function products_datamyFunction(item, index) {
         var actions = '' +
         '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
-        '<a href="javascript:void(0)" class="share fl-l connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
+        '<a href="javascript:void(0)" class="share fl-l connect_product" connect_image_url="' + IMAGE_url + '" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
     }//product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" 
     if (role == 'admin' || role == 'Admin'){
         var admin_actions = '' +
@@ -2736,7 +2740,7 @@ function products_datamyFunction(item, index) {
         var actions = '' +
         '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
-        '<a href="javascript:void(0)" class="share fl-l connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
+        '<a href="javascript:void(0)" class="share fl-l connect_product" connect_image_url="' + IMAGE_url + '" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
     }
     var product_container = '<div class="container-prod">' +
     '<div class="image div_cimage" style="background-image:url(' + IMAGE_url + ');" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" ></div>' +
@@ -4526,7 +4530,7 @@ $("body").delegate(".get_contact","click",function(event){
     conta = 1;
     $("#contactname").html($(this).attr('connect_from'));
     $("#cotacttime").html($(this).attr('connects_time'));
-    var IMAGE_url = 'img/jeans3.jpg';
+    var IMAGE_url = $(this).attr('connect_image_url');
     $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
 
     //$("#chat_message").val();
@@ -4541,6 +4545,8 @@ $("body").delegate(".get_contact","click",function(event){
     messageauto = 1;
     connects_datalengthnow = 0;
     $("#chat").html('loading ...');
+    //contact_from = 0;
+    response_message_from = 0;
     contact(username,$(this).attr('connect_from'),$(this).attr('connects_id'),chat_message); 
     if (messageauto == 1) {
         messageauto = 0; 
@@ -4577,6 +4583,8 @@ $("body").delegate(".add_float","click",function(event){
         messageauto = 1;
         connects_datalengthnow = 0;
         $("#chat").html('loading ...');
+        //contact_from = 0;
+        response_message_from = 0;
         contact(username,$(this).attr('connect_from'),$(this).attr('connects_id'),chat_message);
     
         $("#connects_chatbar").show(100);
@@ -4620,310 +4628,92 @@ $("body").delegate(".add_float","click",function(event){
 var data_length = 0;
 var chats_length = 0;
 var connects_datalength = 0;
+var connect_messages = 0;
 var connects_datalengthnow = 0;
 var connectstrue = 0;
 var oppname = 0;
-var response_message = 1;
+var response_message = 0;
+var response_message_from = 0;
+var contact_from = 0;
+var contact_ofrom = 0;
+var count_time_out = 0;
+var IMAGE_pic_url  = '../img/jeans3.jpg';
 function contact(user_name,con_from,conn_id,chat_message) {
-    if (connect_product == 1) {
-        con_from = connect_from;
-    }
-
-    if (chat_window == 1) {
-        chat_window = 0;
-    } else {
-        if (con_from != "" ) {
-            if (conectset == 0) {
-
-            } else {
-                conectset = 0;
-            } 
-            //$(".chat_main_container").show(100);              
-        }        
-    }  
-    var IMAGE_url = 'img/jeans3.jpg';
-    //connects_id = conn_id;
-    //connect_from = con_from;
-    //alert('username ' + username + ' ' + ' connect_from ' + con_from  + ' chat_message ' + chat_message);
-    
-    $.ajax({
-        type: "POST", // Type of request to be send, called as
-        dataType: 'json',
-        data: { contact: 12, username: user_name,connect_from: con_from ,connects_id: conn_id, chat_message:chat_message  },
-        processData: true,
-        url: api_server_url + '/cordova/contact.php',
-        success: function searchSuccess(response) {
-            //alert('username ' + response.username + ' ' + ' connect_from ' + response.connect_from  + ' chat_message ' + response.chat_message + ' response.message ' + response.message);
-            try {
-                //alert(response.message);
-                //$("#chat_num").html(response.chat_num);
-                if (response.message == "success") {
-                    response_message = 1;
-                    var connects_data = response.connects;
-                    connects_datalength = connects_datalengthnow;
-                    connects_datalengthnow = connects_data.length;
-                    
-                    var chat_num_diff = Math.abs(connects_datalengthnow - connects_datalength);
-
-                    if (chat_num_diff > 0) {
-                        $("#chat_num").show(100);
-                        $("#chat_num").html(chat_num_diff);
-                    } else {
-                        //$("#chat_num").hide(100);
-                        //$("#chat_num").html(chat_num_diff);
-                        $("#chat_num").html(connects_data.length);
-                    }
-                    
-
-                    if (connects_datalength < connects_datalengthnow || connects_datalength > connects_datalengthnow) {
-                        
-                        if (response.connect_from != '') {
-                            $("#chat").html('');
-                            data_length =  connects_data.length;
-                            //alert('chat username ' + response.username + ' ' + ' connect_from ' + response.connect_from + ' connects_id ' + response.connects_id   + ' chat_message ' + response.chat_message + ' connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow);
-                            connects_data.forEach(chat_contacts_datamyFunction);
+    if (con_from != '') {
+        $.ajax({
+            type: "POST", // Type of request to be send, called as
+            dataType: 'json',
+            data: { contact: 12, username: user_name,connect_from: con_from ,connects_id: conn_id, chat_message:chat_message  },
+            processData: true,
+            url: api_server_url + '/cordova/contact.php',
+            success: function searchSuccess(response) {
+                try {
+                    if (response.message == "success") {
+                        var connects_data = response.connects;
+                        connects_datalength = connects_datalengthnow;
+                        connects_datalengthnow = connects_data.length;                    
+                        //var chat_num_diff = Math.abs(connects_datalengthnow - connects_datalength);
+                        var connects_name_image =  response.connects_name_IMAGE; 
+                        if (connects_name_image.includes("http", 0)) {
+                            IMAGE_pic_url = connects_name_image + '';
                         } else {
-                           // alert('connects username ' + response.username + ' ' + ' connect_from ' + response.connect_from + ' connects_id ' + response.connects_id   + ' chat_message ' + response.chat_message + ' connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow);
-                            /**$("#connects").html('');
-                            value_from_connects_name = '';
-                            connects_data.forEach(contacts_datamyFunction); */
+                            IMAGE_pic_url = IMAGE_url_path_name + connects_name_image + '';
                         }
-                        $("#connects").html('');
-                        value_from_connects_name = '';
-                        connects_data.forEach(contacts_datamyFunction);
-                    } else {
-                        /**if (response.connect_from != '') {
-                            $("#chat").html('');
-                            data_length =  connects_data.length;
-                            //alert('length username ' + response.username + ' ' + ' connect_from ' + response.connect_from + ' connects_id ' + response.connects_id   + ' chat_message ' + response.chat_message + ' connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow);
-                            connects_data.forEach(chat_contacts_datamyFunction);
-                        } */
-                        //connects_data.forEach(contacts_datamyFunction);
-                        //alert('username ' + response.username + ' ' + ' connect_from ' + response.connect_from + ' connects_id ' + response.connects_id   + ' chat_message ' + response.chat_message + ' connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow);
-                    }
-                } else {
-                    //alert(response.message);
-                    //messageauto = 0;
-                    connect_product = 0;
-                    connects_datalengthnow = 0;
-                    if (response_message == 1) {
-                        response_message = 0;
-                        if (con_from == "" ) {
-                            $("#chat").html('Loading ...');
-                            contact('Mo-pal' ,response.username,response.connects_id,'Hello ' + response.username + ', My name is ' + 'Mo-pal'  + '. How can i help you?');
-                            if (messageauto == 1) {
-                                messageauto = 0; 
-                                $(".chat_main_container").show(100)
-                                $("#connects_contacts").hide(100,function(){       
-                                    $("#connects_messages").show(100); 
-                                    $("#menu_container_top_tab").hide(100);                
-                                    //$("#menu_container_bottom_tab").hide(100);
-                                    $("#center_top_id").hide(100);                
-                    
-                                });
-                            }
-                        } else {
-                            $("#chat").html('Loading ...');
-                            contact(response.connect_from ,response.username,response.connects_id,'Hello ' + response.username + ', My name is ' + response.connect_from  + '. How can i help you?');
-                            if (messageauto == 1) {
-                                messageauto = 0; 
-                                $(".chat_main_container").show(100)
-                                $("#connects_contacts").hide(100,function(){       
-                                    $("#connects_messages").show(100); 
-                                    $("#menu_container_top_tab").hide(100);                
-                                    //$("#menu_container_bottom_tab").hide(100);
-                                    $("#center_top_id").hide(100);                
-                    
-                                });
-                            }
-                        } 
-                    }
-                    //alert(response.message);
-                    
-                }
-                /**if (response.message == "success") {
-                    var connects_data = response.connects;
-                    var connect_status = response.connect_status;
-                    connects_datalength = connects_datalengthnow;
-                    //alert('connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow)
-
-                    connects_datalengthnow = connects_data.length;
-                    //alert('connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow)
-
-                    //alert('messageauto ' + messageauto + ' connect_from ' + connect_from + ' connectstrue ' + connectstrue + ' data_length ' + data_length);
-                    if (connect_from == "") {
-                        $("#chat").html('Loading ...');
-                        //connectstrue = 1;
-                        data_length =  connects_data.length; 
-                        //alert('messageauto ' + messageauto + ' connect_from ' + connect_from + ' connectstrue ' + connectstrue + ' data_length ' + data_length);
-                        connects_data.forEach(contacts_datamyFunction);
-                    } else {
-                        //alert('connects_datalength ' + connects_datalength + ' connects_datalengthnow ' + connects_datalengthnow)
                         if (connects_datalength < connects_datalengthnow || connects_datalength > connects_datalengthnow) {
-                            $("#chat").html('');
-                            connectstrue = 1;
-                            data_length =  connects_data.length;                 
-                            connects_data.forEach(contacts_datamyFunction);
-                            alert('messageauto ' + messageauto + ' connect_from ' + connect_from + ' connectstrue ' + connectstrue + ' data_length ' + data_length);
-
-                        } else {
-                            connectstrue = 0;
-                            data_length =  connects_data.length;                 
-                            connects_data.forEach(contacts_datamyFunction);
-                            //alert('this messageauto ' + messageauto + ' connect_from ' + connect_from + ' connectstrue ' + connectstrue + ' data_length ' + data_length);
-
-                        }
-                        //alert('messageauto ' + messageauto + ' connect_from ' + connect_from + ' data_length ' + data_length + ' connectstrue ' + connectstrue);
-                        //alert('this messageauto ' + messageauto + ' connect_from ' + connect_from + ' connectstrue ' + connectstrue + ' data_length ' + data_length);
-
-                    }                    
-                }
-                else {
-                    if (connect_from != "" ) {
-                        if (conectset == 0) {
-                            $("#contactname").html(connect_from);
-                            $("#cotacttime").html(Date());
-                            var connect_messages  = '<div class="message stark" connect_from="' + connect_from + '" connect_messages_id="' + '1' + '">' + 'Hello ' + username + ', My name is ' + connect_from + '. How can i help you?' + '</div>';
-                            $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
-                            //$("#chat").html(connect_messages);
-                            messageauto = 1;
-                            oppname = 1;
-                            connects_datalengthnow = 0;
-                            contact(connect_from,username,conn_id,'Hello ' + username + ', My name is ' + connect_from + '. How can i help you?');
-                            
-                            if (messageauto == 1) {
-                                messageauto = 0; 
-                                $("#connects_contacts").hide(100,function(){       
-                                    $("#connects_messages").show(100); 
-                                    $("#menu_container_top_tab").hide(100);                
-                                    //$("#menu_container_bottom_tab").hide(100);                
-                                    $("#center_top_id").hide(100);                
-    
-                                });
+                            if (response.connect_from != '') {
+                                $("#chat").html('');
+                                data_length =  connects_data.length;
+                                connects_data.forEach(chat_contacts_datamyFunction);                                
                             }
-                                                    
-                        } else {
-                            //conectset = 0;
-                            //alert("conectset " + conectset);
-                        }               
-                    }
-                    else{
-                        connects_datalengthnow = 0;
-                        contact('Mo-pal',username,conn_id,'Hello ' + username + ', My name is ' + 'Mo-pal' + '. How can i help you?');
-
-                        //alert("connect_from " + connect_from);
- 
-                    }                               
-                } */            
-            } catch(e) {
-               // $('#app-cover-spin').hide(0);
-               //alert("Error json ");
-                     
+                        }
+                    } else {
+                        if (response_message_from < 1) {
+                            response_message_from = 1;
+                            connects_datalengthnow = 0;
+                            contact(con_from ,user_name,conn_id,'Hello ' + user_name + ', My name is ' + con_from  + '. How can i help you?');
+                        }                    
+                    }           
+                } catch(e) {
+                    $("#chat").html('<div class="message stark">Json persing error</div>');
+                }
+            },
+            error: function searchError(xhr, err) {
+                $("#chat").html('<div class="message stark">Error on ajax call: ' + err  + ' ' + JSON.stringify(xhr) + '</div>');
             }
-          
-        },
-        error: function searchError(xhr, err) {
-          //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-          //$('#app-cover-spin').hide(0);
+        });
          
-
+    } else {        
+        if (response_message < 1) {
+            response_message = 1;
+            connects_datalengthnow = 0;
+            contact('Mo-pal' ,user_name,conn_id,'Hello ' + user_name + ', My name is ' + 'Mo-pal'  + '. How can i help you?');
         }
-    });
-    
-
-    /**if (chats_length > 0) {
-        $("#chat_num").show(100);
-        $("#chat_num").html(chats_length);
-    } else {
-        $("#chat_num").hide(100);
-        $("#chat_num").html(chats_length);
-    } */
+    }    
 }
 var value_from_connects_name = "";
 var endchat = 1;
-function contacts_datamyFunction(item, index) {
+/**function contacts_datamyFunction(item, index) {
     var data_i = data_length-1;
     var IMAGE_url = '../img/jeans3.jpg';
     if (value_from_connects_name.includes(item.connect_from) == false) {
         value_from_connects_name = value_from_connects_name + " " + item.connect_from;
-        if (item.connect_from != username) {
-            loadchat(item.connect_from);
-        } else {
-            //alert(item.connect_from);
-        }
-        //alert(value_from_connects_name);
-    }
-    /**if (connect_from != "") {
-        if (connectstrue == 1) {
-            if (username == item.connect_from) {
-                var connect_messages  = '<div class="message parker" connect_from="' + item.connect_from + '" connect_messages_id="' + item.connect_messages_id + '">' + item.connect_message + '</div>';
-                $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");    
-            } else {
-                var connect_messages  = '<div class="message stark" connect_from="' + item.connect_from + '" connect_messages_id="' + item.connect_messages_id + '">' + item.connect_message + '</div>';
-                $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
-            }
-            if (data_i == index) {
-                var typing = '<div id="bot_typing" class="message stark">' +
-                '<div class="typing typing-1"></div>' +
-                '<div class="typing typing-2"></div>' +
-                '<div class="typing typing-3"></div>' +
-                '</div>';
-                $("#chat").append(connect_messages + typing);
-                window.location.href="#bot_typing"; 
-                endchat = 0;
-                //alert(messageauto);
-                if (messageauto = 1) {
-                    messageauto = 0; 
-                    $(".chat_main_container").show(100)
-                    $("#connects_contacts").hide(100,function(){       
-                        $("#connects_messages").show(100); 
-                        $("#menu_container_top_tab").hide(100);                
-                        //$("#menu_container_bottom_tab").hide(100);
-                        $("#center_top_id").hide(100);                
-    
-                    });
-                }
-                
-            } else {
-                $("#chat").append(connect_messages);
-            }
-        } else {
-            if (messageauto = 1) {
-                messageauto = 0; 
-                $(".chat_main_container").show(100)
-                $("#connects_contacts").hide(100,function(){       
-                    $("#connects_messages").show(100); 
-                    $("#menu_container_top_tab").hide(100);                
-                    //$("#menu_container_bottom_tab").hide(100);
-                    $("#center_top_id").hide(100);                
-
-                });
-            }
-        }
         
-    } else{
-        if (value_from_connects_name.includes(item.connect_from) == false) {
-            value_from_connects_name = value_from_connects_name + " " + item.connect_from;
-            loadchat(item.connect_from);
+        //$("#connects").html('<div class="contact">' + value_from_connects_name + '</div>');        
+        if (item.connect_from != username) {
+            //$("#connects").html('Loading...');
+            //loadchat(item.connect_from);
         }
-        //alert('connectstrue ' + connectstrue);
-    } */
-    //alert('value_from_connects_name ' + value_from_connects_name);
-
-       
-}
+    }   
+} */
 function chat_contacts_datamyFunction(item, index) {
     var data_i = data_length-1;
-    var IMAGE_url = '../img/jeans3.jpg';
-
     if (username == item.connect_from) {
         var connect_messages  = '<div class="message parker" connect_from="' + item.connect_from + '" connect_messages_id="' + item.connect_messages_id + '">' + item.connect_message + '</div>';
-        $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");    
+        $(".pic").attr("style", "background-image: url('" + IMAGE_pic_url + "')");    
     } else {
         var connect_messages  = '<div class="message stark" connect_from="' + item.connect_from + '" connect_messages_id="' + item.connect_messages_id + '">' + item.connect_message + '</div>';
-        $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
+        $(".pic").attr("style", "background-image: url('" + IMAGE_pic_url + "')");
     }
-    //alert(item.connect_message);
     if (data_i == index) {
         var typing = '<div id="bot_typing" class="message stark">' +
         '<div class="typing typing-1"></div>' +
@@ -4932,85 +4722,13 @@ function chat_contacts_datamyFunction(item, index) {
         '</div>';
         
         $("#chat").append(connect_messages + typing);
-
-        //$("#chat").append(connect_messages + typing + inpuy);
-        window.location.href="#bot_typing"; 
-        //endchat = 0;
-        //alert(messageauto);
-        /**if (messageauto == 1) {
-            messageauto = 0; 
-            $(".chat_main_container").show(100)
-            $("#connects_contacts").hide(100,function(){       
-                $("#connects_messages").show(100); 
-                $("#menu_container_top_tab").hide(100);                
-                //$("#menu_container_bottom_tab").hide(100);
-                $("#center_top_id").hide(100);                
-
-            });
-        } */
-        
+        window.location.href="#bot_typing";
     } else {
         $("#chat").append(connect_messages);
     }
-    /**if (connect_from != "") {
-        if (connectstrue == 1) {
-            if (username == item.connect_from) {
-                var connect_messages  = '<div class="message parker" connect_from="' + item.connect_from + '" connect_messages_id="' + item.connect_messages_id + '">' + item.connect_message + '</div>';
-                $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");    
-            } else {
-                var connect_messages  = '<div class="message stark" connect_from="' + item.connect_from + '" connect_messages_id="' + item.connect_messages_id + '">' + item.connect_message + '</div>';
-                $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
-            }
-            if (data_i == index) {
-                var typing = '<div id="bot_typing" class="message stark">' +
-                '<div class="typing typing-1"></div>' +
-                '<div class="typing typing-2"></div>' +
-                '<div class="typing typing-3"></div>' +
-                '</div>';
-                $("#chat").append(connect_messages + typing);
-                window.location.href="#bot_typing"; 
-                endchat = 0;
-                //alert(messageauto);
-                if (messageauto = 1) {
-                    messageauto = 0; 
-                    $(".chat_main_container").show(100)
-                    $("#connects_contacts").hide(100,function(){       
-                        $("#connects_messages").show(100); 
-                        $("#menu_container_top_tab").hide(100);                
-                        //$("#menu_container_bottom_tab").hide(100);
-                        $("#center_top_id").hide(100);                
     
-                    });
-                }
-                
-            } else {
-                $("#chat").append(connect_messages);
-            }
-        } else {
-            if (messageauto = 1) {
-                messageauto = 0; 
-                $(".chat_main_container").show(100)
-                $("#connects_contacts").hide(100,function(){       
-                    $("#connects_messages").show(100); 
-                    $("#menu_container_top_tab").hide(100);                
-                    //$("#menu_container_bottom_tab").hide(100);
-                    $("#center_top_id").hide(100);                
-
-                });
-            }
-        }
-        
-    } else{
-        if (value_from_connects_name.includes(item.connect_from) == false) {
-            value_from_connects_name = value_from_connects_name + " " + item.connect_from;
-            loadchat(item.connect_from);
-        }
-        //alert('connectstrue ' + connectstrue);
-    } */
-    //alert('value_from_connects_name ' + value_from_connects_name);
-
-       
 }
+
 $("#order_items_back").click(function(){
     $("#order_items_container").hide(100,function(){
     }); 
@@ -5171,56 +4889,79 @@ function connects_datamyFunction(item, index) {
     } else {
         product_title_account = messag.substring(0, 30) + "...";
     }
-    //alert(item.connect_from + ' message ' + item.connect_message);
-    if (item.connect_status == "unread") {
-        //get_connect_from = item.connect_from;
-
-        //unread = unread + 1;
-        var connect_messages  = '<div class="contact get_contact" connect_from="' + item.connect_from + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
-        '<div class="pic rogers rogers_'+ index +'"></div>' +
-        '<div class="badge">' +
-        '  ' + bum + '' +
-        '</div><i class="fa fa-check-circle float-right" aria-hidden="true">' + item.connect_status + '</i>' +
-        '<div class="name">' +
-        '  ' + item.connect_from + '' +
-        '</div>' +
-        '<div class="message">' +
-        '  ' + product_title_account + '' +
-        '</div>' +
-        '</div>';        
+    if (item.connect_from == username) {
+        var connect_name = item.connect_to;
     } else {
-        //bum = 0;
-        var connect_messages  = '<div class="contact get_contact" connect_from="' + item.connect_from + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
-        '<div class="pic rogers rogers_'+ index +'"></div>' + 
-        '<div class="badge badge-info">' +
-        '  ' + bum + '' +
-        '</div><i class="fa fa-check-circle float-right" aria-hidden="true">' + item.connect_status + '</i>' +       
-        '<div class="name">' +
-        '  ' + item.connect_from + '' +
-        '</div>' +
-        '<div class="message">' +
-        '  ' + product_title_account + '' +
-        '</div>' +
-        '</div>';
+        var connect_name = item.connect_from;  
     }
     
-    $(".rogers_" + index + "").attr("style", "background-image: url('" + IMAGE_url + "')");
-    
-    //alert(item.connect_from + ' message ' + item.connect_message + ' status ' + item.connect_status);
+    //alert(item.connect_status + ' item.connect_from ' + item.connect_from + ' item.connect_to ' + item.connect_to);
+    //if (item.connect_from != item.connect_to) {
+        var _status = JSON.parse(item.connect_status);
+        var item_connect_status = _status.connect_status;
+        bum =  Number(_status.count);        
+        var product_image =  _status.connects_name_IMAGE; 
+        if (product_image.includes("http", 0)) {
+            var IMAGE_url = product_image + '';
+        } else {
+            var IMAGE_url = IMAGE_url_path_name + product_image + '';
+        }
+        
+        if (Number.isNaN(Date.parse(item.connects_time))) {
+            var connect_date = item.connects_time;
+        } else {
+            var msec = Date.parse(item.connects_time);
+            var d = new Date(msec);
+            var connect_date =d.toDateString();
+        }        
 
-    $("#connects").append(connect_messages);
+        var check_time = '<i class="float-right is-info time div5">' + connect_date + '</i>';
+
+        if (item_connect_status == "unread") {
+            var check_status = '<a class="status div4 text-secondary" data-toggle="tooltip">✓</a>';
+        } else {
+            var check_status = '<a class="status div4 text-info" data-toggle="tooltip">✓✓</a>';
+        }
+
+        if (bum > 0) {
+            var con_messages  = '<div class="contact get_contact" connect_image_url="' + IMAGE_url + '" connect_from="' + connect_name + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
+            '<div class="pic rogers rogers_'+ index +'" style="background-image:url(' + IMAGE_url + ');"></div>' +
+            '<div class="badge">' +
+            '  ' + bum + '' +
+            '</div>' +
+            '<h6 class="name">' +
+            '  ' + connect_name + '' +
+            '</h6>' +    
+            ' ' + product_title_account + '' + check_time +    
+            '</div>'; 
+            $("#connects").append(con_messages);       
+        } else {
+            var con_messages  = '<div class="contact get_contact" connect_image_url="' + IMAGE_url + '" connect_from="' + connect_name + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
+            '<div class="pic rogers rogers_'+ index +'" style="background-image:url(' + IMAGE_url + ');"></div>' + 
+             '<div class="name">' +
+            '  ' + connect_name + '' +
+            '</div>' +    
+            ' ' + product_title_account + '' + check_time + '<br>' + check_status +    
+            '</div>';
+            $("#connects").append(con_messages);
+        }
+    //}
+        
+
+        //alert(con_messages + " index " + index);
+    
+    
 }
 var connects_data_from = "";
 function chat_main_container() {
     $(".chat_main_container").show(100);
-    //$('#app-cover-spin').show(0);
-    //window.location.href="#center_top_id";
-    //contact(connect_from,username,conn_id,'Hello ' + username + ', My name is ' + connect_from + '. How can i help you?');
-    connects_datalengthnow = 0;  
-    //connect_from = '';  
-    connect_product = 0; 
-    $("#chat").html('loading ...');                  
-    contact(username,"","","");
+    //connect_product = 0;
+    //connects_datalengthnow = 0; 
+    //$("#connects").html('Loading...');
+    
+    //loadchat(''); 
+    //contact(username,"","","");
+    window.location.href="#center_top_id";
 }
 function loadchat(item_connect_from) {    
     $.ajax({
@@ -5233,53 +4974,35 @@ function loadchat(item_connect_from) {
             try {
                 if (response.message == "success") {
                     var connects_data = response.connects;
-                    bum = response.data_returned;
-                    connects_data.forEach(connects_datamyFunction);
-                } else {
-                    //alert('response.message ' + response.message);
-
-                }
-                //alert('username ' + username + ' item_connect_from ' + item_connect_from + ' response.message ' + response.message);
-                /**if (response.message == "success") {
-                    var connect_status = response.connect_status;
-                    var connects_data = response.connects;
-                    bum = response.data_returned;                
-                    if (connect_from == "") {
-                        if (connect_status != "0") { 
-                            unread = 0;
-                            connects_data.forEach(connects_datamyFunction);    
-                        } else {
-    
+                    connects_datalength = connect_messages;
+                    connect_messages = response.connect_messages;
+                    if (connects_datalength < connect_messages || connects_datalength > connect_messages) {
+                        if (connect_from != '' ) {
+                            //alert(connect_messages + " connect_from " + connect_from);
+                            contact(username,connect_from,'','');
                         }
                     }
+                    //$("#connects").html('');
+                    if (response.data_returned > 0) {
+                        $("#chat_num").html(response.data_returned);
+                        $("#chat_num").show(100);
+                    } else {
+                        $("#chat_num").html(response.data_returned);
+                        $("#chat_num").hide(100);
+                    }
+                    //alert(connect_messages + " connect_from " + connect_from);
+                    $("#connects").html('');
+                    connects_data.forEach(connects_datamyFunction);
+                } else {
+                    $("#connects").html('<div class="contact">' + response.message + '</div>');
+                    contact(username,'','','');
                 }
-                else {
-                    connects_datalengthnow = 0;
-                    contact('Mo-pal',username,conn_id,'  connect_from ' + item_connect_from + ' '  + response.message + '');
-                } */
             } catch(e) {
-                //alert('Json persing error');
-                //connects_datalengthnow = 0;
-                //contact('Mo-pal',username,conn_id,'Json persing error');
+                $("#connects").html('<div class="contact">Json persing error</div>');
             }          
         },
         error: function searchError(xhr, err) {
-            //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-          /**unread++;
-          var connect_messages  = '<div class="contact get_contact" connect_from="' + 'Mo-pal' + '" connects_id="' + 'Mo-pal' + '" connects_time="' + Date() + '">' +
-              '<div class="pic rogers"></div>' +
-              '<div class="badge">' +
-              '  ' + unread +'' +
-              '</div>' +
-              '<div class="name">' +
-              '  ' + 'Mo-pal' + '' +
-              '</div>' +
-              '<div class="message">' +
-              '  connect_from ' + "Error on ajax call: " + err  + " " + JSON.stringify(xhr) + '' +
-              '</div>' +
-              '</div>';
-          $("#connects").append(connect_messages); */
-
+            //$("#connects").html('<div class="contact">' + 'Error on ajax call: ' + err  + ' ' + JSON.stringify(xhr) + '</div>');
         }
     });
     
@@ -5619,7 +5342,7 @@ function login_user(login_email,login_password) {
                     first = response.first_name;
                     last = response.last_name;
                     phone = response.phone_number;
-
+                    
                     var location = JSON.parse(response.location_name);
                         postal = location.postal;
                         country = location.country;
@@ -6495,1422 +6218,3 @@ function upload_image_from_file(uploadFile_arr) {
         }
     }); */
 }
-
-
-
-
-/**function edit_add_items_name() {
-          // Function to preview image after validation
-
-        $(function() {
-            $(".edit_add_items_").change(function() {
-
-
-
-
-
-
-
-                $("#message").empty(); // To remove the previous error message
-
-
-
-
-
-
-
-                urlimageIsLoaded($(this).val());
-
-
-
-
-
-
-
-            });
-            $("#edit_file").change(function() {
-
-
-
-
-
-
-
-                $("#message").empty(); // To remove the previous error message
-
-
-
-
-
-
-
-                var file = this.files[0];
-
-
-
-
-
-
-
-                var imagefile = file.type;
-
-
-
-
-
-
-
-                var match= ["image/jpeg","image/png","image/jpg"];
-
-
-
-
-
-
-
-                if(!((imagefile==match[0]) || (imagefile==match[1]) || (imagefile==match[2]))){
-
-
-
-
-
-
-
-                    $('#previewing').attr('src','noimage.png');
-
-
-
-
-
-
-
-                    $("#message").html("<p id='error'>Please Select A valid Image File</p>"+"<h4>Note</h4>"+"<span id='error_message'>Only jpeg, jpg and png Images type allowed</span>");
-
-
-
-
-
-
-
-                    return false;
-
-
-
-
-
-
-
-                } else {
-
-
-
-
-
-
-
-                    var reader = new FileReader();
-
-
-
-
-
-
-
-                    reader.onload = imageIsLoaded;
-
-
-
-
-
-
-
-                    reader.readAsDataURL(this.files[0]);
-
-
-
-
-
-
-
-                }
-
-
-
-
-
-
-
-            });
-        });
-
-        function urlimageIsLoaded(url) {
-
-
-
-
-
-
-
-            $(this).css("color","green");
-
-
-
-
-
-
-
-            document.getElementById("edit_add_prod_btn").disabled = false;
-
-
-
-
-
-
-
-            setTimeout(hide_items_name, 3000);
-
-
-
-
-
-
-
-            $('#overlay_image_preview').css("display", "block");
-
-
-
-
-
-
-
-            $('#previewing').attr('src', url);
-
-
-
-
-
-
-
-            $('#previewing').attr('width', '250px');
-
-
-
-
-
-
-
-            $('#previewing').attr('height', 30);
-
-
-
-
-
-
-
-        };
-        
-        function imageIsLoaded(e) {
-
-
-
-
-
-
-
-            $(this).css("color","green");
-
-
-
-
-
-
-
-            document.getElementById("edit_add_prod_btn").disabled = false;
-
-
-
-
-
-
-
-            setTimeout(hide_items_name, 3000);
-
-
-
-
-
-
-
-            $('#overlay_image_preview').css("display", "block");
-
-
-
-
-
-
-
-            $('#previewing').attr('src', e.target.result);
-
-
-
-
-
-
-
-            $('#previewing').attr('width', '250px');
-
-
-
-
-
-
-
-            $('#previewing').attr('height', 30);
-
-
-
-
-
-
-
-        };
-      }      
-      $("#edit_add_items_php").on('submit',(function(e) {
-
-
-
-
-
-
-
-          e.preventDefault();
-
-
-
-
-
-
-
-          var edit_overlay_prod_title = $("#edit_prod_title").val();
-
-
-
-
-
-
-
-          var edit_overlay_prod_price = $("#edit_prod_price").val();
-
-
-
-
-
-
-
-          var edit_overlay_product_description = $("#edit_product_description").val();
-
-
-
-
-
-
-
-          var edit_overlay_quantity = $("#edit_quantity").val();
-
-
-
-
-
-
-
-          var edit_overlay_category_option = $("#edit_category_option").val();
-
-
-
-
-
-
-
-          var edit_overlay_brands_option = $("#edit_brands_option").val();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          if (Number.isNaN(Number(edit_overlay_prod_price)) != true) {
-
-
-
-
-
-
-
-            $("#edit_prod_price").val(edit_overlay_prod_price/currency_exchange_rate);
-
-
-
-
-
-
-
-            //alert(edit_overlay_prod_price);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-              if (upload_from_url == true) {
-
-
-
-
-
-
-
-                var edit_url = $("#edit_url").val();
-
-
-
-
-
-
-
-                if(edit_overlay_prod_title != "" && edit_overlay_prod_price != "" && edit_overlay_product_description != "" && edit_overlay_quantity != "" && edit_overlay_category_option != "" && edit_overlay_category_option != null && edit_overlay_brands_option != ""  && edit_overlay_brands_option != null){
-
-
-
-
-
-
-
-                  //alert(edit_overlay_prod_price);
-
-
-
-
-
-
-
-                  var myObj = { edit_prod_title:edit_overlay_prod_title,edit_prod_price:edit_overlay_prod_price,edit_product_description:edit_overlay_product_description,edit_quantity:edit_overlay_quantity,edit_category_option:edit_overlay_category_option,edit_brands_option:edit_overlay_brands_option };
-
-
-
-
-
-
-
-                  var myJSON = JSON.stringify(myObj);
-
-
-
-
-
-
-
-                  var str = myJSON;
-
-
-
-
-
-
-
-                 // alert(myJSON);
-
-
-
-
-
-
-
-                  var dataURL = "" + path_protocol + "//" + host_name + "/api/edit_urlToUpload.php?q=" + str;  
-
-
-
-
-
-
-
-                  $('#cover-spin').show(0);
-
-
-
-
-
-
-
-                  $.ajax({
-
-
-
-
-
-
-
-                      url: dataURL, // Url to which the request is 
-
-
-
-
-
-
-
-                      type: "POST", // Type of request to be send, called as 
-
-
-
-
-
-
-
-                      data: new FormData(this), // Data sent to server, a set of key/value pairs (i.e. form fields and values)			
-
-
-
-
-
-
-
-                      contentType: false, // The content type used when sending data to the server.			
-
-
-
-
-
-
-
-                      cache: false, // To unable request pages to be cached			
-
-
-
-
-
-
-
-                      processData:false, // To send DOMDocument or non processed data file it is set to false			
-
-
-
-
-
-
-
-                      success: function(data) // A function to be called if request 
-
-
-
-
-
-
-
-                      {
-
-
-
-
-
-
-
-                          $('#cover-spin').hide(0);
-
-
-
-
-
-
-
-                          var myObj = JSON.parse(data);
-
-
-
-
-
-
-
-                          var dataa = myObj.data_requested;
-
-
-
-
-
-
-
-                          var data_returned = myObj.data_returned;
-
-
-
-
-
-
-
-                          var uploaded = myObj.uploaded;
-
-
-
-
-
-
-
-                          var success = myObj.success; 
-
-
-
-
-
-
-
-                          var _more_success = myObj._more_success;
-
-
-
-
-
-
-
-                          var _more_uploaded = myObj._more_uploaded;
-
-
-
-
-
-
-
-                          if (success == "Uploaded Successfully...") {
-
-
-
-
-
-
-
-                              var  overlay_image_preview =  document.getElementById("overlay_image_preview");				
-
-
-
-
-
-
-
-                              overlay_image_preview.style.display = "none";
-
-
-
-
-
-
-
-                              add_items_press = 0;
-
-
-
-
-
-
-
-                              $("#edit_prod_title").val("");
-
-
-
-
-
-
-
-                              $("#edit_prod_price").val("");
-
-
-
-
-
-
-
-                              $("#edit_product_description").val("");
-
-
-
-
-
-
-
-                              $("#edit_quantity").val("");
-
-
-
-
-
-
-
-                              $("#edit_category_option").val("");
-
-
-
-
-
-
-
-                              $("#edit_brands_option").val("");
-
-
-
-
-
-
-
-                              $("#edit_url").val("");
-
-
-
-
-
-
-
-                              var  edit_modal =  document.getElementById("edit_modal");
-
-
-
-
-
-
-
-                              edit_modal.style.display = "none";
-
-
-
-
-
-
-
-                              snackbar(uploaded);
-
-
-
-
-
-
-
-                              product(username,start_limit, end_limit);
-
-
-
-
-
-
-
-                          } else {
-
-
-
-
-
-
-
-                              snackbar(uploaded);
-
-
-
-
-
-
-
-                          }
-
-
-
-
-
-
-
-                      }
-
-
-
-
-
-
-
-                  });
-
-
-
-
-
-
-
-                } else {
-
-
-
-
-
-
-
-                  if (edit_url != "" && edit_url != null ){
-
-
-
-
-
-
-
-                      $("#edit_url").css({
-
-
-
-
-
-
-
-                          "color": "white",
-
-
-
-
-
-
-
-                          "background-color": "#98bf21",
-
-
-
-
-
-
-
-                          "font-family": "Arial",
-
-
-
-
-
-
-
-                          "font-size": "20px",
-
-
-
-
-
-
-
-                          "padding": "5px"
-
-
-
-
-
-
-
-                      });
-
-
-
-
-
-
-
-                  }
-
-
-
-
-
-
-
-                  snackbar("Choose your product image");
-
-
-
-
-
-
-
-                  document.getElementById("edit_add_prod_btn").disabled = true;
-
-
-
-
-
-
-
-                }
-
-
-
-
-
-
-
-              } else {
-
-
-
-
-
-
-
-                var edit_file = $("#edit_file").val();
-
-
-
-
-
-
-
-                if(edit_overlay_prod_title != "" && edit_overlay_prod_price != "" && edit_overlay_product_description != "" && edit_overlay_quantity != "" && edit_overlay_category_option != "" && edit_overlay_category_option != null && edit_overlay_brands_option != ""  && edit_overlay_brands_option != null){
-
-
-
-
-
-
-
-                  var myObj = { edit_prod_title:edit_overlay_prod_title,edit_prod_price:edit_overlay_prod_price,edit_product_description:edit_overlay_product_description,edit_quantity:edit_overlay_quantity,edit_category_option:edit_overlay_category_option,edit_brands_option:edit_overlay_brands_option };
-
-
-
-
-
-
-
-                  var myJSON = JSON.stringify(myObj);
-
-
-
-
-
-
-
-                  var str = myJSON;
-
-
-
-
-
-
-
-                  //alert(myJSON);
-
-
-
-
-
-
-
-                  var dataURL = "" + path_protocol + "//" + host_name + "/api/edit_fileToUpload.php?q=" + str;  
-
-
-
-
-
-
-
-                  $('#cover-spin').show(0);
-
-
-
-
-
-
-
-                  $.ajax({
-
-
-
-
-
-
-
-                      url: dataURL, // Url to which the request is 
-
-
-
-
-
-
-
-                      type: "POST", // Type of request to be send, called as 
-
-
-
-
-
-
-
-                      data: new FormData(this), // Data sent to server, a set of key/value pairs (i.e. form fields and values)			
-
-
-
-
-
-
-
-                      contentType: false, // The content type used when sending data to the server.			
-
-
-
-
-
-
-
-                      cache: false, // To unable request pages to be cached			
-
-
-
-
-
-
-
-                      processData:false, // To send DOMDocument or non processed data file it is set to false			
-
-
-
-
-
-
-
-                      success: function(data) // A function to be called if request 
-
-
-
-
-
-
-
-                      {
-
-
-
-
-
-
-
-                          $('#cover-spin').hide(0);
-
-
-
-
-
-
-
-                          var myObj = JSON.parse(data);
-
-
-
-
-
-
-
-                          var dataa = myObj.data_requested;
-
-
-
-
-
-
-
-                          var data_returned = myObj.data_returned;
-
-
-
-
-
-
-
-                          var uploaded = myObj.uploaded;
-
-
-
-
-
-
-
-                          var success = myObj.success; 
-
-
-
-
-
-
-
-                          var _more_success = myObj._more_success;
-
-
-
-
-
-
-
-                          var _more_uploaded = myObj._more_uploaded;
-
-
-
-
-
-
-
-                          if (success == "Uploaded Successfully...") {
-
-
-
-
-
-
-
-                              var  overlay_image_preview =  document.getElementById("overlay_image_preview");				
-
-
-
-
-
-
-
-                              overlay_image_preview.style.display = "none";
-
-
-
-
-
-
-
-                              add_items_press = 0;
-
-
-
-
-
-
-
-                              $("#edit_prod_title").val("");
-
-
-
-
-
-
-
-                              $("#edit_prod_price").val("");
-
-
-
-
-
-
-
-                              $("#edit_product_description").val("");
-
-
-
-
-
-
-
-                              $("#edit_quantity").val("");
-
-
-
-
-
-
-
-                              $("#edit_category_option").val("");
-
-
-
-
-
-
-
-                              $("#edit_brands_option").val("");
-
-
-
-
-
-
-
-                              $("#edit_file").val("");
-
-
-
-
-
-
-
-                              var  edit_modal =  document.getElementById("edit_modal");
-
-
-
-
-
-
-
-                              edit_modal.style.display = "none";
-
-
-
-
-
-
-
-                              snackbar(uploaded);
-
-
-
-
-
-
-
-                              product(username,start_limit, end_limit);
-
-
-
-
-
-
-
-                          } else {
-
-
-
-
-
-
-
-                              snackbar(uploaded);
-
-
-
-
-
-
-
-                          }
-
-
-
-
-
-
-
-                      }
-
-
-
-
-
-
-
-                  });
-
-
-
-
-
-
-
-                } else {
-
-
-
-
-
-
-
-                  if (edit_file != "" && edit_file != null ){
-
-
-
-
-
-
-
-                      $("#edit_file").css({
-
-
-
-
-
-
-
-                          "color": "white",
-
-
-
-
-
-
-
-                          "background-color": "#98bf21",
-
-
-
-
-
-
-
-                          "font-family": "Arial",
-
-
-
-
-
-
-
-                          "font-size": "20px",
-
-
-
-
-
-
-
-                          "padding": "5px"
-
-
-
-
-
-
-
-                      });
-
-
-
-
-
-
-
-                  }
-
-
-
-
-
-
-
-                  snackbar("Choose your product image");
-
-
-
-
-
-
-
-                  document.getElementById("edit_add_prod_btn").disabled = true;
-
-
-
-
-
-
-
-                }
-
-
-
-
-
-
-
-              }
-
-
-
-
-
-
-
-              //alert(edit_overlay_prod_price);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          } else {
-
-
-
-
-
-
-
-            $("#edit_prod_price").css({
-
-
-
-
-
-
-
-                "color": "white",
-
-
-
-
-
-
-
-                "background-color": "#333"
-
-
-
-
-
-
-
-            });
-
-
-
-
-
-
-
-            snackbar("Enter a valid product price");
-
-
-
-
-
-
-
-          }
-
-
-
-
-
-
-
-      })); */
-
-

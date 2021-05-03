@@ -135,6 +135,34 @@ body {
 }
 
 
+.div3 {
+  display: inline;
+  float: right !important;
+  right: 10px !important;
+  border-color: #00d7fd !important;
+  width: fit-content;
+  bottom: 5px !important;
+
+}
+.div4 {
+  display: inline;
+  float: right !important;
+  right: 10px !important;
+  border-color: #373f41 !important;
+  width: fit-content;
+  bottom: 5px !important;
+  
+}
+
+.div5 {
+  display: inline;
+  float: right !important;
+  right: 10px !important;
+  border-color: #373f41;
+  width: fit-content;
+  
+}
+
 #snackbar {
   visibility: hidden;
   min-width: 250px;

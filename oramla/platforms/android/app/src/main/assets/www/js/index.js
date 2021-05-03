@@ -108,7 +108,7 @@ function user_container(user,email) {
                         phone = response.phone_number;
     
                         first = response.first_name;
-                        last = response.last_name;                    
+                        last = response.last_name;  
                         
                         var location = JSON.parse(response.location_name);
                         postal = location.postal;
@@ -116,10 +116,10 @@ function user_container(user,email) {
                         city = location.city;
                         address = location.address;
     
-                        $("#input-postal-code").val(location.postal);
-                        $("#input-country").val(location.country);
-                        $("#input-city").val(location.city);
-                        $("#input-address").val(location.address);
+                        $("#input-postal-code").val(postal);
+                        $("#input-country").val(country);
+                        $("#input-city").val(city);
+                        $("#input-address").val(address);
                         
                         $("#pending_orders_count").html(response.pending_orders);
                         $("#active_orders_count").html(response.active_orders);
@@ -4628,6 +4628,7 @@ $("body").delegate(".add_float","click",function(event){
 var data_length = 0;
 var chats_length = 0;
 var connects_datalength = 0;
+var connect_messages = 0;
 var connects_datalengthnow = 0;
 var connectstrue = 0;
 var oppname = 0;
@@ -4894,8 +4895,10 @@ function connects_datamyFunction(item, index) {
         var connect_name = item.connect_from;  
     }
     
-    var _status = JSON.parse(item.connect_status);
-    var item_connect_status = _status.connect_status;
+    //alert(item.connect_status + ' item.connect_from ' + item.connect_from + ' item.connect_to ' + item.connect_to);
+    //if (item.connect_from != item.connect_to) {
+        var _status = JSON.parse(item.connect_status);
+        var item_connect_status = _status.connect_status;
         bum =  Number(_status.count);        
         var product_image =  _status.connects_name_IMAGE; 
         if (product_image.includes("http", 0)) {
@@ -4903,79 +4906,49 @@ function connects_datamyFunction(item, index) {
         } else {
             var IMAGE_url = IMAGE_url_path_name + product_image + '';
         }
-
-
-        //item_connect_status == "unread"
-        //var d = new Date(item.connects_time);
-        //d.toDateString();
-        //alert(Number.isNaN(Date.parse(item.connects_time)));
+        
         if (Number.isNaN(Date.parse(item.connects_time))) {
             var connect_date = item.connects_time;
         } else {
             var msec = Date.parse(item.connects_time);
             var d = new Date(msec);
             var connect_date =d.toDateString();
-        }
-        
+        }        
 
         var check_time = '<i class="float-right is-info time div5">' + connect_date + '</i>';
 
         if (item_connect_status == "unread") {
-            //<style type="text/css">div.image {max-width: 256px;max-height: 256px;background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGxpbmVhckdyYWRpZW50IGlkPSJTVkdJRF8xXyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgxPSItMjYuODc1IiB5MT0iNTU5LjUwNSIgeDI9Ii0yNi44NzUiIHkyPSI2MjIuNDEiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoOCAwIDAgLTggNDU1IDQ5NDEpIj4NCgk8c3RvcCAgb2Zmc2V0PSIwIiBzdHlsZT0ic3RvcC1jb2xvcjojMDA2REYwIi8+DQoJPHN0b3AgIG9mZnNldD0iMSIgc3R5bGU9InN0b3AtY29sb3I6IzAwRTdGMCIvPg0KPC9saW5lYXJHcmFkaWVudD4NCjxwYXRoIHN0eWxlPSJmaWxsOnVybCgjU1ZHSURfMV8pOyIgZD0iTTI0MCw0ODBDMTA3LjQ1Miw0ODAsMCwzNzIuNTQ4LDAsMjQwUzEwNy40NTIsMCwyNDAsMHMyNDAsMTA3LjQ1MiwyNDAsMjQwDQoJQzQ3OS44NSwzNzIuNDg2LDM3Mi40ODYsNDc5Ljg1LDI0MCw0ODB6IE0yNDAsMTZDMTE2LjI4OCwxNiwxNiwxMTYuMjg4LDE2LDI0MHMxMDAuMjg4LDIyNCwyMjQsMjI0czIyNC0xMDAuMjg4LDIyNC0yMjQNCglDNDYzLjg1OSwxMTYuMzQ3LDM2My42NTMsMTYuMTQxLDI0MCwxNnoiLz4NCjxsaW5lYXJHcmFkaWVudCBpZD0iU1ZHSURfMl8iIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iLTI2Ljg5MjIiIHkxPSI1NTkuNTA1IiB4Mj0iLTI2Ljg5MjIiIHkyPSI2MjIuNDEiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoOCAwIDAgLTggNDU1IDQ5NDEpIj4NCgk8c3RvcCAgb2Zmc2V0PSIwIiBzdHlsZT0ic3RvcC1jb2xvcjojMDA2REYwIi8+DQoJPHN0b3AgIG9mZnNldD0iMSIgc3R5bGU9InN0b3AtY29sb3I6IzAwRTdGMCIvPg0KPC9saW5lYXJHcmFkaWVudD4NCjxwYXRoIHN0eWxlPSJmaWxsOnVybCgjU1ZHSURfMl8pOyIgZD0iTTIwNS44MjQsMzA5LjgyNGMtMi4xMjIsMC00LjE1Ni0wLjg0NC01LjY1Ni0yLjM0NGwtNjcuODgtNjcuODgNCgljLTMuMDY5LTMuMTc4LTIuOTgxLTguMjQzLDAuMTk3LTExLjMxMmMzLjEtMi45OTQsOC4wMTUtMi45OTQsMTEuMTE1LDBsNjIuMjI0LDYyLjIyNEwzMzUuOTI4LDE2MC40DQoJYzMuMDY5LTMuMTc4LDguMTM0LTMuMjY2LDExLjMxMi0wLjE5NmMzLjE3OCwzLjA2OSwzLjI2Niw4LjEzNCwwLjE5NiwxMS4zMTJjLTAuMDY0LDAuMDY3LTAuMTMsMC4xMzItMC4xOTYsMC4xOTZMMjExLjQ4LDMwNy40OA0KCUMyMDkuOTgsMzA4Ljk4LDIwNy45NDYsMzA5LjgyNCwyMDUuODI0LDMwOS44MjRMMjA1LjgyNCwzMDkuODI0eiIvPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=)}</style>
-            
-            var check_status = '<a class="status div4 text-secondary" data-toggle="tooltip">✓</a>'; 
-            //var check_status = '<i class="status div4 viewconfirm blue-color" aria-hidden="true" data-toggle="tooltip">✓</i>';
-
-            //var check_status = '<i class=" status div3 fa fa-check-circle teal-color" aria-hidden="true">' + item_connect_status + '</i>';
-            //var check_status = '<i class="status div3" style="max-width: 256px;max-height: 256px;background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNDgwIDQ4MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDgwIDQ4MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGxpbmVhckdyYWRpZW50IGlkPSJTVkdJRF8xXyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiIHgxPSItMjYuODc1IiB5MT0iNTU5LjUwNSIgeDI9Ii0yNi44NzUiIHkyPSI2MjIuNDEiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoOCAwIDAgLTggNDU1IDQ5NDEpIj4NCgk8c3RvcCAgb2Zmc2V0PSIwIiBzdHlsZT0ic3RvcC1jb2xvcjojMDA2REYwIi8+DQoJPHN0b3AgIG9mZnNldD0iMSIgc3R5bGU9InN0b3AtY29sb3I6IzAwRTdGMCIvPg0KPC9saW5lYXJHcmFkaWVudD4NCjxwYXRoIHN0eWxlPSJmaWxsOnVybCgjU1ZHSURfMV8pOyIgZD0iTTI0MCw0ODBDMTA3LjQ1Miw0ODAsMCwzNzIuNTQ4LDAsMjQwUzEwNy40NTIsMCwyNDAsMHMyNDAsMTA3LjQ1MiwyNDAsMjQwDQoJQzQ3OS44NSwzNzIuNDg2LDM3Mi40ODYsNDc5Ljg1LDI0MCw0ODB6IE0yNDAsMTZDMTE2LjI4OCwxNiwxNiwxMTYuMjg4LDE2LDI0MHMxMDAuMjg4LDIyNCwyMjQsMjI0czIyNC0xMDAuMjg4LDIyNC0yMjQNCglDNDYzLjg1OSwxMTYuMzQ3LDM2My42NTMsMTYuMTQxLDI0MCwxNnoiLz4NCjxsaW5lYXJHcmFkaWVudCBpZD0iU1ZHSURfMl8iIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiB4MT0iLTI2Ljg5MjIiIHkxPSI1NTkuNTA1IiB4Mj0iLTI2Ljg5MjIiIHkyPSI2MjIuNDEiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoOCAwIDAgLTggNDU1IDQ5NDEpIj4NCgk8c3RvcCAgb2Zmc2V0PSIwIiBzdHlsZT0ic3RvcC1jb2xvcjojMDA2REYwIi8+DQoJPHN0b3AgIG9mZnNldD0iMSIgc3R5bGU9InN0b3AtY29sb3I6IzAwRTdGMCIvPg0KPC9saW5lYXJHcmFkaWVudD4NCjxwYXRoIHN0eWxlPSJmaWxsOnVybCgjU1ZHSURfMl8pOyIgZD0iTTIwNS44MjQsMzA5LjgyNGMtMi4xMjIsMC00LjE1Ni0wLjg0NC01LjY1Ni0yLjM0NGwtNjcuODgtNjcuODgNCgljLTMuMDY5LTMuMTc4LTIuOTgxLTguMjQzLDAuMTk3LTExLjMxMmMzLjEtMi45OTQsOC4wMTUtMi45OTQsMTEuMTE1LDBsNjIuMjI0LDYyLjIyNEwzMzUuOTI4LDE2MC40DQoJYzMuMDY5LTMuMTc4LDguMTM0LTMuMjY2LDExLjMxMi0wLjE5NmMzLjE3OCwzLjA2OSwzLjI2Niw4LjEzNCwwLjE5NiwxMS4zMTJjLTAuMDY0LDAuMDY3LTAuMTMsMC4xMzItMC4xOTYsMC4xOTZMMjExLjQ4LDMwNy40OA0KCUMyMDkuOTgsMzA4Ljk4LDIwNy45NDYsMzA5LjgyNCwyMDUuODI0LDMwOS44MjRMMjA1LjgyNCwzMDkuODI0eiIvPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPC9zdmc+DQo=)"></i>';
-
-
+            var check_status = '<a class="status div4 text-secondary" data-toggle="tooltip">✓</a>';
         } else {
-            //<style type="text/css">div.image {max-width: 256px;max-height: 256px;background-image: url(data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjQ5NnB0IiB2aWV3Qm94PSIwIDAgNDk2IDQ5NiIgd2lkdGg9IjQ5NnB0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Im0yNDggOGMtMTMyLjU0Njg3NSAwLTI0MCAxMDcuNDUzMTI1LTI0MCAyNDBzMTA3LjQ1MzEyNSAyNDAgMjQwIDI0MCAyNDAtMTA3LjQ1MzEyNSAyNDAtMjQwLTEwNy40NTMxMjUtMjQwLTI0MC0yNDB6bS00MCAzMjQtODgtODggODggODggMTY4LTE2OHptMCAwIiBmaWxsPSIjNTdhNGZmIi8+PGcgZmlsbD0iIzAwNGZhYyI+PHBhdGggZD0ibTI0OCAwYy0xMzYuOTY0ODQ0IDAtMjQ4IDExMS4wMzUxNTYtMjQ4IDI0OHMxMTEuMDM1MTU2IDI0OCAyNDggMjQ4IDI0OC0xMTEuMDM1MTU2IDI0OC0yNDhjLS4xNjAxNTYtMTM2LjkwMjM0NC0xMTEuMDk3NjU2LTI0Ny44Mzk4NDQtMjQ4LTI0OHptMCA0ODBjLTEyOC4xMjg5MDYgMC0yMzItMTAzLjg3MTA5NC0yMzItMjMyczEwMy44NzEwOTQtMjMyIDIzMi0yMzIgMjMyIDEwMy44NzEwOTQgMjMyIDIzMmMtLjE0MDYyNSAxMjguMDcwMzEyLTEwMy45Mjk2ODggMjMxLjg1OTM3NS0yMzIgMjMyem0wIDAiLz48cGF0aCBkPSJtMzcwLjM0Mzc1IDE1OC4zNDM3NS0xNjIuMzQzNzUgMTYyLjM0Mzc1LTgyLjM0Mzc1LTgyLjM0Mzc1Yy0zLjE0MDYyNS0zLjAzMTI1LTguMTI4OTA2LTIuOTg4MjgxLTExLjIxNDg0NC4wOTc2NTYtMy4wODU5MzcgMy4wODU5MzgtMy4xMjg5MDYgOC4wNzQyMTktLjA5NzY1NiAxMS4yMTQ4NDRsODggODhjMy4xMjUgMy4xMjEwOTQgOC4xODc1IDMuMTIxMDk0IDExLjMxMjUgMGwxNjgtMTY4YzMuMDMxMjUtMy4xNDA2MjUgMi45ODgyODEtOC4xMjg5MDYtLjA5NzY1Ni0xMS4yMTQ4NDQtMy4wODU5MzgtMy4wODU5MzctOC4wNzQyMTktMy4xMjg5MDYtMTEuMjE0ODQ0LS4wOTc2NTZ6bTAgMCIvPjwvZz48L3N2Zz4=)}</style>
-            
-            //var check_status = '<i class="status div4 viewconfirm blue-color" data-toggle="tooltip">✓✓</i>';
-            var check_status = '<a class="status div4 text-info" data-toggle="tooltip">✓✓</a>'; 
-
-            //var check_status = '<i class="status div4 fa fa-check-circle blue-color" aria-hidden="true">' + item_connect_status + '</i>';
-            //var check_status = '<i class="status div4" style="max-width: 256px;max-height: 256px;background-image: url(data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjQ5NnB0IiB2aWV3Qm94PSIwIDAgNDk2IDQ5NiIgd2lkdGg9IjQ5NnB0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxwYXRoIGQ9Im0yNDggOGMtMTMyLjU0Njg3NSAwLTI0MCAxMDcuNDUzMTI1LTI0MCAyNDBzMTA3LjQ1MzEyNSAyNDAgMjQwIDI0MCAyNDAtMTA3LjQ1MzEyNSAyNDAtMjQwLTEwNy40NTMxMjUtMjQwLTI0MC0yNDB6bS00MCAzMjQtODgtODggODggODggMTY4LTE2OHptMCAwIiBmaWxsPSIjNTdhNGZmIi8+PGcgZmlsbD0iIzAwNGZhYyI+PHBhdGggZD0ibTI0OCAwYy0xMzYuOTY0ODQ0IDAtMjQ4IDExMS4wMzUxNTYtMjQ4IDI0OHMxMTEuMDM1MTU2IDI0OCAyNDggMjQ4IDI0OC0xMTEuMDM1MTU2IDI0OC0yNDhjLS4xNjAxNTYtMTM2LjkwMjM0NC0xMTEuMDk3NjU2LTI0Ny44Mzk4NDQtMjQ4LTI0OHptMCA0ODBjLTEyOC4xMjg5MDYgMC0yMzItMTAzLjg3MTA5NC0yMzItMjMyczEwMy44NzEwOTQtMjMyIDIzMi0yMzIgMjMyIDEwMy44NzEwOTQgMjMyIDIzMmMtLjE0MDYyNSAxMjguMDcwMzEyLTEwMy45Mjk2ODggMjMxLjg1OTM3NS0yMzIgMjMyem0wIDAiLz48cGF0aCBkPSJtMzcwLjM0Mzc1IDE1OC4zNDM3NS0xNjIuMzQzNzUgMTYyLjM0Mzc1LTgyLjM0Mzc1LTgyLjM0Mzc1Yy0zLjE0MDYyNS0zLjAzMTI1LTguMTI4OTA2LTIuOTg4MjgxLTExLjIxNDg0NC4wOTc2NTYtMy4wODU5MzcgMy4wODU5MzgtMy4xMjg5MDYgOC4wNzQyMTktLjA5NzY1NiAxMS4yMTQ4NDRsODggODhjMy4xMjUgMy4xMjEwOTQgOC4xODc1IDMuMTIxMDk0IDExLjMxMjUgMGwxNjgtMTY4YzMuMDMxMjUtMy4xNDA2MjUgMi45ODgyODEtOC4xMjg5MDYtLjA5NzY1Ni0xMS4yMTQ4NDQtMy4wODU5MzgtMy4wODU5MzctOC4wNzQyMTktMy4xMjg5MDYtMTEuMjE0ODQ0LS4wOTc2NTZ6bTAgMCIvPjwvZz48L3N2Zz4=)"></i>';
-
+            var check_status = '<a class="status div4 text-info" data-toggle="tooltip">✓✓</a>';
         }
 
-    if (bum > 0) {
-        var connect_messages  = '<div class="contact get_contact" connect_image_url="' + IMAGE_url + '" connect_from="' + connect_name + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
-        '<div class="pic rogers rogers_'+ index +'" style="background-image:url(' + IMAGE_url + ');"></div>' +
-        '<div class="badge">' +
-        '  ' + bum + '' +
-        '</div>' +
-        '<h6 class="name">' +
-        '  ' + connect_name + '' +
-        '</h6>' +
-
-        ' ' + product_title_account + '' + check_time +
-
-        '</div>'; 
+        if (bum > 0) {
+            var con_messages  = '<div class="contact get_contact" connect_image_url="' + IMAGE_url + '" connect_from="' + connect_name + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
+            '<div class="pic rogers rogers_'+ index +'" style="background-image:url(' + IMAGE_url + ');"></div>' +
+            '<div class="badge">' +
+            '  ' + bum + '' +
+            '</div>' +
+            '<h6 class="name">' +
+            '  ' + connect_name + '' +
+            '</h6>' +    
+            ' ' + product_title_account + '' + check_time +    
+            '</div>'; 
+            $("#connects").append(con_messages);       
+        } else {
+            var con_messages  = '<div class="contact get_contact" connect_image_url="' + IMAGE_url + '" connect_from="' + connect_name + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
+            '<div class="pic rogers rogers_'+ index +'" style="background-image:url(' + IMAGE_url + ');"></div>' + 
+             '<div class="name">' +
+            '  ' + connect_name + '' +
+            '</div>' +    
+            ' ' + product_title_account + '' + check_time + '<br>' + check_status +    
+            '</div>';
+            $("#connects").append(con_messages);
+        }
+    //}
         
 
-        //$(".rogers_" + index + "").attr("style", "background-image: url('" + IMAGE_url + "')");
-        $("#connects").append(connect_messages);       
-    } else {
-        var connect_messages  = '<div class="contact get_contact" connect_image_url="' + IMAGE_url + '" connect_from="' + connect_name + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
-        '<div class="pic rogers rogers_'+ index +'" style="background-image:url(' + IMAGE_url + ');"></div>' + 
-        //'<div class="badge badge-info">' +
-        //'  ' + bum + '' +
-        //'</div>' +
-        '<div class="name">' +
-        '  ' + connect_name + '' +
-        '</div>' +
-
-        ' ' + product_title_account + '' + check_time + '<br>' + check_status +
-
-        '</div>';
-
-
-        //$(".rogers_" + index + "").attr("style", "background-image: url('" + IMAGE_url + "')");
-        $("#connects").append(connect_messages);
-    }
+        //alert(con_messages + " index " + index);
     
     
 }
@@ -5000,7 +4973,15 @@ function loadchat(item_connect_from) {
             try {
                 if (response.message == "success") {
                     var connects_data = response.connects;
-                    $("#connects").html('');
+                    connects_datalength = connect_messages;
+                    connect_messages = response.connect_messages;
+                    if (connects_datalength < connect_messages || connects_datalength > connect_messages) {
+                        if (connect_from != '' ) {
+                            //alert(connect_messages + " connect_from " + connect_from);
+                            contact(username,connect_from,'','');
+                        }
+                    }
+                    //$("#connects").html('');
                     if (response.data_returned > 0) {
                         $("#chat_num").html(response.data_returned);
                         $("#chat_num").show(100);
@@ -5008,17 +4989,19 @@ function loadchat(item_connect_from) {
                         $("#chat_num").html(response.data_returned);
                         $("#chat_num").hide(100);
                     }
+                    //alert(connect_messages + " connect_from " + connect_from);
+                    $("#connects").html('');
                     connects_data.forEach(connects_datamyFunction);
                 } else {
-                    contact(username,'','','');
                     $("#connects").html('<div class="contact">' + response.message + '</div>');
+                    contact(username,'','','');
                 }
             } catch(e) {
                 $("#connects").html('<div class="contact">Json persing error</div>');
             }          
         },
         error: function searchError(xhr, err) {
-            $("#connects").html('<div class="contact">' + 'Error on ajax call: ' + err  + ' ' + JSON.stringify(xhr) + '</div>');
+            //$("#connects").html('<div class="contact">' + 'Error on ajax call: ' + err  + ' ' + JSON.stringify(xhr) + '</div>');
         }
     });
     
@@ -5358,7 +5341,7 @@ function login_user(login_email,login_password) {
                     first = response.first_name;
                     last = response.last_name;
                     phone = response.phone_number;
-
+                    
                     var location = JSON.parse(response.location_name);
                         postal = location.postal;
                         country = location.country;

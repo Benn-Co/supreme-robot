@@ -3,11 +3,11 @@
   "name": "com.benco.org",
   "displayName": "Oramla",
   "version": "1.0.0",
-  "description": "A sample Apache Cordova application that responds to the deviceready event.",
+  "description": "The leading platform for globle trade. We connect and serve millions of buyers and sellers around the world",
   "homepage": "http://cordova.io",
   "license": "Apache-2.0",
   "author": {
-    "name": "Apache Cordova Team",
+    "name": "Mo-pal Oramla Team",
     "email": "dev@cordova.apache.org"
   }
 }
