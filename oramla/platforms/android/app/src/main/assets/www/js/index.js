@@ -817,7 +817,7 @@ function search(search_params,startlimit,endlimit) {
 function authentication(username) {
     $("#app-cover-spin").removeClass("app-cover");
     
-    if (username == "") {
+    if (username == "" || username == null) {
         $(".main").hide(100);
         $(".authentication").show(100);
     } else {
