@@ -204,6 +204,8 @@ function user_container(user,email) {
                         $("#menu_container_complete_orders_count").html('<span class="badge badge-info">' + response.complete_orders + '</span>');
                         $("#menu_container_orders_count").html('<span class="badge badge-secondary">' + response.user_orders + '</span>');
                     } else {
+                        $('#app-cover-spin').hide(0);
+
                         /**$('.user_error_container').show(100, function(){
                             $("#user_row_container").hide(100);
                             $("#user_row_h").html(response.message);
@@ -211,6 +213,8 @@ function user_container(user,email) {
                         }); */
                     }
                 } catch(e) {
+                    $('#app-cover-spin').hide(0);
+
                     /**$('.user_error_container').show(100, function(){
                         $("#user_row_container").hide(100);
                         $("#user_row_h").html('JSON error');
@@ -359,14 +363,7 @@ function userupdate() {
         $("#user_review").addClass("is-invalid");
         $("#user_review").removeClass("is-valid");
     }
-    //$("#input-rating").val();
-    /**if ($("#input-rating").val() != "" && $("#input-rating").val() != null) {
-        $("#input-rating").removeClass("is-invalid");
-        $("#input-rating").addClass("is-valid");
-    } else {
-        $("#input-rating").addClass("is-invalid");
-        $("#input-rating").removeClass("is-valid");
-    } */
+    
     if (error_username_data == 0 && error_first_data == 0 && error_last_data == 0 && error_email_data == 0 && error_phone_data == 0 && error_postal_data == 0 && error_country_data == 0 && error_city_data == 0 && error_address_data == 0 ) {
         error_user_data = 0;
     } else {
@@ -438,6 +435,7 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
 
                 } catch(e) {                    
                     alert('JSON parsing error');
+                    $('#app-cover-spin').hide(0);
                 }
             } else if (contact_information_save == 1) {
                 contact_information_save = 0;
@@ -457,7 +455,8 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
                             if (add_products_agent == 1) {
                                 add_products_agent = 0;
                                 $("#add_products_new").show(100);
-                            } else {
+                            } else if (checkout_contact_information_save == 1)  {
+                                checkout_contact_information_save = 0;
                                 checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_total,username);
                             }                   
                         });
@@ -466,12 +465,16 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
                         $("#contact_information_save").addClass("btn-warning");
                         $("#contact_information_save").html(response.message);
                         $("#contact_information_save_help").html("Something went wrong");
+                        $('#app-cover-spin').hide(0);
+
                     }
                 } catch(e) {   
                     $("#contact_information_save").removeClass("btn-info");
                     $("#contact_information_save").addClass("btn-warning");
                     $("#contact_information_save").html("JSON error");
-                    $("#contact_information_save_help").html('JSON parsing error');                 
+                    $("#contact_information_save_help").html('JSON parsing error');
+                    $('#app-cover-spin').hide(0);
+                 
                 }
                 
             } else {
@@ -584,7 +587,6 @@ $("#radio-0").click(function(){
         document.body.classList.toggle('nav-is-toggled');
         _apps_tab =0;
     }
-    //$("#menu_container_apps_tab").hide(100);
     main();
 });
 
@@ -712,7 +714,6 @@ $("#radio-1").click(function(){
         document.body.classList.toggle('nav-is-toggled');
         _apps_tab =0;
     }
-    //$("#menu_container_apps_tab").hide(100);
 
 });
 $("#search").keypress(function (e){
@@ -815,9 +816,7 @@ function search(search_params,startlimit,endlimit) {
 
 function authentication(username) {
     $("#app-cover-spin").removeClass("app-cover");
-
-    //alert(devicePlatform);
-    //localStorage.setItem("username", username);
+    
     if (username == "") {
         $(".main").hide(100);
         $(".authentication").show(100);
@@ -826,19 +825,7 @@ function authentication(username) {
         $(".main").show(100);
         localStorage.setItem("username", username);
         localStorage.setItem("role", role);
-
-        /**datab = window.sqlitePlugin.openDatabase({
-            name: 'my.db',
-            location: 'default',
-        });
-        db.transaction(function(tx) {
-            tx.executeSql('CREATE TABLE IF NOT EXISTS DemoTable (username, score)');
-            tx.executeSql('INSERT INTO DemoTable VALUES (?,?)', ['' + username + '', '101']);
-          }, function(error) {
-           alert('Transaction ERROR: ' + error.message);
-          }, function() {
-            alert('Populated database OK');
-          }); */
+        
         main();
     }     
 }
@@ -850,14 +837,11 @@ function main() {
         $(".main").show(100);
         $(".product_main_container").show(100);
     });
-    //var cat_id = "";
     startlimit = 0;
     endlimit = 24;
     search_value != '';
     geoshop_value != '';
     cat_id != '';
-    //alert(role);
-    //alert(username);
     if (role == 'customer' || role == '' || role == null) {
         $("#action_float_id").html('<i class="fa  fa-invision my-float">Sell</i>');
         $("#add_products_agent").hide(100);
@@ -871,24 +855,16 @@ function main() {
         count_time_out = 0;
         loadconnects();
         user_container(username,email);
-        //setTimeout(loadchat, 3000);
     }    
 }
 var conectset = 0;
 var messageauto = 0;
 function loadconnects() {
     conectset = 1;
-    //alert(connect_from);
-    //contact(connect_from,username,conn_id,'Hello ' + username + ', My name is ' + connect_from + '. How can i help you?');
-    //messageauto = 0; 
     if (username == "") {
         $(".main").hide(100);
         $(".authentication").show(100);
     } else{
-        //connects_datalengthnow = 0;  
-        //connect_from = '';  
-        //connect_product = 0; 
-        //contact(username,connect_from,"","");
         loadchat('');
         setTimeout(loadconnects, 3000);
     }                
@@ -939,7 +915,7 @@ $("body").delegate(".connect_product","click",function(event){
             $("#contactname").html($(this).attr('add_client'));
             $("#cotacttime").html(Date());
             var IMAGE_url = $(this).attr('connect_image_url');
-            $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
+            $(".picbar").attr("style", "background-image: url('" + IMAGE_url + "')");
             var chat_message = '';
             connect_product = 1;
             //alert(connect_from);
@@ -1088,77 +1064,14 @@ function order_id(startlimit,endlimit,status,username,order_id) {
             } catch(e) {
                 $('#app-cover-spin').hide(0);
                 alert('JSON parsing error');
-                //snackbar('JSON parsing error');
-    
-                
-            }
-          
+            }          
         },
         error: function searchError(xhr, err) {
-          //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+          alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
           $('#app-cover-spin').hide(0);
-          alert(response.status + " : " + response.error);
-          //snackbar("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
         }
     });
-
-    /**const options = {
-        method: 'post',
-        data: { order_id: 12, startlimit: startlimit, endlimit: endlimit, status:status, username: username, order_id: order_id },
-        headers: { Authorization: 'OAuth2: token' }
-    };      
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/order_id.php', options, function(response) {
-        try {
-            response.data = JSON.parse(response.data);
-            if (response.data.message == "success") {
-                var products_status = response.data.products_status;
-                var products_data = response.data.products;
-                
-                //order_items_container
-                if (status == "active" || status == "cancelled" || status == "shipped") {
-                    $("#orders_items_made").html('');
-                    $("#orderid").html(order_id);
-                    window.location.href="#order_items_container";
-                    data_len = products_data.length;
-                    products_data.forEach(order_items_datamyFunction);
-                } else {
-                    $("#orders_made").html('');
-                    window.location.href="#order_container";
-                    data_len = products_data.length;
-                    if (status == "pending_orders") {
-                        $("#pending_orders_count").html(products_data.length);
-                    } else if (status == "active_orders") {
-                        $("#active_orders_count").html(products_data.length);
-                    } else if (status == "confirmed_orders") {
-                        $("#confirmed_orders_count").html(products_data.length);
-                    } else if (status == "complete_orders") {
-                        $("#complete_orders_count").html(products_data.length);
-                    } else if (status == "user_orders") {
-                        $("#_orders_count").html(products_data.length);
-                    }
-                    products_data.forEach(order_datamyFunction);
-                }
-                
-                
-            } else {
-                $('#app-cover-spin').hide(0);
-                alert(response.data.message);
-            }
-            
-        } catch(e) {
-            $('#app-cover-spin').hide(0);
-            //alert('JSON parsing error');
-            snackbar('JSON parsing error');
-
-            
-        }
-    }, function(response) {
-        $('#app-cover-spin').hide(0);
-        //alert(response.status + " : " + response.error);
-        snackbar(response.status + " : " + response.error);
-
-        
-    }); */
+    
 }
 
 function product_id(startlimit,endlimit,action,username,product_id) {
@@ -1323,109 +1236,6 @@ function product_id(startlimit,endlimit,action,username,product_id) {
           });
         }
     });
-
-    /**const options = {
-        method: 'post',
-        data: { product_id_action: action, startlimit: startlimit, endlimit: endlimit, username: username, product_id: product_id },
-        headers: { Authorization: 'OAuth2: token' }
-    };      
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/product_id.php', options, function(response) {
-        $('#app-cover-spin').hide(0);
-        try {
-            response.data = JSON.parse(response.data);
-            if (response.data.message == "success") {
-                var products_status = response.data.products_status;
-                var products_data = response.data.products;
-                //alert("quantity " + response.data.quantity);
-                total_pay = 0;
-                total_total = 0;
-                total_tax = 0;
-                total_shipping = 0;
-                //alert(products_status);
-                $("#orders_container").hide(10,function(){});
-                $("#order_items_container").hide(10);
-
-                if (products_status == "add_to_cart") {                    
-                    $("#shopping_cart_num").html(products_data.length);
-                } else if (products_status == "edit_product") {
-                    $("#product_row_container").html('');                    
-                    products_data.forEach(products_datamyFunction);
-                } else if (products_status == "remove_product") {                    
-                    $("#product_row_container").html(''); 
-                    products_data.forEach(products_datamyFunction);
-                } else if (products_status == "cart_to_remove") {                    
-                    $('.cart_error_container').hide(100, function(){
-                        //window.location.href="#cart_container";
-                        $("#cart_row_container").show(100);
-                    });
-                    $("#cart_row_container").html('');
-                    $("#shopping_cart_num").html(products_data.length);
-                    products_data.forEach(cart_datamyFunction);
-                } else if (products_status == "qt-minus") {                    
-                    $('.cart_error_container').hide(100, function(){
-                        //window.location.href="#cart_container";
-                        $("#cart_row_container").show(100);
-                    });
-                    $("#cart_row_container").html('');
-                    $("#shopping_cart_num").html(products_data.length);
-                    products_data.forEach(cart_datamyFunction);
-                } else if (products_status == "qt-plus") {                    
-                    $('.cart_error_container').hide(100, function(){
-                        //window.location.href="#cart_container";
-                        $("#cart_row_container").show(100);
-                    });
-                    $("#cart_row_container").html('');
-                    $("#shopping_cart_num").html(products_data.length);
-                    products_data.forEach(cart_datamyFunction);
-                } else if (products_status == "qt") {                    
-                    $('.cart_error_container').hide(100, function(){
-                        //window.location.href="#cart_container";
-                        $("#cart_row_container").show(100);
-                    });
-                    $("#cart_row_container").html('');
-                    $("#shopping_cart_num").html(products_data.length);
-                    products_data.forEach(cart_datamyFunction);
-                } else if (products_status == "0") {
-
-                    $('.cart_error_container').show(100, function(){
-                        window.location.href="#cart_container";
-                        $("#cart_row_container").hide(100);
-                        $("#cart_row_h").html(response.data.message);
-                        $("#shopping_cart_num").html(products_data.length);
-                        $("#cart_row_p").html('Your cart is empty. Add products to your cart.');
-                    });
-
-                } else {
-                    window.location.href="#cart_container";
-                    $("#cart_row_container").html('');
-                    $("#shopping_cart_num").html(products_data.length);
-                    products_data.forEach(cart_datamyFunction);
-                    $("#shopping_cart_num").html(products_data.length);
-                    $('.cart_error_container').hide(100, function(){
-                        window.location.href="#cart_container";
-                        $("#cart_row_container").show(100);
-                    });
-                    $("#orders_container").hide(100);
-                    $("#order_items_container").hide(10);
-
-                }                
-            }
-        } catch(e) {
-            $('.cart_error_container').show(100, function(){
-                window.location.href="#cart_container";
-                $("#cart_row_container").hide(100);
-                $("#cart_row_h").html(response.data.message);
-                $("#cart_row_p").html('JSON parsing error');
-            });
-        }
-    }, function(response) {
-        $('#app-cover-spin').hide(0);
-        $('.cart_error_container').show(100, function(){
-            window.location.href="#cart_container";
-            $("#cart_row_container").hide(100);
-            $("#cart_row_p").html(response.status + " : " + response.error);
-        });
-    }); */
     
 }
 var total_pay = 0;
@@ -1458,17 +1268,14 @@ function cart_datamyFunction(item, index) {
     } else {
         var IMAGE_url = IMAGE_url_path_name + product_image + '';
     }
-    //var IMAGE_url = 'img/jeans3.jpg';
-    //currency_price_symbal = '$';
+    
     var actions = '<div class="float-left icon_padding_div icon_cartdelete tags are-medium">' +
     '<span class="tag is-danger icon_remove_cart" product_id = "' + item.product_id + '">Remove</span>' +
     '</div>';
     product_row_container = '<div class="cart_productitem columns is-multiline is-mobile block"> ' + 
     
     '<div class="column image card"  style="background-image:url(' + IMAGE_url + ');" >' +
-    //'<div class="cart_menu column image" style="background-image:url(' + IMAGE_url + ');" >' +
-    //'<img class="img-fluid" src="' + IMAGE_url + '" alt="' + item.product_image + '">' +
-    //'</div>' +     
+    
     '</div>' +           
 
     '<div class="column is-6 bg-light card">' +
@@ -1693,6 +1500,7 @@ var  _shipping = '0';
 var  _pay = '0';
 var checkout_contact_information_save = 0;
 $("#checkout_total").click(function(){
+
    _shipping =  $("#_shipping").val();
    _pay =  $("#_pay").val();
 
@@ -1705,7 +1513,6 @@ $("#checkout_total").click(function(){
    } else {
     $("#_shippingerror").html('');
     $("#_payerror").html(''); 
-    //phone = '';
     if (phone == "") {
         checkout_contact_information_save = 1;
         $("#contact_information_save").removeClass("btn-success");
@@ -1715,83 +1522,23 @@ $("#checkout_total").click(function(){
         $("#contact_information_save_help").html('');
         $("#contact_information").show(100);
     } else {
-        //$("#add_products_new").show(100);
         checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_total,username);
     }   
    }  
 });
-$(".user_orders").click(function(){
-    /**$("#orders_container").show(10,function(){
-            $("#cart_container").hide(10); 
-            $('#app-cover-spin').hide(0);
-            $("#order_items_container").hide(10);           
-        }); */
-    /**window.location.href="#orders_container";
-    $("#menu_container_top_tab").show(100);                
-
-    $("#product_container").hide(100);
-    $("#menu_container_left_tab").hide(100);
-    $("#chat_container").hide(100);
-    $("#connects_chatbar").hide(100);
-    $("#location_container").hide(100);
-    $("#user_container").hide(100); */
-
+$(".user_orders").click(function(){    
     order_id(startlimit,endlimit,'user_orders',username,'');
 });
-$(".pending_orders").click(function(){
-    //pending_orders_count
-    /**window.location.href="#orders_container";
-    $("#menu_container_top_tab").show(100);                
-
-    $("#product_container").hide(100);
-    $("#menu_container_left_tab").hide(100);
-    $("#chat_container").hide(100);
-    $("#connects_chatbar").hide(100);
-    $("#location_container").hide(100);
-    $("#user_container").hide(100); */
-
+$(".pending_orders").click(function(){    
     order_id(startlimit,endlimit,'pending_orders',username,'');
 });
-$(".active_orders").click(function(){
-    //active_orders_count
-    /**window.location.href="#orders_container";
-    $("#menu_container_top_tab").show(100);                
-
-    $("#product_container").hide(100);
-    $("#menu_container_left_tab").hide(100);
-    $("#chat_container").hide(100);
-    $("#connects_chatbar").hide(100);
-    $("#location_container").hide(100);
-    $("#user_container").hide(100); */
-
+$(".active_orders").click(function(){    
     order_id(startlimit,endlimit,'active_orders',username,'');
 });
-$(".confirmed_orders").click(function(){
-    //confirmed_orders_count
-    /**window.location.href="#orders_container";
-    $("#menu_container_top_tab").show(100);                
-
-    $("#product_container").hide(100);
-    $("#menu_container_left_tab").hide(100);
-    $("#chat_container").hide(100);
-    $("#connects_chatbar").hide(100);
-    $("#location_container").hide(100);
-    $("#user_container").hide(100); */
-
+$(".confirmed_orders").click(function(){    
     order_id(startlimit,endlimit,'confirmed_orders',username,'');
 });
-$(".complete_orders").click(function(){
-    //confirmed_orders_count
-    /**window.location.href="#orders_container";
-    $("#menu_container_top_tab").show(100);                
-
-    $("#product_container").hide(100);
-    $("#menu_container_left_tab").hide(100);
-    $("#chat_container").hide(100);
-    $("#connects_chatbar").hide(100);
-    $("#location_container").hide(100);
-    $("#user_container").hide(100); */
-
+$(".complete_orders").click(function(){    
     order_id(startlimit,endlimit,'complete_orders',username,'');
 });
 
@@ -1806,7 +1553,6 @@ $("#user_products").click(function(){
 });
 
 function checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_total,username) {
-    //alert();
     $('#app-cover-spin').show(0);
     $.ajax({
         type: "POST", // Type of request to be send, called as
@@ -1816,7 +1562,6 @@ function checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_
         url: api_server_url + '/cordova/checkout_total.php',
         success: function searchSuccess(response) {
             try {
-                //response.data = JSON.parse(response.data);
                 if (response.message == "success") {
                     var products_status = response.products_status;
                     var products_data = response.products;                
@@ -1829,45 +1574,35 @@ function checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_
                     $("#total_tax").html('Taxes ('+_tax+'%): ' +  currency_price_symbal + '<span>' +  total_tax + '</span>');
                     $("#total_shipping").html('Delivery (' +  currency_price_symbal + ''+_delivery+'/km): ' +  currency_price_symbal + '<span>' +  total_shipping + ' in ' + gradius + ' km radius</span>');
                     $("#total_total").html('Total: ' +  currency_price_symbal + '<span>' +  total_total + '</span>');
-                    //alert(products_data);
                     if (products_status != "0") {
                         $("#orders_made").html('');
                         window.location.href="#order_container";
                         data_len = products_data.length;
                         products_data.forEach(order_datamyFunction);
                     }
-                    
-                    //$("#orders_container").hide(100);
                     $("#order_items_container").hide(10);
-                    //alert(products_data);
-                    
-                    
-    
                 } else {
-                   // $('#app-cover-spin').hide(0);
                     alert(response.message);
+                    $('#app-cover-spin').hide(0);
                 }
             } catch(e) {
-                //$('#app-cover-spin').hide(0);
-                //snackbar('JSON parsing error');
+                $('#app-cover-spin').hide(0);
                 alert('JSON parsing error');
-                
-            }
-          
+            }          
         },
         error: function searchError(xhr, err) {
-          alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-          //$('#app-cover-spin').hide(0);
-          //snackbar(response.status + " : " + response.error);
+            $('#app-cover-spin').hide(0);
+            alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));            
         }
     });
-
 }
 
 $("body").delegate(".div_cimage","click",function(event){
-    event.preventDefault();   
-    window.location.href="#product_add_client_container";
-    window.location.href="#product_container";
+    event.preventDefault(); 
+    $('#app-cover-spin').show(0);
+  
+    //window.location.href="#product_add_client_container";
+    //window.location.href="#product_container";
  
     var product_price = $(this).attr('product_price');    
     var product_title = $(this).attr('product_title');    
@@ -1895,7 +1630,9 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
     }
     var add_imageadd_ = document.getElementById('add_imageadd_');
     add_imageadd_.src = IMAGE_url;
-    window.location.href="#product_add_client_container";
+    var otheaddlimg = document.getElementById('otheaddlimg');
+    otheaddlimg.src = IMAGE_url;
+    window.location.href="#";
     $("#product_row_container").hide(100,function(){       
         $("#product_add_client_container").show(100);
         $("#product_error").hide(100);
@@ -1937,6 +1674,7 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
 
     $("#otheadd").html(add_client);
     $("#otheaddl").html(add_client);
+    $(".otheaddlocation").html(add_client);
 
     $("#add_fload_id").attr("connect_from", "" + add_client + "");
     $("#add_fload_id").attr("connects_id", "" + product_id + "");
@@ -1947,10 +1685,10 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
         add_client_cima = add_client;
         other_product_same_client(0,8,add_client);
         agent_location_map(add_client,username);
-    }    
-    //other_product_same_client(0,8,add_client);
-    //agent_location_map(add_client,username);
+    }
     other_similar_products(product_id,add_client);
+    $('#app-cover-spin').hide(0);
+
 }
 $("body").delegate(".div_otherimage","click",function(event){
     event.preventDefault();
@@ -1990,33 +1728,7 @@ function other_product_same(product_id) {
 
         }
     });
-
-    /**const options = {
-        method: 'post',
-        data: { other_product_same: 12, product_id:product_id },
-        headers: { Authorization: 'OAuth2: token' }
-    };      
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/other_product_same.php', options, function(response) {
-        try {
-            response.data = JSON.parse(response.data);            
-            if (response.data.message == "success") {
-                var products_status = response.data.products_status;
-                var products_data = response.data.products;
-                $("#other_title").html('');
-                if (products_status != "0") { 
-                    $("#other_title").html('');
-                    $('.product_error_container').hide(100, function(){
-                    });                   
-                    products_data.forEach(other_product_samemyFunction);
-                }
-            }
-        } catch(e) {
-            
-        }
-    }, function(response) {
-       // $('#app-cover-spin').hide(0);
-        
-    }); */
+    
 }
 function other_product_samemyFunction(item, index) {
     var product_image = item.product_img;
@@ -2063,34 +1775,8 @@ function other_product_same_client(startlimit,endlimit,add_client) {
           //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
 
         }
-    });
-
-    /**const options = {
-        method: 'post',
-        data: { other_product_same_client: 12, startlimit: startlimit, endlimit: endlimit, add_client:add_client },
-        headers: { Authorization: 'OAuth2: token' }
-    };      
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/other_product_same_client.php', options, function(response) {
-        try {
-            response.data = JSON.parse(response.data);            
-            if (response.data.message == "success") {
-                var products_status = response.data.products_status;
-                var products_data = response.data.products;
-                if (products_status != "0") { 
-                    $("#add_carousel_indicators").html('');
-                    $("#add_carousel_other").html('');
-                    $('.product_error_container').hide(100, function(){
-                    });                   
-                    products_data.forEach(other_product_same_clientmyFunction);
-                }
-            }
-        } catch(e) {
-            
-        }
-    }, function(response) {
-        //$('#app-cover-spin').hide(0);
-        
-    }); */
+    });    
+    
 }
 function other_product_same_clientmyFunction(item, index) {
     var product_image = item.product_img;
@@ -2108,50 +1794,12 @@ function other_product_same_clientmyFunction(item, index) {
     } else {
         var IMAGE_url = IMAGE_url_path_name + product_image + '';
     }
-    //var IMAGE_url = 'img/noni.png';
-    /**currency_price_symbal = '<div class="currencyclass"><input class="icon_input" type="radio" name="add_' + item.product_id + '_currency_symbal" id="add_' + item.product_id + '_currency_symbal">' +
-                            '<label class="currencyicon_label" for="add_' + item.product_id + '_currency_symbal"><img src="img/dollar.svg" alt=""></label></div>';
-    */
-
+    
     if (index < 1) {
         var add_carousel_indicators = '<li data-target="#carouselExampleIndicators" data-slide-to="' + index + '" class="active"></li>';
         $("#add_carousel_indicators").append(add_carousel_indicators);
         
-        /**if (username == item.add_client) {
-            var actions = '<div class="tags are-medium">' + 
-            '<span class="tag is-primary">' +
-            '<a>' +  currency_price_symbal + '</a>' +    
-            '<a>' +  product_price + '</a>' +
-            '</span> ' +
-            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
-            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-            '</div>';
-        } else {
-            var actions = '<div class="tags are-medium">' +
-            '<span class="tag is-primary">' +
-            '<a>' +  currency_price_symbal + '</a>' +    
-            '<a>' +  product_price + '</a>' +
-            '</span> ' +    
-            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
-            '</div>';
-        }
-        if (role == 'admin' || role == 'Admin'){
-            var actions = '<div class="tags are-medium">' +
-            '<span class="tag is-primary">' +
-            '<a>' +  currency_price_symbal + '</a>' +    
-            '<a>' +  product_price + '</a>' +
-            '</span> ' +
-            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
-            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
-            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-            '</div>';
-        } */
-
+        
         if (username == item.add_client) {
             var adminactions = '';
     
@@ -2196,41 +1844,6 @@ function other_product_same_clientmyFunction(item, index) {
         var add_carousel_indicators = '<li data-target="#carouselExampleIndicators" data-slide-to="' + index + '" class=""></li>';
         $("#add_carousel_indicators").append(add_carousel_indicators);
 
-        /**if (username == item.add_client) {
-            var actions = '<div class="tags are-medium">' + 
-            '<span class="tag is-primary">' +
-            '<a>' +  currency_price_symbal + '</a>' +    
-            '<a>' +  product_price + '</a>' +
-            '</span> ' +   
-            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
-            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-            '</div>';
-        } else {
-            var actions = '<div class="tags are-medium">' + 
-            '<span class="tag is-primary">' +
-            '<a>' +  currency_price_symbal + '</a>' +    
-            '<a>' +  product_price + '</a>' +
-            '</span> ' +   
-            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
-            '</div>';
-        }
-        if (role == 'admin' || role == 'Admin'){
-            var actions = '<div class="tags are-medium">' +
-            '<span class="tag is-primary">' +
-            '<a>' +  currency_price_symbal + '</a>' +    
-            '<a>' +  product_price + '</a>' +
-            '</span> ' +
-            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
-            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
-            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-            '</div>';
-        } */
-
         if (username == item.add_client) {
             var adminactions = '';
     
@@ -2263,25 +1876,6 @@ function other_product_same_clientmyFunction(item, index) {
        
         '<div class="carousel-caption d-md-block card-title add_divtext add_oer">' + actions +
         
-        /**'<a class="buynownow">' +
-        '<div class="float-left icon_padding_div">' +
-        '<input class="add_to_cart icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + '_cart" id="add_' + item.product_id + '_cart">' +
-        '<label class="currencyicon_label" for="add_' + item.product_id + '_cart"><img src="img/shopping-cart.svg" alt=""></label>' +
-        '</div>' +   
-    
-        '<div class="float-left icon_padding_div">' +
-        '<input class="edit_product icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + '_edit" id="add_' + item.product_id + '_edit">' +
-        '<label class="currencyicon_label" for="add_' + item.product_id + '_edit"><img src="img/edit.svg" alt=""></label>' +
-        '</div>' +
-    
-        '<div class="float-left icon_padding_div">' +
-        '<input class="add_to_remove icon_input" product_id = "' + item.product_id + '" type="radio" name="add_' + item.product_id + 'remove_cart" id="add_' + item.product_id + 'remove_cart">' +
-        '<label class="currencyicon_label" for="add_' + item.product_id + 'remove_cart"><img src="img/delete.svg" alt=""></label>' +
-        '</div>' + 
-        '</a>' + */ 
-
-
-
         '</div> ' + 
         
         '<div class="card-body">' +
@@ -2317,16 +1911,16 @@ function other_similar_products(product_id,add_client) {
                         $('#other_dot2').show(100, function(){});
                         $('#other_mySlides3').show(100, function(){});
                         $('#other_dot3').show(100, function(){}); */
-                        if (products_data.length < 6) {
-                            $('#other_mySlides1').hide(100, function(){});
-                            $('#other_dot1').hide(100, function(){});
-                        } else if (products_data.length < 12) {
-                            $('#other_mySlides2').hide(100, function(){});
-                            $('#other_dot2').hide(100, function(){});
-                        } else if (products_data.length < 18) {
-                            $('#other_mySlides3').hide(100, function(){});
-                            $('#other_dot3').hide(100, function(){});
-                        }
+                        //if (products_data.length < 6) {
+                            $('#other_mySlides1').show(100, function(){});
+                            $('#other_dot1').show(100, function(){});
+                        //} else if (products_data.length < 12) {
+                            $('#other_mySlides2').show(100, function(){});
+                            $('#other_dot2').show(100, function(){});
+                        //} else if (products_data.length < 18) {
+                            $('#other_mySlides3').show(100, function(){});
+                            $('#other_dot3').show(100, function(){});
+                        //}
                         products_data.forEach(other_similar_productsmyFunction);
                     }
                 }
@@ -2357,32 +1951,7 @@ function other_similar_productsmyFunction(item, index) {
     } else {
         var IMAGE_url = IMAGE_url_path_name + product_image + '';
     }
-
-    /**var other_similar_products = '<div class="mySlides ">' +
-    '<div class="row">' +
-    '<div class="col add_clidduct_column">' +
-    '<img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">' +
-    '</div>' +
-    '<div class="col add_clidduct_column">' +
-    '<img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">' +
-    '</div>' +
-    '<div class="col add_clidduct_column">' +
-    '<img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">' +
-    '</div>' +
-    '<div class="col add_clidduct_column">' +
-    '<img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">' +
-    '</div>' +
-    '<div class="col add_clidduct_column">' +
-    '<img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">' +
-    '</div>' +
-    '<div class="col add_clidduct_column">' +
-    '<img src="img/noni.png" class="rounded" width="100%" height="100%" alt="...">' +
-    '</div>' +
-    '</div>' +
-    '</div>'; */
-
     
-
     if (index < 6) {
         var other_similar_products_row1 = '<div class="col add_clidduct_column">' +
         '<img class="rounded div_cimage" width="100%" height="100%"  src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
@@ -2400,117 +1969,7 @@ function other_similar_productsmyFunction(item, index) {
         '</div>';
         $("#other_similar_products_row3").append(other_similar_products_row3);
     }
-
-
-
-    /**if (index < 1) {
-        //var add_carousel_indicators = '<li data-target="#carouselExampleIndicators" data-slide-to="' + index + '" class="active"></li>';
-        //$("#other_similar_products").append(other_similar_products);
-        
-        if (username == item.add_client) {
-            var actions = '<div class="tags are-medium">' + 
-            '<span class="tag is-primary">' +
-            '<a>' +  currency_price_symbal + '</a>' +    
-            '<a>' +  product_price + '</a>' +
-            '</span> ' +
-            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
-            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-            '</div>';
-        } else {
-            var actions = '<div class="tags are-medium">' +
-            '<span class="tag is-primary">' +
-            '<a>' +  currency_price_symbal + '</a>' +    
-            '<a>' +  product_price + '</a>' +
-            '</span> ' +    
-            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
-            '</div>';
-        }
-        if (role == 'admin' || role == 'Admin'){
-            var actions = '<div class="tags are-medium">' +
-            '<span class="tag is-primary">' +
-            '<a>' +  currency_price_symbal + '</a>' +    
-            '<a>' +  product_price + '</a>' +
-            '</span> ' +
-            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
-            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
-            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-            '</div>';
-        }
-        
-        
-        
-        var add_carousel_other  = '<div class="carousel-item active">' +
-        '<img class="d-block w-100 div_cimage" src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
-                
-        '<div class="carousel-caption d-md-block card-title add_divtext add_oer">' + actions +
-        
-        '</div> ' +
-
-        '<div class="card-body">' +
-        '<h5>' + item.product_title + '</h5>' +  
-        '</div> ' +
-                 
-        '</div>';
-        $("#other_similar_products").append(other_similar_products);    
-    } else {
-        //var add_carousel_indicators = '<li data-target="#carouselExampleIndicators" data-slide-to="' + index + '" class=""></li>';
-        //$("#add_carousel_indicators").append(add_carousel_indicators);
-
-        if (username == item.add_client) {
-            var actions = '<div class="tags are-medium">' + 
-            '<span class="tag is-primary">' +
-            '<a>' +  currency_price_symbal + '</a>' +    
-            '<a>' +  product_price + '</a>' +
-            '</span> ' +   
-            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
-            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-            '</div>';
-        } else {
-            var actions = '<div class="tags are-medium">' + 
-            '<span class="tag is-primary">' +
-            '<a>' +  currency_price_symbal + '</a>' +    
-            '<a>' +  product_price + '</a>' +
-            '</span> ' +   
-            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
-            '</div>';
-        }
-        if (role == 'admin' || role == 'Admin'){
-            var actions = '<div class="tags are-medium">' +
-            '<span class="tag is-primary">' +
-            '<a>' +  currency_price_symbal + '</a>' +    
-            '<a>' +  product_price + '</a>' +
-            '</span> ' +
-            '<span class="tag is-success add_to_cart" product_id = "' + item.product_id + '">Buy</span>' +
-            '<span class="tag is-primary wishlist_product" product_id = "' + item.product_id + '">Wishlist</span>' +
-            '<span class="tag is-secondary connect_product" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '">Connect</span>' +
-            '<span class="tag is-info edit_product" product_id = "' + item.product_id + '">Edit</span>' +
-            '<span class="tag is-danger add_to_remove" product_id = "' + item.product_id + '">Delete</span>' +
-            '</div>';
-        }
-
-        var add_carousel_other  = '<div class="carousel-item">' +
-        '<img class="d-block w-100 div_cimage " src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
-       
-        '<div class="carousel-caption d-md-block card-title add_divtext add_oer">' + actions +
-        
-        '</div> ' + 
-        
-        '<div class="card-body">' +
-        '<h5>' + item.product_title + '</h5>' +  
-        '</div> ' +
-
-        '</div>';
-
-        $("#other_similar_products").append(other_similar_products);
-    } */
+    
 }
 $("#arrow_add_client_back").click(function(){
     $("#product_add_client_container").hide(100,function(){       
@@ -2588,39 +2047,7 @@ function apps_categories(add_client) {
 
         }
     });
-
-    /**const options = {
-        method: 'post',
-        data: { apps_categories: 12, add_client: add_client },
-        headers: { Authorization: 'OAuth2: token' }
-    };      
-    cordova.plugin.http.sendRequest(api_server_url + '/cordova/apps_categories.php', options, function(response) {
-        $('#app-cover-spin').hide(0);
-        try {
-            response.data = JSON.parse(response.data);
-            $("#apps_categories").html('');
-            if (response.data.message == "success") {
-                var apps_categories_status = response.data.apps_categories_status;
-                var apps_categories = response.data.apps_categories;
-                if (apps_categories_status != "0") {      
-                    apps_categories.forEach(apps_categoriesmyFunction);
-                } else {
-                        $("#apps_categories").html(response.data.message);
-                        $("#apps_categories").append('No new Industries');
-                }
-            }
-            else {
-                    $("#apps_categories").html(response.data.message);
-                    $("#apps_categories").append('No new Industries');
-            }
-        } catch(e) {
-                $("#apps_categories").html(response.data.message);
-                $("#apps_categories").append('JSON parsing error');
-        }
-    }, function(response) {
-        $('#app-cover-spin').hide(0);
-            $("#apps_categories").append(response.status + " : " + response.error);
-    }); */
+    
 }
 function apps_categoriesmyFunction(item, index) {
     var cat_id = item.cat_id;
@@ -4342,12 +3769,6 @@ function product_tax(e) {
     }
 }
 
-
-
-/**
-
- */
-
 const product_industry_input = document.querySelector('#product_industry');
 product_industry_input.addEventListener('change', (event) => {
 var product_industry = event.target.value;
@@ -4359,6 +3780,46 @@ var product_category = event.target.value;
 
 });
 
+$('#list-shipping-list').on('click', function (e) {
+  e.preventDefault()
+  $("#productshipping").show(100);
+  $("#productcondition").hide(100);
+  $("#productbrand").hide(100);
+  $("#productavailability").hide(100);
+  $("#producttax").hide(100);
+});
+$('#list-condition-list').on('click', function (e) {
+    e.preventDefault()
+    $("#productshipping").hide(100);
+    $("#productcondition").show(100);
+    $("#productbrand").hide(100);
+    $("#productavailability").hide(100);
+    $("#producttax").hide(100);  
+});
+$('#list-brand-list').on('click', function (e) {
+  e.preventDefault()
+  $("#productshipping").hide(100);
+  $("#productcondition").hide(100);
+  $("#productbrand").show(100);
+  $("#productavailability").hide(100);
+  $("#producttax").hide(100);
+});
+$('#list-availability-list').on('click', function (e) {
+  e.preventDefault()
+  $("#productshipping").hide(100);
+  $("#productcondition").hide(100);
+  $("#productbrand").hide(100);
+  $("#productavailability").show(100);
+  $("#producttax").hide(100);
+});
+$('#list-tax-list').on('click', function (e) {
+  e.preventDefault()
+  $("#productshipping").hide(100);
+  $("#productcondition").hide(100);
+  $("#productbrand").hide(100);
+  $("#productavailability").hide(100);
+  $("#producttax").show(100);
+});
 
 $("#add_products_close").click(function(){
     $("#add_products_new").hide(100);
@@ -4463,6 +3924,10 @@ $("#s1").click(function(){
     main();
 });
 
+$('.carousel').carousel({
+    touch: true
+})
+
 var connect_from = "";
 var connects_id = "";
 var chat_window = 0;
@@ -4490,7 +3955,7 @@ $("#chat_message").keypress(function (e){
             }
         } else {
             var connect_messages  = '<div class="message stark" connect_from="' + 'Mo-pal' + '" connect_messages_id="' + '1' + '">' + 'Please, Type your message' + '</div>';
-            $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
+            $(".picbar").attr("style", "background-image: url('" + IMAGE_url + "')");
             $("#chat").html(connect_messages);
         }
     }
@@ -4518,10 +3983,9 @@ $("#radio-send").click(function(){
             
         }
     } else {
-        //contact(connect_from,username,conn_id,'Please, Type your message');
-        /**var connect_messages  = '<div class="message stark" connect_from="' + 'Mo-pal' + '" connect_messages_id="' + '1' + '">' + 'Please, Type your message' + '</div>';
-        $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
-        $("#chat").html(connect_messages); */
+        var connect_messages  = '<div class="message stark" connect_from="' + 'Mo-pal' + '" connect_messages_id="' + '1' + '">' + 'Please, Type your message' + '</div>';
+        $(".picbar").attr("style", "background-image: url('" + IMAGE_url + "')");
+        $("#chat").html(connect_messages);
     }
 });
 var conta = 0;
@@ -4531,11 +3995,9 @@ $("body").delegate(".get_contact","click",function(event){
     $("#contactname").html($(this).attr('connect_from'));
     $("#cotacttime").html($(this).attr('connects_time'));
     var IMAGE_url = $(this).attr('connect_image_url');
-    $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
+    $(".picbar").attr("style", "background-image: url('" + IMAGE_url + "')");
 
-    //$("#chat_message").val();
-
-
+    $("#chat_message").val();
     
     var chat_message = '';
     connect_from = $(this).attr('connect_from');
@@ -4575,7 +4037,7 @@ $("body").delegate(".add_float","click",function(event){
         $("#contactname").html($(this).attr('connect_from'));
         $("#cotacttime").html($(this).attr('connects_time'));
         var IMAGE_url = 'img/jeans3.jpg';
-        $(".pic").attr("style", "background-image: url('" + IMAGE_url + "')");
+        $(".picbar").attr("style", "background-image: url('" + IMAGE_url + "')");
         var chat_message = '';
         div_cima = 1;
         connect_from = $(this).attr('connect_from');
@@ -4678,7 +4140,7 @@ function contact(user_name,con_from,conn_id,chat_message) {
                 }
             },
             error: function searchError(xhr, err) {
-                $("#chat").html('<div class="message stark">Error on ajax call: ' + err  + ' ' + JSON.stringify(xhr) + '</div>');
+                //$("#chat").html('<div class="message stark">Error on ajax call: ' + err  + ' ' + JSON.stringify(xhr) + '</div>');
             }
         });
          
@@ -4692,27 +4154,15 @@ function contact(user_name,con_from,conn_id,chat_message) {
 }
 var value_from_connects_name = "";
 var endchat = 1;
-/**function contacts_datamyFunction(item, index) {
-    var data_i = data_length-1;
-    var IMAGE_url = '../img/jeans3.jpg';
-    if (value_from_connects_name.includes(item.connect_from) == false) {
-        value_from_connects_name = value_from_connects_name + " " + item.connect_from;
-        
-        //$("#connects").html('<div class="contact">' + value_from_connects_name + '</div>');        
-        if (item.connect_from != username) {
-            //$("#connects").html('Loading...');
-            //loadchat(item.connect_from);
-        }
-    }   
-} */
+
 function chat_contacts_datamyFunction(item, index) {
     var data_i = data_length-1;
     if (username == item.connect_from) {
         var connect_messages  = '<div class="message parker" connect_from="' + item.connect_from + '" connect_messages_id="' + item.connect_messages_id + '">' + item.connect_message + '</div>';
-        $(".pic").attr("style", "background-image: url('" + IMAGE_pic_url + "')");    
+        $(".picbar").attr("style", "background-image: url('" + IMAGE_pic_url + "')");    
     } else {
         var connect_messages  = '<div class="message stark" connect_from="' + item.connect_from + '" connect_messages_id="' + item.connect_messages_id + '">' + item.connect_message + '</div>';
-        $(".pic").attr("style", "background-image: url('" + IMAGE_pic_url + "')");
+        $(".picbar").attr("style", "background-image: url('" + IMAGE_pic_url + "')");
     }
     if (data_i == index) {
         var typing = '<div id="bot_typing" class="message stark">' +
@@ -4894,62 +4344,54 @@ function connects_datamyFunction(item, index) {
     } else {
         var connect_name = item.connect_from;  
     }
+    var _status = JSON.parse(item.connect_status);
+    var item_connect_status = _status.connect_status;
+    bum =  Number(_status.count);        
+    var product_image =  _status.connects_name_IMAGE; 
+    if (product_image.includes("http", 0)) {
+        var IMAGE_url = product_image + '';
+    } else {
+        var IMAGE_url = IMAGE_url_path_name + product_image + '';
+    }
     
-    //alert(item.connect_status + ' item.connect_from ' + item.connect_from + ' item.connect_to ' + item.connect_to);
-    //if (item.connect_from != item.connect_to) {
-        var _status = JSON.parse(item.connect_status);
-        var item_connect_status = _status.connect_status;
-        bum =  Number(_status.count);        
-        var product_image =  _status.connects_name_IMAGE; 
-        if (product_image.includes("http", 0)) {
-            var IMAGE_url = product_image + '';
-        } else {
-            var IMAGE_url = IMAGE_url_path_name + product_image + '';
-        }
-        
-        if (Number.isNaN(Date.parse(item.connects_time))) {
-            var connect_date = item.connects_time;
-        } else {
-            var msec = Date.parse(item.connects_time);
-            var d = new Date(msec);
-            var connect_date =d.toDateString();
-        }        
+    if (Number.isNaN(Date.parse(item.connects_time))) {
+        var connect_date = item.connects_time;
+    } else {
+        var msec = Date.parse(item.connects_time);
+        var d = new Date(msec);
+        var connect_date =d.toDateString();
+    }        
 
-        var check_time = '<i class="float-right is-info time div5">' + connect_date + '</i>';
+    var check_time = '<i class="float-right is-info time div5">' + connect_date + '</i>';
 
-        if (item_connect_status == "unread") {
-            var check_status = '<a class="status div4 text-secondary" data-toggle="tooltip">✓</a>';
-        } else {
-            var check_status = '<a class="status div4 text-info" data-toggle="tooltip">✓✓</a>';
-        }
+    if (item_connect_status == "unread") {
+        var check_status = '<a class="status div4 text-secondary" data-toggle="tooltip">✓</a>';
+    } else {
+        var check_status = '<a class="status div4 text-info" data-toggle="tooltip">✓✓</a>';
+    }
 
-        if (bum > 0) {
-            var con_messages  = '<div class="contact get_contact" connect_image_url="' + IMAGE_url + '" connect_from="' + connect_name + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
-            '<div class="pic rogers rogers_'+ index +'" style="background-image:url(' + IMAGE_url + ');"></div>' +
-            '<div class="badge">' +
-            '  ' + bum + '' +
-            '</div>' +
-            '<h6 class="name">' +
-            '  ' + connect_name + '' +
-            '</h6>' +    
-            ' ' + product_title_account + '' + check_time +    
-            '</div>'; 
-            $("#connects").append(con_messages);       
-        } else {
-            var con_messages  = '<div class="contact get_contact" connect_image_url="' + IMAGE_url + '" connect_from="' + connect_name + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
-            '<div class="pic rogers rogers_'+ index +'" style="background-image:url(' + IMAGE_url + ');"></div>' + 
-             '<div class="name">' +
-            '  ' + connect_name + '' +
-            '</div>' +    
-            ' ' + product_title_account + '' + check_time + '<br>' + check_status +    
-            '</div>';
-            $("#connects").append(con_messages);
-        }
-    //}
-        
-
-        //alert(con_messages + " index " + index);
-    
+    if (bum > 0) {
+        var con_messages  = '<div class="contact get_contact" connect_image_url="' + IMAGE_url + '" connect_from="' + connect_name + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
+        '<div class="pic rogers rogers_'+ index +'" style="background-image:url(' + IMAGE_url + ');"></div>' +
+        '<div class="badge">' +
+        '  ' + bum + '' +
+        '</div>' +
+        '<h6 class="name">' +
+        '  ' + connect_name + '' +
+        '</h6>' +    
+        ' ' + product_title_account + '' + check_time +    
+        '</div>'; 
+        $("#connects").append(con_messages);       
+    } else {
+        var con_messages  = '<div class="contact get_contact" connect_image_url="' + IMAGE_url + '" connect_from="' + connect_name + '" connects_id="' + item.connects_id + '" connects_time="' + item.connects_time + '">' +
+        '<div class="pic rogers rogers_'+ index +'" style="background-image:url(' + IMAGE_url + ');"></div>' + 
+         '<div class="name">' +
+        '  ' + connect_name + '' +
+        '</div>' +    
+        ' ' + product_title_account + '' + check_time + '<br>' + check_status +    
+        '</div>';
+        $("#connects").append(con_messages);
+    }
     
 }
 var connects_data_from = "";

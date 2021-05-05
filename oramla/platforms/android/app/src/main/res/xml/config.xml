@@ -25,10 +25,10 @@
     </feature>
     <name>Oramla</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        The leading platform for globle trade. We connect and serve millions of buyers and sellers around the world
     </description>
     <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+        Mo-pal Oramla Team
     </author>
     <content src="index.html" />
     <access origin="*" />

@@ -38,8 +38,8 @@
     },
     "platforms": [
       "electron",
-      "browser",
-      "android"
+      "android",
+      "browser"
     ]
   }
 }

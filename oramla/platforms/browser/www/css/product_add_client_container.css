@@ -178,6 +178,15 @@ li {
   background-color: #bbb;
 
 }
+.addContent{
+  color: rgb(34, 18, 36);
+  background-color: #bbb;
+}
+.addtabContent{
+  color: rgb(34, 18, 36);
+  background-color: #bbb;
+  display: none;
+}
 
 nav ul {
 	-webkit-font-smoothing: antialiased;

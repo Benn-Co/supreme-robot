@@ -16,6 +16,9 @@
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.benco.org"
     },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "com.benco.org"
+    },
     "cordova-plugin-media": {
       "PACKAGE_NAME": "com.benco.org"
     },
@@ -26,9 +29,6 @@
       "PACKAGE_NAME": "com.benco.org"
     },
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.benco.org"
-    },
-    "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.benco.org"
     }
   },

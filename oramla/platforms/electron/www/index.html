@@ -219,52 +219,114 @@
 
       <div id="product_add_client_container" class="product_add_client">
         <!-- not responsive yet -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-          <div  id="add_main" class="header">  
-            <ul class="cf">
-              <li>
-                <a id="add_client_rating" class="dropdown">
-                  <img src="img/user-svgrepo-com.svg" alt="" width="25px" height="25px">
-                  <b id="otheaddl"></b>
-                </a>
-                <ul>
-                  <li>
-                    <a id="add_client_rating" class="">
-                      <i id="rating_num" class="circle_num badge badge-info">0</i>
-                      <img src="img/best-employee.svg" alt="" width="25px" height="25px">
-                    </a>                
-                  </li>
-                  <li>
-                    <a id="add_client_location" href="#agentlocation" class="">
-                      <img src="img/location-svgrepo-com.svg" alt="" width="25px" height="25px">
-                    </a>                
-                  </li>
-                  <li>
-                    <a id="add_client_delivery" class="">
-                      <img src="img/international-delivery.svg" alt="" width="25px" height="25px">
-                    </a>                
-                  </li>
-                  <li>
-                    <a id="add_client_payment" class="">
-                      <img src="img/payment-methods-svgrepo-com.svg" alt="" width="25px" height="25px">
-                    </a>                
-                  </li>
-                </ul>
-              </li>
-          </ul>
-          </div>
-          <div class="add_active">
-            <a id="arrow_add_client_back" class="my-2 my-sm-0 arrow left">
-              <i></i>
-              <svg>
-                <use xlink:href="#circle">
-              </svg>
-            </a>
-  
-          </div>
+        <nav class="nav nav-justified nav_add_client sticky-top">
+          <a class="nav-item nav-link active" href="#agentclient">
+            <img id="otheaddlimg" src="img/logo.png" alt="" width="25px" height="25px" class="rounded-circle">
+            <span  id="otheaddl"></span>
+          </a>
+          <a class="nav-item nav-link" href="#addloactionagent">
+            <i class="fa fa-map-marker" aria-hidden="true"></i>
+          </a>
+          <a class="nav-item nav-link" href="#productshipping">
+            <img src="img/fast-shipping.png" alt="" width="25px" height="25px">
+          </a>
+          <a class="nav-item nav-link" href="#paymentmethods">
+            <i class="fa fa-credit-card" aria-hidden="true"></i>
+          </a>
+
+          <a class="nav-item nav-link add_nav" href="#">
+            <i id="arrow_add_client_back" class="fa fa-arrow-left"></i>
+          </a>
+          
         </nav>
         
-        <section class="buy-grid  container-fluid">          
+
+        <!--<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+          <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">
+                
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                
+
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                
+
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                
+
+              </a>
+            </li>
+            
+          </ul>
+          
+          <div class="add_active">
+            <button id="arrow_add_client_back"  class="button is-black"><i class="fa fa-arrow-left"></i></button>
+
+          </div>
+        </nav>
+         <div  id="add_main" class="header float-left" style="display: inline;">  
+            <a id="add_client_rating" class="dropdown">
+              
+            </a>
+            <a id="add_client_rating" class="">
+              
+            </a>
+            <a id="add_client_location" href="#agentlocation" class="">
+            </a>
+            <a id="add_client_delivery" class="">
+              <img src="img/international-delivery.svg" alt="" width="25px" height="25px">
+            </a>
+            <a id="add_client_payment" class="">
+              <img src="img/payment-methods-svgrepo-com.svg" alt="" width="25px" height="25px">
+            </a>
+            
+            
+
+          </div> 
+        
+         <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a id="add_client_rating" class="nav-link" href="#">
+                
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#agentlocation">
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+              </a>
+            </li>
+          </ul>-->
+         
+
+        
+        <section class="buy-grid container-fluid">          
           <div class="hero-image-wrapper">
             <img id="add_imageadd_" src="https://www.osprey.com/images/product/hero/arielpro65_side_voyagergrey.jpg" class="hero-image-element" alt="alt">
             <div id="other_title" class="row">
@@ -273,58 +335,824 @@
           </div>
           <header class="header_header">
             <h5 id="add_carousel_title"></h5>
+            <div class="tags">
+              <span class="tag is-black fa fa-star"></span>
+              <span class="tag is-black fa fa-star"></span>
+              <span class="tag is-black fa fa-star"></span>
+              <span class="tag is-light fa fa-star"></span>
+              <span class="tag is-light fa fa-star"></span>
+            </div>
           </header>
-          <div class="selection">
-            <div class="selection-row">
-              <div class="rate">
-                <a href="#!" class="active">★</a>
-                <a href="#!" class="active">★</a>
-                <a href="#!" class="active">★</a>
-                <a href="#!">★</a>
-                <a href="#!">★</a>
-               </div>
-            </div> 
-            
-            <p class="card-price"><span id="add_carousel_currency"></span><span id="add_carousel_price"></span></p>
-            
-            <button  id="add_carousel_buynow" class="btn btn-primary btn-large btn-full"></button>
 
-          </div>
-          <div class="specs-table">
-            <h4>Specifications</h4>
-            <div class="specs-table-row ">
-              <div class="spec-table-label">=></div>
-              <div id="add_carousel_desc" class="spec-table-description">This is the description</div>
+          <div class="">
+            <div id="productrating" class="selection"> 
+              
+              <div class="tags">
+                <span class="tag is-black fa fa-user otheaddlocation"></span>
+                <span class="tag is-black"><i id="rating_num" class="fa fa-star" aria-hidden="true">3</i></span>
+
+              </div>
+              
+              <div class="tags">
+                <p class="card-price"><span id="add_carousel_currency"></span><span id="add_carousel_price"></span></p>
+                <span class="tag" id="add_carousel_buynow"></span>
+              </div>              
+
+            </div>
+
+            <div class="tags">
+              <a class="tag is-black" id="list-shipping-list" href="#productshipping">shipping</a>
+              <a class="tag is-black" id="list-condition-list" href="#productcondition">condition</a>
+              <a class="tag is-black" id="list-brand-list" href="#productbrand">brand</a>
+              <a class="tag is-black" id="list-availability-list" href="#productavailability">availability</a>
+              <a class="tag is-black" id="list-tax-list" href="#producttax">tax</a>
+            </div>
+            
+            <div class="addContent">
+              <div class="" id="productshipping">
+                <h5 class="text sticky-top">Shipping</h5>
+                <div class="card overflow-auto" style="height: 200px;">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 text-success">US:CA:Overnight:16.00 USD:1:1:2:3</h5>
+                    <span>3 days ago</span>
+                  </div>
+                  
+                  <div class="box">
+                    <p class="mb-1">shipping cost, shipping speeds, and the locations your product ships from.<br>Supported prices : 0–1000 USD (check for other currencies)</p>
+                    
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping label</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>perishable</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Sameday</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Oversize</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Only FedEx</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping weight</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>weights 0–2000 lbs</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping length</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping width</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping height</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">ships from country</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Kenya (KE) Nairobi</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">transit time label</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Heavy package</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>From Nairobi</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Dog food</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">max handling time</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>3 days</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">min handling time</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 day</span>
+                      </span>
+                    </div>
+                    <br>
+
+                  </div>
+                </div>
+              </div>
+              <div class="addtabContent" id="productcondition">
+                <h5 class="text sticky-top">condition</h5>
+                <div class="card overflow-auto"  style="height: 200px;">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 text-success">US:CA:Overnight:16.00 USD:1:1:2:3</h5>
+                    <span>3 days ago</span>
+                  </div>
+                  
+                  <div class="box">
+                    <p class="mb-1">shipping cost, shipping speeds, and the locations your product ships from.<br>Supported prices : 0–1000 USD (check for other currencies)</p>
+                    
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping label</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>perishable</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Sameday</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Oversize</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Only FedEx</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping weight</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>weights 0–2000 lbs</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping length</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping width</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping height</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">ships from country</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Kenya (KE) Nairobi</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">transit time label</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Heavy package</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>From Nairobi</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Dog food</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">max handling time</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>3 days</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">min handling time</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 day</span>
+                      </span>
+                    </div>
+                    <br>
+
+                  </div>
+                </div>
+              </div>
+              <div class="addtabContent" id="productavailability">
+                <h5 class="text sticky-top">availability</h5>
+                <div class="card overflow-auto" style="height: 200px;">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 text-success">US:CA:Overnight:16.00 USD:1:1:2:3</h5>
+                    <span>3 days ago</span>
+                  </div>
+                  
+                  <div class="box">
+                    <p class="mb-1">shipping cost, shipping speeds, and the locations your product ships from.<br>Supported prices : 0–1000 USD (check for other currencies)</p>
+                    
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping label</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>perishable</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Sameday</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Oversize</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Only FedEx</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping weight</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>weights 0–2000 lbs</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping length</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping width</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping height</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">ships from country</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Kenya (KE) Nairobi</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">transit time label</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Heavy package</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>From Nairobi</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Dog food</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">max handling time</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>3 days</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">min handling time</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 day</span>
+                      </span>
+                    </div>
+                    <br>
+
+                  </div>
+                </div>
+              </div>
+              <div class="addtabContent" id="producttax">
+                <h5 class="text sticky-top">tax</h5>
+                <div class="card overflow-auto" style="height: 200px;">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 text-success">US:CA:Overnight:16.00 USD:1:1:2:3</h5>
+                    <span>3 days ago</span>
+                  </div>
+                  
+                  <div class="box">
+                    <p class="mb-1">shipping cost, shipping speeds, and the locations your product ships from.<br>Supported prices : 0–1000 USD (check for other currencies)</p>
+                    
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping label</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>perishable</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Sameday</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Oversize</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Only FedEx</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping weight</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>weights 0–2000 lbs</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping length</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping width</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping height</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">ships from country</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Kenya (KE) Nairobi</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">transit time label</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Heavy package</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>From Nairobi</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Dog food</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">max handling time</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>3 days</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">min handling time</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 day</span>
+                      </span>
+                    </div>
+                    <br>
+
+                  </div>
+                </div>
+              </div>
+              <div class="addtabContent" id="productbrand">
+                <h5 class="text sticky-top">brand</h5>
+                <div class="card overflow-auto" style="height: 200px;">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 text-success">US:CA:Overnight:16.00 USD:1:1:2:3</h5>
+                    <span>3 days ago</span>
+                  </div>
+                  
+                  <div class="box">
+                    <p class="mb-1">shipping cost, shipping speeds, and the locations your product ships from.<br>Supported prices : 0–1000 USD (check for other currencies)</p>
+                    
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping label</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>perishable</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Sameday</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Oversize</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Only FedEx</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping weight</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>weights 0–2000 lbs</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping length</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping width</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">shipping height</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 - 150 for inches</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">ships from country</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Kenya (KE) Nairobi</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">transit time label</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Heavy package</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>From Nairobi</span>
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>Dog food</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">max handling time</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>3 days</span>
+                      </span>
+                    </div>
+                    <br>
+
+                    <div class="float-left">
+                      <span class="icon-text">
+                        <span class="badge badge-primary text-wrap">min handling time</span >
+                        <span class="icon">
+                          <i class="fa fa-arrow-right"></i>
+                        </span>
+                        <span>1 day</span>
+                      </span>
+                    </div>
+                    <br>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div  id="paymentmethods"  class="">
+              <h5 class="text sticky-top">Payment options</h5>
+
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title"><a class="tag is-black" id="list-paywithrams-list" href="#productpaywithrams">Pay With Rams</a></h5>
+                  <p class="card-text">You'll send your payment in crypto through Oramla. You can track each transaction, manage your earnings, convert the funds into local currencies, and more.</p>
+              
+                  <h6 class="card-text">More supported payment options</h6>
+
+                  <div id="specscarouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <div class="tags">
+                          <span class="tag is-black">Bank Transfer</span>
+                          <span class="tag is-black">Cash</span>
+                          <span class="tag is-black">Neteller</span>
+                          <span class="tag is-black">Skrill</span>
+                          <span class="tag is-black">PayPal</span>
+                          <span class="tag is-black">Ethereum</span>
+                          <span class="tag is-black">Bitcoin</span>
+                          <span class="tag is-black">Litecoin</span>
+                          <span class="tag is-black">Amazon gift cards</span>
+                          <span class="tag is-black">Cash In-Person</span>
+                        </div>
+                      </div>
+                      <div class="carousel-item">
+                        <div class="tags">
+                          <span class="tag is-black">Bank Transfer</span>
+                          <span class="tag is-black">Cash</span>
+                          <span class="tag is-black">Neteller</span>
+                          <span class="tag is-black">Skrill</span>
+                          <span class="tag is-black">PayPal</span>
+                          <span class="tag is-black">Ethereum</span>
+                          <span class="tag is-black">Bitcoin</span>
+                          <span class="tag is-black">Litecoin</span>
+                          <span class="tag is-black">Amazon gift cards</span>
+                          <span class="tag is-black">Cash In-Person</span>
+                        </div>
+                      </div>
+                      <div class="carousel-item">
+                        <div class="tags">
+                          <span class="tag is-black">Bank Transfer</span>
+                          <span class="tag is-black">Cash</span>
+                          <span class="tag is-black">Neteller</span>
+                          <span class="tag is-black">Skrill</span>
+                          <span class="tag is-black">PayPal</span>
+                          <span class="tag is-black">Ethereum</span>
+                          <span class="tag is-black">Bitcoin</span>
+                          <span class="tag is-black">Litecoin</span>
+                          <span class="tag is-black">Amazon gift cards</span>
+                          <span class="tag is-black">Cash In-Person</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+                
+              </div>
+
+              
+            </div>
+
+            
+            
+            <hr>
+            
+            <div class="specs-table">              
+  
+              <h4 class="text sticky-top">Specifications</h4>
+  
+              <div class="specs-table-row card">
+                <div class="spec-table-label">=></div>
+                <div id="add_carousel_desc" class="spec-table-description">This is the description</div>
+              </div>
+              
             </div>
           </div>
+
+          
+
         </section>
-        <section class="callout  container-fluid">
-          <div id="carouselExampleIndicators" class="carousel slide bg-dark text-white  row" data-ride="carousel">
-            <h3 class="text">Other Products from Agent <b id="otheadd"></b></h3>
-            <ol id="add_carousel_indicators" class="carousel-indicators _carousel_indicators" style="z-index: 0;">
-  
-              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-  
-            </ol>
-            <div id="add_carousel_other" class="carousel-inner">                  
-  
+        <section id="agentclient" class="callout  container-fluid">
+          <h3 class="text sticky-top">Other Products from Agent <b id="otheadd"></b></h3>
+
+          <div class="card">
+            <div id="carouselExampleIndicators" class="carousel slide bg-dark text-white  row" data-ride="carousel">
+              <ol id="add_carousel_indicators" class="carousel-indicators _carousel_indicators" style="z-index: 0;">
+    
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+    
+              </ol>
+              <div id="add_carousel_other" class="carousel-inner">                  
+    
+              </div>
+              <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
-          </div>
+          </div>          
         </section>
-        <section class="callout  container-fluid">
-          <div id="agentlocation" class="addagenttext  row" style="text-align:center;">
+        <section id="addloactionagent" class="callout  container-fluid">
+          <h3 class="text sticky-top">Agent Agent <b class="otheaddlocation"></b> location</h3>
+          
+          <div id="agentlocation" class="addagenttext row" style="text-align:center;">
           </div>
           <div id="agent_location_map" class="row"> </div>
+
+          
         </section>
         <section class="callout  container-fluid">
           <h3 class="text">Similar products </h3>
@@ -421,18 +1249,14 @@
          
     </div>
 
-    <div id="chat_container" class="chat_main_container container is-fullhd">      
-      <nav  id="center_top_id" class="navbar navbar-light bg-light fixed-top">
+    <div id="chat_container" class="chat_main_container is-fullhd">      
+      <nav  id="center_top_id" class="navbar navbar-light bg-light fixed-top sticky-top">
         <div class="is-centered">
            <h2>Connects</h2>
         </div>
         <div class="is-centered">
-          <a id="contacts_back" class="my-2 my-sm-0 arrow left float-right" style="float:right">
-            <i></i>
-            <svg>
-              <use xlink:href="#circle">
-            </svg>
-          </a>
+          <button id="contacts_back"  class="button is-black"><i class="fa fa-arrow-left"></i></button>
+          
         </div>
       </nav>
       <div id="connects_contacts">
@@ -445,7 +1269,7 @@
         <div class="chat">  
 
           <div class="contact bar">
-            <div id="namepic" class="pic stark"></div>
+            <div id="namepic" class="pic picbar stark"></div>
             <div id="contactname" class="name">
             </div>
             <div id="cotacttime" class="seen">
@@ -547,7 +1371,7 @@
             <div class="list-group list-group-horizontal  columns is-multiline is-mobile block">
               <div class="float-left column is-6">                 
                 <div class="select is-link">
-                  <select>
+                  <select id="_shipping">
                     <option value="0" selected>Delivery option</option>
                     <option value="Pick up">Pick up</option>
                     <option value="Door to door">Door to door</option>
@@ -559,7 +1383,7 @@
               </div>
               <div class="float-right column is-6">
                 <div class="select is-link">              
-                  <select>
+                  <select id="_pay">
                     <option value="0" selected>Payment option</option>
                     <option value="M-Pesa">M-Pesa</option>
                     <option value="Paypal">Paypal</option>
