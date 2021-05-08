@@ -2384,6 +2384,8 @@ function products_datamyFunction(item, index) {
     } else {
         $("#product_next").show(100,function(){       
             $("#product_previous").hide(100);
+            $("#add_products_new").hide(1000);
+
         });
     }
     if (product_row_index < 24) {
@@ -5968,6 +5970,11 @@ function upload_image_from_file(uploadFile_arr) {
                         //imageurl
                         $("#product_save").html(response.uploadFile_arr.message);
                         $("#upload_from_help").html(response.product_title + ' uploaded successfuly');
+                        cat_id = '';
+                        brand_id = '';
+                        startlimit = 0;
+                        endlimit = 24;
+                        product_main_container(startlimit,endlimit,cat_id,brand_id);
                     } else {                        
                         $("#product_save").removeClass("btn-primary");
                         $("#product_save").removeClass("btn-success");
