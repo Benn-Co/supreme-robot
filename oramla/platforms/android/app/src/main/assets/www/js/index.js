@@ -62,10 +62,43 @@ function onDeviceReady() {
     //console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     //document.getElementById('deviceready').classList.add('ready');
     username = localStorage.getItem("username");
-    role = localStorage.getItem("role");
     email = localStorage.getItem("email");
+    check_user_authentication(username,email);
+}
+function check_user_authentication(username,email) {
+    $.ajax({
+        type: "POST", // Type of request to be send, called as
+        dataType: 'json',
+        data: { check_user_authentication: 12, username:username, email:email},
+        processData: true,
+        url: api_server_url + '/cordova/check_user_authentication.php',
+        success: function searchSuccess(response) {
+            try {
+                if (response.message == 'success') {
+                    latitude = response.latitude;
+                    longitude = response.longitude;
+                    var location = JSON.parse(response.location_name);
+                    postal = location.postal;
+                    country = location.country;
+                    city = location.city;
+                    address = location.address;
+                    review = response.review;
+                    rating = response.rating;
+                    role = response.role;
 
-    authentication(username);
+                    authentication(response.username);
+                } else {
+                    authentication('');
+                }
+            } catch(e) {                    
+                //alert('JSON parsing error');
+                authentication('');
+            }
+        },
+        error: function searchError(xhr, err) {
+            authentication('');
+        }
+      });
 }
 
 function user_container(user,email) {
@@ -387,6 +420,8 @@ $("body").delegate(".give_us_stars","click",function(event){
     rating_stars = $(this).attr('star');   
 });
 function update_user_data(latitude,longitude,user_role,rating,review,address,city,country,postal,user_phone,user_email,last,first,user_name) {
+    //alert(latitude + ' ' + longitude + ' ' + user_role + ' ' + rating + ' ' + review + ' ' + address + ' ' + city + ' ' + country + ' ' + postal + ' ' + user_phone + ' ' + user_email + ' ' + last + ' ' + first + ' ' + user_name)
+
     $('#app-cover-spin').show(0);
     $.ajax({
         type: "POST", // Type of request to be send, called as
@@ -395,6 +430,8 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
         processData: true,
         url: api_server_url + '/cordova/update_user_data.php',
         success: function searchSuccess(response) {
+            //alert(latitude + ' ' + longitude + ' ' + user_role + ' ' + rating + ' ' + review + ' ' + address + ' ' + city + ' ' + country + ' ' + postal + ' ' + user_phone + ' ' + user_email + ' ' + last + ' ' + first + ' ' + user_name)
+
             //alert('action_float_id ' + action_float_id + " location_main_container " + location_main_container + " contact_information_save " + contact_information_save)
             if (action_float_id == 1) {
                 action_float_id = 0;
@@ -421,6 +458,8 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
                 }
                 role = response.role;
                 localStorage.setItem("role", role); 
+                $('#app-cover-spin').hide(0);
+
                 main();
             } else if (location_main_container == 1) {
                 location_main_container = 0;
@@ -432,9 +471,10 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
                     country = location.country;
                     city = location.city;
                     address = location.address;
+                    $('#app-cover-spin').hide(0);
 
                 } catch(e) {                    
-                    alert('JSON parsing error');
+                    //alert('JSON parsing error');
                     $('#app-cover-spin').hide(0);
                 }
             } else if (contact_information_save == 1) {
@@ -455,6 +495,8 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
                             if (add_products_agent == 1) {
                                 add_products_agent = 0;
                                 $("#add_products_new").show(100);
+                                $('#app-cover-spin').hide(0);
+
                             } else if (checkout_contact_information_save == 1)  {
                                 checkout_contact_information_save = 0;
                                 checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_total,username);
@@ -513,13 +555,16 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
                         $("#input-country").val(location.country);
                         $("#input-city").val(location.city);
                         $("#input-address").val(location.address);
-        
+                        $('#app-cover-spin').hide(0);
+
                     } else {
                         $('.user_error_container').show(100, function(){
                             $("#user_row_container").hide(100);
                             $("#user_row_h").html(response.message);
                             $("#user_row_p").html(response.login_email + " or " + response.login_password);
                         });
+                        $('#app-cover-spin').hide(0);
+
                     }
                 } catch(e) {
                     $('.user_error_container').show(100, function(){
@@ -527,12 +572,14 @@ function update_user_data(latitude,longitude,user_role,rating,review,address,cit
                         $("#user_row_h").html('JSON error');
                         $("#user_row_p").html('JSON parsing error');
                     });
+                    $('#app-cover-spin').hide(0);
+
                 }
             }
           
         },
         error: function searchError(xhr, err) {
-          //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+          alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
           $('#app-cover-spin').hide(0);
           $('.user_error_container').show(100, function(){
             $("#user_row_container").hide(100);
@@ -647,10 +694,11 @@ function geoshop(latitude,longitude,gradius,startlimit,endlimit) {
                             $("#arrow_navigation_container").show(100);
                         }); 
                         product_row_container_index = products_data.length;                   
-                        $("#product_row_container").html(''); 
+                        $("#product_data_container").html(''); 
                         $('#app-cover-spin').hide(0); 
-                        search_value != '';
-                        cat_id != '';
+                        search_value = '';
+                        cat_id = '';
+                        brand_id = "";
                         products_data.forEach(products_datamyFunction);
                     } else {
                         $('.product_error_container').show(100, function(){
@@ -769,10 +817,11 @@ function search(search_params,startlimit,endlimit) {
                             $("#arrow_navigation_container").show(100);
                         });  
                         product_row_container_index = products_data.length;
-                        $("#product_row_container").html(''); 
+                        $("#product_data_container").html(''); 
                         $('#app-cover-spin').hide(0);
-                        geoshop_value != '';
-                        cat_id != '';
+                        geoshop_value = '';
+                        cat_id = '';
+                        brand_id = "";
                         products_data.forEach(products_datamyFunction);
                     } else {
                         $('.product_error_container').show(100, function(){
@@ -824,7 +873,7 @@ function authentication(username) {
         $(".authentication").hide(100);
         $(".main").show(100);
         localStorage.setItem("username", username);
-        localStorage.setItem("role", role);
+        //localStorage.setItem("role", role);
         
         main();
     }     
@@ -839,9 +888,11 @@ function main() {
     });
     startlimit = 0;
     endlimit = 24;
-    search_value != '';
-    geoshop_value != '';
-    cat_id != '';
+    search_value = '';
+    geoshop_value = '';
+    cat_id = '';
+    brand_id = "";
+    //alert(role);
     if (role == 'customer' || role == '' || role == null) {
         $("#action_float_id").html('<i class="fa  fa-invision my-float">Sell</i>');
         $("#add_products_agent").hide(100);
@@ -849,8 +900,8 @@ function main() {
         $("#action_float_id").html('<i class="fa fa-invision my-float">Buy</i>');
         $("#add_products_agent").show(100);        
     }
-    product_main_container(startlimit,endlimit,cat_id);
-    apps_categories(username);    
+    product_main_container(startlimit,endlimit,cat_id,brand_id);
+    apps_categories('');    
     if (username != "") {
         count_time_out = 0;
         loadconnects();
@@ -866,6 +917,7 @@ function loadconnects() {
         $(".authentication").show(100);
     } else{
         loadchat('');
+        //user_container(username,email);
         setTimeout(loadconnects, 3000);
     }                
     
@@ -1102,15 +1154,15 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                         $('#app-cover-spin').hide(0);
 
                     } else if (products_status == "edit_product") {
-                        $("#product_row_container").html(''); 
+                        $("#product_data_container").html(''); 
                         product_row_container_index = products_data.length;        
-                        $("#product_row_container").html(''); 
+                        $("#product_data_container").html(''); 
                         $('#app-cover-spin').hide(0); 
                         products_data.forEach(products_datamyFunction);
                     } else if (products_status == "remove_product") {                    
-                        $("#product_row_container").html(''); 
+                        $("#product_data_container").html(''); 
                         product_row_container_index = products_data.length;
-                        $("#product_row_container").html(''); 
+                        $("#product_data_container").html(''); 
                         $('#app-cover-spin').hide(0); 
                         
                         products_data.forEach(products_datamyFunction);
@@ -1674,7 +1726,7 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
 
     $("#otheadd").html(add_client);
     $("#otheaddl").html(add_client);
-    $(".otheaddlocation").html(add_client);
+    $(".agent_name_class").html(add_client);
 
     $("#add_fload_id").attr("connect_from", "" + add_client + "");
     $("#add_fload_id").attr("connects_id", "" + product_id + "");
@@ -1741,7 +1793,11 @@ function other_product_samemyFunction(item, index) {
     var other_title = '<div class="col add_clidduct_column">' +
     '<img src="' + IMAGE_url + '" alt="' + item.product_img + '" class="rounded div_otherimage" width="100%" height="100%">' +
     '</div>';
-    $("#other_title").append(other_title);
+    var url_image = new Image();
+    url_image.onload = function() {
+        $("#other_title").append(other_title);
+    }
+    url_image.src = IMAGE_url;
 }
 function other_product_same_client(startlimit,endlimit,add_client) {
     //$('#app-cover-spin').show(0);
@@ -1839,7 +1895,11 @@ function other_product_same_clientmyFunction(item, index) {
         '</div> ' +
                  
         '</div>';
-        $("#add_carousel_other").append(add_carousel_other);    
+        var url_image = new Image();
+        url_image.onload = function() {
+            $("#add_carousel_other").append(add_carousel_other);    
+        }
+        url_image.src = IMAGE_url;
     } else {
         var add_carousel_indicators = '<li data-target="#carouselExampleIndicators" data-slide-to="' + index + '" class=""></li>';
         $("#add_carousel_indicators").append(add_carousel_indicators);
@@ -1883,7 +1943,11 @@ function other_product_same_clientmyFunction(item, index) {
         '</div> ' +
 
         '</div>';
-        $("#add_carousel_other").append(add_carousel_other);
+        var url_image = new Image();
+        url_image.onload = function() {
+            $("#add_carousel_other").append(add_carousel_other);
+        }
+        url_image.src = IMAGE_url;
     }
 }
 function other_similar_products(product_id,add_client) {
@@ -1921,6 +1985,9 @@ function other_similar_products(product_id,add_client) {
                             $('#other_mySlides3').show(100, function(){});
                             $('#other_dot3').show(100, function(){});
                         //}
+                        other_similar_6 = 6;
+                        other_similar_12 = other_similar_6 + 6;
+                        other_similar_18 = other_similar_12  + 6;
                         products_data.forEach(other_similar_productsmyFunction);
                     }
                 }
@@ -1935,6 +2002,9 @@ function other_similar_products(product_id,add_client) {
         }
     });
 }
+var other_similar_6 = 6;
+var other_similar_12 = other_similar_6 + 6;
+var other_similar_18 = other_similar_12  + 6;
 function other_similar_productsmyFunction(item, index) {
     var product_image = item.product_img;
     var product_price = currency_exchange_rate * item.product_price;    
@@ -1950,24 +2020,45 @@ function other_similar_productsmyFunction(item, index) {
         var IMAGE_url = product_image + '';
     } else {
         var IMAGE_url = IMAGE_url_path_name + product_image + '';
-    }
-    
-    if (index < 6) {
+    }   
+
+    if (index < other_similar_6) {
         var other_similar_products_row1 = '<div class="col add_clidduct_column">' +
         '<img class="rounded div_cimage" width="100%" height="100%"  src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
         '</div>';
-        $("#other_similar_products_row1").append(other_similar_products_row1);
+        var url_image = new Image();
+        url_image.onload = function() {
+            $("#other_similar_products_row1").append(other_similar_products_row1);
+        }
+        url_image.onerror = function() {
+            other_similar_6++;
+        }                
+        url_image.src = IMAGE_url;
 
-    } else if(index < 12){
+    } else if(index < other_similar_12){
         var other_similar_products_row2 = '<div class="col add_clidduct_column">' +
         '<img class="rounded div_cimage" width="100%" height="100%"  src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
         '</div>';
-        $("#other_similar_products_row2").append(other_similar_products_row2);
-    } else if(index < 18){
+        var url_image = new Image();
+        url_image.onload = function() {
+            $("#other_similar_products_row2").append(other_similar_products_row2);
+        }
+        url_image.onerror = function() {
+            other_similar_12++;
+        }                
+        url_image.src = IMAGE_url;
+    } else if(index < other_similar_18){
         var other_similar_products_row3 = '<div class="col add_clidduct_column">' +
         '<img class="rounded div_cimage" width="100%" height="100%"  src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item.add_location + '" add_description="' + item.add_description + '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
         '</div>';
-        $("#other_similar_products_row3").append(other_similar_products_row3);
+        var url_image = new Image();
+        url_image.onload = function() {
+            $("#other_similar_products_row3").append(other_similar_products_row3);
+        }
+        url_image.onerror = function() {
+            other_similar_18++;
+        }                
+        url_image.src = IMAGE_url;
     }
     
 }
@@ -1979,6 +2070,8 @@ $("#arrow_add_client_back").click(function(){
 });
 
 var cat_id = "";
+var brand_id = "";
+var category_clicked = "";
 $("body").delegate(".category","click",function(event){
     event.preventDefault();
     cat_id = $(this).attr('cat_id');
@@ -1994,9 +2087,12 @@ $("body").delegate(".category","click",function(event){
         $("#cart_container").hide(100);
         $("#location_container").hide(100);
         $("#user_container").hide(100);
-        search_value != '';
-        geoshop_value != '';
-        product_main_container(startlimit,endlimit,cat_id);
+        search_value = '';
+        geoshop_value = '';
+        brand_id = "";
+        category_clicked = cat_id;
+        apps_categories(cat_id);
+        product_main_container(startlimit,endlimit,cat_id,brand_id);
     });
     $("#product_add_client_container").hide(100,function(){       
         $("#product_error").hide(100);
@@ -2005,14 +2101,51 @@ $("body").delegate(".category","click",function(event){
         document.body.classList.toggle('nav-is-toggled');
         _apps_tab =0;
         cat_id = "";
+        brand_id = "";
     }
 });
-function apps_categories(add_client) {
+$("body").delegate(".apps_brands_back","click",function(event){
+    event.preventDefault();
+    apps_categories('');
+});
+
+$("body").delegate(".selectBrand","click",function(event){
+    event.preventDefault();
+    brand_id = $(this).attr('brand_id');
+    var add_client = $(this).attr('add_client');
+    startlimit = 0;
+    endlimit = 24;
+    $('.product_main_container').show(100, function(){
+        $("#menu_container_left_tab").show(100);
+        $("#chat_container").hide(100);
+        $("#connects_chatbar").hide(100);
+        $("#orders_container").hide(100);
+        $("#order_items_container").hide(10);
+        $("#cart_container").hide(100);
+        $("#location_container").hide(100);
+        $("#user_container").hide(100);
+        search_value  = '';
+        geoshop_value  = '';
+        cat_id = "";
+        //apps_categories(add_client);
+        product_main_container(startlimit,endlimit,cat_id,brand_id);
+    });
+    $("#product_add_client_container").hide(100,function(){       
+        $("#product_error").hide(100);
+    });
+    if (_apps_tab != 0) {
+        document.body.classList.toggle('nav-is-toggled');
+        _apps_tab =0;
+        cat_id = "";
+        brand_id = "";
+    }
+});
+function apps_categories(cat_id) {
     $('#app-cover-spin').show(0);
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
-        data: { apps_categories: 12, add_client: add_client },
+        data: { apps_categories: 12, cat_id: cat_id },
         processData: true,
         url: api_server_url + '/cordova/apps_categories.php',
         success: function searchSuccess(response) {
@@ -2023,12 +2156,36 @@ function apps_categories(add_client) {
                 if (response.message == "success") {
                     var apps_categories_status = response.apps_categories_status;
                     var apps_categories = response.apps_categories;
-                    if (apps_categories_status != "0") {      
-                        apps_categories.forEach(apps_categoriesmyFunction);
+
+                    if (cat_id != '') {
+                        if (category_clicked != '') {
+                            $("#apps_categories").hide(100);
+                            $("#apps_brands").show(100);
+                        }
+                        
+
+                        if (apps_categories_status != "0") {  
+                            $("#product_category").html('<option value="">Select Category</option>');
+                            $("#apps_brands").html('<a class="nav-link nav-expand-link apps_brands_back button is-black"><i class="fa fa-arrow-left"></i>Back</a>');
+                            apps_categories.forEach(apps_brandsmyFunction);
+                        } else {
+                                $("#apps_brands").html(response.message);
+                                $("#apps_brands").append('No new categories');
+                        }
                     } else {
-                            $("#apps_categories").html(response.message);
-                            $("#apps_categories").append('No new Industries');
+                        $("#apps_brands").hide(100);
+                        $("#apps_categories").show(100);
+                        if (apps_categories_status != "0") {  
+                            $("#product_industry").html('<option value="">Select Industry/Department</option>');
+                            $("#apps_categories").html('');
+                            apps_categories.forEach(apps_categoriesmyFunction);
+                        } else {
+                                $("#apps_categories").html(response.message);
+                                $("#apps_categories").append('No new Industries');
+                        } 
                     }
+                    
+
                 }
                 else {
                         $("#apps_categories").html(response.message);
@@ -2049,6 +2206,24 @@ function apps_categories(add_client) {
     });
     
 }
+function apps_brandsmyFunction(item, index) {
+    var brand_id = item.brand_id;
+    var brand_title = item.brand_title;
+    var add_client = item.add_client;
+    var brand_description = item.brand_description;   
+
+    if (category_clicked == '') {
+        var product_industry_option = '<option class="is-link" add_client="' + add_client + '" value="' + brand_id + '">' + brand_title + '</option>';
+        $("#product_category").append(product_industry_option);
+    } else{
+        var category_container = '<li class="apps_nav-item nav-expand ">' +
+        '<a brand_id="' + brand_id + '" add_client="' + add_client + '" class="nav-link nav-expand-link selectBrand" href="#">' + brand_title + '</a>' +    
+        '</li>';
+        $("#apps_brands").append(category_container);
+    }
+    
+
+}
 function apps_categoriesmyFunction(item, index) {
     var cat_id = item.cat_id;
     var cat_title = item.cat_title;
@@ -2056,13 +2231,17 @@ function apps_categoriesmyFunction(item, index) {
     var category_description = item.category_description;
 
     var category_container = '<li class="apps_nav-item nav-expand ">' +
-    '<a cat_id="' + cat_id + '" add_client="' + add_client + '" class="nav-link nav-expand-link category" href="#">' + cat_title + '</a>' +    
-    
+    '<a cat_id="' + cat_id + '" add_client="' + add_client + '" class="nav-link nav-expand-link category" href="#">' + cat_title + '<span class="icon"> <i cat_id="' + cat_id + '" add_client="' + add_client + '"  class="fa fa-arrow-right"></i> </span></a>' +    
+    '' +
     '</li>';
     $("#apps_categories").append(category_container);
+
+    var product_industry_option = '<option class="is-link category" add_client="' + add_client + '" value="' + cat_id + '">' + cat_title + '</option>';
+    $("#product_industry").append(product_industry_option);
+
 }
 
-function product_main_container(startlimit,endlimit,cat_id) {
+function product_main_container(startlimit,endlimit,cat_id,brand_id) {
     $('#app-cover-spin').show(0);
     $.ajax({
         type: "POST", // Type of request to be send, called as
@@ -2081,7 +2260,7 @@ function product_main_container(startlimit,endlimit,cat_id) {
                             $("#arrow_navigation_container").show(100);
                         });
                         product_row_container_index = products_data.length; 
-                        $("#product_row_container").html(''); 
+                        $("#product_data_container").html(''); 
                         $('#app-cover-spin').hide(0);                 
                         products_data.forEach(products_datamyFunction);
                     } else {
@@ -2185,7 +2364,11 @@ function products_datamyFunction(item, index) {
     '</div>';
     
     if (index >= startlimit) {
-        $("#product_row_container").append(product_row_container);
+        var url_image = new Image();
+        url_image.onload = function() {
+            $("#product_data_container").append(product_row_container);
+        }                
+        url_image.src = IMAGE_url;
     }
     if (startlimit > 0) {
         var ger = product_row_index - startlimit;
@@ -2423,8 +2606,14 @@ var product_price = 0;
 var selling_price = 7;
 var buying_price = 5;//100%
 var percent_price = selling_price/buying_price;
-    //percent_price = percent_price*0.1;
+var pricing_strategy = '';
+var product_type = '';
+var product_list_price = 0;
+var sale_price = 0;
+var net_price = 0;
+//percent_price = percent_price*0.1;
 function product_pricing_strategy(list_price) {
+    product_list_price = list_price;
     if (product_price != 0) {
         
         
@@ -2480,9 +2669,11 @@ function product_pricing_strategy(list_price) {
             var margin_price = product_price * percent_price * 0.1;
             margin_price = margin_price.toFixed(2);
 
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
             //alert(sale_price);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Calculated as (Direct material costs <b>' + product_costs + '</b>  + Direct labor costs <b>' + labor_costs + '</b> as ('+ product_*100 +')% of Direct material costs + Allocated overhead <b>' + overhead + '</b> as ('+ labor_*100 +')% of Direct labor costs) * <b>' + percent_price + '</b> % margin</span>');
             $("#product_price_help").html('<strong>Cost-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
@@ -2493,114 +2684,141 @@ function product_pricing_strategy(list_price) {
             //product_price = product_price.toFixed(2);
             var margin_price = product_price * percent_price*0.1;
             //var list_price = product_price + margin_price;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
-
+            net_price = product_price;
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Markup as a <b>' + percent_price + '</b> %  of product price = <b>' +  currency_price_symbal + ' ' + sale_price + '</b></span>');
             $("#product_price_help").html('<strong>Cost-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
         } else if (percent_pricing_strategy == 'private_labels_pricing') {
             //product_price = percent_price*product_price;
             var margin_price = product_price * percent_price*0.1;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Your product’s price is an absolute parameter and should be determined <b>solely</> by what your customers might want to pay.</span>');
             $("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
         } else if (percent_pricing_strategy == 'penetration_pricing') {
             //product_price = percent_price*product_price;
             var margin_price = product_price * percent_price*0.1;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Used to quickly gain market share by setting an initially low price to entice customers to purchase from.</span>');
             $("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
         } else if (percent_pricing_strategy == 'MSRP') {
             //product_price = percent_price*product_price;
             var margin_price = product_price * percent_price*0.1;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Price the manufacturer recommends you use to sell their products to consumers</span>');
             $("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
         } else if (percent_pricing_strategy == 'stable_pricing') {
             //product_price = percent_price*product_price;
             var margin_price = product_price * percent_price*0.1;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> To keep the price stable and as close to the market value of the product as possible.</b></span>');
             $("#product_price_help").html('<strong>Value-Based Pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
-        }
-        else if (percent_pricing_strategy == 'charm_pricing') {
+        } else if (percent_pricing_strategy == 'charm_pricing') {
             //product_price = percent_price*product_price;
+            var product_charm_price = 20 - 19.99;
+            product_price = product_price - product_charm_price;
             var margin_price = product_price * percent_price*0.1;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Removing a penny or two from a rounded price point (i.e. changing a price tag from $20.00 to $19.99)</b></span>');
             $("#product_price_help").html('<strong>Demand-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
         } else if (percent_pricing_strategy == 'skim_pricing') {
             //product_price = percent_price*product_price;
             var margin_price = product_price * percent_price*0.1;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Introduce a new product at the highest possible price point and then lower the price over a specified period of time.</b></span>');
             $("#product_price_help").html('<strong>Demand-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
         } else if (percent_pricing_strategy == 'repricing') {
             //product_price = percent_price*product_price;
             var margin_price = product_price * percent_price*0.1;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Price of your product to match the lowest amount at that time.</b></span>');
             $("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
         } else if (percent_pricing_strategy == 'anchor_pricing') {
             //product_price = percent_price*product_price;
             var margin_price = product_price * percent_price*0.1;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Listing both the original price point and the sale price point to relay perceived value.</b></span>');
             $("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + product_price);
 
         } else if (percent_pricing_strategy == 'discounts_and_promotions_pricing') {
             //product_price = percent_price*product_price;
             var margin_price = product_price * percent_price*0.1;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> You may want to consider the possibility that out of necessity in the future.</b></span>');
             $("#product_price_help").html('<strong>Competition-based pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
         } else if (percent_pricing_strategy == 'multiple_pricing') {
             //product_price = percent_price*product_price;
             var margin_price = product_price * percent_price*0.1;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Products are bundled to create a higher perceived value at a lower cost.</b></span>');
             $("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
         } else if (percent_pricing_strategy == 'keystone_pricing') {
             //product_price = percent_price*product_price;
             var margin_price = product_price * percent_price*0.1;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Pricing your products too high or too low.</b></span>');
             $("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
         } else if (percent_pricing_strategy == 'dynamic_segments_pricing') {
             //product_price = percent_price*product_price;
             var margin_price = product_price * percent_price*0.1;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Use algorithms to derive the pricing for different groups based on statistics.</b></span>');
             $("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
         } else if (percent_pricing_strategy == 'dynamic_time_pricing') {
             //product_price = percent_price*product_price;
             var margin_price = product_price * percent_price*0.1;
-            var sale_price = (Number(product_price) + Number(margin_price));
+            sale_price = (Number(product_price) + Number(margin_price));
             sale_price = sale_price.toFixed(2);
+            net_price = product_price;
+
             $("#product_price_strategy_help").html('List Price =  <b>' +  currency_price_symbal + ' ' + list_price + '</b><br> Net Price =  <b>' +  currency_price_symbal + ' ' + product_price + '</b><br> Sale Price =  <b>' +  currency_price_symbal + ' ' + sale_price + '</b><br><span class="help is-success"> Cheaper prices on products to match the sales quota, as compared to the start of the month.</b></span>');
             $("#product_price_help").html('<strong>Loss-leading pricing </strong> <br>' +  currency_price_symbal + ' ' + sale_price);
 
@@ -2615,9 +2833,10 @@ function product_pricing_strategy(list_price) {
         $("#product_price").addClass("is-invalid");
     }
 }
-const pricing_strategy = document.querySelector('#pricing_strategy');
-pricing_strategy.addEventListener('change', (event) => {
+const pricing_strategy_input = document.querySelector('#pricing_strategy');
+pricing_strategy_input.addEventListener('change', (event) => {
     percent_pricing_strategy = event.target.value;
+    pricing_strategy = percent_pricing_strategy;
     if (percent_pricing_strategy == 'cost_plus_pricing') {
         $("#pricing_strategy_help").html('Price = total cost of product + gross profit margin');
     } else if (percent_pricing_strategy == 'markup_pricing') {
@@ -2728,7 +2947,13 @@ function updateValue(e) {
     }
 }
 
-
+var product_title = '';
+var product_industry = '';
+var product_category = '';
+var product_quantity = 0;
+var shipping_strategies = '';
+var shipping_rates = '';
+var product_description = '';
 
 
 var availability = '';// availability_strategy_help => Accurately submit the product's availability and match the availability from your landing page
@@ -2958,46 +3183,46 @@ function product_availability(e) {
 
 
 
-var brand = '';// Provide the brand name of the product generally recognized by consumers<br>Only provide your store name as the brand in case you manufacture the product, or your product falls into a generic brand category. For example, you could submit your store name as the brand if you sell white label products or customized jewelry<br>If the product doesn’t have a brand, submit the manufacturer or supplier name under the brand attribute.<br>Don't submit values such as N/A, Generic, No brand, or Does not exist.<br>For compatible products:<br>Submit the GTIN and brand from the manufacturer who actually built the compatible product<br>Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product
-               // Required (For all new products, except movies, books, and musical recording brands)<br>Optional for all other products <br>Your product’s brand name<br>Example<br>Oramla<br>Syntax<br>Max 70 characters<br>Schema.org property<br>Product.brand
+var brand = '';// Provide the brand name of the product generally recognized by consumers. Only provide your store name as the brand in case you manufacture the product, or your product falls into a generic brand category. For example, you could submit your store name as the brand if you sell white label products or customized jewelry. If the product doesn’t have a brand, submit the manufacturer or supplier name under the brand attribute. Don't submit values such as N/A, Generic, No brand, or Does not exist. For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product. Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product
+               // <span class="text-danger">Required(For all new products, except movies, books, and musical recording brands)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s brand name. Example<span class="text-danger">Oramla</span>. Syntax Max 70 characters. Schema.org property<span class="text-info">Product.brand</span>
 
-var gtin = '';// Exclude dashes and spaces<br>Submit only valid GTINs as defined in the official GS1 validation guide, which includes these requirements: The checksum digit is present and correct<br>The GTIN is not restricted (GS1 prefix ranges 02, 04, 2)<br>The GTIN is not a coupon (GS1 prefix ranges 98 - 99)<br>For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product<br>Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product<br>For multipacks: Use the product identifiers that relates to the multipack<br>For bundles: Use the product identifiers for the main product in the bundle <br>If you offer customization, engraving, or other personalization of a product that's been assigned a GTIN by the manufacturer: Submit the GTIN and use the is_​bundle attribute to let us know that the product includes customization
-              // Required (For all new products with a GTIN assigned by the manufacturer)<br>Optional (strongly recommended) for all other products <br>Your product’s Global Trade Item Number (GTIN) <br>Example 3234567890126 <br>Syntax Max 50 numeric characters (max 14 per value - added spaces and dashes are ignored) <br>Supported values UPC (in North America / GTIN-12) <br>12-digit number like 323456789012 8-digit UPC-E codes should be converted to 12-digit codes EAN (in Europe / GTIN-13) 13-digit number like 3001234567892 JAN (in Japan / GTIN-13) 8 or 13-digit number like 49123456 or 4901234567894 ISBN (for books) 10 or 13-digit number like 1455582344 or 978-1455582341. If you have both, only include the 13-digit number. ISBN-10 are deprecated and should be converted to ISBN-13 ITF-14 (for multipacks / GTIN-14) 14-digit number like 10856435001702<br> Schema.org property Product.isbn Product.gtin8 Product.gtin12 Product.gtin13 Product.gtin14
+var gtin = '';// Exclude dashes and spaces. Submit only valid GTINs as defined in the official GS1 validation guide, which includes these requirements: The checksum digit is present and correct. The GTIN is not restricted (GS1 prefix ranges 02, 04, 2). The GTIN is not a coupon (GS1 prefix ranges 98 - 99). For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product. Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product. For <span class="text-info">multipacks</span>: Use the product identifiers that relates to the multipack. For <span class="text-info">bundles</span>: Use the product identifiers for the main product in the bundle. If you offer customization, engraving, or other personalization of a product that's been assigned a GTIN by the manufacturer: Submit the GTIN and use the <span class="text-info">is ​bundle</span> attribute to let us know that the product includes customization
+              // <span class="text-danger">Required (For all new products with a GTIN assigned by the manufacturer)</span>. <span class="text-warning">Optional (strongly recommended)</span> for all other products. Your product’s Global Trade Item Number (GTIN). Example <span class="text-danger">3234567890126</span>. Syntax Max 50 numeric characters (max 14 per value - added spaces and dashes are ignored). Supported values UPC (in North America / GTIN-12), <span class="text-primary">12-digit</span> number like 323456789012 8-digit UPC-E codes should be converted to <span class="text-primary">12-digit</span> codes EAN (in Europe / GTIN-13) 13-digit number like 3001234567892 JAN (in Japan / GTIN-13) 8 or 13-digit number like 49123456 or 4901234567894 ISBN (for books) 10 or <span class="text-primary">13-digit</span> number like 1455582344 or 978-1455582341. If you have both, only include the 13-digit number. ISBN-10 are deprecated and should be converted to <span class="text-primary">ISBN-13 ITF-14</span> (for multipacks / GTIN-14) <span class="text-primary">14-digit</span> number like 10856435001702. Schema.org property <span class="text-info">Product.isbn Product.gtin8 Product.gtin12 Product.gtin13 Product.gtin14</span>
 
-var MPN = '';// Only submit MPNs assigned by a manufacturer<br>Use the most specific MPN possible. For example, different colors of a product should have different MPNs.              
-             // Required (Only if your new product does not have a manufacturer assigned GTIN)<br>Optional for all other products <br>Your product’s Manufacturer Part Number (mpn) <br>Example OR12345AMLA <br>Syntax Max 70 alphanumeric characters <br>Schema.org property Product.mpn
+var MPN = '';// Only submit MPNs assigned by a manufacturer. Use the most specific MPN possible. For example, different colors of a product should have different MPNs.              
+             // <span class="text-danger">Required (Only if your new product does not have a manufacturer assigned GTIN)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s Manufacturer Part Number (mpn). Example <span class="text-danger">OR12345AMLA</span>. Syntax Max 70 alphanumeric characters. Schema.org property <span class="text-info">Product.mpn</span>
 
-var identifier_exists = '';// If you don't submit the attribute, the default is yes<br>Your product’s category type determines which UPIs (GTIN, MPN, brand) are required.<br>If your product is a media item and the GTIN is unavailable:<br>Submit identifier_​exists attribute with a value of no<br>Note: ISBN and SBN codes are accepted as GTINs. <br>If your product is an apparel (clothing) item and the brand is unavailable:<br>Submit identifier_​exists attribute with a value of no<br>In all other categories, if your product doesn’t have a GTIN, or a combination of MPN and brand: <br>Submit identifier_​exists attribute with a value of no
-                           // Optional <br>Use to indicate whether or not the unique product identifiers (UPIs) GTIN, MPN, and brand are available for your product.<br>Example no <br>Supported values<br> yes Product identifiers are assigned to the new product by the manufacturer <br> no Product lacks a brand, GTIN, or MPN (see requirements to the right). If set to no, still provide the UPIs you have.
+var identifier_exists = '';// If you don’t submit the attribute, the default is <span class="text-danger">yes</span>. Your product’s category type determines which UPIs (GTIN, MPN, brand) are required. If your product is a media item and the GTIN is unavailable: Submit <span class="text-info">identifier exists</span> attribute with a value of <span class="text-danger">no</span>. Note: ISBN and SBN codes are accepted as GTINs. If your product is an apparel (clothing) item and the brand is unavailable: Submit <span class="text-info">identifier ​exists</span> attribute with a value of <span class="text-danger">no</span>. In all other categories, if your product doesn’t have a GTIN, or a combination of MPN and brand: Submit <span class="text-info">identifier exists</span> attribute with a value of <span class="text-danger">no</span>
+                           // <span class="text-warning">Optional</span>. Use to indicate whether or not the unique product identifiers (UPIs) GTIN, MPN, and brand are available for your product. Example <span class="text-danger">no</span>. Supported values <span class="text-danger">yes</span> Product identifiers are assigned to the new product by the manufacturer, <span class="text-danger">no</span> Product lacks a brand, GTIN, or MPN (see requirements to the right). If set to <span class="text-danger">no</span>, still provide the UPIs you have.
 
 var product_brand_strategy = 'brand';
 function brand_strategy_data(strategy_data) {
     if (product_brand_strategy == 'brand') {
         $("#product_data_brand_title").html(product_brand_strategy + ":");
-        $("#brand_strategy_help").html("Provide the brand name of the product generally recognized by consumers<br>Only provide your store name as the brand in case you manufacture the product, or your product falls into a generic brand category. For example, you could submit your store name as the brand if you sell white label products or customized jewelry<br>If the product doesn’t have a brand, submit the manufacturer or supplier name under the brand attribute.<br>Don't submit values such as N/A, Generic, No brand, or Does not exist.<br>For compatible products:<br>Submit the GTIN and brand from the manufacturer who actually built the compatible product<br>Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product");
-       
-        $("#product_data_brand_help").html("Required (For all new products, except movies, books, and musical recording brands)<br>Optional for all other products <br>Your product’s brand name<br>Example<br>Oramla<br>Syntax<br>Max 70 characters<br>Schema.org property<br>Product.brand");
+        $("#brand_strategy_help").html("Provide the brand name of the product generally recognized by consumers. Only provide your store name as the brand in case you manufacture the product, or your product falls into a generic brand category. For example, you could submit your store name as the brand if you sell white label products or customized jewelry. If the product doesn’t have a brand, submit the manufacturer or supplier name under the brand attribute. Don't submit values such as N/A, Generic, No brand, or Does not exist. For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product. Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product");      
+        
+        $("#product_data_brand_help").html(' <span class="text-danger">Required(For all new products, except movies, books, and musical recording brands)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s brand name. Example<span class="text-danger">Oramla</span>. Syntax Max 70 characters. Schema.org property<span class="text-info">Product.brand</span>');
         $("#product_brand_help").html(strategy_data);
         brand = strategy_data;
     } else if (product_brand_strategy == 'gtin') {
         $("#product_data_brand_title").html(product_brand_strategy + ":");
-        $("#brand_strategy_help").html("Exclude dashes and spaces<br>Submit only valid GTINs as defined in the official GS1 validation guide, which includes these requirements: The checksum digit is present and correct<br>The GTIN is not restricted (GS1 prefix ranges 02, 04, 2)<br>The GTIN is not a coupon (GS1 prefix ranges 98 - 99)<br>For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product<br>Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product<br>For multipacks: Use the product identifiers that relates to the multipack<br>For bundles: Use the product identifiers for the main product in the bundle <br>If you offer customization, engraving, or other personalization of a product that's been assigned a GTIN by the manufacturer: Submit the GTIN and use the is_​bundle attribute to let us know that the product includes customization");
+        $("#brand_strategy_help").html('Exclude dashes and spaces. Submit only valid GTINs as defined in the official GS1 validation guide, which includes these requirements: The checksum digit is present and correct. The GTIN is not restricted (GS1 prefix ranges 02, 04, 2). The GTIN is not a coupon (GS1 prefix ranges 98 - 99). For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product. Don’t provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand’s product. For <span class="text-info">multipacks</span>: Use the product identifiers that relates to the multipack. For <span class="text-info">bundles</span>: Use the product identifiers for the main product in the bundle. If you offer customization, engraving, or other personalization of a product that’s been assigned a GTIN by the manufacturer: Submit the GTIN and use the <span class="text-info">is ​bundle</span> attribute to let us know that the product includes customization');
        
-        $("#product_data_brand_help").html("Required (For all new products with a GTIN assigned by the manufacturer)<br>Optional (strongly recommended) for all other products <br>Your product’s Global Trade Item Number (GTIN) <br>Example 3234567890126 <br>Syntax Max 50 numeric characters (max 14 per value - added spaces and dashes are ignored) <br>Supported values UPC (in North America / GTIN-12) <br>12-digit number like 323456789012 8-digit UPC-E codes should be converted to 12-digit codes EAN (in Europe / GTIN-13) 13-digit number like 3001234567892 JAN (in Japan / GTIN-13) 8 or 13-digit number like 49123456 or 4901234567894 ISBN (for books) 10 or 13-digit number like 1455582344 or 978-1455582341. If you have both, only include the 13-digit number. ISBN-10 are deprecated and should be converted to ISBN-13 ITF-14 (for multipacks / GTIN-14) 14-digit number like 10856435001702<br> Schema.org property Product.isbn Product.gtin8 Product.gtin12 Product.gtin13 Product.gtin14");
+        $("#product_data_brand_help").html('<span class="text-danger">Required (For all new products with a GTIN assigned by the manufacturer)</span>. <span class="text-warning">Optional (strongly recommended)</span> for all other products. Your product’s Global Trade Item Number (GTIN). Example <span class="text-danger">3234567890126</span>. Syntax Max 50 numeric characters (max 14 per value - added spaces and dashes are ignored). Supported values UPC (in North America / GTIN-12), <span class="text-primary">12-digit</span> number like 323456789012 8-digit UPC-E codes should be converted to <span class="text-primary">12-digit</span> codes EAN (in Europe / GTIN-13) 13-digit number like 3001234567892 JAN (in Japan / GTIN-13) 8 or 13-digit number like 49123456 or 4901234567894 ISBN (for books) 10 or <span class="text-primary">13-digit</span> number like 1455582344 or 978-1455582341. If you have both, only include the 13-digit number. ISBN-10 are deprecated and should be converted to <span class="text-primary">ISBN-13 ITF-14</span> (for multipacks / GTIN-14) <span class="text-primary">14-digit</span> number like 10856435001702. Schema.org property <span class="text-info">Product.isbn Product.gtin8 Product.gtin12 Product.gtin13 Product.gtin14</span>');
         $("#product_brand_help").html(strategy_data);
         gtin = strategy_data;
     } else if (product_brand_strategy == 'MPN') {
         $("#product_data_brand_title").html(product_brand_strategy + ":");
-        $("#brand_strategy_help").html("Only submit MPNs assigned by a manufacturer<br>Use the most specific MPN possible. For example, different colors of a product should have different MPNs. ");
+        $("#brand_strategy_help").html('Only submit MPNs assigned by a manufacturer. Use the most specific MPN possible. For example, different colors of a product should have different MPNs.');
        
-        $("#product_data_brand_help").html("Required (Only if your new product does not have a manufacturer assigned GTIN)<br>Optional for all other products <br>Your product’s Manufacturer Part Number (mpn) <br>Example OR12345AMLA <br>Syntax Max 70 alphanumeric characters <br>Schema.org property Product.mpn");
+        $("#product_data_brand_help").html('<span class="text-danger">Required (Only if your new product does not have a manufacturer assigned GTIN)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s Manufacturer Part Number (mpn). Example <span class="text-danger">OR12345AMLA</span>. Syntax Max 70 alphanumeric characters. Schema.org property <span class="text-info">Product.mpn</span>');
         $("#product_brand_help").html(strategy_data);
         MPN = strategy_data;
     } else if (product_brand_strategy == 'identifier exists') {
         $("#product_data_brand_title").html(product_brand_strategy + ":");
-        $("#brand_strategy_help").html("If you don't submit the attribute, the default is yes<br>Your product’s category type determines which UPIs (GTIN, MPN, brand) are required.<br>If your product is a media item and the GTIN is unavailable:<br>Submit identifier_​exists attribute with a value of no<br>Note: ISBN and SBN codes are accepted as GTINs. <br>If your product is an apparel (clothing) item and the brand is unavailable:<br>Submit identifier_​exists attribute with a value of no<br>In all other categories, if your product doesn’t have a GTIN, or a combination of MPN and brand: <br>Submit identifier_​exists attribute with a value of no");
+        $("#brand_strategy_help").html('If you don’t submit the attribute, the default is <span class="text-danger">yes</span>. Your product’s category type determines which UPIs (GTIN, MPN, brand) are required. If your product is a media item and the GTIN is unavailable: Submit <span class="text-info">identifier exists</span> attribute with a value of <span class="text-danger">no</span>. Note: ISBN and SBN codes are accepted as GTINs. If your product is an apparel (clothing) item and the brand is unavailable: Submit <span class="text-info">identifier ​exists</span> attribute with a value of <span class="text-danger">no</span>. In all other categories, if your product doesn’t have a GTIN, or a combination of MPN and brand: Submit <span class="text-info">identifier exists</span> attribute with a value of <span class="text-danger">no</span>');
        
-        $("#product_data_brand_help").html("Optional <br>Use to indicate whether or not the unique product identifiers (UPIs) GTIN, MPN, and brand are available for your product.<br>Example no <br>Supported values<br> yes Product identifiers are assigned to the new product by the manufacturer <br> no Product lacks a brand, GTIN, or MPN (see requirements to the right). If set to no, still provide the UPIs you have.");
+        $("#product_data_brand_help").html('<span class="text-warning">Optional</span>. Use to indicate whether or not the unique product identifiers (UPIs) GTIN, MPN, and brand are available for your product. Example <span class="text-danger">no</span>. Supported values <span class="text-danger">yes</span> Product identifiers are assigned to the new product by the manufacturer, <span class="text-danger">no</span> Product lacks a brand, GTIN, or MPN (see requirements to the right). If set to <span class="text-danger">no</span>, still provide the UPIs you have.');
         $("#product_brand_help").html(strategy_data);
         identifier_exists = strategy_data;
     }
@@ -3008,33 +3233,35 @@ const brand_strategy = document.querySelector('#brand_strategy');
 brand_strategy.addEventListener('change', (event) => {
     //$("#product_availability").val() = '';
     product_brand_strategy = event.target.value;
+    var i_e = '';
+
     if (product_brand_strategy == 'brand') {
         $("#product_data_brand_title").html(product_brand_strategy + ":");
-        $("#brand_strategy_help").html("Provide the brand name of the product generally recognized by consumers<br>Only provide your store name as the brand in case you manufacture the product, or your product falls into a generic brand category. For example, you could submit your store name as the brand if you sell white label products or customized jewelry<br>If the product doesn’t have a brand, submit the manufacturer or supplier name under the brand attribute.<br>Don't submit values such as N/A, Generic, No brand, or Does not exist.<br>For compatible products:<br>Submit the GTIN and brand from the manufacturer who actually built the compatible product<br>Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product");
-       
-        $("#product_data_brand_help").html("Required (For all new products, except movies, books, and musical recording brands)<br>Optional for all other products <br>Your product’s brand name<br>Example<br>Oramla<br>Syntax<br>Max 70 characters<br>Schema.org property<br>Product.brand");
-        //$("#product_brand_help").html(strategy_data);
+        $("#brand_strategy_help").html("Provide the brand name of the product generally recognized by consumers. Only provide your store name as the brand in case you manufacture the product, or your product falls into a generic brand category. For example, you could submit your store name as the brand if you sell white label products or customized jewelry. If the product doesn’t have a brand, submit the manufacturer or supplier name under the brand attribute. Don't submit values such as N/A, Generic, No brand, or Does not exist. For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product. Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product");      
+        
+        $("#product_data_brand_help").html(' <span class="text-danger">Required(For all new products, except movies, books, and musical recording brands)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s brand name. Example<span class="text-danger">Oramla</span>. Syntax Max 70 characters. Schema.org property<span class="text-info">Product.brand</span>');
+        i_e = 'i.e <span class="text-danger">Oramla</span>';
         //var brand = strategy_data;
     } else if (product_brand_strategy == 'gtin') {
         $("#product_data_brand_title").html(product_brand_strategy + ":");
-        $("#brand_strategy_help").html("Exclude dashes and spaces<br>Submit only valid GTINs as defined in the official GS1 validation guide, which includes these requirements: The checksum digit is present and correct<br>The GTIN is not restricted (GS1 prefix ranges 02, 04, 2)<br>The GTIN is not a coupon (GS1 prefix ranges 98 - 99)<br>For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product<br>Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product<br>For multipacks: Use the product identifiers that relates to the multipack<br>For bundles: Use the product identifiers for the main product in the bundle <br>If you offer customization, engraving, or other personalization of a product that's been assigned a GTIN by the manufacturer: Submit the GTIN and use the is_​bundle attribute to let us know that the product includes customization");
+        $("#brand_strategy_help").html('Exclude dashes and spaces. Submit only valid GTINs as defined in the official GS1 validation guide, which includes these requirements: The checksum digit is present and correct. The GTIN is not restricted (GS1 prefix ranges 02, 04, 2). The GTIN is not a coupon (GS1 prefix ranges 98 - 99). For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product. Don’t provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand’s product. For <span class="text-info">multipacks</span>: Use the product identifiers that relates to the multipack. For <span class="text-info">bundles</span>: Use the product identifiers for the main product in the bundle. If you offer customization, engraving, or other personalization of a product that’s been assigned a GTIN by the manufacturer: Submit the GTIN and use the <span class="text-info">is ​bundle</span> attribute to let us know that the product includes customization');
        
-        $("#product_data_brand_help").html("Required (For all new products with a GTIN assigned by the manufacturer)<br>Optional (strongly recommended) for all other products <br>Your product’s Global Trade Item Number (GTIN) <br>Example 3234567890126 <br>Syntax Max 50 numeric characters (max 14 per value - added spaces and dashes are ignored) <br>Supported values UPC (in North America / GTIN-12) <br>12-digit number like 323456789012 8-digit UPC-E codes should be converted to 12-digit codes EAN (in Europe / GTIN-13) 13-digit number like 3001234567892 JAN (in Japan / GTIN-13) 8 or 13-digit number like 49123456 or 4901234567894 ISBN (for books) 10 or 13-digit number like 1455582344 or 978-1455582341. If you have both, only include the 13-digit number. ISBN-10 are deprecated and should be converted to ISBN-13 ITF-14 (for multipacks / GTIN-14) 14-digit number like 10856435001702<br> Schema.org property Product.isbn Product.gtin8 Product.gtin12 Product.gtin13 Product.gtin14");
-        //$("#product_brand_help").html(strategy_data);
+        $("#product_data_brand_help").html('<span class="text-danger">Required (For all new products with a GTIN assigned by the manufacturer)</span>. <span class="text-warning">Optional (strongly recommended)</span> for all other products. Your product’s Global Trade Item Number (GTIN). Example <span class="text-danger">3234567890126</span>. Syntax Max 50 numeric characters (max 14 per value - added spaces and dashes are ignored). Supported values UPC (in North America / GTIN-12), <span class="text-primary">12-digit</span> number like 323456789012 8-digit UPC-E codes should be converted to <span class="text-primary">12-digit</span> codes EAN (in Europe / GTIN-13) 13-digit number like 3001234567892 JAN (in Japan / GTIN-13) 8 or 13-digit number like 49123456 or 4901234567894 ISBN (for books) 10 or <span class="text-primary">13-digit</span> number like 1455582344 or 978-1455582341. If you have both, only include the 13-digit number. ISBN-10 are deprecated and should be converted to <span class="text-primary">ISBN-13 ITF-14</span> (for multipacks / GTIN-14) <span class="text-primary">14-digit</span> number like 10856435001702. Schema.org property <span class="text-info">Product.isbn Product.gtin8 Product.gtin12 Product.gtin13 Product.gtin14</span>');
+        i_e = 'i.e <span class="text-danger">3234567890126</span>';
         //var gtin = strategy_data;
     } else if (product_brand_strategy == 'MPN') {
         $("#product_data_brand_title").html(product_brand_strategy + ":");
-        $("#brand_strategy_help").html("Only submit MPNs assigned by a manufacturer<br>Use the most specific MPN possible. For example, different colors of a product should have different MPNs. ");
+        $("#brand_strategy_help").html('Only submit MPNs assigned by a manufacturer. Use the most specific MPN possible. For example, different colors of a product should have different MPNs.');
        
-        $("#product_data_brand_help").html("Required (Only if your new product does not have a manufacturer assigned GTIN)<br>Optional for all other products <br>Your product’s Manufacturer Part Number (mpn) <br>Example OR12345AMLA <br>Syntax Max 70 alphanumeric characters <br>Schema.org property Product.mpn");
-        //$("#product_brand_help").html(strategy_data);
+        $("#product_data_brand_help").html('<span class="text-danger">Required (Only if your new product does not have a manufacturer assigned GTIN)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s Manufacturer Part Number (mpn). Example <span class="text-danger">OR12345AMLA</span>. Syntax Max 70 alphanumeric characters. Schema.org property <span class="text-info">Product.mpn</span>');
+        i_e = 'i.e <span class="text-danger">OR12345AMLA</span>';
         //var MPN = strategy_data;
     } else if (product_brand_strategy == 'identifier exists') {
         $("#product_data_brand_title").html(product_brand_strategy + ":");
-        $("#brand_strategy_help").html("If you don't submit the attribute, the default is yes<br>Your product’s category type determines which UPIs (GTIN, MPN, brand) are required.<br>If your product is a media item and the GTIN is unavailable:<br>Submit identifier_​exists attribute with a value of no<br>Note: ISBN and SBN codes are accepted as GTINs. <br>If your product is an apparel (clothing) item and the brand is unavailable:<br>Submit identifier_​exists attribute with a value of no<br>In all other categories, if your product doesn’t have a GTIN, or a combination of MPN and brand: <br>Submit identifier_​exists attribute with a value of no");
+        $("#brand_strategy_help").html('If you don’t submit the attribute, the default is <span class="text-danger">yes</span>. Your product’s category type determines which UPIs (GTIN, MPN, brand) are required. If your product is a media item and the GTIN is unavailable: Submit <span class="text-info">identifier exists</span> attribute with a value of <span class="text-danger">no</span>. Note: ISBN and SBN codes are accepted as GTINs. If your product is an apparel (clothing) item and the brand is unavailable: Submit <span class="text-info">identifier ​exists</span> attribute with a value of <span class="text-danger">no</span>. In all other categories, if your product doesn’t have a GTIN, or a combination of MPN and brand: Submit <span class="text-info">identifier exists</span> attribute with a value of <span class="text-danger">no</span>');
        
-        $("#product_data_brand_help").html("Optional <br>Use to indicate whether or not the unique product identifiers (UPIs) GTIN, MPN, and brand are available for your product.<br>Example no <br>Supported values<br> yes Product identifiers are assigned to the new product by the manufacturer <br> no Product lacks a brand, GTIN, or MPN (see requirements to the right). If set to no, still provide the UPIs you have.");
-        //$("#product_brand_help").html(strategy_data);
+        $("#product_data_brand_help").html('<span class="text-warning">Optional</span>. Use to indicate whether or not the unique product identifiers (UPIs) GTIN, MPN, and brand are available for your product. Example <span class="text-danger">no</span>. Supported values <span class="text-danger">yes</span> Product identifiers are assigned to the new product by the manufacturer, <span class="text-danger">no</span> Product lacks a brand, GTIN, or MPN (see requirements to the right). If set to <span class="text-danger">no</span>, still provide the UPIs you have.');
+        i_e = 'i.e <span class="text-danger">no</span>';
         //var identifier_exists = strategy_data;
     }
     
@@ -3044,7 +3271,7 @@ brand_strategy.addEventListener('change', (event) => {
         $("#product_brand").addClass("is-valid"); 
         brand_strategy_data($("#product_brand").val());       
     } else {
-        $("#product_brand_help").html("Input " + product_brand_strategy + "");
+        $("#product_brand_help").html("Input " + product_brand_strategy + " " + i_e);
         $("#product_brand").removeClass("is-valid");
         $("#product_brand").addClass("is-invalid");
     }    
@@ -3067,175 +3294,176 @@ function product_brand(e) {
 
 
 var condition = '';// The condition of your product at time of sale
-                   // Required if your product is used or refurbished <br>Optional for new products<br>Example new<br>Supported values new, Brand new, original, unopened packaging, refurbished, Professionally restored to working order, comes with a warranty, may or may not have the original packaging, used, Previously used, original packaging opened or missing<br>Schema.org property Offer.​itemCondition
+// <span class="text-danger">Required</span> if your product is <span class="text-danger">used</span> or <span class="text-danger">refurbished</span>. <span class="text-warning">Optional</span> for new products. Example <span class="text-danger">new</span>. Supported values <span class="text-danger">new</span>, <span class="text-danger">Brand new</span>, <span class="text-danger">original</span>, <span class="text-danger">unopened packaging</span>, <span class="text-danger">refurbished</span>, <span class="text-danger">Professionally restored to working order</span>, <span class="text-danger">comes with a warranty</span>, <span class="text-danger">may or may not have the original packaging</span>, <span class="text-danger">used</span>, <span class="text-danger">Previously used</span>, <span class="text-danger">original packaging opened or missing</span>. Schema.org property <span class="text-info">Offer.​itemCondition</span>
 
-var adult = '';// Submit yes if this individual product contains nudity or sexually suggestive content. If you don't submit the attribute, the default is no.
-               // Required (If a product contains adult content). Indicate a product includes sexually suggestive content <br>Example yes <br>Supported values yes no
+var adult = '';// Submit <span class="text-danger">yes</span> if this individual product contains nudity or sexually suggestive content. If you don’t submit the attribute, the default is <span class="text-danger">no</span>.
+// <span class="text-danger">Required (If a product contains adult content)</span>. Indicate a product includes sexually suggestive content. Example <span class="text-danger">yes</span>. Supported values <span class="text-danger">yes</span> <span class="text-danger">no</span>
 
-var multipack = '';// Submit this attribute if you defined a custom group of identical products and are selling them as a single unit of sale. For example, you're selling 6 bars of soap together <br>Submit the number of products in your multipack. If you don't submit the attribute, the default is 0 <br>If the product's manufacturer assembled the multipack instead of you, don't submit this attribute
-                   // Required (For multipack products in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US) <br>Required for enhanced free listings on Google if you’ve created a multipack <br>Optional for all other products and countries of sale <br>The number of identical products sold within a merchant-defined multipack <br>Example 6 <br>Syntax Integer
-                   
-var is_bundle = '';// Submit yes if you're selling a custom bundle of different products that you created, and the bundle includes a main product. For example, a camera combined with a lens and bag. If you don't submit the attribute, the default is no <br>Don't use this attribute for bundles without a clear main product. For example, a gift basket containing cheese and crackers
-                   // Required (For bundles in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)<br>Required for enhanced free listings on Google if you’ve created a bundle containing a main product<br>Optional for all other products and countries of sale<br>Indicates a product is a merchant-defined custom group of different products featuring one main product<br>Example yes<br>Supported values yes, no
+var multipack = '';// Submit this attribute if you defined a custom group of identical products and are selling them as a single unit of sale. For example, you’re selling 6 bars of soap together. Submit the number of products in your multipack. If you don’t submit the attribute, the default is <span class="text-danger">0</span>. If the product’s manufacturer assembled the multipack instead of you, don’t submit this attribute
+// <span class="text-danger">Required (For multipack products in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)</span>. <span class="text-danger">Required</span> for enhanced free listings on Oramla if you’ve created a multipack. <span class="text-warning">Optional</span> for all other products and countries of sale. The number of identical products sold within a merchant-defined multipack. Example <span class="text-danger">6</span>. Syntax <span class="text-info">Integer</span>
 
-var energy_efficiency_class = '';// Include the legally required energy label<br>To be used in combination with min_energy_​​efficiency_​​class and max_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to G).
-                                 // Optional (except when required by local law or regulations) <br>Your product’s energy label<br>Example A+ <br>Supported values A+++, A++, A+, A, B, C, D, E, F, G
+var is_bundle = '';// Submit <span class="text-danger">yes</span> if you’re selling a custom bundle of different products that you created, and the bundle includes a main product. For example, a camera combined with a lens and bag. If you don’t submit the attribute, the default is <span class="text-danger">no</span>. Don’t use this attribute for bundles without a clear main product. For example, a gift basket containing cheese and crackers
+// <span class="text-danger">Required (For bundles in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)</span>. <span class="text-danger">Required</span> for enhanced free listings on Oramla if you’ve created a bundle containing a main product. <span class="text-warning">Optional</span> for all other products and countries of sale. Indicates a product is a merchant-defined custom group of different products featuring one main product. Example <span class="text-danger">yes</span>. Supported values <span class="text-danger">yes</span>, <span class="text-danger">no</span>
 
-var min_energy_efficiency_class = '';// Include the legally required energy label<br>To be used in combination with energy_​​efficiency_class and max_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to D).
-                                     // Optional (except when required by local laws or regulations) <br>Available for EU & CH only<br>Your product’s energy label<br>Example A+++ <br>Supported values A+++, A++, A, B, C, D, E, F, G
+var energy_efficiency_class = '';// Include the legally required energy label. To be used in combination with <span class="text-info">min energy ​​efficiency ​​class</span> and <span class="text-info">max energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">G</span>).
+              // <span class="text-warning">Optional (except when required by local law or regulations)</span>. Your product’s energy label. Example <span class="text-danger">A+</span>. Supported values <span class="text-danger">A+++</span>, <span class="text-danger">A++</span>, <span class="text-danger">A+</span>, <span class="text-danger">A</span>, <span class="text-danger">B</span>, <span class="text-danger">C</span>, <span class="text-danger">D</span>, <span class="text-danger">E</span>, <span class="text-danger">F</span>, <span class="text-danger">G</span>
 
-var max_energy_efficiency_class = '';// Include the legally required energy label <br>To be used in combination with energy_​​efficiency_​​class and min_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to D).
-                                     // Optional (except when required by local laws or regulations)<br>Available for EU & CH only<br>Your product’s energy label<br>Example D<br>Supported values A+++, A++, A, B, C, D, E, F, G
+var min_energy_efficiency_class = '';// Include the legally required energy label. To be used in combination with <span class="text-info">energy ​​efficiency class</span> and <span class="text-info">max energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">D</span>).
+                  // <span class="text-warning">Optional (except when required by local laws or regulations)</span>. Available for EU & CH only. Your product’s energy label. Example <span class="text-danger">A+++</span>. Supported values <span class="text-danger">A+++</span>, <span class="text-danger">A++</span>, <span class="text-danger">A</span>, <span class="text-danger">B</span>, <span class="text-danger">C</span>, <span class="text-danger">D</span>, <span class="text-danger">E</span>, <span class="text-danger">F</span>, <span class="text-danger">G</span>
 
-var age_group = '';// Include one value per product <br>For variants Include with the same value for item_​group_​id and different values for age_​group
-                   // Required (For all apparel products that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products with assigned age groups)<br>Required for enhanced free listings for all Apparel & Accessories (166) products <br>Optional for all other products and countries of sale<br>The demographic for which your product is intended<br>Example infant<br>Supported values <br>newborn Up to 3 months old <br>infant Between 3-12 months old <br>toddler Between 1-5 years old<br>kids Between 5-13 years old <br>adult Typically teens or older <br>Schema.org property Product.​audience.​suggestedMinAge Product.​audience.​suggestedMaxAge
+var max_energy_efficiency_class = '';// Include the legally required energy label. To be used in combination with <span class="text-info">energy ​​efficiency ​​class</span> and <span class="text-info">min energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">D</span>).
+                  // <span class="text-warning">Optional (except when required by local laws or regulations)</span>. Available for EU & CH only. Your product’s energy label. Example <span class="text-danger">D</span>. Supported values <span class="text-danger">A+++</span>, <span class="text-danger">A++</span>, <span class="text-danger">A</span>, <span class="text-danger">B</span>, <span class="text-danger">C</span>, <span class="text-danger">D</span>, <span class="text-danger">E</span>, <span class="text-danger">F</span>, <span class="text-danger">G</span>
 
-var color = '';// Don’t use a number such as 0 2 4 6 8<br>Don’t use characters that aren’t alphanumeric such as #fff000<br>Don’t use only 1 letter such as R (For Chinese, Japanese, or Korean languages, you can include a single character such as 红)<br>Don’t reference the product or image such as “see image”<br>Don't combine several color names into 1 word, such as RedPinkBlue. Instead, separate them with a /, such as Red/Pink/Blue. Don’t use a value that isn’t a color, such as multicolor, various, variety, men's, women's, or N/A.<br>If your product features multiple colors, list the primary color first.<br>For variants <br>Include with the same value for item_​group_​id and different values for color
-               // Required (For all apparel products in feeds that are targeted to Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different colors)<br>Required for enhanced free listings for all Apparel & Accessories (166) products<br>Optional for all other products and countries of sale<br>Your product’s color(s)<br>Example Black <br>Syntax Max 100 alphanumeric characters (max 40 characters per color) <br>Schema.org property Product.color
+var age_group = '';// Include one value per product. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">age ​group</span>
+// <span class="text-danger">Required (For all apparel products that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products with assigned age groups)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Apparel & Accessories (166) products. <span class="text-warning">Optional</span> for all other products and countries of sale. The demographic for which your product is intended. Example <span class="text-danger">infant</span>. Supported values <span class="text-danger">newborn</span> Up to 3 months old <span class="text-danger">infant</span> Between 3-12 months old <span class="text-danger">toddler</span> Between 1-5 years old <span class="text-danger">kids</span> Between 5-13 years old <span class="text-danger">adult</span> Typically teens or older. Schema.org property <span class="text-info">Product.​audience.​suggestedMinAge Product.​audience.​suggestedMaxAge</span>
 
-var gender = '';// For some Apparel & Accessories (166) categories like Shoelaces (1856), this attribute is recommended instead of required since these categories aren't dependent on gender<br>For variants Include with the same value for item_​group_​id and different values for gender
-                // Required (Required for all apparel items in feeds that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all gender-specific products)<br>Required for enhanced free listings for all Oramla Apparel & Accessories (166) products <br>Optional for all other products and countries of sale <br>The gender for which your product is intended<br>Example Unisex <br>Supported values male, female, unisex, <br>Schema.org property Product.​audience.​suggested​Gender
+var color = '';// Don’t use a number such as 0 2 4 6 8. Don’t use characters that aren’t alphanumeric such as #fff000. Don’t use only 1 letter such as R (For Chinese, Japanese, or Korean languages, you can include a single character such as 红). Don’t reference the product or image such as “see image”. Don’t combine several color names into 1 word, such as RedPinkBlue. Instead, separate them with a <span class="text-danger">/</span>, such as <span class="text-danger">Red/Pink/Blue</span>. Don’t use a value that isn’t a color, such as multicolor, various, variety, men’s, women’s, or N/A. If your product features multiple colors, list the primary color first. For variants. Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">color</span>
+// <span class="text-danger">Required (For all apparel products in feeds that are targeted to Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different colors)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Apparel & Accessories (166) products. <span class="text-warning">Optional</span> for all other products and countries of sale. Your product’s color(s). Example <span class="text-danger">Black</span>. Syntax Max 100 alphanumeric characters (max 40 characters per color). Schema.org property <span class="text-info">Product.color</span>
 
-var material = '';// To indicate multiple materials for a single product (not variants), add a primary material, followed by up to 2 secondary materials, separated by a /. For example, instead of CottonPolyesterElastane, use cotton/polyester/elastane <br>For variants Include with the same value for item_​group_​id and different values for material
-                  // Required (if relevant for distinguishing different products in a set of variants)<br>Optional for all other products <br>Your product’s fabric or material <br>Example leather <br>Syntax Max 200 characters <br> Schema.org property Product.material
-                  
-var pattern = '';// For variants Include with the same value for item_​group_​id and different values for pattern
-                 // Required (if relevant for distinguishing different products in a set of variants) <br>Optional for all other products <br>Your product’s pattern or graphic print <br>Example striped, polka dot, paisley <br>Syntax Max 100 characters<br>Schema.org property Product.pattern
 
-var size = '';// For variants: Include with the same value for item_​group_​id and different values for size<br>If sizes contain multiple dimensions, condense them into 1 value. For example, "16/34 Tall" for neck size 16 inches, sleeve length 34 inches, and “Tall” fit<br>If your item is one size fits all or one size fits most, you can use one size, OS, one size fits all, OSFA, one size fits most, or OSFM<br>For merchant-defined multipack products, submit the multipack quantity using the multipack attribute. Do not submit the multipack quantity under size.
-              // Required (Required for all apparel products in Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) product categories targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different sizes)<br>Required for enhanced free listings for all Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) products.<br>Optional for all other products and countries of sale<br>Your product’s size<br>Example XL<br>Syntax Max 100 characters <br>Schema.org property Product.size
+var gender = '';// For some Apparel & Accessories (166) categories like Shoelaces (1856), this attribute is recommended instead of required since these categories aren’t dependent on gender. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">gender</span>
+// <span class="text-danger">Required (Required for all apparel items in feeds that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all gender-specific products)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Oramla Apparel & Accessories (166) products. <span class="text-danger">Optional</span> for all other products and countries of sale. The gender for which your product is intended. Example <span class="text-danger">Unisex</span>. Supported values <span class="text-danger">male</span>, <span class="text-danger">female</span>, <span class="text-danger">unisex</span>. Schema.org property <span class="text-info">Product.​audience.​suggested​Gender</span>
 
-var size_system = '';// If you don't submit the attribute, the default is your country of sale
-                     // Optional (Available for apparel products only)<br>The country of the size system used by your product<br>Example US<br>Supported values US, UK, EU, DE, FR, JP, CN (China), IT, BR, MEX, AU, 
+var material = '';// To indicate multiple materials for a single product (not variants), add a primary material, followed by up to 2 secondary materials, separated by a <span class="text-danger">/</span>. For example, instead of CottonPolyesterElastane, use <span class="text-danger">cotton/polyester/elastane</span>. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">material</span>
+// <span class="text-danger">Required (if relevant for distinguishing different products in a set of variants)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s fabric or material. Example <span class="text-danger">leather</span>. Syntax Max 200 characters. Schema.org property <span class="text-danger">Product.material</span>
 
-var item_group_id = '';// Use a unique value for each group of variants. Use the parent SKU where possible<br>Keep the value the same when updating your product data<br>Use only valid unicode characters<br>Use an item group ID for a set of products that differ by one or more of these attributes: color, size, pattern, material, age group, gender <br>Include the same attributes for each product in the item group. For example, if a product varies by size and color, submit size and color for every product that share the same value for item_​group_​id <br>If your products differ by design elements that aren't represented by the attributes above, don't use item_​group_​id
-                       // Required (Brazil, France, Germany, Japan, the United Kingdom, and the US if the product is a variant)<br>Required for enhanced free listings for all product variants<br>Optional for all other products and countries of sale<br>ID for a group of products that come in different versions (variants)<br>Example AB12345 <br>Syntax Max 50 alphanumeric characters <br>Schema.org property Product.​inProductGroupWithID
+var pattern = '';// For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for pattern
+// <span class="text-danger">Required (if relevant for distinguishing different products in a set of variants)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s pattern or graphic print. Example <span class="text-danger">striped</span>, <span class="text-danger">polka dot</span>, <span class="text-danger">paisley</span>. Syntax Max 100 characters. Schema.org property <span class="text-info">Product.pattern</span>
 
-var product_detail = '';// Don't add information covered in other attributes, all capital letters, gimmicky foreign characters, promotion text, or list keywords or search terms<br>Don’t add information such as price, sale price, sale dates, shipping, delivery date, other time-related information, or your company’s name<br>Only provide an attribute name and value when the value is confirmed. For example, provide “Vegetarian=False” if a food product is not vegetarian, and not just because False is the default value for Boolean attributes.
-                        // Optional Technical specifications or additional details of your product <br>Example General:Product Type:Digital player <br>Syntax product_detail uses 3 sub-attributes: section_name: Max 140 characters attribute_name: Max 140 characters attribute_value: Max 1000 characters
+var size = '';// For variants: Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">size</span>. If sizes contain multiple dimensions, condense them into 1 value. For example, <span class="text-danger">"16/34 Tall"</span> for neck size <span class="text-danger">16 inches</span>, sleeve length <span class="text-danger">34 inches</span>, and <span class="text-danger">“Tall” fit</span>. If your item is one size fits all or one size fits most, you can use <span class="text-danger">one size</span>, <span class="text-danger">OS</span>, <span class="text-danger">one size fits all</span>, <span class="text-danger">OSFA</span>, <span class="text-danger">one size fits most</span>, or <span class="text-danger">OSFM</span>. For merchant-defined multipack products, submit the <span class="text-info">multipack</span> quantity using the <span class="text-info">multipack</span> attribute. Do not submit the multipack quantity under size.
+// <span class="text-danger">Required (Required for all apparel products in Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) product categories targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different sizes)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) products. <span class="text-warning">Optional</span> for all other products and countries of sale. Your product’s size. Example <span class="text-danger">XL</span>. Syntax Max 100 characters. Schema.org property <span class="text-info">Product.size</span>
 
-var product_highlight = '';// Use between 2 and 10 product highlights <br>Describe only the product itself. Don't list keywords or search terms .Don’t include promotional text, all capital letters, or gimmicky foreign characters
-                           // Optional The most relevant highlights of your products <br>Example Supports thousands of apps, including Netflix, YouTube, and HBO Max <br>Syntax Max 150 characters
+var size_system = '';// If you don’t submit the attribute, the default is your country of sale
+  // <span class="text-warning">Optional (Available for apparel products only)</span>. The country of the size system used by your product. Example <span class="text-danger">US</span>. Supported values <span class="text-danger">US</span>, <span class="text-danger">UK</span>, <span class="text-danger">EU</span>, <span class="text-danger">DE</span>, <span class="text-danger">FR</span>, <span class="text-danger">JP</span>, <span class="text-danger">CN (China)</span>, <span class="text-danger">IT</span>, <span class="text-danger">BR</span>, <span class="text-danger">MEX</span>, <span class="text-danger">AU</span>...
+
+var item_group_id = '';// Use a unique value for each group of variants. Use the parent SKU where possible. Keep the value the same when updating your product data. Use only valid unicode characters. Use an item group ID for a set of products that differ by one or more of these attributes: <span class="text-info">color</span>, <span class="text-info">size</span>, <span class="text-info">pattern</span>, <span class="text-info">material</span>, <span class="text-info">age group</span>, <span class="text-info">gender</span>. Include the same attributes for each product in the item group. For example, if a product varies by size and color, submit size and color for every product that share the same value for <span class="text-info">item ​group ​id</span>. If your products differ by design elements that aren’t represented by the attributes above, don’t use <span class="text-info">item ​group ​id</span>
+    // <span class="text-danger">Required (Tanzania, South Africa, Nigeria, Morocco, the United Kingdom, and Kenya if the product is a variant)</span>. <span class="text-danger">Required</span> for enhanced free listings for all product variants. <span class="text-warning">Optional</span> for all other products and countries of sale. ID for a group of products that come in different versions (variants). Example <span class="text-danger">AB12345</span>. Syntax Max 50 alphanumeric characters. Schema.org property <span class="text-info">Product.​inProductGroupWithID</span>
+
+var product_detail = '';// Don’t add information covered in other attributes, all capital letters, gimmicky foreign characters, promotion text, or list keywords or search terms. Don’t add information such as price, sale price, sale dates, shipping, delivery date, other time-related information, or your company’s name. Only provide an attribute name and value when the value is confirmed. For example, provide <span class="text-primary">“Vegetarian=False”</span> if a food product is not vegetarian, and not just because False is the default value for Boolean attributes.
+     // <span class="text-warning">Optional</span>. Technical specifications or additional details of your product. Example <span class="text-danger">General:Product</span>, <span class="text-danger">Type:Digital player</span>. Syntax <span class="text-info">product detail</span> uses 3 sub-attributes: <span class="text-danger">section name</span>: Max 140 characters, <span class="text-danger">attribute name</span>: Max 140 characters <span class="text-danger">attribute value</span>: Max 1000 characters
+
+var product_highlight = '';// Use between 2 and 10 product highlights. Describe only the product itself. Don't list keywords or search terms .Don’t include promotional text, all capital letters, or gimmicky foreign characters
+        // <span class="text-warning">Optional</span>. The most relevant highlights of your products. Example <span class="text-danger">Supports thousands of apps</span>, <span class="text-danger">including Netflix</span>, <span class="text-danger">YouTube</span>, and <span class="text-danger">HBO Max</span>. Syntax Max 150 characters
 
 var product_condition_strategy = 'condition';
 function condition_strategy_data(strategy_data) {
     if (product_condition_strategy == 'condition') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("The condition of your product at time of sale");
+        $("#condition_strategy_help").html('The condition of your product at time of sale');
        
-        $("#product_data_condition_help").html("Required if your product is used or refurbished <br>Optional for new products<br>Example new<br>Supported values new, Brand new, original, unopened packaging, refurbished, Professionally restored to working order, comes with a warranty, may or may not have the original packaging, used, Previously used, original packaging opened or missing<br>Schema.org property Offer.​itemCondition");
+        $("#product_data_condition_help").html('<span class="text-danger">Required</span> if your product is <span class="text-danger">used</span> or <span class="text-danger">refurbished</span>. <span class="text-warning">Optional</span> for new products. Example <span class="text-danger">new</span>. Supported values <span class="text-danger">new</span>, <span class="text-danger">Brand new</span>, <span class="text-danger">original</span>, <span class="text-danger">unopened packaging</span>, <span class="text-danger">refurbished</span>, <span class="text-danger">Professionally restored to working order</span>, <span class="text-danger">comes with a warranty</span>, <span class="text-danger">may or may not have the original packaging</span>, <span class="text-danger">used</span>, <span class="text-danger">Previously used</span>, <span class="text-danger">original packaging opened or missing</span>. Schema.org property <span class="text-info">Offer.​itemCondition</span>');
         $("#product_condition_help").html(strategy_data);
         condition = strategy_data;
     } else if (product_condition_strategy == 'adult') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Submit yes if this individual product contains nudity or sexually suggestive content. If you don't submit the attribute, the default is no.");
+        $("#condition_strategy_help").html('Submit <span class="text-danger">yes</span> if this individual product contains nudity or sexually suggestive content. If you don’t submit the attribute, the default is <span class="text-danger">no</span>.');
        
-        $("#product_data_condition_help").html("Required (If a product contains adult content). Indicate a product includes sexually suggestive content <br>Example yes <br>Supported values yes no.");
+        $("#product_data_condition_help").html('<span class="text-danger">Required (If a product contains adult content)</span>. Indicate a product includes sexually suggestive content. Example <span class="text-danger">yes</span>. Supported values <span class="text-danger">yes</span> <span class="text-danger">no</span>');
         $("#product_condition_help").html(strategy_data);
         adult = strategy_data;
     } else if (product_condition_strategy == 'multipack') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Submit this attribute if you defined a custom group of identical products and are selling them as a single unit of sale. For example, you're selling 6 bars of soap together <br>Submit the number of products in your multipack. If you don't submit the attribute, the default is 0 <br>If the product's manufacturer assembled the multipack instead of you, don't submit this attribute");
+        $("#condition_strategy_help").html('Submit this attribute if you defined a custom group of identical products and are selling them as a single unit of sale. For example, you’re selling 6 bars of soap together. Submit the number of products in your multipack. If you don’t submit the attribute, the default is <span class="text-danger">0</span>. If the product’s manufacturer assembled the multipack instead of you, don’t submit this attribute');
        
-        $("#product_data_condition_help").html("Required (For multipack products in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US) <br>Required for enhanced free listings on Google if you’ve created a multipack <br>Optional for all other products and countries of sale <br>The number of identical products sold within a merchant-defined multipack <br>Example 6 <br>Syntax Integer");
+        $("#product_data_condition_help").html('<span class="text-danger">Required (For multipack products in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)</span>. <span class="text-danger">Required</span> for enhanced free listings on Oramla if you’ve created a multipack. <span class="text-warning">Optional</span> for all other products and countries of sale. The number of identical products sold within a merchant-defined multipack. Example <span class="text-danger">6</span>. Syntax <span class="text-info">Integer</span>');
         $("#product_condition_help").html(strategy_data);
         multipack = strategy_data;
     } else if (product_condition_strategy == 'is bundle') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Submit yes if you're selling a custom bundle of different products that you created, and the bundle includes a main product. For example, a camera combined with a lens and bag. If you don't submit the attribute, the default is no <br>Don't use this attribute for bundles without a clear main product. For example, a gift basket containing cheese and crackers");
+        $("#condition_strategy_help").html('Submit <span class="text-danger">yes</span> if you’re selling a custom bundle of different products that you created, and the bundle includes a main product. For example, a camera combined with a lens and bag. If you don’t submit the attribute, the default is <span class="text-danger">no</span>. Don’t use this attribute for bundles without a clear main product. For example, a gift basket containing cheese and crackers');
        
-        $("#product_data_condition_help").html("Required (For bundles in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)<br>Required for enhanced free listings on Google if you’ve created a bundle containing a main product<br>Optional for all other products and countries of sale<br>Indicates a product is a merchant-defined custom group of different products featuring one main product<br>Example yes<br>Supported values yes, no");
+        $("#product_data_condition_help").html('<span class="text-danger">Required (For bundles in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)</span>. <span class="text-danger">Required</span> for enhanced free listings on Oramla if you’ve created a bundle containing a main product. <span class="text-warning">Optional</span> for all other products and countries of sale. Indicates a product is a merchant-defined custom group of different products featuring one main product. Example <span class="text-danger">yes</span>. Supported values <span class="text-danger">yes</span>, <span class="text-danger">no</span>');
         $("#product_condition_help").html(strategy_data);
         is_bundle = strategy_data;
     } else if (product_condition_strategy == 'energy efficiency class') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Include the legally required energy label<br>To be used in combination with min_energy_​​efficiency_​​class and max_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to G).");
+        $("#condition_strategy_help").html('Include the legally required energy label. To be used in combination with <span class="text-info">min energy ​​efficiency ​​class</span> and <span class="text-info">max energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">G</span>).');
        
-        $("#product_data_condition_help").html("Optional (except when required by local law or regulations) <br>Your product’s energy label<br>Example A+ <br>Supported values A+++, A++, A+, A, B, C, D, E, F, G");
+        $("#product_data_condition_help").html('<span class="text-warning">Optional (except when required by local law or regulations)</span>. Your product’s energy label. Example <span class="text-danger">A+</span>. Supported values <span class="text-danger">A+++</span>, <span class="text-danger">A++</span>, <span class="text-danger">A+</span>, <span class="text-danger">A</span>, <span class="text-danger">B</span>, <span class="text-danger">C</span>, <span class="text-danger">D</span>, <span class="text-danger">E</span>, <span class="text-danger">F</span>, <span class="text-danger">G</span>');
         $("#product_condition_help").html(strategy_data);
         energy_efficiency_class = strategy_data;
     } else if (product_condition_strategy == 'min energy efficiency class') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Include the legally required energy label<br>To be used in combination with energy_​​efficiency_class and max_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to D).");
+        $("#condition_strategy_help").html('Include the legally required energy label. To be used in combination with <span class="text-info">energy ​​efficiency class</span> and <span class="text-info">max energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">D</span>).');
        
-        $("#product_data_condition_help").html("Optional (except when required by local laws or regulations) <br>Available for EU & CH only<br>Your product’s energy label<br>Example A+++ <br>Supported values A+++, A++, A, B, C, D, E, F, G");
+        $("#product_data_condition_help").html('<span class="text-warning">Optional (except when required by local laws or regulations)</span>. Available for EU & CH only. Your product’s energy label. Example <span class="text-danger">A+++</span>. Supported values <span class="text-danger">A+++</span>, <span class="text-danger">A++</span>, <span class="text-danger">A</span>, <span class="text-danger">B</span>, <span class="text-danger">C</span>, <span class="text-danger">D</span>, <span class="text-danger">E</span>, <span class="text-danger">F</span>, <span class="text-danger">G</span>');
         $("#product_condition_help").html(strategy_data);
         min_energy_efficiency_class = strategy_data;
     } else if (product_condition_strategy == 'max energy efficiency class') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Include the legally required energy label <br>To be used in combination with energy_​​efficiency_​​class and min_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to D).");
+        $("#condition_strategy_help").html('Include the legally required energy label. To be used in combination with <span class="text-info">energy ​​efficiency ​​class</span> and <span class="text-info">min energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">D</span>).');
        
-        $("#product_data_condition_help").html("Optional (except when required by local laws or regulations)<br>Available for EU & CH only<br>Your product’s energy label<br>Example D<br>Supported values A+++, A++, A, B, C, D, E, F, G");
+        $("#product_data_condition_help").html('<span class="text-warning">Optional (except when required by local laws or regulations)</span>. Available for EU & CH only. Your product’s energy label. Example <span class="text-danger">D</span>. Supported values <span class="text-danger">A+++</span>, <span class="text-danger">A++</span>, <span class="text-danger">A</span>, <span class="text-danger">B</span>, <span class="text-danger">C</span>, <span class="text-danger">D</span>, <span class="text-danger">E</span>, <span class="text-danger">F</span>, <span class="text-danger">G</span>');
         $("#product_condition_help").html(strategy_data);
         max_energy_efficiency_class = strategy_data;
     } else if (product_condition_strategy == 'age group') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Include one value per product <br>For variants Include with the same value for item_​group_​id and different values for age_​group");
+        $("#condition_strategy_help").html('Include one value per product. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">age ​group</span>');
        
-        $("#product_data_condition_help").html("Required (For all apparel products that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products with assigned age groups)<br>Required for enhanced free listings for all Apparel & Accessories (166) products <br>Optional for all other products and countries of sale<br>The demographic for which your product is intended<br>Example infant<br>Supported values <br>newborn Up to 3 months old <br>infant Between 3-12 months old <br>toddler Between 1-5 years old<br>kids Between 5-13 years old <br>adult Typically teens or older <br>Schema.org property Product.​audience.​suggestedMinAge Product.​audience.​suggestedMaxAge");
+        $("#product_data_condition_help").html('<span class="text-danger">Required (For all apparel products that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products with assigned age groups)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Apparel & Accessories (166) products. <span class="text-warning">Optional</span> for all other products and countries of sale. The demographic for which your product is intended. Example <span class="text-danger">infant</span>. Supported values <span class="text-danger">newborn</span> Up to 3 months old <span class="text-danger">infant</span> Between 3-12 months old <span class="text-danger">toddler</span> Between 1-5 years old <span class="text-danger">kids</span> Between 5-13 years old <span class="text-danger">adult</span> Typically teens or older. Schema.org property <span class="text-info">Product.​audience.​suggestedMinAge Product.​audience.​suggestedMaxAge</span>');
         $("#product_condition_help").html(strategy_data);
         age_group = strategy_data;
     } else if (product_condition_strategy == 'color') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Don’t use a number such as 0 2 4 6 8<br>Don’t use characters that aren’t alphanumeric such as #fff000<br>Don’t use only 1 letter such as R (For Chinese, Japanese, or Korean languages, you can include a single character such as 红)<br>Don’t reference the product or image such as “see image”<br>Don't combine several color names into 1 word, such as RedPinkBlue. Instead, separate them with a /, such as Red/Pink/Blue. Don’t use a value that isn’t a color, such as multicolor, various, variety, men's, women's, or N/A.<br>If your product features multiple colors, list the primary color first.<br>For variants <br>Include with the same value for item_​group_​id and different values for color");
+        $("#condition_strategy_help").html('Don’t use a number such as 0 2 4 6 8. Don’t use characters that aren’t alphanumeric such as #fff000. Don’t use only 1 letter such as R (For Chinese, Japanese, or Korean languages, you can include a single character such as 红). Don’t reference the product or image such as “see image”. Don’t combine several color names into 1 word, such as RedPinkBlue. Instead, separate them with a <span class="text-danger">/</span>, such as <span class="text-danger">Red/Pink/Blue</span>. Don’t use a value that isn’t a color, such as multicolor, various, variety, men’s, women’s, or N/A. If your product features multiple colors, list the primary color first. For variants. Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">color</span>');
        
-        $("#product_data_condition_help").html("Required (For all apparel products in feeds that are targeted to Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different colors)<br>Required for enhanced free listings for all Apparel & Accessories (166) products<br>Optional for all other products and countries of sale<br>Your product’s color(s)<br>Example Black <br>Syntax Max 100 alphanumeric characters (max 40 characters per color) <br>Schema.org property Product.color");
+        $("#product_data_condition_help").html('<span class="text-danger">Required (For all apparel products in feeds that are targeted to Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different colors)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Apparel & Accessories (166) products. <span class="text-warning">Optional</span> for all other products and countries of sale. Your product’s color(s). Example <span class="text-danger">Black</span>. Syntax Max 100 alphanumeric characters (max 40 characters per color). Schema.org property <span class="text-info">Product.color</span>');
         $("#product_condition_help").html(strategy_data);
         color = strategy_data;
     } else if (product_condition_strategy == 'gender') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("For some Apparel & Accessories (166) categories like Shoelaces (1856), this attribute is recommended instead of required since these categories aren't dependent on gender<br>For variants Include with the same value for item_​group_​id and different values for gender");
+        $("#condition_strategy_help").html('For some Apparel & Accessories (166) categories like Shoelaces (1856), this attribute is recommended instead of required since these categories aren’t dependent on gender. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">gender</span>');
        
-        $("#product_data_condition_help").html("Required (Required for all apparel items in feeds that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all gender-specific products)<br>Required for enhanced free listings for all Oramla Apparel & Accessories (166) products <br>Optional for all other products and countries of sale <br>The gender for which your product is intended<br>Example Unisex <br>Supported values male, female, unisex, <br>Schema.org property Product.​audience.​suggested​Gender");
+        $("#product_data_condition_help").html('<span class="text-danger">Required (Required for all apparel items in feeds that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all gender-specific products)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Oramla Apparel & Accessories (166) products. <span class="text-danger">Optional</span> for all other products and countries of sale. The gender for which your product is intended. Example <span class="text-danger">Unisex</span>. Supported values <span class="text-danger">male</span>, <span class="text-danger">female</span>, <span class="text-danger">unisex</span>. Schema.org property <span class="text-info">Product.​audience.​suggested​Gender</span>');
         $("#product_condition_help").html(strategy_data);
         gender = strategy_data;
     } else if (product_condition_strategy == 'material') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("To indicate multiple materials for a single product (not variants), add a primary material, followed by up to 2 secondary materials, separated by a /. For example, instead of CottonPolyesterElastane, use cotton/polyester/elastane <br>For variants Include with the same value for item_​group_​id and different values for material");
+        $("#condition_strategy_help").html('To indicate multiple materials for a single product (not variants), add a primary material, followed by up to 2 secondary materials, separated by a <span class="text-danger">/</span>. For example, instead of CottonPolyesterElastane, use <span class="text-danger">cotton/polyester/elastane</span>. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">material</span>');
        
-        $("#product_data_condition_help").html("Required (if relevant for distinguishing different products in a set of variants)<br>Optional for all other products <br>Your product’s fabric or material <br>Example leather <br>Syntax Max 200 characters <br> Schema.org property Product.material");
+        $("#product_data_condition_help").html('<span class="text-danger">Required (if relevant for distinguishing different products in a set of variants)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s fabric or material. Example <span class="text-danger">leather</span>. Syntax Max 200 characters. Schema.org property <span class="text-danger">Product.material</span>');
         $("#product_condition_help").html(strategy_data);
         material = strategy_data;
     } else if (product_condition_strategy == 'pattern') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("For variants Include with the same value for item_​group_​id and different values for pattern");
+        $("#condition_strategy_help").html('For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for pattern');
        
-        $("#product_data_condition_help").html("Required (if relevant for distinguishing different products in a set of variants) <br>Optional for all other products <br>Your product’s pattern or graphic print <br>Example striped, polka dot, paisley <br>Syntax Max 100 characters<br>Schema.org property Product.pattern");
+        $("#product_data_condition_help").html('<span class="text-danger">Required (if relevant for distinguishing different products in a set of variants)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s pattern or graphic print. Example <span class="text-danger">striped</span>, <span class="text-danger">polka dot</span>, <span class="text-danger">paisley</span>. Syntax Max 100 characters. Schema.org property <span class="text-info">Product.pattern</span>');
         $("#product_condition_help").html(strategy_data);
         pattern = strategy_data;
     } else if (product_condition_strategy == 'size') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("For variants: Include with the same value for item_​group_​id and different values for size<br>If sizes contain multiple dimensions, condense them into 1 value. For example, '16/34 Tall' for neck size 16 inches, sleeve length 34 inches, and “Tall” fit<br>If your item is one size fits all or one size fits most, you can use one size, OS, one size fits all, OSFA, one size fits most, or OSFM<br>For merchant-defined multipack products, submit the multipack quantity using the multipack attribute. Do not submit the multipack quantity under size.");
+        $("#condition_strategy_help").html('For variants: Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">size</span>. If sizes contain multiple dimensions, condense them into 1 value. For example, <span class="text-danger">"16/34 Tall"</span> for neck size <span class="text-danger">16 inches</span>, sleeve length <span class="text-danger">34 inches</span>, and <span class="text-danger">“Tall” fit</span>. If your item is one size fits all or one size fits most, you can use <span class="text-danger">one size</span>, <span class="text-danger">OS</span>, <span class="text-danger">one size fits all</span>, <span class="text-danger">OSFA</span>, <span class="text-danger">one size fits most</span>, or <span class="text-danger">OSFM</span>. For merchant-defined multipack products, submit the <span class="text-info">multipack</span> quantity using the <span class="text-info">multipack</span> attribute. Do not submit the multipack quantity under size.');
        
-        $("#product_data_condition_help").html("Required (Required for all apparel products in Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) product categories targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different sizes)<br>Required for enhanced free listings for all Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) products.<br>Optional for all other products and countries of sale<br>Your product’s size<br>Example XL<br>Syntax Max 100 characters <br>Schema.org property Product.size");
+        $("#product_data_condition_help").html('<span class="text-danger">Required (Required for all apparel products in Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) product categories targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different sizes)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) products. <span class="text-warning">Optional</span> for all other products and countries of sale. Your product’s size. Example <span class="text-danger">XL</span>. Syntax Max 100 characters. Schema.org property <span class="text-info">Product.size</span>');
         $("#product_condition_help").html(strategy_data);
         size = strategy_data;
     } else if (product_condition_strategy == 'size system') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("If you don't submit the attribute, the default is your country of sale");
+        $("#condition_strategy_help").html('If you don’t submit the attribute, the default is your country of sale');
        
-        $("#product_data_condition_help").html("Optional (Available for apparel products only)<br>The country of the size system used by your product<br>Example US<br>Supported values US, UK, EU, DE, FR, JP, CN (China), IT, BR, MEX, AU, ");
+        $("#product_data_condition_help").html('<span class="text-warning">Optional (Available for apparel products only)</span>. The country of the size system used by your product. Example <span class="text-danger">US</span>. Supported values <span class="text-danger">US</span>, <span class="text-danger">UK</span>, <span class="text-danger">EU</span>, <span class="text-danger">DE</span>, <span class="text-danger">FR</span>, <span class="text-danger">JP</span>, <span class="text-danger">CN (China)</span>, <span class="text-danger">IT</span>, <span class="text-danger">BR</span>, <span class="text-danger">MEX</span>, <span class="text-danger">AU</span>...');
         $("#product_condition_help").html(strategy_data);
         size_system = strategy_data;
     } else if (product_condition_strategy == 'item group id') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Use a unique value for each group of variants. Use the parent SKU where possible<br>Keep the value the same when updating your product data<br>Use only valid unicode characters<br>Use an item group ID for a set of products that differ by one or more of these attributes: color, size, pattern, material, age group, gender <br>Include the same attributes for each product in the item group. For example, if a product varies by size and color, submit size and color for every product that share the same value for item_​group_​id <br>If your products differ by design elements that aren't represented by the attributes above, don't use item_​group_​id");
+        $("#condition_strategy_help").html('Use a unique value for each group of variants. Use the parent SKU where possible. Keep the value the same when updating your product data. Use only valid unicode characters. Use an item group ID for a set of products that differ by one or more of these attributes: <span class="text-info">color</span>, <span class="text-info">size</span>, <span class="text-info">pattern</span>, <span class="text-info">material</span>, <span class="text-info">age group</span>, <span class="text-info">gender</span>. Include the same attributes for each product in the item group. For example, if a product varies by size and color, submit size and color for every product that share the same value for <span class="text-info">item ​group ​id</span>. If your products differ by design elements that aren’t represented by the attributes above, don’t use <span class="text-info">item ​group ​id</span>');
        
-        $("#product_data_condition_help").html("Required (Brazil, France, Germany, Japan, the United Kingdom, and the US if the product is a variant)<br>Required for enhanced free listings for all product variants<br>Optional for all other products and countries of sale<br>ID for a group of products that come in different versions (variants)<br>Example AB12345 <br>Syntax Max 50 alphanumeric characters <br>Schema.org property Product.​inProductGroupWithID");
+        $("#product_data_condition_help").html('<span class="text-danger">Required (Tanzania, South Africa, Nigeria, Morocco, the United Kingdom, and Kenya if the product is a variant)</span>. <span class="text-danger">Required</span> for enhanced free listings for all product variants. <span class="text-warning">Optional</span> for all other products and countries of sale. ID for a group of products that come in different versions (variants). Example <span class="text-danger">AB12345</span>. Syntax Max 50 alphanumeric characters. Schema.org property <span class="text-info">Product.​inProductGroupWithID</span>');
         $("#product_condition_help").html(strategy_data);
         item_group_id = strategy_data;
     } else if (product_condition_strategy == 'product detail') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Don't add information covered in other attributes, all capital letters, gimmicky foreign characters, promotion text, or list keywords or search terms<br>Don’t add information such as price, sale price, sale dates, shipping, delivery date, other time-related information, or your company’s name<br>Only provide an attribute name and value when the value is confirmed. For example, provide “Vegetarian=False” if a food product is not vegetarian, and not just because False is the default value for Boolean attributes.");
+        $("#condition_strategy_help").html('Don’t add information covered in other attributes, all capital letters, gimmicky foreign characters, promotion text, or list keywords or search terms. Don’t add information such as price, sale price, sale dates, shipping, delivery date, other time-related information, or your company’s name. Only provide an attribute name and value when the value is confirmed. For example, provide <span class="text-primary">“Vegetarian=False”</span> if a food product is not vegetarian, and not just because False is the default value for Boolean attributes.');
        
-        $("#product_data_condition_help").html("Optional Technical specifications or additional details of your product <br>Example General:Product Type:Digital player <br>Syntax product_detail uses 3 sub-attributes: section_name: Max 140 characters attribute_name: Max 140 characters attribute_value: Max 1000 characters");
+        $("#product_data_condition_help").html('<span class="text-warning">Optional</span>. Technical specifications or additional details of your product. Example <span class="text-danger">General:Product</span>, <span class="text-danger">Type:Digital player</span>. Syntax <span class="text-info">product detail</span> uses 3 sub-attributes: <span class="text-danger">section name</span>: Max 140 characters, <span class="text-danger">attribute name</span>: Max 140 characters <span class="text-danger">attribute value</span>: Max 1000 characters');
         $("#product_condition_help").html(strategy_data);
         product_detail = strategy_data;
     } else if (product_condition_strategy == 'product highlight') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Use between 2 and 10 product highlights <br>Describe only the product itself. Don't list keywords or search terms .Don’t include promotional text, all capital letters, or gimmicky foreign characters");
+        $("#condition_strategy_help").html('Use between 2 and 10 product highlights. Describe only the product itself. Don’t list keywords or search terms .Don’t include promotional text, all capital letters, or gimmicky foreign characters');
        
-        $("#product_data_condition_help").html("Optional The most relevant highlights of your products <br>Example Supports thousands of apps, including Netflix, YouTube, and HBO Max <br>Syntax Max 150 characters");
+        $("#product_data_condition_help").html('<span class="text-warning">Optional</span>. The most relevant highlights of your products. Example <span class="text-danger">Supports thousands of apps</span>, <span class="text-danger">including Netflix</span>, <span class="text-danger">YouTube</span>, and <span class="text-danger">HBO Max</span>. Syntax Max 150 characters');
         $("#product_condition_help").html(strategy_data);
         product_highlight = strategy_data;
     } 
@@ -3244,124 +3472,126 @@ function condition_strategy_data(strategy_data) {
 const condition_strategy = document.querySelector('#condition_strategy');
 condition_strategy.addEventListener('change', (event) => {
     product_condition_strategy = event.target.value;
+    var i_e = '';
+
     if (product_condition_strategy == 'condition') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("The condition of your product at time of sale");
+        $("#condition_strategy_help").html('The condition of your product at time of sale');
        
-        $("#product_data_condition_help").html("Required if your product is used or refurbished <br>Optional for new products<br>Example new<br>Supported values new, Brand new, original, unopened packaging, refurbished, Professionally restored to working order, comes with a warranty, may or may not have the original packaging, used, Previously used, original packaging opened or missing<br>Schema.org property Offer.​itemCondition");
-        //$("#product_brand_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-danger">Required</span> if your product is <span class="text-danger">used</span> or <span class="text-danger">refurbished</span>. <span class="text-warning">Optional</span> for new products. Example <span class="text-danger">new</span>. Supported values <span class="text-danger">new</span>, <span class="text-danger">Brand new</span>, <span class="text-danger">original</span>, <span class="text-danger">unopened packaging</span>, <span class="text-danger">refurbished</span>, <span class="text-danger">Professionally restored to working order</span>, <span class="text-danger">comes with a warranty</span>, <span class="text-danger">may or may not have the original packaging</span>, <span class="text-danger">used</span>, <span class="text-danger">Previously used</span>, <span class="text-danger">original packaging opened or missing</span>. Schema.org property <span class="text-info">Offer.​itemCondition</span>');
+        i_e = 'i.e <span class="text-danger">new</span>';
         //var brand = strategy_data;
     } else if (product_condition_strategy == 'adult') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Submit yes if this individual product contains nudity or sexually suggestive content. If you don't submit the attribute, the default is no.");
+        $("#condition_strategy_help").html('Submit <span class="text-danger">yes</span> if this individual product contains nudity or sexually suggestive content. If you don’t submit the attribute, the default is <span class="text-danger">no</span>.');
        
-        $("#product_data_condition_help").html("Required (If a product contains adult content). Indicate a product includes sexually suggestive content <br>Example yes <br>Supported values yes no.");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-danger">Required (If a product contains adult content)</span>. Indicate a product includes sexually suggestive content. Example <span class="text-danger">yes</span>. Supported values <span class="text-danger">yes</span> <span class="text-danger">no</span>');
+        i_e = 'i.e <span class="text-danger">yes</span>';
         //var adult = strategy_data;
     } else if (product_condition_strategy == 'multipack') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Submit this attribute if you defined a custom group of identical products and are selling them as a single unit of sale. For example, you're selling 6 bars of soap together <br>Submit the number of products in your multipack. If you don't submit the attribute, the default is 0 <br>If the product's manufacturer assembled the multipack instead of you, don't submit this attribute");
+        $("#condition_strategy_help").html('Submit this attribute if you defined a custom group of identical products and are selling them as a single unit of sale. For example, you’re selling 6 bars of soap together. Submit the number of products in your multipack. If you don’t submit the attribute, the default is <span class="text-danger">0</span>. If the product’s manufacturer assembled the multipack instead of you, don’t submit this attribute');
        
-        $("#product_data_condition_help").html("Required (For multipack products in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US) <br>Required for enhanced free listings on Google if you’ve created a multipack <br>Optional for all other products and countries of sale <br>The number of identical products sold within a merchant-defined multipack <br>Example 6 <br>Syntax Integer");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-danger">Required (For multipack products in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)</span>. <span class="text-danger">Required</span> for enhanced free listings on Oramla if you’ve created a multipack. <span class="text-warning">Optional</span> for all other products and countries of sale. The number of identical products sold within a merchant-defined multipack. Example <span class="text-danger">6</span>. Syntax <span class="text-info">Integer</span>');
+        i_e = 'i.e <span class="text-danger">6</span>';
         //var multipack = strategy_data;
     } else if (product_condition_strategy == 'is bundle') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Submit yes if you're selling a custom bundle of different products that you created, and the bundle includes a main product. For example, a camera combined with a lens and bag. If you don't submit the attribute, the default is no <br>Don't use this attribute for bundles without a clear main product. For example, a gift basket containing cheese and crackers");
+        $("#condition_strategy_help").html('Submit <span class="text-danger">yes</span> if you’re selling a custom bundle of different products that you created, and the bundle includes a main product. For example, a camera combined with a lens and bag. If you don’t submit the attribute, the default is <span class="text-danger">no</span>. Don’t use this attribute for bundles without a clear main product. For example, a gift basket containing cheese and crackers');
        
-        $("#product_data_condition_help").html("Required (For bundles in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)<br>Required for enhanced free listings on Google if you’ve created a bundle containing a main product<br>Optional for all other products and countries of sale<br>Indicates a product is a merchant-defined custom group of different products featuring one main product<br>Example yes<br>Supported values yes, no");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-danger">Required (For bundles in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)</span>. <span class="text-danger">Required</span> for enhanced free listings on Oramla if you’ve created a bundle containing a main product. <span class="text-warning">Optional</span> for all other products and countries of sale. Indicates a product is a merchant-defined custom group of different products featuring one main product. Example <span class="text-danger">yes</span>. Supported values <span class="text-danger">yes</span>, <span class="text-danger">no</span>');
+        i_e = 'i.e <span class="text-danger">yes</span>';
         //var is_bundle = strategy_data;
     } else if (product_condition_strategy == 'energy efficiency class') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Include the legally required energy label<br>To be used in combination with min_energy_​​efficiency_​​class and max_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to G).");
+        $("#condition_strategy_help").html('Include the legally required energy label. To be used in combination with <span class="text-info">min energy ​​efficiency ​​class</span> and <span class="text-info">max energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">G</span>).');
        
-        $("#product_data_condition_help").html("Optional (except when required by local law or regulations) <br>Your product’s energy label<br>Example A+ <br>Supported values A+++, A++, A+, A, B, C, D, E, F, G");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-warning">Optional (except when required by local law or regulations)</span>. Your product’s energy label. Example <span class="text-danger">A+</span>. Supported values <span class="text-danger">A+++</span>, <span class="text-danger">A++</span>, <span class="text-danger">A+</span>, <span class="text-danger">A</span>, <span class="text-danger">B</span>, <span class="text-danger">C</span>, <span class="text-danger">D</span>, <span class="text-danger">E</span>, <span class="text-danger">F</span>, <span class="text-danger">G</span>');
+        i_e = 'i.e <span class="text-danger">A+</span>';
         //var energy_efficiency_class = strategy_data;
     } else if (product_condition_strategy == 'min energy efficiency class') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Include the legally required energy label<br>To be used in combination with energy_​​efficiency_class and max_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to D).");
+        $("#condition_strategy_help").html('Include the legally required energy label. To be used in combination with <span class="text-info">energy ​​efficiency class</span> and <span class="text-info">max energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">D</span>).');
        
-        $("#product_data_condition_help").html("Optional (except when required by local laws or regulations) <br>Available for EU & CH only<br>Your product’s energy label<br>Example A+++ <br>Supported values A+++, A++, A, B, C, D, E, F, G");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-warning">Optional (except when required by local laws or regulations)</span>. Available for EU & CH only. Your product’s energy label. Example <span class="text-danger">A+++</span>. Supported values <span class="text-danger">A+++</span>, <span class="text-danger">A++</span>, <span class="text-danger">A</span>, <span class="text-danger">B</span>, <span class="text-danger">C</span>, <span class="text-danger">D</span>, <span class="text-danger">E</span>, <span class="text-danger">F</span>, <span class="text-danger">G</span>');
+        i_e = 'i.e <span class="text-danger">A+++</span>';
         //var min_energy_efficiency_class = strategy_data;
     } else if (product_condition_strategy == 'max energy efficiency class') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Include the legally required energy label <br>To be used in combination with energy_​​efficiency_​​class and min_energy_efficiency_class to create an energy efficiency label, for example, A+ (A+++ to D).");
+        $("#condition_strategy_help").html('Include the legally required energy label. To be used in combination with <span class="text-info">energy ​​efficiency ​​class</span> and <span class="text-info">min energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">D</span>).');
        
-        $("#product_data_condition_help").html("Optional (except when required by local laws or regulations)<br>Available for EU & CH only<br>Your product’s energy label<br>Example D<br>Supported values A+++, A++, A, B, C, D, E, F, G");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-warning">Optional (except when required by local laws or regulations)</span>. Available for EU & CH only. Your product’s energy label. Example <span class="text-danger">D</span>. Supported values <span class="text-danger">A+++</span>, <span class="text-danger">A++</span>, <span class="text-danger">A</span>, <span class="text-danger">B</span>, <span class="text-danger">C</span>, <span class="text-danger">D</span>, <span class="text-danger">E</span>, <span class="text-danger">F</span>, <span class="text-danger">G</span>');
+        i_e = 'i.e <span class="text-danger">D</span>';
         //var max_energy_efficiency_class = strategy_data;
     } else if (product_condition_strategy == 'age group') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Include one value per product <br>For variants Include with the same value for item_​group_​id and different values for age_​group");
+        $("#condition_strategy_help").html('Include one value per product. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">age ​group</span>');
        
-        $("#product_data_condition_help").html("Required (For all apparel products that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products with assigned age groups)<br>Required for enhanced free listings for all Apparel & Accessories (166) products <br>Optional for all other products and countries of sale<br>The demographic for which your product is intended<br>Example infant<br>Supported values <br>newborn Up to 3 months old <br>infant Between 3-12 months old <br>toddler Between 1-5 years old<br>kids Between 5-13 years old <br>adult Typically teens or older <br>Schema.org property Product.​audience.​suggestedMinAge Product.​audience.​suggestedMaxAge");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-danger">Required (For all apparel products that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products with assigned age groups)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Apparel & Accessories (166) products. <span class="text-warning">Optional</span> for all other products and countries of sale. The demographic for which your product is intended. Example <span class="text-danger">infant</span>. Supported values <span class="text-danger">newborn</span> Up to 3 months old <span class="text-danger">infant</span> Between 3-12 months old <span class="text-danger">toddler</span> Between 1-5 years old <span class="text-danger">kids</span> Between 5-13 years old <span class="text-danger">adult</span> Typically teens or older. Schema.org property <span class="text-info">Product.​audience.​suggestedMinAge Product.​audience.​suggestedMaxAge</span>');
+        i_e = 'i.e <span class="text-danger">infant</span>';
         //var age_group = strategy_data;
     } else if (product_condition_strategy == 'color') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Don’t use a number such as 0 2 4 6 8<br>Don’t use characters that aren’t alphanumeric such as #fff000<br>Don’t use only 1 letter such as R (For Chinese, Japanese, or Korean languages, you can include a single character such as 红)<br>Don’t reference the product or image such as “see image”<br>Don't combine several color names into 1 word, such as RedPinkBlue. Instead, separate them with a /, such as Red/Pink/Blue. Don’t use a value that isn’t a color, such as multicolor, various, variety, men's, women's, or N/A.<br>If your product features multiple colors, list the primary color first.<br>For variants <br>Include with the same value for item_​group_​id and different values for color");
+        $("#condition_strategy_help").html('Don’t use a number such as 0 2 4 6 8. Don’t use characters that aren’t alphanumeric such as #fff000. Don’t use only 1 letter such as R (For Chinese, Japanese, or Korean languages, you can include a single character such as 红). Don’t reference the product or image such as “see image”. Don’t combine several color names into 1 word, such as RedPinkBlue. Instead, separate them with a <span class="text-danger">/</span>, such as <span class="text-danger">Red/Pink/Blue</span>. Don’t use a value that isn’t a color, such as multicolor, various, variety, men’s, women’s, or N/A. If your product features multiple colors, list the primary color first. For variants. Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">color</span>');
        
-        $("#product_data_condition_help").html("Required (For all apparel products in feeds that are targeted to Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different colors)<br>Required for enhanced free listings for all Apparel & Accessories (166) products<br>Optional for all other products and countries of sale<br>Your product’s color(s)<br>Example Black <br>Syntax Max 100 alphanumeric characters (max 40 characters per color) <br>Schema.org property Product.color");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-danger">Required (For all apparel products in feeds that are targeted to Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different colors)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Apparel & Accessories (166) products. <span class="text-warning">Optional</span> for all other products and countries of sale. Your product’s color(s). Example <span class="text-danger">Black</span>. Syntax Max 100 alphanumeric characters (max 40 characters per color). Schema.org property <span class="text-info">Product.color</span>');
+        i_e = 'i.e <span class="text-danger">Black</span>';
         //var color = strategy_data;
     } else if (product_condition_strategy == 'gender') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("For some Apparel & Accessories (166) categories like Shoelaces (1856), this attribute is recommended instead of required since these categories aren't dependent on gender<br>For variants Include with the same value for item_​group_​id and different values for gender");
+        $("#condition_strategy_help").html('For some Apparel & Accessories (166) categories like Shoelaces (1856), this attribute is recommended instead of required since these categories aren’t dependent on gender. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">gender</span>');
        
-        $("#product_data_condition_help").html("Required (Required for all apparel items in feeds that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all gender-specific products)<br>Required for enhanced free listings for all Oramla Apparel & Accessories (166) products <br>Optional for all other products and countries of sale <br>The gender for which your product is intended<br>Example Unisex <br>Supported values male, female, unisex, <br>Schema.org property Product.​audience.​suggested​Gender");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-danger">Required (Required for all apparel items in feeds that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all gender-specific products)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Oramla Apparel & Accessories (166) products. <span class="text-danger">Optional</span> for all other products and countries of sale. The gender for which your product is intended. Example <span class="text-danger">Unisex</span>. Supported values <span class="text-danger">male</span>, <span class="text-danger">female</span>, <span class="text-danger">unisex</span>. Schema.org property <span class="text-info">Product.​audience.​suggested​Gender</span>');
+        i_e = 'i.e <span class="text-danger">Unisex</span>';
         //var gender = strategy_data;
     } else if (product_condition_strategy == 'material') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("To indicate multiple materials for a single product (not variants), add a primary material, followed by up to 2 secondary materials, separated by a /. For example, instead of CottonPolyesterElastane, use cotton/polyester/elastane <br>For variants Include with the same value for item_​group_​id and different values for material");
+        $("#condition_strategy_help").html('To indicate multiple materials for a single product (not variants), add a primary material, followed by up to 2 secondary materials, separated by a <span class="text-danger">/</span>. For example, instead of CottonPolyesterElastane, use <span class="text-danger">cotton/polyester/elastane</span>. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">material</span>');
        
-        $("#product_data_condition_help").html("Required (if relevant for distinguishing different products in a set of variants)<br>Optional for all other products <br>Your product’s fabric or material <br>Example leather <br>Syntax Max 200 characters <br> Schema.org property Product.material");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-danger">Required (if relevant for distinguishing different products in a set of variants)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s fabric or material. Example <span class="text-danger">leather</span>. Syntax Max 200 characters. Schema.org property <span class="text-danger">Product.material</span>');
+        i_e = 'i.e <span class="text-danger">leather</span>';
         //var material = strategy_data;
     } else if (product_condition_strategy == 'pattern') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("For variants Include with the same value for item_​group_​id and different values for pattern");
+        $("#condition_strategy_help").html('For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for pattern');
        
-        $("#product_data_condition_help").html("Required (if relevant for distinguishing different products in a set of variants) <br>Optional for all other products <br>Your product’s pattern or graphic print <br>Example striped, polka dot, paisley <br>Syntax Max 100 characters<br>Schema.org property Product.pattern");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-danger">Required (if relevant for distinguishing different products in a set of variants)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s pattern or graphic print. Example <span class="text-danger">striped</span>, <span class="text-danger">polka dot</span>, <span class="text-danger">paisley</span>. Syntax Max 100 characters. Schema.org property <span class="text-info">Product.pattern</span>');
+        i_e = 'i.e <span class="text-danger">striped</span>';
         //var condition = strategy_data;
     } else if (product_condition_strategy == 'size') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("For variants: Include with the same value for item_​group_​id and different values for size<br>If sizes contain multiple dimensions, condense them into 1 value. For example, '16/34 Tall' for neck size 16 inches, sleeve length 34 inches, and “Tall” fit<br>If your item is one size fits all or one size fits most, you can use one size, OS, one size fits all, OSFA, one size fits most, or OSFM<br>For merchant-defined multipack products, submit the multipack quantity using the multipack attribute. Do not submit the multipack quantity under size.");
+        $("#condition_strategy_help").html('For variants: Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">size</span>. If sizes contain multiple dimensions, condense them into 1 value. For example, <span class="text-danger">"16/34 Tall"</span> for neck size <span class="text-danger">16 inches</span>, sleeve length <span class="text-danger">34 inches</span>, and <span class="text-danger">“Tall” fit</span>. If your item is one size fits all or one size fits most, you can use <span class="text-danger">one size</span>, <span class="text-danger">OS</span>, <span class="text-danger">one size fits all</span>, <span class="text-danger">OSFA</span>, <span class="text-danger">one size fits most</span>, or <span class="text-danger">OSFM</span>. For merchant-defined multipack products, submit the <span class="text-info">multipack</span> quantity using the <span class="text-info">multipack</span> attribute. Do not submit the multipack quantity under size.');
        
-        $("#product_data_condition_help").html("Required (Required for all apparel products in Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) product categories targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different sizes)<br>Required for enhanced free listings for all Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) products.<br>Optional for all other products and countries of sale<br>Your product’s size<br>Example XL<br>Syntax Max 100 characters <br>Schema.org property Product.size");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-danger">Required (Required for all apparel products in Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) product categories targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different sizes)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) products. <span class="text-warning">Optional</span> for all other products and countries of sale. Your product’s size. Example <span class="text-danger">XL</span>. Syntax Max 100 characters. Schema.org property <span class="text-info">Product.size</span>');
+        i_e = 'i.e <span class="text-danger">XL</span>';
         //var size = strategy_data;
     } else if (product_condition_strategy == 'size system') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("If you don't submit the attribute, the default is your country of sale");
+        $("#condition_strategy_help").html('If you don’t submit the attribute, the default is your country of sale');
        
-        $("#product_data_condition_help").html("Optional (Available for apparel products only)<br>The country of the size system used by your product<br>Example US<br>Supported values US, UK, EU, DE, FR, JP, CN (China), IT, BR, MEX, AU, ");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-warning">Optional (Available for apparel products only)</span>. The country of the size system used by your product. Example <span class="text-danger">US</span>. Supported values <span class="text-danger">US</span>, <span class="text-danger">UK</span>, <span class="text-danger">EU</span>, <span class="text-danger">DE</span>, <span class="text-danger">FR</span>, <span class="text-danger">JP</span>, <span class="text-danger">CN (China)</span>, <span class="text-danger">IT</span>, <span class="text-danger">BR</span>, <span class="text-danger">MEX</span>, <span class="text-danger">AU</span>...');
+        i_e = 'i.e <span class="text-danger">US</span>';
         //var size_system = strategy_data;
     } else if (product_condition_strategy == 'item group id') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Use a unique value for each group of variants. Use the parent SKU where possible<br>Keep the value the same when updating your product data<br>Use only valid unicode characters<br>Use an item group ID for a set of products that differ by one or more of these attributes: color, size, pattern, material, age group, gender <br>Include the same attributes for each product in the item group. For example, if a product varies by size and color, submit size and color for every product that share the same value for item_​group_​id <br>If your products differ by design elements that aren't represented by the attributes above, don't use item_​group_​id");
+        $("#condition_strategy_help").html('Use a unique value for each group of variants. Use the parent SKU where possible. Keep the value the same when updating your product data. Use only valid unicode characters. Use an item group ID for a set of products that differ by one or more of these attributes: <span class="text-info">color</span>, <span class="text-info">size</span>, <span class="text-info">pattern</span>, <span class="text-info">material</span>, <span class="text-info">age group</span>, <span class="text-info">gender</span>. Include the same attributes for each product in the item group. For example, if a product varies by size and color, submit size and color for every product that share the same value for <span class="text-info">item ​group ​id</span>. If your products differ by design elements that aren’t represented by the attributes above, don’t use <span class="text-info">item ​group ​id</span>');
        
-        $("#product_data_condition_help").html("Required (Brazil, France, Germany, Japan, the United Kingdom, and the US if the product is a variant)<br>Required for enhanced free listings for all product variants<br>Optional for all other products and countries of sale<br>ID for a group of products that come in different versions (variants)<br>Example AB12345 <br>Syntax Max 50 alphanumeric characters <br>Schema.org property Product.​inProductGroupWithID");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-danger">Required (Tanzania, South Africa, Nigeria, Morocco, the United Kingdom, and Kenya if the product is a variant)</span>. <span class="text-danger">Required</span> for enhanced free listings for all product variants. <span class="text-warning">Optional</span> for all other products and countries of sale. ID for a group of products that come in different versions (variants). Example <span class="text-danger">AB12345</span>. Syntax Max 50 alphanumeric characters. Schema.org property <span class="text-info">Product.​inProductGroupWithID</span>');
+        i_e = 'i.e <span class="text-danger">AB12345</span>';
         //var item_group_id = strategy_data;
     } else if (product_condition_strategy == 'product detail') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Don't add information covered in other attributes, all capital letters, gimmicky foreign characters, promotion text, or list keywords or search terms<br>Don’t add information such as price, sale price, sale dates, shipping, delivery date, other time-related information, or your company’s name<br>Only provide an attribute name and value when the value is confirmed. For example, provide “Vegetarian=False” if a food product is not vegetarian, and not just because False is the default value for Boolean attributes.");
+        $("#condition_strategy_help").html('Don’t add information covered in other attributes, all capital letters, gimmicky foreign characters, promotion text, or list keywords or search terms. Don’t add information such as price, sale price, sale dates, shipping, delivery date, other time-related information, or your company’s name. Only provide an attribute name and value when the value is confirmed. For example, provide <span class="text-primary">“Vegetarian=False”</span> if a food product is not vegetarian, and not just because False is the default value for Boolean attributes.');
        
-        $("#product_data_condition_help").html("Optional Technical specifications or additional details of your product <br>Example General:Product Type:Digital player <br>Syntax product_detail uses 3 sub-attributes: section_name: Max 140 characters attribute_name: Max 140 characters attribute_value: Max 1000 characters");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-warning">Optional</span>. Technical specifications or additional details of your product. Example <span class="text-danger">General:Product</span>, <span class="text-danger">Type:Digital player</span>. Syntax <span class="text-info">product detail</span> uses 3 sub-attributes: <span class="text-danger">section name</span>: Max 140 characters, <span class="text-danger">attribute name</span>: Max 140 characters <span class="text-danger">attribute value</span>: Max 1000 characters');
+        i_e = 'i.e <span class="text-danger">General:Product</span>';
         //var product_detail = strategy_data;
     } else if (product_condition_strategy == 'product highlight') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
-        $("#condition_strategy_help").html("Use between 2 and 10 product highlights <br>Describe only the product itself. Don't list keywords or search terms .Don’t include promotional text, all capital letters, or gimmicky foreign characters");
+        $("#condition_strategy_help").html('Use between 2 and 10 product highlights. Describe only the product itself. Don’t list keywords or search terms .Don’t include promotional text, all capital letters, or gimmicky foreign characters');
        
-        $("#product_data_condition_help").html("Optional The most relevant highlights of your products <br>Example Supports thousands of apps, including Netflix, YouTube, and HBO Max <br>Syntax Max 150 characters");
-        //$("#product_condition_help").html(strategy_data);
+        $("#product_data_condition_help").html('<span class="text-warning">Optional</span>. The most relevant highlights of your products. Example <span class="text-danger">Supports thousands of apps</span>, <span class="text-danger">including Netflix</span>, <span class="text-danger">YouTube</span>, and <span class="text-danger">HBO Max</span>. Syntax Max 150 characters');
+        i_e = 'i.e <span class="text-danger">Supports thousands of apps</span>';
         //var product_highlight = strategy_data;
     }
     
@@ -3371,7 +3601,7 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_condition").addClass("is-valid"); 
         condition_strategy_data($("#product_condition").val());       
     } else {
-        $("#product_condition_help").html("Input " + product_condition_strategy + "");
+        $("#product_condition_help").html("Input " + product_condition_strategy + " " + i_e);
         $("#product_condition").removeClass("is-valid");
         $("#product_condition").addClass("is-invalid");
     }    
@@ -3393,14 +3623,14 @@ function product_condition(e) {
 
 
 
-var excluded_destination = '';// Optional <br>A setting that you can use to exclude a product from participating in a specific type of advertising campaign
-                   // Example <br> Shopping ads <br>Supported values <br>Shopping ads <br>Buy on Oramla  Display ads <br>Local inventory ads <br>Free listings <br>Free local listings
+var excluded_destination = '';// <span class="text-warning">Optional</span>. A setting that you can use to exclude a product from participating in a specific type of advertising campaign
+                   // Example <span class="text-danger">Shopping ads</span>. Supported values <span class="text-danger">Shopping ads</span>, <span class="text-danger">Buy on Oramla  Display ads</span>, <span class="text-danger">Local inventory ads</span>, <span class="text-danger">Free listings</span>, <span class="text-danger">Free local listings</span>
 
-var included_destination = '';// Optional<br>A setting that you can use to include a product in a specific type of advertising campaign
-                              // Example<br>Shopping ads<br>Supported values<br>Shopping ads<br>Buy on Oramla listings<br>Display ads<br>Local inventory ads<br>Free listings<br>Free local listings
+var included_destination = '';// <span class="text-warning">Optional</span>. A setting that you can use to include a product in a specific type of advertising campaign
+                              // Example <span class="text-danger">Shopping ads</span>. Supported values <span class="text-danger">Shopping ads</span>, <span class="text-danger">Buy on Oramla listings</span>, <span class="text-danger">Display ads</span>, <span class="text-danger">Local inventory ads</span>, <span class="text-danger">Free listings</span>, <span class="text-danger">Free local listings</span>
                               
-var shopping_ads_excluded_country = '';// Optional<br>A setting that allows you to exclude countries where your products are advertised on Shopping ads.<br>Only available for Shopping ads  
-                                       // Example<br>DE<br>Syntax<br>2 characters. Must be an ISO_3166-1_alpha-2 country code.  
+var shopping_ads_excluded_country = '';// <span class="text-warning">Optional</span>. A setting that allows you to exclude countries where your products are advertised on Shopping ads. Only available for <span class="text-primary">Shopping ads</span>  
+                                       // Example <span class="text-danger">DE</span>. Syntax 2 characters. Must be an ISO_3166-1_alpha-2 country code.  
                                     
 
 var product_destinations_strategy = 'excluded_​​destination';
@@ -3408,23 +3638,23 @@ function destinations_strategy_data(strategy_data) {
     //alert(product_destinations_strategy);
     if (product_destinations_strategy == 'excluded destination') {
         $("#product_data_destinations_title").html(product_destinations_strategy + ":");
-        $("#destinations_strategy_help").html("Optional <br>A setting that you can use to exclude a product from participating in a specific type of advertising campaign");
+        $("#destinations_strategy_help").html('<span class="text-warning">Optional</span>. A setting that you can use to exclude a product from participating in a specific type of advertising campaign');
        
-        $("#product_data_destinations_help").html("Example <br> Shopping ads <br>Supported values <br>Shopping ads <br>Buy on Oramla  Display ads <br>Local inventory ads <br>Free listings <br>Free local listings");
+        $("#product_data_destinations_help").html('Example <span class="text-danger">Shopping ads</span>. Supported values <span class="text-danger">Shopping ads</span>, <span class="text-danger">Buy on Oramla  Display ads</span>, <span class="text-danger">Local inventory ads</span>, <span class="text-danger">Free listings</span>, <span class="text-danger">Free local listings</span>');
         $("#product_destinations_help").html(strategy_data);
         excluded_destination = strategy_data;
     } else if (product_destinations_strategy == 'included destination') {
         $("#product_data_destinations_title").html(product_destinations_strategy + ":");
-        $("#destinations_strategy_help").html("Optional<br>A setting that you can use to include a product in a specific type of advertising campaign");
+        $("#destinations_strategy_help").html(' <span class="text-warning">Optional</span>. A setting that you can use to include a product in a specific type of advertising campaign');
        
-        $("#product_data_destinations_help").html("Example<br>Shopping ads<br>Supported values<br>Shopping ads<br>Buy on Google listings<br>Display ads<br>Local inventory ads<br>Free listings<br>Free local listings");
+        $("#product_data_destinations_help").html('Example <span class="text-danger">Shopping ads</span>. Supported values <span class="text-danger">Shopping ads</span>, <span class="text-danger">Buy on Oramla listings</span>, <span class="text-danger">Display ads</span>, <span class="text-danger">Local inventory ads</span>, <span class="text-danger">Free listings</span>, <span class="text-danger">Free local listings</span>');
         $("#product_destinations_help").html(strategy_data);
         included_destination = strategy_data;
     } else if (product_destinations_strategy == 'shopping ads excluded country') {
         $("#product_data_destinations_title").html(product_destinations_strategy + ":");
-        $("#destinations_strategy_help").html("Optional<br>A setting that allows you to exclude countries where your products are advertised on Shopping ads.<br>Only available for Shopping ads");
+        $("#destinations_strategy_help").html('<span class="text-warning">Optional</span>. A setting that allows you to exclude countries where your products are advertised on Shopping ads. Only available for <span class="text-primary">Shopping ads</span>');
        
-        $("#product_data_destinations_help").html("Example<br>DE<br>Syntax<br>2 characters. Must be an ISO_3166-1_alpha-2 country code.");
+        $("#product_data_destinations_help").html('Example <span class="text-danger">DE</span>. Syntax 2 characters. Must be an ISO_3166-1_alpha-2 country code.');
         $("#product_destinations_help").html(strategy_data);
         shopping_ads_excluded_country = strategy_data;
     } 
@@ -3433,26 +3663,28 @@ function destinations_strategy_data(strategy_data) {
 const destinations_strategy = document.querySelector('#destinations_strategy');
 destinations_strategy.addEventListener('change', (event) => {
     product_destinations_strategy = event.target.value;
+    var i_e = '';
+
     if (product_destinations_strategy == 'excluded destination') {
         $("#product_data_destinations_title").html(product_destinations_strategy + ":");
-        $("#destinations_strategy_help").html("Optional <br>A setting that you can use to exclude a product from participating in a specific type of advertising campaign");
+        $("#destinations_strategy_help").html('<span class="text-warning">Optional</span>. A setting that you can use to exclude a product from participating in a specific type of advertising campaign');
        
-        $("#product_data_destinations_help").html("Example <br> Shopping ads <br>Supported values <br>Shopping ads <br>Buy on Oramla  Display ads <br>Local inventory ads <br>Free listings <br>Free local listings");
-        //$("#product_destinations_help").html(strategy_data);
+        $("#product_data_destinations_help").html('Example <span class="text-danger">Shopping ads</span>. Supported values <span class="text-danger">Shopping ads</span>, <span class="text-danger">Buy on Oramla  Display ads</span>, <span class="text-danger">Local inventory ads</span>, <span class="text-danger">Free listings</span>, <span class="text-danger">Free local listings</span>');
+        i_e = 'i.e <span class="text-danger">Shopping ads</span>';
         //var excluded_destination = strategy_data;
     } else if (product_destinations_strategy == 'included destination') {
         $("#product_data_destinations_title").html(product_destinations_strategy + ":");
-        $("#destinations_strategy_help").html("Optional<br>A setting that you can use to include a product in a specific type of advertising campaign");
+        $("#destinations_strategy_help").html(' <span class="text-warning">Optional</span>. A setting that you can use to include a product in a specific type of advertising campaign');
        
-        $("#product_data_destinations_help").html("Example<br>Shopping ads<br>Supported values<br>Shopping ads<br>Buy on Oramla listings<br>Display ads<br>Local inventory ads<br>Free listings<br>Free local listings");
-        //$("#product_destinations_help").html(strategy_data);
+        $("#product_data_destinations_help").html('Example <span class="text-danger">Shopping ads</span>. Supported values <span class="text-danger">Shopping ads</span>, <span class="text-danger">Buy on Oramla listings</span>, <span class="text-danger">Display ads</span>, <span class="text-danger">Local inventory ads</span>, <span class="text-danger">Free listings</span>, <span class="text-danger">Free local listings</span>');
+        i_e = 'i.e <span class="text-danger">Shopping ads</span>';
         //var included_destination = strategy_data;
     } else if (product_destinations_strategy == 'shopping ads excluded country') {
         $("#product_data_destinations_title").html(product_destinations_strategy + ":");
-        $("#destinations_strategy_help").html("Optional<br>A setting that allows you to exclude countries where your products are advertised on Shopping ads.<br>Only available for Shopping ads");
+        $("#destinations_strategy_help").html('<span class="text-warning">Optional</span>. A setting that allows you to exclude countries where your products are advertised on Shopping ads. Only available for <span class="text-primary">Shopping ads</span>');
        
-        $("#product_data_destinations_help").html("Example<br>DE<br>Syntax<br>2 characters. Must be an ISO_3166-1_alpha-2 country code.");
-        //$("#product_destinations_help").html(strategy_data);
+        $("#product_data_destinations_help").html('Example <span class="text-danger">DE</span>. Syntax 2 characters. Must be an ISO_3166-1_alpha-2 country code.');
+        i_e = 'i.e <span class="text-danger">DE</span>';
         //var shopping_ads_excluded_country = strategy_data;
     }
     //alert($("#product_destinations").val());
@@ -3462,7 +3694,7 @@ destinations_strategy.addEventListener('change', (event) => {
         $("#product_destinations").addClass("is-valid"); 
         destinations_strategy_data($("#product_destinations").val());       
     } else {
-        $("#product_destinations_help").html("Input " + product_destinations_strategy + "");
+        $("#product_destinations_help").html("Input " + product_destinations_strategy + " " + i_e);
         $("#product_destinations").removeClass("is-valid");
         $("#product_destinations").addClass("is-invalid");
     }    
@@ -3485,108 +3717,108 @@ function product_destinations(e) {
 
 
 
-var shipping = '';// Shipping costs are required for enhanced free listings for all products in all countries of sale <br> Use this setting to override the Merchant Center account shipping settings for an individual product or to specify shipping cost, speed, or additional countries your product ships to.
-                  // Your product's shipping cost, shipping speeds, and the locations your product ships to.<br>Supported prices <br>0–1000 USD (check for other currencies)<br>Example US:CA:Overnight:16.00 USD:1:1:2:3 <br> Syntax <br>shipping uses the following sub-attributes: <br>country (required) ISO 3166 country code <br>region or postal_​code or location_​id or location_group_name (optional) <br>service (optional) <br>Service class or shipping speed<br>price (optional) <br>Fixed shipping cost, including VAT if required <br>min_handling_time (optional) and max_handling_time (optional) to specify handling time<br>min_transit_time (optional) and max_transit_time (optional) to specify transit time
+var shipping = '';// Shipping costs are required for enhanced free listings for all products in all countries of sale. Use this setting to override the Merchant Center account shipping settings for an individual product or to specify shipping cost, speed, or additional countries your product ships to.
+                  // Your product’s shipping cost, shipping speeds, and the locations your product ships to. Supported prices <span class="text-danger">0–1000</span> USD (check for other currencies). Example <span class="text-danger">US:CA:Overnight:16.00 USD:1:1:2:3</span>. Syntax shipping uses the following sub-attributes: <span class="text-danger">country (required)</span> ISO 3166 country code, <span class="text-warning">region</span> or <span class="text-warning">postal ​code</span> or <span class="text-warning">location ​id</span> or <span class="text-warning">location group name (optional)</span>, <span class="text-warning">service (optional)</span>, <span class="text-warning">Service class</span> or <span class="text-warning">shipping speed</span>, <span class="text-warning">price (optional)</span>, <span class="text-primary">Fixed shipping cost</span>, including VAT if required, <span class="text-info">min handling time</span> (optional) and <span class="text-info">max handling time</span> (optional) to specify handling time, <span class="text-info">min transit time</span> (optional) and <span class="text-info">max transit time</span> (optional) to specify transit time
 
-var shipping_label = '';// Use a value that you'll recognize in your account shipping settings. The value won't be shown to users. Examples:<br>Sameday, Oversize, Only FedEx\
-                        // Optional<br>Label that you assign to a product to help assign correct shipping costs in Merchant Center account settings<br>Example perishable <br>Syntax Max 100 characters
+var shipping_label = '';// Use a value that you’ll recognize in your account shipping settings. The value won’t be shown to users. Examples: <span class="text-danger">Sameday</span>, <span class="text-danger">Oversize</span>, <span class="text-danger">Only FedEx</span>
+                        // <span class="text-warning">Optional</span>. Label that you assign to a product to help assign correct shipping costs in Merchant Center account settings. Example <span class="text-danger">perishable</span>. Syntax Max 100 characters
 
 var shipping_weight = '';// Submit this value if you set up account shipping settings for carrier-calculated rates or weight-based shipping services
-                         // Optional (Required for carrier-calculated rates, a table based on weight, or a rule based on weight in your account shipping settings)<br>The weight of the product used to calculate the shipping cost<br>Supported weights 0–2000 lbs for imperial, 0–1000 kgs for metric <br>Example 3 kg <br>Syntax Number + unit <br>Supported units lb, oz, g, kg,
+                         // <span class="text-warning">Optional (Required for carrier-calculated rates, a table based on weight, or a rule based on weight in your account shipping settings)</span>. The weight of the product used to calculate the shipping cost. Supported <span class="text-info">weights</span> <span class="text-danger">0–2000</span> lbs for imperial, <span class="text-danger">0–1000</span> kgs for metric. Example <span class="text-danger">3 kg</span>. Syntax Number + unit. Supported units <span class="text-danger">lb</span>, <span class="text-danger">oz</span>, <span class="text-danger">g</span>, <span class="text-danger">kg</span>,
                          
-var shipping_length = '';// Submit this value if you set up account shipping settings for carrier-calculated rates<br>If you don't provide shipping dimension attributes while using carrier-calculated rates, we won't be able to calculate rates based on the dimensional weight of the item. If that's the case, we'll just calculate the rates based on the value you provided in shipping_​weight<br>If you submit this attribute, submit all shipping dimension attributes: shipping_​length, shipping_​width, shipping_​height<br>Use the same unit for all shipping dimension attributes that apply to a single product<br>Keep in mind that Oramla doesn't automatically calculate additional shipping cost for oversized items. If your package would be considered large or oversized by your carrier, you should either use the shipping attribute to set shipping cost for an individual product or use the shipping_​label attribute with account shipping settings to set the cost
-                         // Optional (Required for carrier-calculated rates in your account shipping settings)<br>The length of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm
+var shipping_length = '';// Submit this value if you set up account shipping settings for carrier-calculated rates. If you don’t provide shipping dimension attributes while using carrier-calculated rates, we won’t be able to calculate rates based on the dimensional weight of the item. If that’s the case, we’ll just calculate the rates based on the value you provided in <span class="text-info">shipping ​weight</span>. If you submit this attribute, submit all shipping dimension attributes: <span class="text-info">shipping ​length</span>, <span class="text-info">shipping ​width</span>, <span class="text-info">shipping ​height</span>. Use the same unit for all shipping dimension attributes that apply to a single product. Keep in mind that Oramla doesn’t automatically calculate additional shipping cost for oversized items. If your package would be considered large or oversized by your carrier, you should either use the shipping attribute to set shipping cost for an individual product or use the <span class="text-info">shipping ​label</span> attribute with account shipping settings to set the cost
+                         // <span class="text-warning">Optional (Required for carrier-calculated rates in your account shipping settings)</span>. The length of the product used to calculate the shipping cost by dimensional weight. Example <span class="text-danger">20 in</span>. Syntax Number + unit. Supported values <span class="text-danger">1 - 150</span> for inches, <span class="text-danger">1 - 400</span> for cm. Supported units <span class="text-danger">in</span>, <span class="text-danger">cm</span>
 
-var shipping_width = '';// Meet the requirements for the shipping_​length attribute
-                        // Optional (Required for carrier-calculated rates in your account shipping settings)<br>The width of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm
+var shipping_width = '';// Meet the requirements for the <span class="text-info">shipping ​length</span> attribute
+                        // <span class="text-warning">Optional (Required for carrier-calculated rates in your account shipping settings)</span>. The width of the product used to calculate the shipping cost by dimensional weight. Example <span class="text-danger">20 in</span>. Syntax Number + unit. Supported values <span class="text-danger">1 - 150</span> for inches, <span class="text-danger">1 - 400</span> for cm. Supported units <span class="text-danger">in</span>, <span class="text-danger">cm</span>
 
-var shipping_height = '';// Meet the requirements for the shipping_​length attribute
-                         // Optional (Required for carrier-calculated rates in your account shipping settings)<br>The height of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm
+var shipping_height = '';// Meet the requirements for the <span class="text-info">shipping ​length</span> attribute
+                         // <span class="text-warning">Optional</span> (Required for carrier-calculated rates in your account shipping settings). The height of the product used to calculate the shipping cost by dimensional weight. Example <span class="text-danger">20 in</span>. Syntax Number + unit. Supported values <span class="text-danger">1 - 150</span> for inches, <span class="text-danger">1 - 400</span> for cm. Supported units <span class="text-danger">in</span>, <span class="text-danger">cm</span>
                          
 var ships_from_country = '';// Provide only the country from which you typically ship this product
-                            // Optional <br>A setting that allows you to provide the country from which your product will typically ship.<br>Example DE <br>2 characters. Must be an ISO_3166-1_alpha-2 country code
+                            // <span class="text-warning">Optional</span>. A setting that allows you to provide the country from which your product will typically ship. Example <span class="text-danger">DE</span>. 2 characters. Must be an ISO_3166-1_alpha-2 country code
 
-var transit_time_label = '';// Use a value that you'll recognize in your account shipping settings. The value won't be shown to users. <br>Examples: Dog food, From Seattle, Heavy package
-                            // Optional <br>Label that you assign to a product to help assign different transit times in Merchant Center account settings.<br>Example From Seattle <br>Syntax Max 100 characters
+var transit_time_label = '';// Use a value that you’ll recognize in your account shipping settings. The value won’t be shown to users. Examples: <span class="text-danger">Dog food</span>, <span class="text-danger">From Seattle</span>, <span class="text-danger">Heavy package</span>
+                            // <span class="text-warning">Optional</span>. Label that you assign to a product to help assign different transit times in Merchant Center account settings. Example <span class="text-danger">From Seattle</span>. Syntax Max 100 characters
 
-var max_handling_time = '';// Submit this attribute if you want to display the overall time it takes for a product to arrive at its destination <br>Submit the number of business days (as configured in Merchant Center) <br>For products ready to be shipped the same day, submit 0.<br>For submitting a time range submit max_handling_time in combination with min_handling_time.
-                           // Optional <br>The longest amount of time between when an order is placed for a product and when the product ships.<br>Example 3 <br>Syntax Integer, greater than or equal to 0
+var max_handling_time = '';// Submit this attribute if you want to display the overall time it takes for a product to arrive at its destination. Submit the number of business days (as configured in Merchant Center). For products ready to be shipped the <span class="text-primary">same day</span>, submit <span class="text-danger">0</span>. For submitting a time range submit <span class="text-info">max handling time</span> in combination with <span class="text-info">min handling time</span>.
+                           // <span class="text-warning">Optional</span>. The longest amount of time between when an order is placed for a product and when the product ships. Example <span class="text-danger">3</span>. Syntax Integer, greater than or equal to <span class="text-danger">0</span>
 
-var min_handling_time = '';// Meet the requirements for the max_handling_time attribute
-                           // Optional <br>The shortest amount of time between when an order is placed for a product and when the product ships.<br>Example 1<br>Syntax Integer, greater than or equal to 0
-
+var min_handling_time = '';// Meet the requirements for the <span class="text-info">max handling time</span> attribute
+                           // <span class="text-warning">Optional</span>. The shortest amount of time between when an order is placed for a product and when the product ships. Example <span class="text-danger">1</span>. Syntax Integer, greater than or equal to <span class="text-danger">0</span>
+ 
 
 
 var product_shipping_strategy = 'shipping';
 function shipping_strategy_data(strategy_data) {
     if (product_shipping_strategy == 'shipping') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Shipping costs are required for enhanced free listings for all products in all countries of sale <br> Use this setting to override the Merchant Center account shipping settings for an individual product or to specify shipping cost, speed, or additional countries your product ships to.");
+        $("#shipping_strategy_help").html('Shipping costs are required for enhanced free listings for all products in all countries of sale. Use this setting to override the Merchant Center account shipping settings for an individual product or to specify shipping cost, speed, or additional countries your product ships to.');
        
-        $("#product_data_shipping_help").html("Your product's shipping cost, shipping speeds, and the locations your product ships to.<br>Supported prices <br>0–1000 USD (check for other currencies)<br>Example US:CA:Overnight:16.00 USD:1:1:2:3 <br> Syntax <br>shipping uses the following sub-attributes: <br>country (required) ISO 3166 country code <br>region or postal_​code or location_​id or location_group_name (optional) <br>service (optional) <br>Service class or shipping speed<br>price (optional) <br>Fixed shipping cost, including VAT if required <br>min_handling_time (optional) and max_handling_time (optional) to specify handling time<br>min_transit_time (optional) and max_transit_time (optional) to specify transit time");
+        $("#product_data_shipping_help").html('Your product’s shipping cost, shipping speeds, and the locations your product ships to. Supported prices <span class="text-danger">0–1000</span> USD (check for other currencies). Example <span class="text-danger">US:CA:Overnight:16.00 USD:1:1:2:3</span>. Syntax shipping uses the following sub-attributes: <span class="text-danger">country (required)</span> ISO 3166 country code, <span class="text-warning">region</span> or <span class="text-warning">postal ​code</span> or <span class="text-warning">location ​id</span> or <span class="text-warning">location group name (optional)</span>, <span class="text-warning">service (optional)</span>, <span class="text-warning">Service class</span> or <span class="text-warning">shipping speed</span>, <span class="text-warning">price (optional)</span>, <span class="text-primary">Fixed shipping cost</span>, including VAT if required, <span class="text-info">min handling time</span> (optional) and <span class="text-info">max handling time</span> (optional) to specify handling time, <span class="text-info">min transit time</span> (optional) and <span class="text-info">max transit time</span> (optional) to specify transit time');
         $("#product_shipping_help").html(strategy_data);
         shipping = strategy_data;
     } else if (product_shipping_strategy == 'shipping label') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Use a value that you'll recognize in your account shipping settings. The value won't be shown to users. Examples:<br>Sameday, Oversize, Only FedEx");
+        $("#shipping_strategy_help").html('Use a value that you’ll recognize in your account shipping settings. The value won’t be shown to users. Examples: <span class="text-danger">Sameday</span>, <span class="text-danger">Oversize</span>, <span class="text-danger">Only FedEx</span>');
        
-        $("#product_data_shipping_help").html("Optional<br>Label that you assign to a product to help assign correct shipping costs in Merchant Center account settings<br>Example perishable <br>Syntax Max 100 characters");
+        $("#product_data_shipping_help").html(' <span class="text-warning">Optional</span>. Label that you assign to a product to help assign correct shipping costs in Merchant Center account settings. Example <span class="text-danger">perishable</span>. Syntax Max 100 characters');
         $("#product_shipping_help").html(strategy_data);
         shipping_label = strategy_data;
     } else if (product_shipping_strategy == 'shipping weight') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Submit this value if you set up account shipping settings for carrier-calculated rates or weight-based shipping services");
+        $("#shipping_strategy_help").html('Submit this value if you set up account shipping settings for carrier-calculated rates or weight-based shipping services');
        
-        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates, a table based on weight, or a rule based on weight in your account shipping settings)<br>The weight of the product used to calculate the shipping cost<br>Supported weights 0–2000 lbs for imperial, 0–1000 kgs for metric <br>Example 3 kg <br>Syntax Number + unit <br>Supported units lb, oz, g, kg");
+        $("#product_data_shipping_help").html('<span class="text-warning">Optional (Required for carrier-calculated rates, a table based on weight, or a rule based on weight in your account shipping settings)</span>. The weight of the product used to calculate the shipping cost. Supported <span class="text-info">weights</span> <span class="text-danger">0–2000</span> lbs for imperial, <span class="text-danger">0–1000</span> kgs for metric. Example <span class="text-danger">3 kg</span>. Syntax Number + unit. Supported units <span class="text-danger">lb</span>, <span class="text-danger">oz</span>, <span class="text-danger">g</span>, <span class="text-danger">kg</span>');
         $("#product_shipping_help").html(strategy_data);
         shipping_weight = strategy_data;
     } else if (product_shipping_strategy == 'shipping length') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Submit this value if you set up account shipping settings for carrier-calculated rates<br>If you don't provide shipping dimension attributes while using carrier-calculated rates, we won't be able to calculate rates based on the dimensional weight of the item. If that's the case, we'll just calculate the rates based on the value you provided in shipping_​weight<br>If you submit this attribute, submit all shipping dimension attributes: shipping_​length, shipping_​width, shipping_​height<br>Use the same unit for all shipping dimension attributes that apply to a single product<br>Keep in mind that Oramla doesn't automatically calculate additional shipping cost for oversized items. If your package would be considered large or oversized by your carrier, you should either use the shipping attribute to set shipping cost for an individual product or use the shipping_​label attribute with account shipping settings to set the cost");
+        $("#shipping_strategy_help").html('Submit this value if you set up account shipping settings for carrier-calculated rates. If you don’t provide shipping dimension attributes while using carrier-calculated rates, we won’t be able to calculate rates based on the dimensional weight of the item. If that’s the case, we’ll just calculate the rates based on the value you provided in <span class="text-info">shipping ​weight</span>. If you submit this attribute, submit all shipping dimension attributes: <span class="text-info">shipping ​length</span>, <span class="text-info">shipping ​width</span>, <span class="text-info">shipping ​height</span>. Use the same unit for all shipping dimension attributes that apply to a single product. Keep in mind that Oramla doesn’t automatically calculate additional shipping cost for oversized items. If your package would be considered large or oversized by your carrier, you should either use the shipping attribute to set shipping cost for an individual product or use the <span class="text-info">shipping ​label</span> attribute with account shipping settings to set the cost');
        
-        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates in your account shipping settings)<br>The length of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm");
+        $("#product_data_shipping_help").html(' <span class="text-warning">Optional (Required for carrier-calculated rates in your account shipping settings)</span>. The length of the product used to calculate the shipping cost by dimensional weight. Example <span class="text-danger">20 in</span>. Syntax Number + unit. Supported values <span class="text-danger">1 - 150</span> for inches, <span class="text-danger">1 - 400</span> for cm. Supported units <span class="text-danger">in</span>, <span class="text-danger">cm</span>');
         $("#product_shipping_help").html(strategy_data);
         shipping_length = strategy_data;
     } else if (product_shipping_strategy == 'shipping width') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Meet the requirements for the shipping_​length attribute");
+        $("#shipping_strategy_help").html('Meet the requirements for the <span class="text-info">shipping ​length</span> attribute');
        
-        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates in your account shipping settings)<br>The width of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm");
+        $("#product_data_shipping_help").html('<span class="text-warning">Optional (Required for carrier-calculated rates in your account shipping settings)</span>. The width of the product used to calculate the shipping cost by dimensional weight. Example <span class="text-danger">20 in</span>. Syntax Number + unit. Supported values <span class="text-danger">1 - 150</span> for inches, <span class="text-danger">1 - 400</span> for cm. Supported units <span class="text-danger">in</span>, <span class="text-danger">cm</span>');
         $("#product_shipping_help").html(strategy_data);
         shipping_width = strategy_data;
     } else if (product_shipping_strategy == 'shipping height') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Meet the requirements for the shipping_​length attribute");
+        $("#shipping_strategy_help").html('Meet the requirements for the <span class="text-info">shipping ​length</span> attribute');
        
-        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates in your account shipping settings)<br>The height of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm");
+        $("#product_data_shipping_help").html('<span class="text-warning">Optional</span> (Required for carrier-calculated rates in your account shipping settings). The height of the product used to calculate the shipping cost by dimensional weight. Example <span class="text-danger">20 in</span>. Syntax Number + unit. Supported values <span class="text-danger">1 - 150</span> for inches, <span class="text-danger">1 - 400</span> for cm. Supported units <span class="text-danger">in</span>, <span class="text-danger">cm</span>');
         $("#product_shipping_help").html(strategy_data);
         shipping_height = strategy_data;
     } else if (product_shipping_strategy == 'ships from country') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Provide only the country from which you typically ship this product");
+        $("#shipping_strategy_help").html('Provide only the country from which you typically ship this product');
        
-        $("#product_data_shipping_help").html("Optional <br>A setting that allows you to provide the country from which your product will typically ship.<br>Example DE <br>2 characters. Must be an ISO_3166-1_alpha-2 country code");
+        $("#product_data_shipping_help").html('<span class="text-warning">Optional</span>. A setting that allows you to provide the country from which your product will typically ship. Example <span class="text-danger">DE</span>. 2 characters. Must be an ISO_3166-1_alpha-2 country code');
         $("#product_shipping_help").html(strategy_data);
         ships_from_country = strategy_data;
     } else if (product_shipping_strategy == 'transit time label') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Use a value that you'll recognize in your account shipping settings. The value won't be shown to users. <br>Examples: Dog food, From Seattle, Heavy package");
+        $("#shipping_strategy_help").html('Use a value that you’ll recognize in your account shipping settings. The value won’t be shown to users. Examples: <span class="text-danger">Dog food</span>, <span class="text-danger">From Seattle</span>, <span class="text-danger">Heavy package</span>');
        
-        $("#product_data_shipping_help").html("Optional <br>Label that you assign to a product to help assign different transit times in Merchant Center account settings.<br>Example From Seattle <br>Syntax Max 100 characters");
+        $("#product_data_shipping_help").html(' <span class="text-warning">Optional</span>. Label that you assign to a product to help assign different transit times in Merchant Center account settings. Example <span class="text-danger">From Seattle</span>. Syntax Max 100 characters');
         $("#product_shipping_help").html(strategy_data);
         transit_time_label = strategy_data;
     } else if (product_shipping_strategy == 'max handling time') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Submit this attribute if you want to display the overall time it takes for a product to arrive at its destination <br>Submit the number of business days (as configured in Merchant Center) <br>For products ready to be shipped the same day, submit 0.<br>For submitting a time range submit max_handling_time in combination with min_handling_time.");
+        $("#shipping_strategy_help").html('Submit this attribute if you want to display the overall time it takes for a product to arrive at its destination. Submit the number of business days (as configured in Merchant Center). For products ready to be shipped the <span class="text-primary">same day</span>, submit <span class="text-danger">0</span>. For submitting a time range submit <span class="text-info">max handling time</span> in combination with <span class="text-info">min handling time</span>.');
        
-        $("#product_data_shipping_help").html("Optional <br>The longest amount of time between when an order is placed for a product and when the product ships.<br>Example 3 <br>Syntax Integer, greater than or equal to 0");
+        $("#product_data_shipping_help").html('<span class="text-warning">Optional</span>. The longest amount of time between when an order is placed for a product and when the product ships. Example <span class="text-danger">3</span>. Syntax Integer, greater than or equal to <span class="text-danger">0</span>');
         $("#product_shipping_help").html(strategy_data);
         max_handling_time = strategy_data;
     } else if (product_shipping_strategy == 'min handling time') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Meet the requirements for the max_handling_time attribute");
+        $("#shipping_strategy_help").html('Meet the requirements for the <span class="text-info">max handling time</span> attribute');
        
-        $("#product_data_shipping_help").html("Optional <br>The shortest amount of time between when an order is placed for a product and when the product ships.<br>Example 1<br>Syntax Integer, greater than or equal to 0");
+        $("#product_data_shipping_help").html('<span class="text-warning">Optional</span>. The shortest amount of time between when an order is placed for a product and when the product ships. Example <span class="text-danger">1</span>. Syntax Integer, greater than or equal to <span class="text-danger">0</span>');
         $("#product_shipping_help").html(strategy_data);
         min_handling_time = strategy_data;
     } 
@@ -3595,75 +3827,77 @@ function shipping_strategy_data(strategy_data) {
 const shipping_strategy = document.querySelector('#shipping_strategy');
 shipping_strategy.addEventListener('change', (event) => {
     product_shipping_strategy = event.target.value;
+    var i_e = '';
+
     if (product_shipping_strategy == 'shipping') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Shipping costs are required for enhanced free listings for all products in all countries of sale <br> Use this setting to override the Merchant Center account shipping settings for an individual product or to specify shipping cost, speed, or additional countries your product ships to.");
+        $("#shipping_strategy_help").html('Shipping costs are required for enhanced free listings for all products in all countries of sale. Use this setting to override the Merchant Center account shipping settings for an individual product or to specify shipping cost, speed, or additional countries your product ships to.');
        
-        $("#product_data_shipping_help").html("Your product's shipping cost, shipping speeds, and the locations your product ships to.<br>Supported prices <br>0–1000 USD (check for other currencies)<br>Example US:CA:Overnight:16.00 USD:1:1:2:3 <br> Syntax <br>shipping uses the following sub-attributes: <br>country (required) ISO 3166 country code <br>region or postal_​code or location_​id or location_group_name (optional) <br>service (optional) <br>Service class or shipping speed<br>price (optional) <br>Fixed shipping cost, including VAT if required <br>min_handling_time (optional) and max_handling_time (optional) to specify handling time<br>min_transit_time (optional) and max_transit_time (optional) to specify transit time");
-        //$("#product_destinations_help").html(strategy_data);
+        $("#product_data_shipping_help").html('Your product’s shipping cost, shipping speeds, and the locations your product ships to. Supported prices <span class="text-danger">0–1000</span> USD (check for other currencies). Example <span class="text-danger">US:CA:Overnight:16.00 USD:1:1:2:3</span>. Syntax shipping uses the following sub-attributes: <span class="text-danger">country (required)</span> ISO 3166 country code, <span class="text-warning">region</span> or <span class="text-warning">postal ​code</span> or <span class="text-warning">location ​id</span> or <span class="text-warning">location group name (optional)</span>, <span class="text-warning">service (optional)</span>, <span class="text-warning">Service class</span> or <span class="text-warning">shipping speed</span>, <span class="text-warning">price (optional)</span>, <span class="text-primary">Fixed shipping cost</span>, including VAT if required, <span class="text-info">min handling time</span> (optional) and <span class="text-info">max handling time</span> (optional) to specify handling time, <span class="text-info">min transit time</span> (optional) and <span class="text-info">max transit time</span> (optional) to specify transit time');
+        i_e = 'i.e <span class="text-danger">US:CA:Overnight:16.00 USD:1:1:2:3</span>';
         //var excluded_destination = strategy_data;
     } else if (product_shipping_strategy == 'shipping label') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Use a value that you'll recognize in your account shipping settings. The value won't be shown to users. Examples:<br>Sameday, Oversize, Only FedEx");
+        $("#shipping_strategy_help").html('Use a value that you’ll recognize in your account shipping settings. The value won’t be shown to users. Examples: <span class="text-danger">Sameday</span>, <span class="text-danger">Oversize</span>, <span class="text-danger">Only FedEx</span>');
        
-        $("#product_data_shipping_help").html("Optional<br>Label that you assign to a product to help assign correct shipping costs in Merchant Center account settings<br>Example perishable <br>Syntax Max 100 characters");
-        //$("#product_shipping_help").html(strategy_data);
+        $("#product_data_shipping_help").html(' <span class="text-warning">Optional</span>. Label that you assign to a product to help assign correct shipping costs in Merchant Center account settings. Example <span class="text-danger">perishable</span>. Syntax Max 100 characters');
+        i_e = 'i.e <span class="text-danger">perishable</span>';
         //var shipping_label = strategy_data;
     } else if (product_shipping_strategy == 'shipping weight') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Submit this value if you set up account shipping settings for carrier-calculated rates or weight-based shipping services");
+        $("#shipping_strategy_help").html('Submit this value if you set up account shipping settings for carrier-calculated rates or weight-based shipping services');
        
-        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates, a table based on weight, or a rule based on weight in your account shipping settings)<br>The weight of the product used to calculate the shipping cost<br>Supported weights 0–2000 lbs for imperial, 0–1000 kgs for metric <br>Example 3 kg <br>Syntax Number + unit <br>Supported units lb, oz, g, kg");
-        //$("#product_shipping_help").html(strategy_data);
+        $("#product_data_shipping_help").html('<span class="text-warning">Optional (Required for carrier-calculated rates, a table based on weight, or a rule based on weight in your account shipping settings)</span>. The weight of the product used to calculate the shipping cost. Supported <span class="text-info">weights</span> <span class="text-danger">0–2000</span> lbs for imperial, <span class="text-danger">0–1000</span> kgs for metric. Example <span class="text-danger">3 kg</span>. Syntax Number + unit. Supported units <span class="text-danger">lb</span>, <span class="text-danger">oz</span>, <span class="text-danger">g</span>, <span class="text-danger">kg</span>');
+        i_e = 'i.e <span class="text-danger">3 kg</span>';
         //var shipping_weight = strategy_data;
     } else if (product_shipping_strategy == 'shipping length') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Submit this value if you set up account shipping settings for carrier-calculated rates<br>If you don't provide shipping dimension attributes while using carrier-calculated rates, we won't be able to calculate rates based on the dimensional weight of the item. If that's the case, we'll just calculate the rates based on the value you provided in shipping_​weight<br>If you submit this attribute, submit all shipping dimension attributes: shipping_​length, shipping_​width, shipping_​height<br>Use the same unit for all shipping dimension attributes that apply to a single product<br>Keep in mind that Oramla doesn't automatically calculate additional shipping cost for oversized items. If your package would be considered large or oversized by your carrier, you should either use the shipping attribute to set shipping cost for an individual product or use the shipping_​label attribute with account shipping settings to set the cost");
+        $("#shipping_strategy_help").html('Submit this value if you set up account shipping settings for carrier-calculated rates. If you don’t provide shipping dimension attributes while using carrier-calculated rates, we won’t be able to calculate rates based on the dimensional weight of the item. If that’s the case, we’ll just calculate the rates based on the value you provided in <span class="text-info">shipping ​weight</span>. If you submit this attribute, submit all shipping dimension attributes: <span class="text-info">shipping ​length</span>, <span class="text-info">shipping ​width</span>, <span class="text-info">shipping ​height</span>. Use the same unit for all shipping dimension attributes that apply to a single product. Keep in mind that Oramla doesn’t automatically calculate additional shipping cost for oversized items. If your package would be considered large or oversized by your carrier, you should either use the shipping attribute to set shipping cost for an individual product or use the <span class="text-info">shipping ​label</span> attribute with account shipping settings to set the cost');
        
-        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates in your account shipping settings)<br>The length of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm");
-        //$("#product_shipping_help").html(strategy_data);
+        $("#product_data_shipping_help").html(' <span class="text-warning">Optional (Required for carrier-calculated rates in your account shipping settings)</span>. The length of the product used to calculate the shipping cost by dimensional weight. Example <span class="text-danger">20 in</span>. Syntax Number + unit. Supported values <span class="text-danger">1 - 150</span> for inches, <span class="text-danger">1 - 400</span> for cm. Supported units <span class="text-danger">in</span>, <span class="text-danger">cm</span>');
+        i_e = 'i.e <span class="text-danger">20 in</span>';
         //var shipping_length = strategy_data;
     } else if (product_shipping_strategy == 'shipping width') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Meet the requirements for the shipping_​length attribute");
+        $("#shipping_strategy_help").html('Meet the requirements for the <span class="text-info">shipping ​length</span> attribute');
        
-        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates in your account shipping settings)<br>The width of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm");
-        //$("#product_shipping_help").html(strategy_data);
+        $("#product_data_shipping_help").html('<span class="text-warning">Optional (Required for carrier-calculated rates in your account shipping settings)</span>. The width of the product used to calculate the shipping cost by dimensional weight. Example <span class="text-danger">20 in</span>. Syntax Number + unit. Supported values <span class="text-danger">1 - 150</span> for inches, <span class="text-danger">1 - 400</span> for cm. Supported units <span class="text-danger">in</span>, <span class="text-danger">cm</span>');
+        i_e = 'i.e <span class="text-danger">20 in</span>';
         //var shipping_width = strategy_data;
     } else if (product_shipping_strategy == 'shipping height') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Meet the requirements for the shipping_​length attribute");
+        $("#shipping_strategy_help").html('Meet the requirements for the <span class="text-info">shipping ​length</span> attribute');
        
-        $("#product_data_shipping_help").html("Optional (Required for carrier-calculated rates in your account shipping settings)<br>The height of the product used to calculate the shipping cost by dimensional weight<br>Example 20 in <br>Syntax Number + unit <br>Supported values 1 - 150 for inches, 1 - 400 for cm <br>Supported units in, cm");
-        //$("#product_shipping_help").html(strategy_data);
+        $("#product_data_shipping_help").html('<span class="text-warning">Optional</span> (Required for carrier-calculated rates in your account shipping settings). The height of the product used to calculate the shipping cost by dimensional weight. Example <span class="text-danger">20 in</span>. Syntax Number + unit. Supported values <span class="text-danger">1 - 150</span> for inches, <span class="text-danger">1 - 400</span> for cm. Supported units <span class="text-danger">in</span>, <span class="text-danger">cm</span>');
+        i_e = 'i.e <span class="text-danger">20 in</span>';
         //var shipping_height = strategy_data;
     } else if (product_shipping_strategy == 'ships from country') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Provide only the country from which you typically ship this product");
+        $("#shipping_strategy_help").html('Provide only the country from which you typically ship this product');
        
-        $("#product_data_shipping_help").html("Optional <br>A setting that allows you to provide the country from which your product will typically ship.<br>Example DE <br>2 characters. Must be an ISO_3166-1_alpha-2 country code");
-        //$("#product_shipping_help").html(strategy_data);
+        $("#product_data_shipping_help").html('<span class="text-warning">Optional</span>. A setting that allows you to provide the country from which your product will typically ship. Example <span class="text-danger">DE</span>. 2 characters. Must be an ISO_3166-1_alpha-2 country code');
+        i_e = 'i.e <span class="text-danger">DE</span>';
         //var ships_from_country = strategy_data;
     } else if (product_shipping_strategy == 'transit time label') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Use a value that you'll recognize in your account shipping settings. The value won't be shown to users. <br>Examples: Dog food, From Seattle, Heavy package");
+        $("#shipping_strategy_help").html('Use a value that you’ll recognize in your account shipping settings. The value won’t be shown to users. Examples: <span class="text-danger">Dog food</span>, <span class="text-danger">From Nairobi</span>, <span class="text-danger">Heavy package</span>');
        
-        $("#product_data_shipping_help").html("Optional <br>Label that you assign to a product to help assign different transit times in Merchant Center account settings.<br>Example From Seattle <br>Syntax Max 100 characters");
-        //$("#product_shipping_help").html(strategy_data);
+        $("#product_data_shipping_help").html(' <span class="text-warning">Optional</span>. Label that you assign to a product to help assign different transit times in Merchant Center account settings. Example <span class="text-danger">From Nairobi</span>. Syntax Max 100 characters');
+        i_e = 'i.e <span class="text-danger">From Nairobi</span>';
         //var transit_time_label = strategy_data;
     } else if (product_shipping_strategy == 'max handling time') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Submit this attribute if you want to display the overall time it takes for a product to arrive at its destination <br>Submit the number of business days (as configured in Merchant Center) <br>For products ready to be shipped the same day, submit 0.<br>For submitting a time range submit max_handling_time in combination with min_handling_time.");
+        $("#shipping_strategy_help").html('Submit this attribute if you want to display the overall time it takes for a product to arrive at its destination. Submit the number of business days (as configured in Merchant Center). For products ready to be shipped the <span class="text-primary">same day</span>, submit <span class="text-danger">0</span>. For submitting a time range submit <span class="text-info">max handling time</span> in combination with <span class="text-info">min handling time</span>.');
        
-        $("#product_data_shipping_help").html("Optional <br>The longest amount of time between when an order is placed for a product and when the product ships.<br>Example 3 <br>Syntax Integer, greater than or equal to 0");
-        //$("#product_shipping_help").html(strategy_data);
+        $("#product_data_shipping_help").html('<span class="text-warning">Optional</span>. The longest amount of time between when an order is placed for a product and when the product ships. Example <span class="text-danger">3</span>. Syntax Integer, greater than or equal to <span class="text-danger">0</span>');
+        i_e = 'i.e <span class="text-danger">3</span>';
         //var max_handling_time = strategy_data;
     } else if (product_shipping_strategy == 'min handling time') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
-        $("#shipping_strategy_help").html("Meet the requirements for the max_handling_time attribute");
+        $("#shipping_strategy_help").html('Meet the requirements for the <span class="text-info">max handling time</span> attribute');
        
-        $("#product_data_shipping_help").html("Optional <br>The shortest amount of time between when an order is placed for a product and when the product ships.<br>Example 1<br>Syntax Integer, greater than or equal to 0");
-        //$("#product_shipping_help").html(strategy_data);
+        $("#product_data_shipping_help").html('<span class="text-warning">Optional</span>. The shortest amount of time between when an order is placed for a product and when the product ships. Example <span class="text-danger">1</span>. Syntax Integer, greater than or equal to <span class="text-danger">0</span>');
+        i_e = 'i.e <span class="text-danger">1</span>';
         //var min_handling_time = strategy_data;
     }
     //alert($("#product_destinations").val());
@@ -3673,7 +3907,7 @@ shipping_strategy.addEventListener('change', (event) => {
         $("#product_shipping").addClass("is-valid"); 
         shipping_strategy_data($("#product_shipping").val());       
     } else {
-        $("#product_shipping_help").html("Input " + product_shipping_strategy + "");
+        $("#product_shipping_help").html("Input " + product_shipping_strategy + " " + i_e);
         $("#product_shipping").removeClass("is-valid");
         $("#product_shipping").addClass("is-invalid");
     }    
@@ -3695,11 +3929,11 @@ function product_shipping(e) {
 }
 
 
-var tax = ''; // Use this setting only to override the account tax settings for an individual product. We recommend that you submit tax information for all your products using the account settings in Merchant Center <br>For the US and Canada <br>Don't include tax in the price attribute. For the US only, include the tax in the tax attribute if you need to override your account settings <br>For all other countries Include value added tax (VAT) or Goods and Services Tax (GST) in the price attribute and do not use the tax attribute 
-              // <span class="text-danger">Required (Available for the KE only). </span><span class="text-dark">Your product’s sales tax rate in percent. Example </span><span class="text-danger">US:CA:5.00:y. </span><span class="text-dark">Syntax tax uses 4 sub-attributes: </span><span class="text-danger">rate (required) </span><span class="text-dark">Tax rate as a percentage</span><span class="text-warning">country (optional) </span><span class="text-dark">ISO 3166 country code </span><span class="text-warning">region or postal_​code or location_​id (optional) </span><span class="text-warning">tax_​ship (optional)</span><span class="text-info">Specify if you charge tax on shipping. Accepted values are </span> <span class="text-danger">yes </span> or <span class="text-danger">no</span>
+var tax = ''; // Use this setting only to override the account tax settings for an individual product. We recommend that you submit tax information for all your products using the account settings in Merchant Center. For the Kenya and Tanzania. Don’t include tax in the price attribute. For the Kenya only, include the tax in the tax attribute if you need to override your account settings. For all other countries Include value added tax (VAT) or Goods and Services Tax (GST) in the price attribute and do not use the tax attribute 
+              // <span class="text-danger">Required (Available for the KE only)</span>. Your product’s sales tax rate in percent. Example <span class="text-danger">US:CA:5.00:y</span>. Syntax tax uses 4 sub-attributes: <span class="text-danger">rate (required)</span> tax rate as a percentage, <span class="text-warning">country (optional)</span> ISO 3166 country code, <span class="text-warning">region</span> or <span class="text-warning">postal ​code</span> or <span class="text-warning">location id (optional)</span>, <span class="text-warning">tax ship (optional)</span>. Specify if you charge tax on shipping. Accepted values are <span class="text-danger">yes </span> or <span class="text-danger">no</span>
 
 var tax_category = '';// Use this attribute if you have products that have a specific tax rate.
-                      // Optional (Recommended for custom tax rates at the account level) <br>A category that classifies your product by specific tax rules <br>Example apparel <br>Syntax Max 100 characters
+                      // <span class="text-warning">Optional (Recommended for custom tax rates at the account level)</span>. A category that classifies your product by specific tax rules. Example <span class="text-danger">apparel</span>. Syntax Max 100 characters
 
 
 
@@ -3708,16 +3942,16 @@ var product_tax_strategy = 'tax';
 function tax_strategy_data(strategy_data) {
     if (product_tax_strategy == 'tax') {
         $("#product_data_tax_title").html(product_tax_strategy + ":");
-        $("#tax_strategy_help").html("Use this setting only to override the account tax settings for an individual product. We recommend that you submit tax information for all your products using the account settings in Merchant Center <br>For the US and Canada <br>Don't include tax in the price attribute. For the US only, include the tax in the tax attribute if you need to override your account settings <br>For all other countries Include value added tax (VAT) or Goods and Services Tax (GST) in the price attribute and do not use the tax attribute ");
+        $("#tax_strategy_help").html('Use this setting only to override the account tax settings for an individual product. We recommend that you submit tax information for all your products using the account settings in Merchant Center. For the Kenya and Tanzania. Don’t include tax in the price attribute. For the Kenya only, include the tax in the tax attribute if you need to override your account settings. For all other countries Include value added tax (VAT) or Goods and Services Tax (GST) in the price attribute and do not use the tax attribute ');
        
-        $("#product_data_tax_help").html('<span class="text-danger">Required (Available for the KE only). </span><span class="text-dark">Your product’s sales tax rate in percent. Example </span><span class="text-danger">US:CA:5.00:y. </span><span class="text-dark">Syntax tax uses 4 sub-attributes: </span><span class="text-danger">rate (required) </span><span class="text-dark">Tax rate as a percentage</span><span class="text-warning">country (optional) </span><span class="text-dark">ISO 3166 country code </span><span class="text-warning">region or postal_​code or location_​id (optional) </span><span class="text-warning">tax_​ship (optional)</span><span class="text-info">Specify if you charge tax on shipping. Accepted values are </span> <span class="text-danger">yes </span> or <span class="text-danger">no</span>');
+        $("#product_data_tax_help").html('<span class="text-danger">Required (Available for the KE only)</span>. Your product’s sales tax rate in percent. Example <span class="text-danger">US:CA:5.00:y</span>. Syntax tax uses 4 sub-attributes: <span class="text-danger">rate (required)</span> tax rate as a percentage, <span class="text-warning">country (optional)</span> ISO 3166 country code, <span class="text-warning">region</span> or <span class="text-warning">postal ​code</span> or <span class="text-warning">location id (optional)</span>, <span class="text-warning">tax ship (optional)</span>. Specify if you charge tax on shipping. Accepted values are <span class="text-danger">yes </span> or <span class="text-danger">no</span>');
         $("#product_tax_help").html(strategy_data);
         tax = strategy_data;
     } else if (product_tax_strategy == 'tax category') {
         $("#product_data_tax_title").html(product_tax_strategy + ":");
-        $("#tax_strategy_help").html("Use this attribute if you have products that have a specific tax rate.");
+        $("#tax_strategy_help").html('Use this attribute if you have products that have a specific tax rate.');
        
-        $("#product_data_tax_help").html("Optional (Recommended for custom tax rates at the account level) <br>A category that classifies your product by specific tax rules <br>Example apparel <br>Syntax Max 100 characters");
+        $("#product_data_tax_help").html(' <span class="text-warning">Optional (Recommended for custom tax rates at the account level)</span>. A category that classifies your product by specific tax rules. Example <span class="text-danger">apparel</span>. Syntax Max 100 characters');
         $("#product_tax_help").html(strategy_data);
         tax_category = strategy_data;
     } 
@@ -3726,19 +3960,21 @@ function tax_strategy_data(strategy_data) {
 const tax_strategy = document.querySelector('#tax_strategy');
 tax_strategy.addEventListener('change', (event) => {
     product_tax_strategy = event.target.value;
+    var i_e = '';
+
     if (product_tax_strategy == 'tax') {
         $("#product_data_tax_title").html(product_tax_strategy + ":");
-        $("#tax_strategy_help").html("Use this setting only to override the account tax settings for an individual product. We recommend that you submit tax information for all your products using the account settings in Merchant Center <br>For the US and Canada <br>Don't include tax in the price attribute. For the US only, include the tax in the tax attribute if you need to override your account settings <br>For all other countries Include value added tax (VAT) or Goods and Services Tax (GST) in the price attribute and do not use the tax attribute ");
+        $("#tax_strategy_help").html('Use this setting only to override the account tax settings for an individual product. We recommend that you submit tax information for all your products using the account settings in Merchant Center. For the Kenya and Tanzania. Don’t include tax in the price attribute. For the Kenya only, include the tax in the tax attribute if you need to override your account settings. For all other countries Include value added tax (VAT) or Goods and Services Tax (GST) in the price attribute and do not use the tax attribute ');
        
-        $("#product_data_tax_help").html('<span class="text-danger">Required (Available for the KE only). </span><span class="text-dark">Your product’s sales tax rate in percent. Example </span><span class="text-danger">US:CA:5.00:y. </span><span class="text-dark">Syntax tax uses 4 sub-attributes: </span><span class="text-danger">rate (required) </span><span class="text-dark">Tax rate as a percentage</span><span class="text-warning">country (optional) </span><span class="text-dark">ISO 3166 country code </span><span class="text-warning">region or postal_​code or location_​id (optional) </span><span class="text-warning">tax_​ship (optional)</span><span class="text-info">Specify if you charge tax on shipping. Accepted values are </span> <span class="text-danger">yes </span> or <span class="text-danger">no</span>');
-        //$("#product_tax_help").html(strategy_data);
+        $("#product_data_tax_help").html('<span class="text-danger">Required (Available for the KE only)</span>. Your product’s sales tax rate in percent. Example <span class="text-danger">US:CA:5.00:y</span>. Syntax tax uses 4 sub-attributes: <span class="text-danger">rate (required)</span> tax rate as a percentage, <span class="text-warning">country (optional)</span> ISO 3166 country code, <span class="text-warning">region</span> or <span class="text-warning">postal ​code</span> or <span class="text-warning">location id (optional)</span>, <span class="text-warning">tax ship (optional)</span>. Specify if you charge tax on shipping. Accepted values are <span class="text-danger">yes </span> or <span class="text-danger">no</span>');
+        i_e = 'i.e <span class="text-danger">US:CA:5.00:y</span>';
         //var tax = strategy_data;
     } else if (product_tax_strategy == 'tax category') {
         $("#product_data_tax_title").html(product_tax_strategy + ":");
-        $("#tax_strategy_help").html("Use this attribute if you have products that have a specific tax rate.");
+        $("#tax_strategy_help").html('Use this attribute if you have products that have a specific tax rate.');
        
-        $("#product_data_tax_help").html("Optional (Recommended for custom tax rates at the account level) <br>A category that classifies your product by specific tax rules <br>Example apparel <br>Syntax Max 100 characters");
-        //$("#product_tax_help").html(strategy_data);
+        $("#product_data_tax_help").html(' <span class="text-warning">Optional (Recommended for custom tax rates at the account level)</span>. A category that classifies your product by specific tax rules. Example <span class="text-danger">apparel</span>. Syntax Max 100 characters');
+        i_e = 'i.e <span class="text-danger">apparel</span>';
         //var tax_category = strategy_data;
     }
     //alert($("#product_destinations").val());
@@ -3748,7 +3984,7 @@ tax_strategy.addEventListener('change', (event) => {
         $("#product_tax").addClass("is-valid"); 
         tax_strategy_data($("#product_tax").val());       
     } else {
-        $("#product_tax_help").html("Input " + product_tax_strategy + "");
+        $("#product_tax_help").html("Input " + product_tax_strategy + " " + i_e);
         $("#product_tax").removeClass("is-valid");
         $("#product_tax").addClass("is-invalid");
     }    
@@ -3769,16 +4005,48 @@ function product_tax(e) {
     }
 }
 
+
+
 const product_industry_input = document.querySelector('#product_industry');
 product_industry_input.addEventListener('change', (event) => {
-var product_industry = event.target.value;
-
+product_industry = event.target.value;
+category_clicked = '';
+if (product_industry != '' && product_industry != null) {
+    $("#product_industry").removeClass("is-invalid");
+    $("#product_industry").addClass("is-valid"); 
+    apps_categories(event.target.value);
+} else {
+    $("#product_industry").removeClass("is-valid");
+    $("#product_industry").addClass("is-invalid");
+}
 });
+
 const product_category_input = document.querySelector('#product_category');
 product_category_input.addEventListener('change', (event) => {
-var product_category = event.target.value;
+product_category = event.target.value;
+if (product_category != '' && product_category != null) {
+    $("#product_category").removeClass("is-invalid");
+    $("#product_category").addClass("is-valid"); 
+} else {
+    $("#product_category").removeClass("is-valid");
+    $("#product_category").addClass("is-invalid");
+}
+});
+
+const shipping_rates_input = document.querySelector('#shipping_rates');
+shipping_rates_input.addEventListener('change', (event) => {
+    shipping_rates = event.target.value;
 
 });
+
+const shipping_strategies_input = document.querySelector('#shipping_strategies');
+shipping_strategies_input.addEventListener('change', (event) => {
+    shipping_strategies = event.target.value;
+
+});
+
+var product_data =  '';
+
 
 $('#list-shipping-list').on('click', function (e) {
   e.preventDefault()
@@ -3856,9 +4124,11 @@ $("#pr_next").click(function(){
     } else if(geoshop_value != ''){
         geoshop(latitude,longitude,gradius,startlimit,endlimit);
     } else if(cat_id != ''){
-        product_main_container(startlimit,endlimit,cat_id);
+        product_main_container(startlimit,endlimit,cat_id,brand_id);
+    } else if(brand_id != ''){
+        product_main_container(startlimit,endlimit,cat_id,brand_id);
     } else{
-        product_main_container(startlimit,endlimit,cat_id);
+        product_main_container(startlimit,endlimit,cat_id,brand_id);
     }
 });
 
@@ -3891,9 +4161,11 @@ $("#pr_previous").click(function(){
     } else if(geoshop_value != ''){
         geoshop(latitude,longitude,gradius,startlimit,endlimit);
     } else if(cat_id != ''){
-        product_main_container(startlimit,endlimit,cat_id);
+        product_main_container(startlimit,endlimit,cat_id,brand_id);
+    } else if(brand_id != ''){
+        product_main_container(startlimit,endlimit,cat_id,brand_id);
     } else{
-        product_main_container(startlimit,endlimit,cat_id);
+        product_main_container(startlimit,endlimit,cat_id,brand_id);
     }
 });
 
@@ -4287,9 +4559,10 @@ $("#contacts_back").click(function(){
 var chat_ = 0;
 $("#s5").click(function(){
     chat_ = 1;
-    search_value != '';
-    geoshop_value != '';
-    cat_id != '';
+    search_value = '';
+    geoshop_value = '';
+    cat_id = '';
+    brand_id = "";
     window.location.href="#center_top_id"; 
     $("#menu_container_top_tab").hide(100);                
     $("#center_top_id").show(100);                
@@ -4502,9 +4775,10 @@ document.addEventListener('backbutton', function(){
 });
 
 $("#s2").click(function(){
-    search_value != '';
-    geoshop_value != '';
-    cat_id != '';
+    search_value = '';
+    geoshop_value = '';
+    cat_id = '';
+    brand_id = "";
     //window.location.href="#cart_container";
     $("#menu_container_top_tab").show(100);                
 
@@ -4539,9 +4813,10 @@ function cart() {
 }
 
 $("#s4").click(function(){
-    search_value != '';
-    geoshop_value != '';
-    cat_id != '';
+    search_value = '';
+    geoshop_value = '';
+    cat_id = '';
+    brand_id = "";
     window.location.href="#user_container";
     $("#menu_container_top_tab").show(100);                
 
@@ -4585,9 +4860,9 @@ function user() {
 }
 
 $("#s3").click(function(){
-    search_value != '';
-    geoshop_value != '';
-    cat_id != '';
+    search_value = '';
+    geoshop_value = '';
+    cat_id = '';
     window.location.href="#location_container";
     $("#menu_container_top_tab").show(100);                
 
@@ -4634,7 +4909,7 @@ function location_container() {
         action_float_id = 0;
         contact_information_save = 0;
         location_main_container = 1;
-        update_user_data(latitude,longitude,role,rating,review,address,city,country,postal,user_phone,email,last,first,username);
+        update_user_data(latitude,longitude,role,rating,review,address,city,country,postal,phone,email,last,first,username);
     
     }
 
@@ -5467,7 +5742,11 @@ $(function() {
                 reader.onloadend = function(){ // set image data as background of div
                   //alert(uploadFile.closest(".upimage").find('.imagePreview').length);
                   uploadFile.closest(".imgUp").find('.imagePreview').css("background-image", "url("+this.result+")");
+                  $("#upload_from_file_container_help").html('<span class= "text-success" >image file selected</span>');
+
                 }
+            } else {
+                $("#upload_from_file_container_help").html('<span class= "text-danger" >only image file</span>');
             }
           } else {
            // uploadFile.closest(".imgUp").find('.imagePreview').css("background-image", "url("+$(this).val()+")");
@@ -5487,9 +5766,23 @@ $(function() {
         var uploadUrl = $(this);
         if (upload_from_file == 1) {
           
-        } else {
-            uploadUrl.closest(".imgUp").find('.imagePreview').css("background-image", "url("+$(this).val()+")");
-
+        } else {            
+            if ($(this).val() != '') {
+                var this_url_image = $(this).val();
+                var url_image = new Image();
+                url_image.onload = function() {
+                    // image exists and is loaded
+                    uploadUrl.closest(".imgUp").find('.imagePreview').css("background-image", "url("+this_url_image+")");
+                    $("#upload_from_url_container_help").html('<span class= "text-success" >Image loaded</span>');
+                }
+                url_image.onerror = function() {
+                    $("#upload_from_url_container_help").html('<span class= "text-warning" >Image does not exist</span>');
+                }                
+                url_image.src = this_url_image;
+                
+            } else {
+                $("#upload_from_url_container_help").html('<span class= "text-danger" >Invalid url</span>');
+            }            
         }
         
     });
@@ -5502,7 +5795,7 @@ $("#product_save").click(function(){
     var product_condition = $("#product_condition").val();
     var product_brand = $("#product_brand").val();
     var product_availability = $("#product_availability").val();
-    var product_price = $("#product_price").val();
+    //var product_price = $("#product_price").val();
     var product_quantity = $("#product_quantity").val();
     var product_description = $("#product_description").val();
     var product_shipping = $("#product_shipping").val();
@@ -5510,7 +5803,76 @@ $("#product_save").click(function(){
     var product_title = $("#product_title").val();
     var product_industry = $("#product_industry").val();
     var product_category = $("#product_category").val();
+
+    /**
+    $("#product_data_net_price").val(net_price);
+
+
+ */
+    $("#product_data_tax").val(tax);
+    $("#product_data_shipping_rates").val(shipping_rates);
+    $("#product_data_shipping_strategies").val(shipping_strategies);
+    $("#product_data_product_type").val(product_type);
+    $("#product_data_pricing_strategy").val(pricing_strategy);
+    $("#product_data_product_price").val(product_price);
+    $("#product_data_product_list_price").val(product_list_price);
+
+    $("#product_data_net_price").val(net_price);
+
+    $("#product_data_sale_price").val(sale_price);
+    $("#product_data_tax_category").val(tax_category);
     
+
+    $("#product_data_shipping").val(shipping);
+    $("#product_data_shipping_label").val(shipping_label);
+    $("#product_data_shipping_weight").val(shipping_weight);
+    $("#product_data_shipping_length").val(shipping_length);
+    $("#product_data_shipping_width").val(shipping_width);
+    $("#product_data_shipping_height").val(shipping_height);
+    $("#product_data_ships_from_country").val(ships_from_country);
+    $("#product_data_transit_time_label").val(transit_time_label);
+    $("#product_data_max_handling_time").val(max_handling_time);
+    $("#product_data_min_handling_time").val(min_handling_time);
+    $("#product_data_excluded_destination").val(excluded_destination);
+    $("#product_data_included_destination").val(included_destination);
+    $("#product_data_shopping_ads_excluded_country").val(shopping_ads_excluded_country);
+    $("#product_data_condition").val(condition);
+    $("#product_data_adult").val(adult);
+    $("#product_data_multipack").val(multipack);
+    $("#product_data_is_bundle").val(is_bundle);
+    $("#product_data_energy_efficiency_class").val(energy_efficiency_class);
+    $("#product_data_min_energy_efficiency_class").val(min_energy_efficiency_class);
+    $("#product_data_max_energy_efficiency_class").val(max_energy_efficiency_class);
+    $("#product_data_age_group").val(age_group);
+    $("#product_data_color").val(color);
+    $("#product_data_gender").val(gender);
+    $("#product_data_material").val(material);
+    $("#product_data_pattern").val(pattern);
+    $("#product_data_size").val(size);
+    $("#product_data_size_system").val(size_system);
+    $("#product_data_item_group_id").val(item_group_id);
+    $("#product_data_product_detail").val(product_detail);
+    $("#product_data_product_highlight").val(product_highlight);
+    $("#product_data_brand").val(brand);
+
+    $("#product_data_gtin").val(gtin);
+    $("#product_data_MPN").val(MPN);
+    $("#product_data_identifier_exists").val(identifier_exists);
+    $("#product_data_availability").val(availability);
+    $("#product_data_availability_date").val(availability_date);
+    $("#product_data_cost_of_goods_sold").val(cost_of_goods_sold);
+    $("#product_data_expiration_date").val(expiration_date);
+    $("#product_data_sale_price_effective_date").val(sale_price_effective_date);
+    $("#product_data_unit_pricing_measure").val(unit_pricing_measure);
+    $("#product_data_unit_price_base_measure").val(unit_price_base_measure);
+    $("#product_data_installment").val(installment);
+    $("#product_data_subscription_cost").val(subscription_cost);
+    $("#product_data_loyalty_points").val(loyalty_points);
+    $("#product_data_product_title").val(product_title);
+    $("#product_data_product_industry").val(product_industry);
+    $("#product_data_product_description").val(product_description);
+    $("#product_data_product_quantity").val(product_quantity);
+
     if (upload_from_file == 1) {
         var uploadFile_arr = $('.uploadFile').map(function(){ return  $(this).val() }).get()
         var i;
@@ -5530,6 +5892,7 @@ $("#product_save").click(function(){
 
             $("#product_save").addClass("btn-info");
             $("#product_save").html('Uploading...');
+            $("#upload_from_file_container_help").html('Please wait...');
             $("#upload_from_help").html('Please wait...');
             upload_image_from_file(uploadFile_arr);      
         } else {
@@ -5540,6 +5903,7 @@ $("#product_save").click(function(){
 
             $("#product_save").addClass("btn-warning");
             $("#product_save").html('Error');
+            $("#upload_from_file_container_help").html("No file selected");
             $("#upload_from_help").html("No file selected");
         }        
         
@@ -5557,6 +5921,8 @@ $("#product_save").click(function(){
         if (upload_from_check == 1) {
             upload_image_from_url(uploadUrl_arr);      
         } else {
+            $("#upload_from_url_container_help").html("No Url To the image");
+
             $("#upload_from_help").html("No Url To the image");
         }
     }
@@ -5578,7 +5944,7 @@ function upload_image_from_file(uploadFile_arr) {
     // You can directly make object via using form id but it require all ajax operation inside $("form").submit(<!-- Ajax Here   -->)
     var formData = new FormData(formData[0]);
     $.ajax({
-        url: api_server_url + '/cordova/upload_image_from_file.php',
+        url: api_server_url + '/cordova/upload_image_from_file.php?q=',
         type: 'POST',
         data: formData,
         success: function (response) {
@@ -5592,8 +5958,16 @@ function upload_image_from_file(uploadFile_arr) {
 
                         $("#product_save").addClass("btn-success");
                         $('#app-cover-spin').hide(0);
+                        var imageurl = response.imageurl;
+                        var response_imageurl = '<ul>';
+                        for (i = 0; i < imageurl.length; i++) {
+                            response_imageurl += "<li>" + imageurl[i] + "</li>";
+                        }
+                        response_imageurl += '</ul>';
+                        $("#upload_from_file_container_help").html(response.uploadFile_arr.message + '. Image url : <span class="text-success">' + response_imageurl + '</span>');
+                        //imageurl
                         $("#product_save").html(response.uploadFile_arr.message);
-                        $("#upload_from_help").html('Uploaded successfuly');
+                        $("#upload_from_help").html(response.product_title + ' uploaded successfuly');
                     } else {                        
                         $("#product_save").removeClass("btn-primary");
                         $("#product_save").removeClass("btn-success");
@@ -5604,59 +5978,37 @@ function upload_image_from_file(uploadFile_arr) {
                         $('#app-cover-spin').hide(0);
                         $("#product_save").html('fail');
                         if (response.uploadOk == 0) {
+                            $("#upload_from_file_container_help").html(response.uploadFile_arr);
+
                             $("#upload_from_help").html(response.uploadFile_arr);
                         } else {
+                            $("#upload_from_file_container_help").html(response.uploadFile_arr.message);
+
                             $("#upload_from_help").html(response.uploadFile_arr.message);
                         }
                     }
                 } else {
                     $('#app-cover-spin').hide(0);
+                    $("#upload_from_file_container_help").html(response.message);
+
                     $("#upload_from_help").html(response.message);
                 }
             } catch(e) {
                 $('#app-cover-spin').hide(0);
+                $("#upload_from_file_container_help").html('JSON parsing error');
+
                 $("#upload_from_help").html('JSON parsing error');
             }
         },
         error: function searchError(xhr, err) {
             $('#app-cover-spin').hide(0);
+            $("#upload_from_file_container_help").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+
             $("#upload_from_help").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
         },
         contentType: false,
         processData: false,
         cache: false
     });
-    return false;
-
-    /**$.ajax({
-        type: "POST", // Type of request to be send, called as 
-        dataType: 'json',
-        data: { upload_image_from_file: 12, uploadFile_arr: uploadFile_arr, username:username},
-        processData: true,
-        url: api_server_url + '/cordova/upload_image_from_file.php',
-        success: function searchSuccess(response) {
-            $('#app-cover-spin').hide(0);
-            try {
-                if (response.message == "success") {
-
-                    alert(response.uploadFile_arr);
-                    //$("#new_password_button_help").html(forgot_login_email);
-
-                    //$("#new_password").removeClass("active");
-                    //$("#login").addClass("active");
-
-                    //$("#new_password_button_help").html(response.validate_message);
-
-                } else {
-                    $("#upload_from_help").html(response.message);
-                }
-            } catch(e) {
-                $("#upload_from_help").html('JSON parsing error');
-            }          
-        },
-        error: function searchError(xhr, err) {
-          $('#app-cover-spin').hide(0);
-          $("#upload_from_help").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-        }
-    }); */
+    
 }

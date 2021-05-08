@@ -41,44 +41,57 @@
 24    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 24-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:16:5-75
 24-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:16:22-72
-25
-26    <application
-26-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:5-12:19
-27        android:debuggable="true"
-28        android:hardwareAccelerated="true"
-28-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:18-52
-29        android:icon="@mipmap/ic_launcher"
-29-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:53-87
-30        android:label="@string/app_name"
-30-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:88-120
-31        android:supportsRtl="true" >
-31-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:121-147
-32        <activity
-32-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:9-11:20
-33            android:name="com.benco.org.MainActivity"
-33-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:205-232
-34            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-34-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:19-135
-35            android:label="@string/activity_name"
-35-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:136-173
-36            android:launchMode="singleTop"
-36-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:174-204
-37            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
-37-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:233-295
-38            android:windowSoftInputMode="adjustResize" >
-38-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:296-338
-39            <intent-filter android:label="@string/launcher_name" >
-39-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:7:13-10:29
-39-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:7:28-65
-40                <action android:name="android.intent.action.MAIN" />
-40-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:8:17-69
-40-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:8:25-66
-41
-42                <category android:name="android.intent.category.LAUNCHER" />
-42-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:9:17-77
-42-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:9:27-74
-43            </intent-filter>
-44        </activity>
-45    </application>
-46
-47</manifest>
+25    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+25-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:17:5-81
+25-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:17:22-78
+26    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+26-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:18:5-79
+26-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:18:22-76
+27
+28    <uses-feature
+28-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:19:5-90
+29        android:name="android.hardware.location.gps"
+29-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:19:19-63
+30        android:required="true" />
+30-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:19:64-87
+31
+32    <application
+32-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:5-12:19
+33        android:debuggable="true"
+34        android:hardwareAccelerated="true"
+34-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:18-52
+35        android:icon="@mipmap/ic_launcher"
+35-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:53-87
+36        android:label="@string/app_name"
+36-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:88-120
+37        android:supportsRtl="true" >
+37-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:121-147
+38        <activity
+38-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:9-11:20
+39            android:name="com.benco.org.MainActivity"
+39-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:205-232
+40            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
+40-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:19-135
+41            android:label="@string/activity_name"
+41-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:136-173
+42            android:launchMode="singleTop"
+42-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:174-204
+43            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
+43-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:233-295
+44            android:windowSoftInputMode="adjustResize" >
+44-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:296-338
+45            <intent-filter android:label="@string/launcher_name" >
+45-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:7:13-10:29
+45-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:7:28-65
+46                <action android:name="android.intent.action.MAIN" />
+46-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:8:17-69
+46-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:8:25-66
+47
+48                <category android:name="android.intent.category.LAUNCHER" />
+48-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:9:17-77
+48-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:9:27-74
+49            </intent-filter>
+50        </activity>
+51    </application>
+52
+53</manifest>

@@ -196,6 +196,9 @@
       <ul id="apps_categories" class="apps_nav-items nav-level-1">
           
       </ul>
+      <ul id="apps_brands" class="apps_nav-items nav-level-1 apps_brands">
+          
+      </ul>
     </nav>
     
     <div id="product_container" class="product_main_container container is-fullhd"> 
@@ -213,16 +216,41 @@
         </div>  
       </div>
 
-      <div id="product_row_container" class="row">
+      <div id="product_row_container">
+        <div id="product_data_container"  class="row">
+
+        </div>
         
+        <div class="action_buttons">
+        <a id="add_products_agent"  class="product_float">
+          <i class="fa fa-plus-circle product_my-float"></i>
+        </a>
+        <div class="product_label-container">
+          <div class="product_label-text">Add products</div>
+          <i class="fa fa-play product_label-arrow"></i>
+        </div>
+    
+        
+        <a id="action_float_id" class="float">
+          <i class="fa fa-plus-circle my-float"></i>
+        </a>
+        <div class="label-container">
+          <div class="label-text">You would like to </div>
+          <i class="fa fa-play label-arrow"></i>
+        </div>
+      </div>
+
       </div>
 
       <div id="product_add_client_container" class="product_add_client">
         <!-- not responsive yet -->
         <nav class="nav nav-justified nav_add_client sticky-top">
           <a class="nav-item nav-link active" href="#agentclient">
-            <img id="otheaddlimg" src="img/logo.png" alt="" width="25px" height="25px" class="rounded-circle">
-            <span  id="otheaddl"></span>
+            <div class="tags"> 
+              <img id="otheaddlimg" src="img/logo.png" class="tag" alt="">   
+                        
+              <span class="tag is-black"><span id="otheaddl"></span> <span class="fa fa-star" id="rating_num" > 3</span></span>              
+            </div>
           </a>
           <a class="nav-item nav-link" href="#addloactionagent">
             <i class="fa fa-map-marker" aria-hidden="true"></i>
@@ -239,92 +267,6 @@
           </a>
           
         </nav>
-        
-
-        <!--<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-          <ul class="nav nav-pills">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">
-                
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                
-
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                
-
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                
-
-              </a>
-            </li>
-            
-          </ul>
-          
-          <div class="add_active">
-            <button id="arrow_add_client_back"  class="button is-black"><i class="fa fa-arrow-left"></i></button>
-
-          </div>
-        </nav>
-         <div  id="add_main" class="header float-left" style="display: inline;">  
-            <a id="add_client_rating" class="dropdown">
-              
-            </a>
-            <a id="add_client_rating" class="">
-              
-            </a>
-            <a id="add_client_location" href="#agentlocation" class="">
-            </a>
-            <a id="add_client_delivery" class="">
-              <img src="img/international-delivery.svg" alt="" width="25px" height="25px">
-            </a>
-            <a id="add_client_payment" class="">
-              <img src="img/payment-methods-svgrepo-com.svg" alt="" width="25px" height="25px">
-            </a>
-            
-            
-
-          </div> 
-        
-         <ul class="nav nav-pills">
-            <li class="nav-item">
-              <a id="add_client_rating" class="nav-link" href="#">
-                
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#agentlocation">
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-              </a>
-            </li>
-          </ul>-->
-         
-
         
         <section class="buy-grid container-fluid">          
           <div class="hero-image-wrapper">
@@ -345,19 +287,9 @@
           </header>
 
           <div class="">
-            <div id="productrating" class="selection"> 
-              
-              <div class="tags">
-                <span class="tag is-black fa fa-user otheaddlocation"></span>
-                <span class="tag is-black"><i id="rating_num" class="fa fa-star" aria-hidden="true">3</i></span>
-
-              </div>
-              
-              <div class="tags">
-                <p class="card-price"><span id="add_carousel_currency"></span><span id="add_carousel_price"></span></p>
-                <span class="tag" id="add_carousel_buynow"></span>
-              </div>              
-
+            <div class="tags">
+              <p class="card-price"><span id="add_carousel_currency"></span><span id="add_carousel_price"></span></p>
+              <span class="tag" id="add_carousel_buynow"></span>
             </div>
 
             <div class="tags">
@@ -369,674 +301,148 @@
             </div>
             
             <div class="addContent">
+
               <div class="" id="productshipping">
                 <h5 class="text sticky-top">Shipping</h5>
-                <div class="card overflow-auto" style="height: 200px;">
-                  <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1 text-success">US:CA:Overnight:16.00 USD:1:1:2:3</h5>
-                    <span>3 days ago</span>
-                  </div>
+                
+                <div class="card overflow-auto">
                   
-                  <div class="box">
-                    <p class="mb-1">shipping cost, shipping speeds, and the locations your product ships from.<br>Supported prices : 0–1000 USD (check for other currencies)</p>
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 id="shippingvalue" class="mb-1 text-success">US:CA:Overnight:16.00 USD:1:1:2:3</h6>
+                    <span id="shippingupdate">Updated 3 days ago</span>
+                  </div>
+
+                  <p class="mb-1">shipping cost, shipping speeds, and the locations your product ships from.<br>Supported prices : 0–1000 USD (check for other currencies)</p>
+
+                  <div id="shippingbox" class="box">
                     
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping label</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>perishable</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Sameday</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Oversize</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Only FedEx</span>
+                    <span class="icon-text">
+                      <span class="badge badge-primary text-wrap">shipping label</span >
+                      <span class="icon">
+                        <i class="fa fa-arrow-right"></i>
                       </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping weight</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>weights 0–2000 lbs</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping length</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping width</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping height</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">ships from country</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Kenya (KE) Nairobi</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">transit time label</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Heavy package</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>From Nairobi</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Dog food</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">max handling time</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>3 days</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">min handling time</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 day</span>
-                      </span>
-                    </div>
-                    <br>
+                      <span>perishable</span>                      
+                    </span>                    
 
                   </div>
+
                 </div>
+
               </div>
+
               <div class="addtabContent" id="productcondition">
                 <h5 class="text sticky-top">condition</h5>
-                <div class="card overflow-auto"  style="height: 200px;">
+                
+                <div class="card overflow-auto">
                   <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1 text-success">US:CA:Overnight:16.00 USD:1:1:2:3</h5>
-                    <span>3 days ago</span>
+                    <h6 id="conditionvalue" class="mb-1 text-success">refurbished</h6>
+                    <span id="conditionupdate">3 days ago</span>
                   </div>
-                  
-                  <div class="box">
-                    <p class="mb-1">shipping cost, shipping speeds, and the locations your product ships from.<br>Supported prices : 0–1000 USD (check for other currencies)</p>
+
+                  <p class="mb-1">The condition of the product at time of sale</p>
+
+                  <div id="conditionbox" class="box">
                     
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping label</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>perishable</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Sameday</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Oversize</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Only FedEx</span>
+                    <span class="icon-text">
+                      <span class="badge badge-primary text-wrap">condition</span >
+                      <span class="icon">
+                        <i class="fa fa-arrow-right"></i>
                       </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping weight</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>weights 0–2000 lbs</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping length</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping width</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping height</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">ships from country</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Kenya (KE) Nairobi</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">transit time label</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Heavy package</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>From Nairobi</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Dog food</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">max handling time</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>3 days</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">min handling time</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 day</span>
-                      </span>
-                    </div>
-                    <br>
+                      <span>refurbished</span>                      
+                    </span>
 
                   </div>
                 </div>
+
               </div>
+
               <div class="addtabContent" id="productavailability">
                 <h5 class="text sticky-top">availability</h5>
-                <div class="card overflow-auto" style="height: 200px;">
-                  <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1 text-success">US:CA:Overnight:16.00 USD:1:1:2:3</h5>
-                    <span>3 days ago</span>
-                  </div>
+                
+                <div class="card overflow-auto">
                   
-                  <div class="box">
-                    <p class="mb-1">shipping cost, shipping speeds, and the locations your product ships from.<br>Supported prices : 0–1000 USD (check for other currencies)</p>
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 id="availabilityvalue" class="mb-1 text-success">in stock</h6>
+                    <span id="availabilityupdate">Updated 3 days ago</span>
+                  </div>
+
+                  <p class="mb-1">Product’s availability.</p>
+
+                  <div id="availabilitybox" class="box">
                     
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping label</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>perishable</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Sameday</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Oversize</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Only FedEx</span>
+                    <span class="icon-text">
+                      <span class="badge badge-primary text-wrap">availability</span >
+                      <span class="icon">
+                        <i class="fa fa-arrow-right"></i>
                       </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping weight</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>weights 0–2000 lbs</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping length</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping width</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping height</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">ships from country</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Kenya (KE) Nairobi</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">transit time label</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Heavy package</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>From Nairobi</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Dog food</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">max handling time</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>3 days</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">min handling time</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 day</span>
-                      </span>
-                    </div>
-                    <br>
+                      <span>in stock</span>                      
+                    </span>                    
 
                   </div>
+
                 </div>
+
               </div>
+
               <div class="addtabContent" id="producttax">
                 <h5 class="text sticky-top">tax</h5>
-                <div class="card overflow-auto" style="height: 200px;">
-                  <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1 text-success">US:CA:Overnight:16.00 USD:1:1:2:3</h5>
-                    <span>3 days ago</span>
-                  </div>
+                
+                <div class="card overflow-auto">
                   
-                  <div class="box">
-                    <p class="mb-1">shipping cost, shipping speeds, and the locations your product ships from.<br>Supported prices : 0–1000 USD (check for other currencies)</p>
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 id="taxvalue" class="mb-1 text-success">US:CA:5.00:y</h6>
+                    <span id="taxupdate">Updated 3 days ago</span>
+                  </div>
+
+                  <p class="mb-1">Your product’s sales tax rate in percent. A category that classifies your product by specific tax rules </p>
+
+                  <div id="taxbox" class="box">
                     
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping label</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>perishable</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Sameday</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Oversize</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Only FedEx</span>
+                    <span class="icon-text">
+                      <span class="badge badge-primary text-wrap">tax category</span >
+                      <span class="icon">
+                        <i class="fa fa-arrow-right"></i>
                       </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping weight</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>weights 0–2000 lbs</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping length</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping width</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping height</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">ships from country</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Kenya (KE) Nairobi</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">transit time label</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Heavy package</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>From Nairobi</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Dog food</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">max handling time</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>3 days</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">min handling time</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 day</span>
-                      </span>
-                    </div>
-                    <br>
+                      <span>apparel</span>                      
+                    </span>                    
 
                   </div>
+
                 </div>
+
               </div>
+
               <div class="addtabContent" id="productbrand">
                 <h5 class="text sticky-top">brand</h5>
-                <div class="card overflow-auto" style="height: 200px;">
-                  <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1 text-success">US:CA:Overnight:16.00 USD:1:1:2:3</h5>
-                    <span>3 days ago</span>
-                  </div>
+                
+                <div class="card overflow-auto">
                   
-                  <div class="box">
-                    <p class="mb-1">shipping cost, shipping speeds, and the locations your product ships from.<br>Supported prices : 0–1000 USD (check for other currencies)</p>
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 id="brandvalue" class="mb-1 text-success">customized jewelry</h6>
+                    <span id="brandupdate">Updated 3 days ago</span>
+                  </div>
+
+                  <p class="mb-1">Product’s brand name</p>
+
+                  <div id="brandbox" class="box">
                     
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping label</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>perishable</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Sameday</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Oversize</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Only FedEx</span>
+                    <span class="icon-text">
+                      <span class="badge badge-primary text-wrap">brand</span >
+                      <span class="icon">
+                        <i class="fa fa-arrow-right"></i>
                       </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping weight</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>weights 0–2000 lbs</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping length</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping width</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">shipping height</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 - 150 for inches</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">ships from country</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Kenya (KE) Nairobi</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">transit time label</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Heavy package</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>From Nairobi</span>
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>Dog food</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">max handling time</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>3 days</span>
-                      </span>
-                    </div>
-                    <br>
-
-                    <div class="float-left">
-                      <span class="icon-text">
-                        <span class="badge badge-primary text-wrap">min handling time</span >
-                        <span class="icon">
-                          <i class="fa fa-arrow-right"></i>
-                        </span>
-                        <span>1 day</span>
-                      </span>
-                    </div>
-                    <br>
+                      <span>Oramla</span>                      
+                    </span>                    
 
                   </div>
+
                 </div>
+
               </div>
+
             </div>
 
-            <div  id="paymentmethods"  class="">
+            <div id="paymentmethods"  class="">
               <h5 class="text sticky-top">Payment options</h5>
 
               <div class="card">
@@ -1099,8 +505,6 @@
 
               
             </div>
-
-            
             
             <hr>
             
@@ -1114,46 +518,50 @@
               </div>
               
             </div>
-          </div>
 
+            <section id="agentclient" class="">
+              <h3 class="text sticky-top">Other Products from Agent <b id="otheadd"></b></h3>
+    
+              <div class="card">
+                <div id="carouselExampleIndicators" class="carousel slide bg-dark text-white  row" data-ride="carousel">
+                  <ol id="add_carousel_indicators" class="carousel-indicators _carousel_indicators" style="z-index: 0;">
+        
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        
+                  </ol>
+                  <div id="add_carousel_other" class="carousel-inner">                  
+        
+                  </div>
+                  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </div>
+              </div>  
+
+            </section>
+            
+
+          </div>          
           
 
-        </section>
-        <section id="agentclient" class="callout  container-fluid">
-          <h3 class="text sticky-top">Other Products from Agent <b id="otheadd"></b></h3>
-
-          <div class="card">
-            <div id="carouselExampleIndicators" class="carousel slide bg-dark text-white  row" data-ride="carousel">
-              <ol id="add_carousel_indicators" class="carousel-indicators _carousel_indicators" style="z-index: 0;">
-    
-                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-    
-              </ol>
-              <div id="add_carousel_other" class="carousel-inner">                  
-    
-              </div>
-              <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-              </a>
-            </div>
-          </div>          
-        </section>
+        </section> 
+        
         <section id="addloactionagent" class="callout  container-fluid">
-          <h3 class="text sticky-top">Agent Agent <b class="otheaddlocation"></b> location</h3>
+          <h3 class="text sticky-top">Agent Agent <b class="agent_name_class"></b> location</h3>
           
           <div id="agentlocation" class="addagenttext row" style="text-align:center;">
           </div>
-          <div id="agent_location_map" class="row"> </div>
-
+          <div id="agent_location_map" class="row"> </div>    
           
         </section>
+        
         <section class="callout  container-fluid">
           <h3 class="text">Similar products </h3>
 
@@ -1192,10 +600,11 @@
           </div>
           
 
-          <a id="add_fload_id" connect_from="" connects_id="" connects_time="" class="add_float" style="display:  none;">
+          <a id="add_fload_id" connect_from="" connects_id="" connects_time="" class="add_float">
             <input class="bottom_input" type="radio" name="s" id="add_s5">
             <label class="bottom_label" for="add_s5"><img src="img/bubble_chart-24px.svg" alt=""></label>
           </a>
+
         </section>
         
       </div>
@@ -1224,28 +633,9 @@
               <circle r="20" cy="22" cx="22" id="test">
           </symbol>
         </svg> 
-      </div>
-      
+      </div>      
 
-      <div class="action_buttons">
-        <a id="add_products_agent"  class="product_float">
-          <i class="fa fa-plus-circle product_my-float"></i>
-        </a>
-        <div class="product_label-container">
-          <div class="product_label-text">Add products</div>
-          <i class="fa fa-play product_label-arrow"></i>
-        </div>
-    
-        
-        <a id="action_float_id" class="float">
-          <i class="fa fa-plus-circle my-float"></i>
-        </a>
-        <div class="label-container">
-          <div class="label-text">You would like to </div>
-          <i class="fa fa-play label-arrow"></i>
-        </div>
-      </div>
-      
+            
          
     </div>
 
@@ -1863,13 +1253,72 @@
               <input type="text" class="form-control is-valid" id="product_client" name="product_client" value="mopal">
             </div>
             <div class="form-group" style="display: none;">
-              <input type="text" class="form-control is-valid" id="product_data" name="product_data" value="">
+              <input type="text" class="form-control is-valid" id="product_data_tax" name="product_data_tax" value="">
+              <input type="text" class="form-control is-valid" id="product_data_sale_price" name="product_data_sale_price" value="">
+              <input type="text" class="form-control is-valid" id="product_data_net_price" name="product_data_net_price" value="">
+              <input type="text" class="form-control is-valid" id="product_data_product_list_price" name="product_data_product_list_price" value="">
+              <input type="text" class="form-control is-valid" id="product_data_product_price" name="product_data_product_price" value="">
+              <input type="text" class="form-control is-valid" id="product_data_pricing_strategy" name="product_data_pricing_strategy" value="">
+              <input type="text" class="form-control is-valid" id="product_data_product_type" name="product_data_product_type" value="">
+              <input type="text" class="form-control is-valid" id="product_data_shipping_strategies" name="product_data_shipping_strategies" value="">
+              <input type="text" class="form-control is-valid" id="product_data_shipping_rates" name="product_data_shipping_rates" value="">
+              <input type="text" class="form-control is-valid" id="product_data_tax_category" name="product_data_tax_category" value="">
+              <input type="text" class="form-control is-valid" id="product_data_shipping" name="product_data_shipping" value="">
+              <input type="text" class="form-control is-valid" id="product_data_shipping_label" name="product_data_shipping_label" value="">
+              <input type="text" class="form-control is-valid" id="product_data_shipping_weight" name="product_data_shipping_weight" value="">
+              <input type="text" class="form-control is-valid" id="product_data_shipping_length" name="product_data_shipping_length" value="">
+              <input type="text" class="form-control is-valid" id="product_data_shipping_width" name="product_data_shipping_width" value="">
+              <input type="text" class="form-control is-valid" id="product_data_shipping_height" name="product_data_shipping_height" value="">
+              <input type="text" class="form-control is-valid" id="product_data_ships_from_country" name="product_data_ships_from_country" value="">
+              <input type="text" class="form-control is-valid" id="product_data_transit_time_label" name="product_data_transit_time_label" value="">
+              <input type="text" class="form-control is-valid" id="product_data_max_handling_time" name="product_data_max_handling_time" value="">
+              <input type="text" class="form-control is-valid" id="product_data_min_handling_time" name="product_data_min_handling_time" value="">
+              <input type="text" class="form-control is-valid" id="product_data_excluded_destination" name="product_data_excluded_destination" value="">
+              <input type="text" class="form-control is-valid" id="product_data_included_destination" name="product_data_included_destination" value="">
+              <input type="text" class="form-control is-valid" id="product_data_shopping_ads_excluded_country" name="product_data_shopping_ads_excluded_country" value="">
+              <input type="text" class="form-control is-valid" id="product_data_condition" name="product_data_condition" value="">
+              <input type="text" class="form-control is-valid" id="product_data_adult" name="product_data_adult" value="">
+              <input type="text" class="form-control is-valid" id="product_data_multipack" name="product_data_multipack" value="">
+              <input type="text" class="form-control is-valid" id="product_data_is_bundle" name="product_data_is_bundle" value="">
+              <input type="text" class="form-control is-valid" id="product_data_energy_efficiency_class" name="product_data_energy_efficiency_class" value="">
+              <input type="text" class="form-control is-valid" id="product_data_min_energy_efficiency_class" name="product_data_min_energy_efficiency_class" value="">
+              <input type="text" class="form-control is-valid" id="product_data_max_energy_efficiency_class" name="product_data_max_energy_efficiency_class" value="">
+              <input type="text" class="form-control is-valid" id="product_data_age_group" name="product_data_age_group" value="">
+              <input type="text" class="form-control is-valid" id="product_data_color" name="product_data_color" value="">
+              <input type="text" class="form-control is-valid" id="product_data_gender" name="product_data_gender" value="">
+              <input type="text" class="form-control is-valid" id="product_data_material" name="product_data_material" value="">
+              <input type="text" class="form-control is-valid" id="product_data_pattern" name="product_data_pattern" value="">
+              <input type="text" class="form-control is-valid" id="product_data_size" name="product_data_size" value="">
+              <input type="text" class="form-control is-valid" id="product_data_size_system" name="product_data_size_system" value="">
+              <input type="text" class="form-control is-valid" id="product_data_item_group_id" name="product_data_item_group_id" value="">
+              <input type="text" class="form-control is-valid" id="product_data_product_detail" name="product_data_product_detail" value="">
+              <input type="text" class="form-control is-valid" id="product_data_product_highlight" name="product_data_product_highlight" value="">
+              <input type="text" class="form-control is-valid" id="product_data_brand" name="product_data_brand" value="">
+              <input type="text" class="form-control is-valid" id="product_data_gtin" name="product_data_gtin" value="">
+              <input type="text" class="form-control is-valid" id="product_data_MPN" name="product_data_MPN" value="">
+              <input type="text" class="form-control is-valid" id="product_data_identifier_exists" name="product_data_identifier_exists" value="">
+              <input type="text" class="form-control is-valid" id="product_data_availability" name="product_data_availability" value="">
+              <input type="text" class="form-control is-valid" id="product_data_availability_date" name="product_data_availability_date" value="">
+              <input type="text" class="form-control is-valid" id="product_data_cost_of_goods_sold" name="product_data_cost_of_goods_sold" value="">
+              <input type="text" class="form-control is-valid" id="product_data_expiration_date" name="product_data_expiration_date" value="">
+              <input type="text" class="form-control is-valid" id="product_data_sale_price_effective_date" name="product_data_sale_price_effective_date" value="">
+              <input type="text" class="form-control is-valid" id="product_data_unit_pricing_measure" name="product_data_unit_pricing_measure" value="">
+              <input type="text" class="form-control is-valid" id="product_data_unit_price_base_measure" name="product_data_unit_price_base_measure" value="">
+              <input type="text" class="form-control is-valid" id="product_data_installment" name="product_data_installment" value="">
+              <input type="text" class="form-control is-valid" id="product_data_subscription_cost" name="product_data_subscription_cost" value="">
+              <input type="text" class="form-control is-valid" id="product_data_loyalty_points" name="product_data_loyalty_points" value="">
+              <input type="text" class="form-control is-valid" id="product_data_product_category" name="product_data_product_category" value="">
+              <input type="text" class="form-control is-valid" id="product_data_product_title" name="product_data_product_title" value="">
+              <input type="text" class="form-control is-valid" id="product_data_product_industry" name="product_data_product_industry" value="">
+              <input type="text" class="form-control is-valid" id="product_data_product_description" name="product_data_product_description" value="">
+              <input type="text" class="form-control is-valid" id="product_data_product_quantity" name="product_data_product_quantity" value="">
+
             </div>
             <div class="form-group">
               <label class="label" for="product_title">Product Title:</label>
               <input type="text" class="form-control is-valid" id="product_title" name="product_title" placeholder="Enter name ">
               <span id="product_title_help" class="form-text text-muted">
-                <span class="text-danger">Required.</span><span class="text-dark"> Your product’s name. Example </span><span class="text-success"> Mens Pique Polo Shirt. </span><span class="text-dark">Syntax Max 150 characters. Schema.org property </span><span class="text-info">Product.name</span>
+                <span class="text-danger">Required</span>.<span class="text-dark"> Your product’s name. Example </span><span class="text-success"> Mens Pique Polo Shirt. </span><span class="text-dark">Syntax Max 150 characters. Schema.org property </span><span class="text-info">Product.name</span>
               </span>
             </div>
             <div class="form-group">
@@ -1877,7 +1326,7 @@
                 <div class="form-group is-valid float-md-left px-2">
                   <span>Price:</span>
                   <input type="text" class="form-control is-valid" id="product_price" name="product_price" placeholder="#">
-                  <span id="product_price_help" class="form-text text-muted">Enter product price </span>
+                  <span id="product_price_help" class="form-text text-muted"><span class="text-danger">Required</span>. Your product’s price. Example $<span class="text-success">15.00</span></span>
                 </div>
                 <div class="form-group is-valid float-md-right px-2">
                   <span>Pricing strategy types:</span>
@@ -1904,24 +1353,24 @@
               <span  id="product_price_strategy_help"  class="help"><span class="help is-success">Calculated as (<b id="percent_price"></b>)% of the product price</span></span>
 
             </div>
+
             <div class="form-group">
               <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
                 <div class="form-group is-valid float-md-left px-2">
                   <span>Industry/Department:</span>
                   <select id="product_industry" class="input" >
-                    <option class="countrycode_phone is-link" country_code="AR" value="54">Argentina (+54)</option>
-                    <option class="countrycode_phone is-link" country_code="AR" value="54">Argentina (+54)</option>
+                    <option value="">Select Industry/Department</option>
+
                   </select>  
-                  <span id="product_industry_help" class="form-text text-muted"></span>
+                  <span id="product_industry_help" class="form-text text-muted"><span class="text-danger">Required.</span> Oramla-defined product Industry/Department for your product</span>
                 </div>
                 <div class="form-group is-valid float-md-right px-2">
                   <span>Category:</span>
                   <select id="product_category" class="input" >
-                    <option class="countrycode_phone is-link" country_code="AR" value="54">Argentina (+54)</option>
-                    <option class="countrycode_phone is-link" country_code="AR" value="54">Argentina (+54)</option>
+                    <option value="">Select Industry/Department</option>
                   
                   </select>  
-                  <span id="product_category_help" class="form-text text-muted"></span>            
+                  <span id="product_category_help" class="form-text text-muted"><span class="text-danger">Required.</span> Oramla-defined product category for your product</span>            
                 </div>                
               </div>
 
@@ -1929,6 +1378,7 @@
               <input type="text" class="form-control is-valid" id="product_type" name="product_type" placeholder="For example, include Maxi Dresses instead of just Dresses">
               <span id="product_type_help" class="form-text text-muted">Product category that you define for your product</span>
             </div>
+
             <div class="form-group">
               <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
                 <div class="form-group is-valid float-md-left px-2">
@@ -1961,7 +1411,7 @@
                 <div class="form-group is-valid float-md-left px-2">
                   <span id="product_data_shipping_title"> shipping:</span>
                   <input type="text" class="form-control is-valid" id="product_shipping" name="product_shipping" placeholder="">
-                  <span id="product_shipping_help" class="form-text text-muted">i.e US:CA:Overnight:16.00 USD:1:1:2:3 </span>
+                  <span id="product_shipping_help" class="form-text text-muted">i.e <span class="text-success">US:CA:Overnight:16.00 USD:1:1:2:3</span> </span>
                 </div>
                 <div class="form-group is-valid float-md-right px-2">
                   <span>shipping:</span>
@@ -2001,7 +1451,7 @@
                 <div class="form-group is-valid float-md-left px-2">
                   <span id="product_data_specification_title"> Availability:</span>
                   <input type="text" class="form-control is-valid" id="product_availability" name="product_availability" placeholder="">
-                  <span id="product_availability_help" class="form-text text-muted">i.e in stock , preorder</span>
+                  <span id="product_availability_help" class="form-text text-muted">i.e  <span class="text-success">in stock</span> , <span class="text-success">preorder </span></span>
                 </div>
                 <div class="form-group is-valid float-md-right px-2">
                   <span>Availability strategy:</span>
@@ -2031,7 +1481,7 @@
                 <div class="form-group is-valid float-md-left px-2">
                   <span id="product_data_brand_title"> brand:</span>
                   <input type="text" class="form-control is-valid" id="product_brand" name="product_brand" placeholder="">
-                  <span id="product_brand_help" class="form-text text-muted">i.e oramla </span>
+                  <span id="product_brand_help" class="form-text text-muted">i.e <span class="text-success">oramla</span> </span>
                 </div>
                 <div class="form-group is-valid float-md-right px-2">
                   <span>Drand strategy:</span>
@@ -2061,7 +1511,7 @@
                 <div class="form-group is-valid float-md-left px-2">
                   <span id="product_data_condition_title"> condition:</span>
                   <input type="text" class="form-control is-valid" id="product_condition" name="product_condition" placeholder="">
-                  <span id="product_condition_help" class="form-text text-muted">i.e new </span>
+                  <span id="product_condition_help" class="form-text text-muted">i.e <span class="text-success">new</span> </span>
                 </div>
                 <div class="form-group is-valid float-md-right px-2">
                   <span>Condition strategy:</span>
@@ -2097,7 +1547,7 @@
                 <div class="form-group is-valid float-md-left px-2">
                   <span id="product_data_destinations_title"> destinations:</span>
                   <input type="text" class="form-control is-valid" id="product_destinations" name="product_destinations" placeholder="">
-                  <span id="product_destinations_help" class="form-text text-muted">i.e Shopping ads </span>
+                  <span id="product_destinations_help" class="form-text text-muted">i.e <span class="text-success">Shopping ads</span> </span>
                 </div>
                 <div class="form-group is-valid float-md-right px-2">
                   <span>Destinations strategy:</span>
@@ -2119,7 +1569,7 @@
                 <div class="form-group is-valid float-md-left px-2">
                   <span id="product_data_tax_title"> tax:</span>
                   <input type="text" class="form-control is-valid" id="product_tax" name="product_tax" placeholder="">
-                  <span id="product_tax_help" class="form-text text-muted">i.e KE:CA:5.00:y </span>
+                  <span id="product_tax_help" class="form-text text-muted">i.e <span class="text-success">KE:CA:5.00:y</span> </span>
                 </div>
                 <div class="form-group is-valid float-md-right px-2">
                   <span>tax strategy:</span>
@@ -2138,15 +1588,14 @@
                 </div> 
               </div>
               <span id="product_data_tax_help" class="help help is-link"><span class="help is-link">
-                <span class="text-danger">Required (Available for the KE only). </span><span class="text-dark">Your product’s sales tax rate in percent. Example </span><span class="text-danger">US:CA:5.00:y. </span><span class="text-dark">Syntax tax uses 4 sub-attributes: </span><span class="text-danger">rate (required) </span><span class="text-dark">Tax rate as a percentage</span><span class="text-warning">country (optional) </span><span class="text-dark">ISO 3166 country code </span><span class="text-warning">region or postal_​code or location_​id (optional) </span><span class="text-warning">tax_​ship (optional)</span><span class="text-info">Specify if you charge tax on shipping. Accepted values are </span> <span class="text-danger">yes </span> or <span class="text-danger">no</span>
-
+                <span class="text-danger">Required (Available for the KE only)</span>. Your product’s sales tax rate in percent. Example <span class="text-danger">US:CA:5.00:y</span>. Syntax tax uses 4 sub-attributes: <span class="text-danger">rate (required)</span> tax rate as a percentage, <span class="text-warning">country (optional)</span> ISO 3166 country code, <span class="text-warning">region</span> or <span class="text-warning">postal ​code</span> or <span class="text-warning">location id (optional)</span>, <span class="text-warning">tax ship (optional)</span>. Specify if you charge tax on shipping. Accepted values are <span class="text-danger">yes </span> or <span class="text-danger">no</span>
               </span>
               
             </div>
             <div class="form-group">
               <label class="label" for="product_quantity">Product Quantity:</label>
               <input type="text" class="form-control is-valid" id="product_quantity" name="product_quantity" placeholder="#">
-              <span id="product_quantity_help" class="form-text text-muted"></span>
+              <span id="product_quantity_help" class="form-text text-muted"><span class="text-danger">Required</span>. Allows store owners to sell products in decimal quantities and restrict checkout to control <span class="text-info">product</span> & <span class="text-info">cart</span> quantities.</span>
             </div>
             <div class="form-group">
 
@@ -2179,6 +1628,7 @@
                   </div>
                   <i class="fa fa-plus imgAdd"></i>
                 </div>
+                <span id="upload_from_file_container_help" class="form-text text-muted"><span class="text-danger">Required</span>. The file of your product’s main image. Example <span class="text-success">​image1.​jpg</span>
 
               </div>
 
@@ -2191,13 +1641,7 @@
                   </div>
                   <i class="fa fa-plus imgAdd"></i>
                 </div>
-                <span class="form-text text-muted">The URL of your product’s main image
-
-                  Example 
-                  http://​www.example.​com/​image1.​jpg
-                  
-                  Schema.org property
-                  Product.image
+                <span id="upload_from_url_container_help" class="form-text text-muted"><span class="text-danger">Required</span>. The URL of your product’s main image. Example <span class="text-success">http://​www.example.​com/​image1.​jpg</span>
                 </span>
               </div>
 
@@ -2217,145 +1661,6 @@
       </div>
     </div>
     
-    <!-- <div id="add_products_new" class="modal">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Add your product(s)</p>
-            <button id="add_products_close" class="delete" aria-label="close"></button>
-          </header>
-          <section class="modal-card-body">
-
-            <div class="field">
-              <label class="label">Product Title:</label>
-              <div class="control">
-                <input class="input" type="text" placeholder="Enter name">
-              </div>
-            </div>
-            
-            <div class="field">
-              <label class="label">Product Price:</label>
-              <div class="control has-icons-left has-icons-right">
-                <input class="input is-success" type="text" placeholder="Enter price">
-                <span class="icon is-small is-left">
-                  <i class="fas fa-user"></i>
-                </span>
-                <span class="icon is-small is-right">
-                  <i class="fas fa-check"></i>
-                </span>
-              </div>
-              <p class="help is-success">Calculated as 5% of the product price</p>
-            </div>            
-            
-            <div class="field is-grouped">
-              <label class="label">Product Industry/Department:</label>
-              <div class="control">
-                <div class="select is-link">
-                  <select >
-                    <option value="Argentina">Argentina</option>
-                    <option value="Bolivia">Bolivia</option>
-                    <option value="Brazil">Brazil</option>
-                    <option value="Chile">Chile</option>
-                    <option value="Colombia">Colombia</option>
-                    <option value="Ecuador">Ecuador</option>
-                    <option value="Guyana">Guyana</option>
-                    <option value="Paraguay">Paraguay</option>
-                    <option value="Peru">Peru</option>
-                    <option value="Suriname">Suriname</option>
-                    <option value="Uruguay">Uruguay</option>
-                    <option value="Venezuela">Venezuela</option>
-                  </select>
-                </div>
-              </div>
-              <label class="label">Product Category:</label>
-              <div class="control">
-                <div class="select is-link">
-                  <select >
-                    <option value="Argentina">Argentina</option>
-                    <option value="Bolivia">Bolivia</option>
-                    <option value="Brazil">Brazil</option>
-                    <option value="Chile">Chile</option>
-                    <option value="Colombia">Colombia</option>
-                    <option value="Ecuador">Ecuador</option>
-                    <option value="Guyana">Guyana</option>
-                    <option value="Paraguay">Paraguay</option>
-                    <option value="Peru">Peru</option>
-                    <option value="Suriname">Suriname</option>
-                    <option value="Uruguay">Uruguay</option>
-                    <option value="Venezuela">Venezuela</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Product Description:</label>
-              <div class="control">
-                <textarea class="textarea" placeholder="Describe your product"></textarea>
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Product quantity:</label>
-              <div class="control has-icons-left has-icons-right">
-                <input class="input is-danger" type="number" placeholder="Enter quantity">
-                <span class="icon is-small is-left">
-                  <i class="fas fa-envelope"></i>
-                </span>
-                <span class="icon is-small is-right">
-                  <i class="fas fa-exclamation-triangle"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Product image:</label>
-
-              <div id="upload_from_url" class="control upload_from_url">
-                <button class="button is-link">Upload from URL</button>
-              </div>
-
-              <div id="upload_from_file" class="control upload_from_file">
-                <button class="button is-link is-light">Upload from File</button>
-              </div>
-
-              <div id="upload_from_file_container" class="container upload_from_file_container">
-                <div class="row">
-                  <div class="col imgUp">
-                    <div class="imagePreview"></div>
-                    <label class="btn btn-primary">
-                      Choose file
-                      <input type="file" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">
-                    </label>
-                  </div>
-                  <i class="fa fa-plus imgAdd"></i>
-                </div>
-              </div>
-
-              <div id="upload_from_url_container" class="field upload_from_url_container">
-                <div class="row">
-                  <div class="col imgUp">
-                    <div class="imagePreview"></div>
-                    <div class="control"><input type="url" class="uploadFile img input is-success" placeholder="Enter url i.e http://oramla.com" style="width:auto;height:0px;overflow:hidden;"></div>
-                    
-                  </div>
-                  <i class="fa fa-plus imgAdd"></i>
-                </div>
-              </div>
-           
-            </div> 
-            
-
-          </section>
-          <footer class="modal-card-foot">            
-            <button class="button is-success">Add</button>
-            <button class="button is-danger">Cancel</button>
-          </footer>
-        </div>
-    </div>-->
-
-    
-      
     
     <div id="menu_container_bottom_tab" class="phone">           
 
@@ -2386,30 +1691,7 @@
 
         
     </div>
-
-     
     
-
-        <!--<a id="add_products_agent"  class="product_float">
-      <i class="fa fa-plus-circle product_my-float"></i>
-    </a>
-    <div class="product_label-container">
-      <div class="product_label-text">Add products</div>
-      <i class="fa fa-play product_label-arrow"></i>
-    </div>
-
-    
-    <a id="action_float_id" class="float">
-      <i class="fa fa-plus-circle my-float"></i>
-    </a>
-    <div class="label-container">
-      <div class="label-text">You would like to </div>
-      <i class="fa fa-play label-arrow"></i>
-    </div> -->
-
-
-    
-
 
   </div> 
   
@@ -2513,7 +1795,6 @@
     </div>
 
   </div>
-
 
   
   <!-- <script type="text/template7" id="results">
@@ -2713,13 +1994,13 @@
     </div>
   </script> -->
 
-    <!-- <script type="text/javascript" src="cordova.js"></script>
+  <!-- <script type="text/javascript" src="cordova.js"></script>
   <script type="text/javascript" src="lib/MSOpenTech/winstore-jscompat.js"></script>
   <script type="text/javascript" src="lib/framework7/js/framework7.min.js"></script>
   <script type="text/javascript" src="js/init-styles.js"></script>
    -->
 
-   <!-- <script type="text/javascript" src="js/my-app.js"></script> -->
+  <!-- <script type="text/javascript" src="js/my-app.js"></script> -->
   
   <script src="foundation-sites@6.6.3/dist/js/foundation.min.js" integrity="sha256-pRF3zifJRA9jXGv++b06qwtSqX1byFQOLjqa2PTEb2o=" crossorigin="anonymous"></script>
 

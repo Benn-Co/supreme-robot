@@ -30,6 +30,10 @@
     },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.benco.org"
+    },
+    "cordova-plugin-geolocation": {
+      "GPS_REQUIRED": "true",
+      "PACKAGE_NAME": "com.benco.org"
     }
   },
   "dependent_plugins": {}

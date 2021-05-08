@@ -1,13 +1,13 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-17:12
-INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-17:12
-INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-17:12
-INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-17:12
+ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
 MERGED from [:CordovaLib] C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\CordovaLib\build\intermediates\library_manifest\debug\AndroidManifest.xml:20:1-27:12
-INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-17:12
-INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-17:12
-INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-17:12
+INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
+INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:1-20:12
 	package
 		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:2:102-125
 		INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml
@@ -94,6 +94,20 @@ uses-permission#android.permission.READ_PHONE_STATE
 ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:16:5-75
 	android:name
 		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:16:22-72
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:17:5-81
+	android:name
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:17:22-78
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:18:5-79
+	android:name
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:18:22-76
+uses-feature#android.hardware.location.gps
+ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:19:5-90
+	android:required
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:19:64-87
+	android:name
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:19:19-63
 uses-sdk
 INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml
