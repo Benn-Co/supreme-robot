@@ -269,11 +269,12 @@
         </nav>
         
         <section class="buy-grid container-fluid">          
-          <div class="hero-image-wrapper">
-            <img id="add_imageadd_" src="https://www.osprey.com/images/product/hero/arielpro65_side_voyagergrey.jpg" class="hero-image-element" alt="alt">
-            <div id="other_title" class="row">
-                  
-            </div> 
+          <div class="hero-image-wrapper image">
+            <div class="hero-image-element">
+              <img id="add_imageadd_" src="http://localhost/product_images/amphibolite.jpg" class="hero-image-element" alt="alt">
+              <div id="other_title" class="row">                    
+              </div>
+            </div>            
           </div>
           <header class="header_header">
             <h5 id="add_carousel_title"></h5>
@@ -314,15 +315,7 @@
 
                   <p class="mb-1">shipping cost, shipping speeds, and the locations your product ships from.<br>Supported prices : 0–1000 USD (check for other currencies)</p>
 
-                  <div id="shippingbox" class="box">
-                    
-                    <span class="icon-text">
-                      <span class="badge badge-primary text-wrap">shipping label</span >
-                      <span class="icon">
-                        <i class="fa fa-arrow-right"></i>
-                      </span>
-                      <span>perishable</span>                      
-                    </span>                    
+                  <div id="shippingbox" class="box">         
 
                   </div>
 
@@ -666,12 +659,8 @@
             </div>
 
             <div class="add_li add_active" style="float:right">
-              <a id="connects_back" class="my-2 my-sm-0 arrow left">
-                <i></i>
-                <svg>
-                  <use xlink:href="#circle">
-                </svg>
-              </a>
+              <button id="connects_back"  class="button is-black"><i class="fa fa-arrow-left"></i></button>
+
             </div>
             
           </div>
@@ -905,9 +894,12 @@
     </div>
 
     <div id="location_container" class="location_main_container">
-
+      <nav class="navbar navbar-light bg-light sticky-top">
+        <div class="is-centered">
+          <h2>Your delivery Location </h2>
+        </div>
+      </nav>
       <section class="container">
-        <h2>Your delivery Location </h2>
         <div id="main_heremap" class="  row"> </div>
       </section>
 
@@ -1253,6 +1245,8 @@
               <input type="text" class="form-control is-valid" id="product_client" name="product_client" value="mopal">
             </div>
             <div class="form-group" style="display: none;">
+              <input type="text" class="form-control is-valid" id="api_server_url" name="api_server_url" value="">
+
               <input type="text" class="form-control is-valid" id="product_data_tax" name="product_data_tax" value="">
               <input type="text" class="form-control is-valid" id="product_data_sale_price" name="product_data_sale_price" value="">
               <input type="text" class="form-control is-valid" id="product_data_net_price" name="product_data_net_price" value="">
