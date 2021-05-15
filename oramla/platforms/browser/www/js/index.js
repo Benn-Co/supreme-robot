@@ -53,7 +53,7 @@ var api_server_url = "https://oramla.com";
 //var api_server_url = "http://192.168.0.102";
 //var api_server_url = "http://169.254.249.58";
 //var api_server_url = "http://192.168.43.16";
-var api_server_url = "http://localhost";
+//var api_server_url = "http://localhost";
 //var api_server_url = "http://192.168.43.16";
 
 
@@ -85,18 +85,54 @@ function check_user_authentication(username,email) {
                     review = response.review;
                     rating = response.rating;
                     role = response.role;
-
-                    authentication(response.username);
+                    username = response.username;
+                    authentication(username);
                 } else {
-                    authentication('');
+                    latitude = '';
+                    longitude = '';
+                    //var location = JSON.parse(response.location_name);
+                    postal = '';
+                    country = '';
+                    city = '';
+                    address = '';
+                    review = '';
+                    rating = '';
+                    role = '';
+                    username = '';
+                    main();
+                    //authentication('');
                 }
             } catch(e) {                    
                 //alert('JSON parsing error');
-                authentication('');
+                latitude = '';
+                longitude = '';
+                //var location = JSON.parse(response.location_name);
+                postal = '';
+                country = '';
+                city = '';
+                address = '';
+                review = '';
+                rating = '';
+                role = '';
+                username = '';
+                main();
+                //authentication('');
             }
         },
         error: function searchError(xhr, err) {
-            authentication('');
+            latitude = '';
+            longitude = '';
+            //var location = JSON.parse(response.location_name);
+            postal = '';
+            country = '';
+            city = '';
+            address = '';
+            review = '';
+            rating = '';
+            role = '';
+            username = '';
+            main();
+            //authentication('');
         }
       });
 }
@@ -867,10 +903,10 @@ function authentication(username) {
     $("#app-cover-spin").removeClass("app-cover");
     
     if (username == "" || username == null) {
-        $(".main").hide(100);
-        $(".authentication").show(100);
+        //$(".main").hide(100);
+        $("#authentication_modal").show(100);
     } else {
-        $(".authentication").hide(100);
+        $("#authentication_modal").hide(100);
         $(".main").show(100);
         localStorage.setItem("username", username);
         //localStorage.setItem("role", role);
@@ -882,7 +918,9 @@ function authentication(username) {
 var imgUri = "https://oramla.com/products.html";
 
 function main() {
-    $('.authentication').hide(100, function(){
+    $("#app-coverin").hide(100);
+
+    $("#authentication_modal").hide(100, function(){
         $(".main").show(100);
         $(".product_main_container").show(100);
     });
@@ -892,7 +930,6 @@ function main() {
     geoshop_value = '';
     cat_id = '';
     brand_id = "";
-    //alert(role);
     if (role == 'customer' || role == '' || role == null) {
         $("#action_float_id").html('<i class="fa  fa-invision my-float">Sell</i>');
         $("#add_products_agent").hide(100);
@@ -913,8 +950,8 @@ var messageauto = 0;
 function loadconnects() {
     conectset = 1;
     if (username == "") {
-        $(".main").hide(100);
-        $(".authentication").show(100);
+        //$(".main").hide(100);
+        $("#authentication_modal").show(100);
     } else{
         loadchat('');
         //user_container(username,email);
@@ -933,7 +970,12 @@ var api = "product_main_container";
 
 $("body").delegate(".add_to_cart","click",function(event){
     event.preventDefault();
-    product_id(startlimit,endlimit,"add_to_cart",username,$(this).attr('product_id'));    
+    if (username == "" || username == null) {
+        //$(".main").hide(100);
+        $("#authentication_modal").show(100);
+    } else {
+        product_id(startlimit,endlimit,"add_to_cart",username,$(this).attr('product_id'));    
+    }
 });
 $("body").delegate(".edit_product","click",function(event){
     event.preventDefault();
@@ -953,9 +995,9 @@ $("body").delegate(".connect_product","click",function(event){
     conta = 1;
     chat_ = 1;                    
 
-    if (username == "") {
-        $(".main").hide(100);
-        $(".authentication").show(100);
+    if (username == "" || username == null) {
+        //$(".main").hide(100);
+        $("#authentication_modal").show(100);
     } else { 
         
         //alert($(this).attr('add_client'));
@@ -1674,7 +1716,7 @@ $("body").delegate(".div_cimage","click",function(event){
     $("#shippingvalue").html($(this).attr('shipping'));
     $("#shippingupdate").html($(this).attr('timestamp'));    
     $("#shippingbox").html('');
-    if ($(this).attr('shipping_rates') != '') {
+    if ($(this).attr('shipping_rates') != '' && $(this).attr('shipping_rates') != 'undefined') {
         var shippingbox = '<span class="icon-text">' +
         '<span class="badge badge-primary text-wrap">shipping rates</span >' +
         '<span class="icon">' +
@@ -1684,7 +1726,7 @@ $("body").delegate(".div_cimage","click",function(event){
         '</span>';
         $("#shippingbox").append(shippingbox);
     }
-    if ($(this).attr('shipping_strategies') != '') {
+    if ($(this).attr('shipping_strategies') != '' && $(this).attr('shipping_strategies') != 'undefined') {
         var shippingbox = '<span class="icon-text">' +
         '<span class="badge badge-primary text-wrap">shipping strategies</span >' +
         '<span class="icon">' +
@@ -1694,7 +1736,7 @@ $("body").delegate(".div_cimage","click",function(event){
         '</span>';
         $("#shippingbox").append(shippingbox);
     }
-    if ($(this).attr('shipping_label') != '') {
+    if ($(this).attr('shipping_label') != '' && $(this).attr('shipping_label') != 'undefined') {
         var shippingbox = '<span class="icon-text">' +
         '<span class="badge badge-primary text-wrap">shipping label</span >' +
         '<span class="icon">' +
@@ -1704,7 +1746,7 @@ $("body").delegate(".div_cimage","click",function(event){
         '</span>';
         $("#shippingbox").append(shippingbox);
     }
-    if ($(this).attr('shipping_weight') != '') {
+    if ($(this).attr('shipping_weight') != '' && $(this).attr('shipping_weight') != 'undefined') {
         var shippingbox = '<span class="icon-text">' +
         '<span class="badge badge-primary text-wrap">shipping weight</span >' +
         '<span class="icon">' +
@@ -1714,7 +1756,7 @@ $("body").delegate(".div_cimage","click",function(event){
         '</span>';
         $("#shippingbox").append(shippingbox);
     }
-    if ($(this).attr('shipping_length') != '') {
+    if ($(this).attr('shipping_length') != '' && $(this).attr('shipping_length') != 'undefined') {
         var shippingbox = '<span class="icon-text">' +
         '<span class="badge badge-primary text-wrap">shipping length</span >' +
         '<span class="icon">' +
@@ -1724,7 +1766,7 @@ $("body").delegate(".div_cimage","click",function(event){
         '</span>';
         $("#shippingbox").append(shippingbox);
     }
-    if ($(this).attr('shipping_width') != '') {
+    if ($(this).attr('shipping_width') != '' && $(this).attr('shipping_width') != 'undefined') {
         var shippingbox = '<span class="icon-text">' +
         '<span class="badge badge-primary text-wrap">shipping width</span >' +
         '<span class="icon">' +
@@ -1734,7 +1776,7 @@ $("body").delegate(".div_cimage","click",function(event){
         '</span>';
         $("#shippingbox").append(shippingbox);
     }
-    if ($(this).attr('shipping_height') != '') {
+    if ($(this).attr('shipping_height') != '' && $(this).attr('shipping_height') != 'undefined') {
         var shippingbox = '<span class="icon-text">' +
         '<span class="badge badge-primary text-wrap">shipping height</span >' +
         '<span class="icon">' +
@@ -1744,7 +1786,7 @@ $("body").delegate(".div_cimage","click",function(event){
         '</span>';
         $("#shippingbox").append(shippingbox);
     }
-    if ($(this).attr('ships_from_country') != '') {
+    if ($(this).attr('ships_from_country') != '' && $(this).attr('ships_from_country') != 'undefined') {
         var shippingbox = '<span class="icon-text">' +
         '<span class="badge badge-primary text-wrap">ships from country</span >' +
         '<span class="icon">' +
@@ -1754,7 +1796,7 @@ $("body").delegate(".div_cimage","click",function(event){
         '</span>';
         $("#shippingbox").append(shippingbox);
     }
-    if ($(this).attr('transit_time_label') != '') {
+    if ($(this).attr('transit_time_label') != '' && $(this).attr('transit_time_label') != 'undefined') {
         var shippingbox = '<span class="icon-text">' +
         '<span class="badge badge-primary text-wrap">transit time label</span >' +
         '<span class="icon">' +
@@ -1764,7 +1806,7 @@ $("body").delegate(".div_cimage","click",function(event){
         '</span>';
         $("#shippingbox").append(shippingbox);
     }
-    if ($(this).attr('max_handling_time') != '') {
+    if ($(this).attr('max_handling_time') != '' && $(this).attr('max_handling_time') != 'undefined') {
         var shippingbox = '<span class="icon-text">' +
         '<span class="badge badge-primary text-wrap">max handling time</span >' +
         '<span class="icon">' +
@@ -1774,7 +1816,7 @@ $("body").delegate(".div_cimage","click",function(event){
         '</span>';
         $("#shippingbox").append(shippingbox);
     }
-    if ($(this).attr('min_handling_time') != '') {
+    if ($(this).attr('min_handling_time') != '' && $(this).attr('min_handling_time') != 'undefined') {
         var shippingbox = '<span class="icon-text">' +
         '<span class="badge badge-primary text-wrap">min handling time</span >' +
         '<span class="icon">' +
@@ -1784,7 +1826,7 @@ $("body").delegate(".div_cimage","click",function(event){
         '</span>';
         $("#shippingbox").append(shippingbox);
     }
-    if ($(this).attr('shipping') != '') {
+    if ($(this).attr('shipping') != '' && $(this).attr('shipping') != 'undefined') {
         var shippingbox = '<span class="icon-text">' +
         '<span class="badge badge-primary text-wrap">shipping</span >' +
         '<span class="icon">' +
@@ -1795,6 +1837,322 @@ $("body").delegate(".div_cimage","click",function(event){
         $("#shippingbox").append(shippingbox);
     }
 
+
+    $("#conditionvalue").html($(this).attr('condition'));
+    $("#conditionupdate").html($(this).attr('timestamp'));    
+    $("#conditionbox").html('');
+    if ($(this).attr('adult') != '' && $(this).attr('adult') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">adult</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('adult') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('multipack') != '' && $(this).attr('multipack') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">multipack</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('multipack') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('is_bundle') != '' && $(this).attr('is_bundle') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">is bundle</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('is_bundle') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('energy_efficiency_class') != '' && $(this).attr('energy_efficiency_class') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">energy efficiency</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('energy_efficiency_class') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('min_energy_efficiency_class') != '' && $(this).attr('min_energy_efficiency_class') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">min energy efficiency</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('min_energy_efficiency_class') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('max_energy_efficiency_class') != '' && $(this).attr('max_energy_efficiency_class') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">max energy efficiency</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('max_energy_efficiency_class') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('age_group') != '' && $(this).attr('age_group') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">age group</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('age_group') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('gender') != '' && $(this).attr('gender') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">gender</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('gender') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('material') != '' && $(this).attr('material') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">material</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('material') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('pattern') != '' && $(this).attr('pattern') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">pattern</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('pattern') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('size') != '' && $(this).attr('size') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">size</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('size') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('size_system') != '' && $(this).attr('size_system') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">size system</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('size_system') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('item_group_id') != '' && $(this).attr('item_group_id') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">item group id</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('item_group_id') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('product_detail') != '' && $(this).attr('product_detail') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">product detail</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('product_detail') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('product_highlight') != '' && $(this).attr('product_highlight') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">product highlight</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('product_highlight') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+    if ($(this).attr('condition') != '' && $(this).attr('condition') != 'undefined') {
+        var conditionbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">condition</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('condition') + '</span>' +                      
+        '</span>';
+        $("#conditionbox").append(conditionbox);
+    }
+
+    $("#brandvalue").html($(this).attr('brand'));
+    $("#brandupdate").html($(this).attr('timestamp'));    
+    $("#brandbox").html('');
+    if ($(this).attr('gtin') != '' && $(this).attr('gtin') != 'undefined') {
+        var brandbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">gtin</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('gtin') + '</span>' +                      
+        '</span>';
+        $("#brandbox").append(brandbox);
+    }
+    if ($(this).attr('MPN') != '' && $(this).attr('MPN') != 'undefined') {
+        var brandbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">MPN</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('MPN') + '</span>' +                      
+        '</span>';
+        $("#brandbox").append(brandbox);
+    }
+    if ($(this).attr('brand') != '' && $(this).attr('brand') != 'undefined') {
+        var brandbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">brand</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('brand') + '</span>' +                      
+        '</span>';
+        $("#brandbox").append(brandbox);
+    }
+
+    $("#availabilityvalue").html($(this).attr('availability'));
+    $("#availabilityupdate").html($(this).attr('timestamp'));    
+    $("#availabilitybox").html('');
+    if ($(this).attr('availability_date') != '' && $(this).attr('availability_date') != 'undefined') {
+        var availabilitybox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">availability date</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('availability_date') + '</span>' +                      
+        '</span>';
+        $("#availabilitybox").append(availabilitybox);
+    }
+    if ($(this).attr('expiration_date') != '' && $(this).attr('expiration_date') != 'undefined') {
+        var availabilitybox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">expiration date</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('expiration_date') + '</span>' +                      
+        '</span>';
+        $("#availabilitybox").append(availabilitybox);
+    }
+    if ($(this).attr('sale_price_effective_date') != '' && $(this).attr('sale_price_effective_date') != 'undefined') {
+        var availabilitybox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">sale price effective date</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('sale_price_effective_date') + '</span>' +                      
+        '</span>';
+        $("#availabilitybox").append(availabilitybox);
+    }
+    if ($(this).attr('unit_pricing_measure') != '' && $(this).attr('unit_pricing_measure') != 'undefined') {
+        var availabilitybox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">unit pricing measure</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('unit_pricing_measure') + '</span>' +                      
+        '</span>';
+        $("#availabilitybox").append(availabilitybox);
+    }
+    if ($(this).attr('unit_price_base_measure') != '' && $(this).attr('unit_price_base_measure') != 'undefined') {
+        var availabilitybox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">unit price base measure</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('unit_price_base_measure') + '</span>' +                      
+        '</span>';
+        $("#availabilitybox").append(availabilitybox);
+    }
+    if ($(this).attr('installment') != '' && $(this).attr('installment') != 'undefined') {
+        var availabilitybox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">installment</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('installment') + '</span>' +                      
+        '</span>';
+        $("#availabilitybox").append(availabilitybox);
+    }
+    if ($(this).attr('subscription_cost') != '' && $(this).attr('subscription_cost') != 'undefined') {
+        var availabilitybox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">subscription cost</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('subscription_cost') + '</span>' +                      
+        '</span>';
+        $("#availabilitybox").append(availabilitybox);
+    }
+    if ($(this).attr('loyalty_points') != '' && $(this).attr('loyalty_points') != 'undefined') {
+        var availabilitybox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">loyalty points</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('loyalty_points') + '</span>' +                      
+        '</span>';
+        $("#availabilitybox").append(availabilitybox);
+    }
+    if ($(this).attr('availability') != '' && $(this).attr('availability') != 'undefined') {
+        var availabilitybox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">availability</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('availability') + '</span>' +                      
+        '</span>';
+        $("#availabilitybox").append(availabilitybox);
+    }
+    
+    $("#taxvalue").html($(this).attr('tax'));
+    $("#taxupdate").html($(this).attr('timestamp'));    
+    $("#taxbox").html('');
+    if ($(this).attr('tax_category') != '' && $(this).attr('tax_category') != 'undefined') {
+        var taxbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">tax category</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('tax_category') + '</span>' +                      
+        '</span>';
+        $("#taxbox").append(taxbox);
+    }
+    if ($(this).attr('tax') != '' && $(this).attr('tax') != 'undefined') {
+        var taxbox = '<span class="icon-text">' +
+        '<span class="badge badge-primary text-wrap">tax</span >' +
+        '<span class="icon">' +
+        '<i class="fa fa-arrow-right"></i>' +
+        '</span>' +
+        '<span>' + $(this).attr('tax') + '</span>' +                      
+        '</span>';
+        $("#taxbox").append(taxbox);
+    }
     
 
 
@@ -3014,11 +3372,9 @@ function products_datamyFunction(item, index) {
 
     var item_add_description = item.add_description;
 
-    if (item_add_description.includes("{", 0)) {
+    if (item_add_description.includes("{", 0) && item_add_description.endsWith("}")) {
     var description = JSON.parse(item.add_description);
-    //alert(item.add_description);
     var item_add_description = description.product_description;
-    //var item_add_description = description;
     var tax = description.tax;
     var tax_category = description.tax_category;
 
@@ -3239,7 +3595,7 @@ function products_datamyFunction(item, index) {
     '<p class="card-text"><b style="height: auto;">' + product_title_account + '</b></p>' +
     '<a href="javascript:void(0)" class="more close"><i class="fa fa-times"></i></a>' +                
     '</div>' +
-    '<div class="description"><p>From ' + item.add_client + '</p><br>' + item.add_description + '<br>Ratings : ' + item.add_rating + '<br>' + adminactions + '</div>' +
+    '<div class="description"><p>From ' + item.add_client + '</p><br>' + item_add_description + '<br>Ratings : ' + item.add_rating + '<br>' + adminactions + '</div>' +
     '</div>' +
     '<div class="buttons cf">' + actions + '</div>' +
     '</div>';
@@ -3466,11 +3822,11 @@ $("#contact_information_save").click(function(){
 var action_float_id = 0;
 $("#action_float_id").click(function(){
     //alert(username);
-    if (username == "") {
-        $(".main").hide(100);
-        $(".authentication").show(100);
+    if (username == "" || username == null) {
+        //$(".main").hide(100);
+        $("#authentication_modal").show(100);
     } else {
-        $(".authentication").hide(100);
+        $("#authentication_modal").hide(100);
         $(".main").show(100);
         //localStorage.setItem("username", username);
         //localStorage.setItem("role", role); 
@@ -5193,8 +5549,8 @@ $("body").delegate(".add_float","click",function(event){
     $("#menu_container_top_tab").hide(100);                
     $("#center_top_id").show(100);
     if (username == "") {
-        $(".main").hide(100);
-        $(".authentication").show(100);
+        //$(".main").hide(100);
+        $("#authentication_modal").show(100);
     } else {
         $("#contactname").html($(this).attr('connect_from'));
         $("#cotacttime").html($(this).attr('connects_time'));
@@ -5361,6 +5717,7 @@ $("#order_back").click(function(){
         $("#top_slider").hide(100);
 
     });
+    main();
     $("#product_add_client_container").hide(100,function(){       
         $("#product_error").hide(100);
     });
@@ -5388,6 +5745,7 @@ $("#cart_back").click(function(){
         $("#top_slider").hide(100);
 
     });
+    main();
     $("#product_add_client_container").hide(100,function(){       
         $("#product_error").hide(100);
     });
@@ -5453,14 +5811,15 @@ $("#s5").click(function(){
     geoshop_value = '';
     cat_id = '';
     brand_id = "";
-    window.location.href="#center_top_id"; 
-    $("#menu_container_top_tab").hide(100);                
-    $("#center_top_id").show(100);                
-
-    if (username == "") {
-        $(".main").hide(100);
-        $(".authentication").show(100);
+    if (username == "" || username == null) {
+        //$(".main").hide(100);
+        $("#authentication_modal").show(100);
     } else {
+        window.location.href="#"; 
+
+        $("#menu_container_top_tab").hide(100);                
+        $("#center_top_id").show(100);                
+    
         $("#connects_chatbar").show(100);
         $("#product_container").hide(100);
         $("#menu_container_left_tab").hide(100);
@@ -5662,6 +6021,9 @@ document.addEventListener('backbutton', function(){
             $("#product_error").hide(100);
         });        
     }
+    if (chat_ != 1 && conta != 1 && div_cima != 1 && connect_product != 1 && add_cdiv_cima != 1) {
+        process.exit(1);
+    }
 });
 
 $("#s2").click(function(){
@@ -5683,7 +6045,12 @@ $("#s2").click(function(){
         $("#top_slider").hide(100);
 
     });
-    cart();
+    if (username == "" || username == null) {
+        //$(".main").hide(100);
+        $("#authentication_modal").show(100);
+    } else {
+        cart();
+    }
     $("#product_add_client_container").hide(100,function(){       
         $("#product_error").hide(100);
     });
@@ -5707,7 +6074,7 @@ $("#s4").click(function(){
     geoshop_value = '';
     cat_id = '';
     brand_id = "";
-    window.location.href="#user_container";
+    //window.location.href="#user_container";
     $("#menu_container_top_tab").show(100);                
 
     $("#product_container").hide(100);
@@ -5732,14 +6099,22 @@ $("#s4").click(function(){
     }
     //$("#menu_container_apps_tab").hide(100);
 });
+$("#authentication_close").click(function(){
+    $("#authentication_modal").hide(100);
+
+});
+$("#authentication").click(function(){
+    $("#authentication_modal").hide(100);
+
+});
 var user_co = 0;
 function user() {    
-    if (username == "") {
+    if (username == "" || username == null) {
         $(".user").hide(100);
-        $(".main").hide(100);        
-        $(".authentication").show(100);
+        //$(".main").hide(100);        
+        $("#authentication_modal").show(100);
     } else {
-        $(".authentication").hide(100);
+        $("#authentication_modal").hide(100);
         $(".main").show(100);
         $(".user").show(100);
         window.location.href="#user_container";
@@ -5753,7 +6128,7 @@ $("#s3").click(function(){
     search_value = '';
     geoshop_value = '';
     cat_id = '';
-    window.location.href="#location_container";
+    //window.location.href="#location_container";
     $("#menu_container_top_tab").show(100);                
 
     $("#product_container").hide(100);
@@ -5769,7 +6144,12 @@ $("#s3").click(function(){
         $("#top_slider").hide(100);
 
     });
-    location_container();
+    if (username == "" || username == null) {
+        //$(".main").hide(100);
+        $("#authentication_modal").show(100);
+    } else {
+        location_container();
+    }
     $("#product_add_client_container").hide(100,function(){       
         $("#product_error").hide(100);
     });
@@ -5871,20 +6251,32 @@ $("#login").keypress(function (e){
     }
 });
 function login_button() {
+    var User_name_format = /^[A-Za-z0-9' ']+$/;
+
    var email_format =/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
    var login_email_details = false;
    var login_password_details = false;
 
    var login_email = $("#login_email").val();
+   var login_details_email = '';
+   var login_details_username = '';
+
    if (login_email != "" && login_email != "name@example.com" && login_email != null) {
     if (email_format.test(login_email)) {
         login_email_details = true;
+        login_details_email = login_email;
+        $("#login_email_help").html(login_email);
+        $("#login_email").removeClass("is-invalid");
+        $("#login_email").addClass("is-valid");
+    } else if (User_name_format.test(login_email)){
+        login_email_details = true;
+        login_details_username = login_email;
         $("#login_email_help").html(login_email);
         $("#login_email").removeClass("is-invalid");
         $("#login_email").addClass("is-valid");
     } else {
         login_email_details = false;
-        $("#login_email_help").html("Enter a valid email address, e.g name@example.com");
+        $("#login_email_help").html("Enter a valid email address, e.g name@example.com or username");
         $("#login_email").removeClass("is-valid");
         $("#login_email").addClass("is-invalid");
     }
@@ -5919,7 +6311,7 @@ function login_button() {
 
    if (login_email_details == true && login_password_details == true) {
     $("#login_button_help").html("Loading your account...");    
-    login_user(login_email,login_password);
+    login_user(login_email,login_password,login_details_username,login_details_email);
    } else {
     $("#login_button_help").html("Correct the error(s) highligted");       
    }
@@ -5927,12 +6319,12 @@ function login_button() {
 $("#login_button").click(function(){  
     login_button();    
 });
-function login_user(login_email,login_password) {
+function login_user(login_email,login_password,login_details_username,login_details_email) {
     $('#app-cover-spin').show(0);
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
-        data: { login_user: 12, login_email: login_email, login_password:login_password },
+        data: { login_user: 12, login_email: login_email, login_password:login_password, login_details_username:login_details_username, login_details_email:login_details_email },
         processData: true,
         url: api_server_url + '/cordova/login_user.php',
         success: function searchSuccess(response) {

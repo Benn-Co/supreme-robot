@@ -11,6 +11,8 @@
         * Enable inline JS: add 'unsafe-inline' to default-src
     -->
   <!-- Removing 'unsafe-eval'. If needed, I will figure out a way around it -->
+  <meta name="robots" content="THE LEADING PLATFORM FOR GLOBAL TRADE. WE CONNECT AND SERVE MILLIONS OF BUYERS AND SELLERS AROUND THE WORLD" />
+
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://polyfill.io https://developers.google.com https://maps.googleapis.com https://js.api.here.com https://developer.here.com https://image.maps.ls.hereapi.com https://oramla.com http://192.168.0.102 http://localhost https://itunes.apple.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
 
   <!-- Required meta tags-->
@@ -55,16 +57,29 @@
   <link rel="stylesheet" href="css/authentication.css">
 
   
-  <title>Oramla</title>
+  <title>Oramla | The leading platform for global trade </title>
 
 </head>
 
 <body>
-  <div id="app-cover-spin" class="app-cover">
+
+  <div id="app-coverin" class="app-cover">
+    <div class="app-coverh1">
+      <h1>
+        Oramla
+      </h1>
+    </div>
+    <div class="app-coverh6">
+      <h6>The leading platform for global trade</h6> 
+    </div>
+  </div>
+
+  <div id="app-cover-spin" class="">
             
   </div> 
 
-   <div id="maincontainer" class="main">
+  <div id="maincontainer" class="main">
+
 
     <div id="menu_container_top_tab" class="menu-container">  
       <div class="top_container_menu" id="top_menu">
@@ -328,21 +343,13 @@
                 
                 <div class="card overflow-auto">
                   <div class="d-flex w-100 justify-content-between">
-                    <h6 id="conditionvalue" class="mb-1 text-success">refurbished</h6>
-                    <span id="conditionupdate">3 days ago</span>
+                    <h6 id="conditionvalue" class="mb-1 text-success"></h6>
+                    <span id="conditionupdate"></span>
                   </div>
 
                   <p class="mb-1">The condition of the product at time of sale</p>
 
-                  <div id="conditionbox" class="box">
-                    
-                    <span class="icon-text">
-                      <span class="badge badge-primary text-wrap">condition</span >
-                      <span class="icon">
-                        <i class="fa fa-arrow-right"></i>
-                      </span>
-                      <span>refurbished</span>                      
-                    </span>
+                  <div id="conditionbox" class="box">                    
 
                   </div>
                 </div>
@@ -355,21 +362,14 @@
                 <div class="card overflow-auto">
                   
                   <div class="d-flex w-100 justify-content-between">
-                    <h6 id="availabilityvalue" class="mb-1 text-success">in stock</h6>
-                    <span id="availabilityupdate">Updated 3 days ago</span>
+                    <h6 id="availabilityvalue" class="mb-1 text-success"></h6>
+                    <span id="availabilityupdate"></span>
                   </div>
 
                   <p class="mb-1">Product’s availability.</p>
 
                   <div id="availabilitybox" class="box">
                     
-                    <span class="icon-text">
-                      <span class="badge badge-primary text-wrap">availability</span >
-                      <span class="icon">
-                        <i class="fa fa-arrow-right"></i>
-                      </span>
-                      <span>in stock</span>                      
-                    </span>                    
 
                   </div>
 
@@ -383,21 +383,13 @@
                 <div class="card overflow-auto">
                   
                   <div class="d-flex w-100 justify-content-between">
-                    <h6 id="taxvalue" class="mb-1 text-success">US:CA:5.00:y</h6>
-                    <span id="taxupdate">Updated 3 days ago</span>
+                    <h6 id="taxvalue" class="mb-1 text-success"></h6>
+                    <span id="taxupdate"></span>
                   </div>
 
                   <p class="mb-1">Your product’s sales tax rate in percent. A category that classifies your product by specific tax rules </p>
 
                   <div id="taxbox" class="box">
-                    
-                    <span class="icon-text">
-                      <span class="badge badge-primary text-wrap">tax category</span >
-                      <span class="icon">
-                        <i class="fa fa-arrow-right"></i>
-                      </span>
-                      <span>apparel</span>                      
-                    </span>                    
 
                   </div>
 
@@ -411,22 +403,14 @@
                 <div class="card overflow-auto">
                   
                   <div class="d-flex w-100 justify-content-between">
-                    <h6 id="brandvalue" class="mb-1 text-success">customized jewelry</h6>
-                    <span id="brandupdate">Updated 3 days ago</span>
+                    <h6 id="brandvalue" class="mb-1 text-success"></h6>
+                    <span id="brandupdate"></span>
                   </div>
 
                   <p class="mb-1">Product’s brand name</p>
 
                   <div id="brandbox" class="box">
                     
-                    <span class="icon-text">
-                      <span class="badge badge-primary text-wrap">brand</span >
-                      <span class="icon">
-                        <i class="fa fa-arrow-right"></i>
-                      </span>
-                      <span>Oramla</span>                      
-                    </span>                    
-
                   </div>
 
                 </div>
@@ -1228,11 +1212,10 @@
       </div>
     </div>
 
-    
-    <div id="add_products_new" class="modal"  tabindex="-1" role="dialog" aria-labelledby="add_products_newTitle" aria-hidden="true">
-      <div class="modal-background"></div>
+    <div id="add_products_new" class="modal bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="add_products_newTitle" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-background"></div>
 
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="add_products_newTitle">Add your product(s)</h5>
@@ -1689,11 +1672,14 @@
 
   </div> 
   
-  <div id="snackbar"></div>
+  <div id="authentication_modal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-header bg-light">
+      <button id="authentication" class="modal-title is-link" aria-label="close">Oramla</button>
 
+      <button id="authentication_close" class="delete" aria-label="close"></button>
+    </div>
 
-  <div class="authentication">
-    
     <div class="tab-content">
       <ul class="nav nav-pills" role="tablist">
         <li class="nav-item">
@@ -1707,8 +1693,8 @@
       <div id="login" class="login-tab-content container tab-pane active">
         <form >
           <div class="form-group">
-            <input type="email" class="form-control is-valid" id="login_email" name="login_email" placeholder="name@example.com">
-            <small id="login_email_help" class="form-text text-muted">Provide email address</small>
+            <input type="text" class="form-control is-valid" id="login_email" name="login_email" placeholder="name@example.com">
+            <small id="login_email_help" class="form-text text-muted">Provide email address or username</small>
           </div>
           <div class="form-group">                
             <input type="password" class="form-control is-invalid" id="login_password" name="login_password" placeholder="Password">
@@ -1787,9 +1773,11 @@
       </div>
 
     </div>
+    
 
-  </div>
+  </div> 
 
+  
   
   <!-- <script type="text/template7" id="results">
     {{#if @global.ios}}
