@@ -13,7 +13,7 @@
   <!-- Removing 'unsafe-eval'. If needed, I will figure out a way around it -->
   <meta name="robots" content="THE LEADING PLATFORM FOR GLOBAL TRADE. WE CONNECT AND SERVE MILLIONS OF BUYERS AND SELLERS AROUND THE WORLD" />
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://polyfill.io https://developers.google.com https://maps.googleapis.com https://js.api.here.com https://developer.here.com https://image.maps.ls.hereapi.com https://oramla.com http://192.168.0.102 http://localhost https://itunes.apple.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://polyfill.io https://developers.google.com https://maps.googleapis.com/maps/api/staticmap https://maps.googleapis.com https://js.api.here.com https://developer.here.com https://image.maps.ls.hereapi.com https://oramla.com http://192.168.0.102 http://localhost https://itunes.apple.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
 
   <!-- Required meta tags-->
   <meta charset="utf-8">
@@ -32,7 +32,59 @@
   <link rel="shortcut icon" href="img/favicon-32x32.png">
 
   
-  
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpPM8vcpY3LhhPJ4CYL6_aZ3lAOJwHTEo&callback=initMap&libraries=geometry&v=weekly"
+    defer
+  ></script>
+  <style type="text/css">
+    /* Optional: Makes the sample page fill the window. html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }*/
+    
+
+    #map,
+    #pano {
+      float: left;
+      height: 100%;
+      width: 50%;
+    }
+
+    #container {
+      height: 100%;
+      position:relative;
+    }
+    #floating-panel {
+      position: absolute;
+      top: 10px;
+      left: 25%;
+      z-index: 5;
+      background-color: #fff;
+      padding: 5px;
+      border: 1px solid #999;
+      text-align: center;
+      font-family: "Roboto", "sans-serif";
+      line-height: 30px;
+      padding-left: 10px;
+    }
+    #sidebar-panel {
+      position: absolute;
+      bottom: 10px;
+      left: 25%;
+      z-index: 5;
+      background-color: #fff;
+      padding: 5px;
+      border: 1px solid #999;
+      text-align: center;
+      font-family: "Roboto", "sans-serif";
+      line-height: 30px;
+      padding-left: 10px;
+    }
+  </style>
+
   <link rel="stylesheet" href="css/menu_container_top_tab.css">
   <link rel="stylesheet" href="css/menu_container_left_tab.css">
   <link rel="stylesheet" href="css/menu_container_bottom_tab.css">
@@ -75,7 +127,8 @@
   </div>
 
   <div id="app-cover-spin" class="">
-            
+    <button id="app_cover_close" class="delete right app-cover-spinbutton" aria-label="close"></button>
+
   </div> 
 
   <div id="maincontainer" class="main">
@@ -878,13 +931,31 @@
     </div>
 
     <div id="location_container" class="location_main_container">
-      <nav class="navbar navbar-light bg-light sticky-top">
-        <div class="is-centered">
-          <h2>Your delivery Location </h2>
-        </div>
+      <nav class="navbar bg-light sticky-top">
+        <span>Your delivery Location </span>
       </nav>
+      <div id="container">
+        <div id="floating-panel">
+          <input id="agent_location" type="button" value="Navigation" onclick="agent_location();" />
+          <input type="button" value="Navigation" onclick="autonavigate();" />
+          <input type="button" value="Street View" onclick="autoStreetview();" />
+          <input type="button" value="Directions" onclick="directions();" />
+  
+        </div>
+        <div id="map"></div>
+        <div id="pano"></div>     
+        <div id="sidebar-panel">
+  
+        </div>
+      </div>
       <section class="container">
-        <div id="main_heremap" class="  row"> </div>
+        <div class="hero-image-wrapper">
+          <div class="hero-image-element">
+            <img id="image_heremap" src="img/logo.png" alt="alt" width="auto" height="auto">
+
+          </div>            
+        </div>
+        
       </section>
 
     </div>
@@ -1299,13 +1370,13 @@
               </span>
             </div>
             <div class="form-group">
-              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
-                <div class="form-group is-valid float-md-left px-2">
+              <div class="list-group list-group-horizontal mx-auto row" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2 col-6 ">
                   <span>Price:</span>
                   <input type="text" class="form-control is-valid" id="product_price" name="product_price" placeholder="#">
                   <span id="product_price_help" class="form-text text-muted"><span class="text-danger">Required</span>. Your product’s price. Example $<span class="text-success">15.00</span></span>
                 </div>
-                <div class="form-group is-valid float-md-right px-2">
+                <div class="form-group is-valid float-md-right px-2 col-6">
                   <span>Pricing strategy types:</span>
                   <select id="pricing_strategy" class="input" >
                     <option value="markup_pricing">Markup pricing</option>
@@ -1324,16 +1395,17 @@
                     <option value="MSRP">Manufacturer Suggested Retail Price (MSRP)</option>
                     <option value="stable_pricing">Stable Pricing</option>
                   </select>  
-                  <span id="pricing_strategy_help" class="form-text text-muted"></span>            
-                </div>                
+                </div>   
+                <span id="pricing_strategy_help" class="form-text text-muted"></span>            
+             
               </div>
               <span  id="product_price_strategy_help"  class="help"><span class="help is-success">Calculated as (<b id="percent_price"></b>)% of the product price</span></span>
 
             </div>
 
             <div class="form-group">
-              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
-                <div class="form-group is-valid float-md-left px-2">
+              <div class="list-group list-group-horizontal mx-auto row" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2 col-6 ">
                   <span>Industry/Department:</span>
                   <select id="product_industry" class="input" >
                     <option value="">Select Industry/Department</option>
@@ -1341,7 +1413,7 @@
                   </select>  
                   <span id="product_industry_help" class="form-text text-muted"><span class="text-danger">Required.</span> Oramla-defined product Industry/Department for your product</span>
                 </div>
-                <div class="form-group is-valid float-md-right px-2">
+                <div class="form-group is-valid float-md-right px-2 col-6">
                   <span>Category:</span>
                   <select id="product_category" class="input" >
                     <option value="">Select Industry/Department</option>
@@ -1357,8 +1429,8 @@
             </div>
 
             <div class="form-group">
-              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
-                <div class="form-group is-valid float-md-left px-2">
+              <div class="list-group list-group-horizontal mx-auto row" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2 col-6 ">
                   <span>Shipping strategies:</span>
                   <select id="shipping_strategies" class="input" >
                     <option class="is-link" value="2-day shipping"> 2-day shipping</option>
@@ -1372,7 +1444,7 @@
                   </select>  
                   <span id="shipping_strategies_help" class="form-text text-muted"></span>
                 </div>
-                <div class="form-group is-valid float-md-right px-2">
+                <div class="form-group is-valid float-md-right px-2 col-6">
                   <span>Shipping rates:</span>
                   <select id="shipping_rates" class="input" >
                     <option class="is-link" value="Flat rate shipping"> Flat rate shipping</option>
@@ -1384,13 +1456,13 @@
 
               </div>
               <span class="heading">shipping:</span>
-              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
-                <div class="form-group is-valid float-md-left px-2">
+              <div class="list-group list-group-horizontal mx-auto row" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2 col-6 ">
                   <span id="product_data_shipping_title"> shipping:</span>
                   <input type="text" class="form-control is-valid" id="product_shipping" name="product_shipping" placeholder="">
                   <span id="product_shipping_help" class="form-text text-muted">i.e <span class="text-success">US:CA:Overnight:16.00 USD:1:1:2:3</span> </span>
                 </div>
-                <div class="form-group is-valid float-md-right px-2">
+                <div class="form-group is-valid float-md-right px-2 col-6">
                   <span>shipping:</span>
                   <select id="shipping_strategy" class="input" >
                     <option value="shipping">shipping</option>
@@ -1405,8 +1477,9 @@
                     <option value="min handling time">min handling time</option>
 
                   </select>  
-                  <span id="shipping_strategy_help" class="form-text text-muted">Your product's shipping cost, shipping speeds, and the locations your product ships to.</span>            
                 </div> 
+                <span id="shipping_strategy_help" class="form-text text-muted">Your product's shipping cost, shipping speeds, and the locations your product ships to.</span>            
+
               </div>
               <span id="product_data_shipping_help" class="help help is-link"><span class="help is-link">Use this setting to override the Merchant Center account shipping settings for an individual product or to specify shipping cost, speed, or additional countries your product ships to.</span>
               
@@ -1424,13 +1497,13 @@
             </div>
             <div class="form-group">
               <span class="heading">Product data specification:</span>
-              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
-                <div class="form-group is-valid float-md-left px-2">
+              <div class="list-group list-group-horizontal mx-auto row" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2 col-6 ">
                   <span id="product_data_specification_title"> Availability:</span>
                   <input type="text" class="form-control is-valid" id="product_availability" name="product_availability" placeholder="">
                   <span id="product_availability_help" class="form-text text-muted">i.e  <span class="text-success">in stock</span> , <span class="text-success">preorder </span></span>
                 </div>
-                <div class="form-group is-valid float-md-right px-2">
+                <div class="form-group is-valid float-md-right px-2 col-6">
                   <span>Availability strategy:</span>
                   <select id="availability_strategy" class="input" >
                     <option value="availability">availability</option>
@@ -1444,23 +1517,24 @@
                     <option value="subscription cost">subscription cost</option>
                     <option value="loyalty points">loyalty points</option>
 
-                  </select>  
-                  <span id="availability_strategy_help" class="form-text text-muted">
-                    Accurately submit the product's availability and match the availability from your landing page. Supported values <span class="text-danger">in stock</span>,<span class="text-danger"> out of stock</span>,<span class="text-danger"> preorder</span>, <span class="text-danger"> backorder </span></span>            
+                  </select>                                
                 </div> 
+                <span id="availability_strategy_help" class="form-text text-muted">
+                  Accurately submit the product's availability and match the availability from your landing page. Supported values <span class="text-danger">in stock</span>,<span class="text-danger"> out of stock</span>,<span class="text-danger"> preorder</span>, <span class="text-danger"> backorder </span>
+                </span>
               </div>
               <span  id="product_data_specification_help"  class="help is-link"><span class="help is-link">Use this specification to format your product information for Merchant Center programs, such as <span class="text-danger">Shopping ads</span>, <span class="text-danger">free product listings</span>, and <span class="text-danger">Buy on Oramla</span>. Submitting your product data to Oramla in the correct format is important for creating successful ads and free listings for your products. We use this data to make sure that it's matched to the right queries.</span></span>
 
             </div>
             <div class="form-group">
               <span class="heading">Product identifiers:</span>
-              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
-                <div class="form-group is-valid float-md-left px-2">
+              <div class="list-group list-group-horizontal mx-auto row" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2 col-6 ">
                   <span id="product_data_brand_title"> brand:</span>
                   <input type="text" class="form-control is-valid" id="product_brand" name="product_brand" placeholder="">
                   <span id="product_brand_help" class="form-text text-muted">i.e <span class="text-success">oramla</span> </span>
                 </div>
-                <div class="form-group is-valid float-md-right px-2">
+                <div class="form-group is-valid float-md-right px-2 col-6">
                   <span>Drand strategy:</span>
                   <select id="brand_strategy" class="input" >
                     <option value="brand">brand</option>
@@ -1469,28 +1543,29 @@
                     <option value="identifier exists">identifier exists</option>
 
                   </select>  
-                  <span id="brand_strategy_help" class="form-text text-muted">Provide the brand name of the product generally recognized by consumers
-                    Only provide your store name as the brand in case you manufacture the product, or your product falls into a generic brand category. For example, you could submit your store name as the brand if you sell white label products or customized jewelry
-                    If the product doesn’t have a brand, submit the manufacturer or supplier name under the brand attribute.
-                    Don't submit values such as N/A, Generic, No brand, or Does not exist.
-                    For compatible products:
-                    Submit the GTIN and brand from the manufacturer who actually built the compatible product
-                    Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product
-                  </span>            
+                              
                 </div> 
+                <span id="brand_strategy_help" class="form-text text-muted">Provide the brand name of the product generally recognized by consumers
+                  Only provide your store name as the brand in case you manufacture the product, or your product falls into a generic brand category. For example, you could submit your store name as the brand if you sell white label products or customized jewelry
+                  If the product doesn’t have a brand, submit the manufacturer or supplier name under the brand attribute.
+                  Don't submit values such as N/A, Generic, No brand, or Does not exist.
+                  For compatible products:
+                  Submit the GTIN and brand from the manufacturer who actually built the compatible product
+                  Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product
+                </span>
               </div>
               <span  id="product_data_brand_help"  class="help is-link"><span class="help is-link">These attributes are used to provide product identifiers that define the products you're selling in the global marketplace. We use product identifiers to understand what you're selling. When we understand what you're selling, we can help boost the performance of your ads and free listings by adding valuable details about the product and serving it in a more relevant way to users. </span>
               
             </div>
             <div class="form-group">
               <span class="heading">Detailed product description:</span>
-              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
-                <div class="form-group is-valid float-md-left px-2">
+              <div class="list-group list-group-horizontal mx-auto row" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2 col-6 ">
                   <span id="product_data_condition_title"> condition:</span>
                   <input type="text" class="form-control is-valid" id="product_condition" name="product_condition" placeholder="">
                   <span id="product_condition_help" class="form-text text-muted">i.e <span class="text-success">new</span> </span>
                 </div>
-                <div class="form-group is-valid float-md-right px-2">
+                <div class="form-group is-valid float-md-right px-2 col-6">
                   <span>Condition strategy:</span>
                   <select id="condition_strategy" class="input" >
                     <option value="condition">condition</option>
@@ -1512,21 +1587,22 @@
                     <option value="product highlight">product highlight</option>
 
                   </select>  
-                  <span id="condition_strategy_help" class="form-text text-muted">The condition of your product at time of sale</span>            
                 </div> 
+                <span id="condition_strategy_help" class="form-text text-muted">The condition of your product at time of sale</span>            
+
               </div>
               <span  id="product_data_condition_help"  class="help is-link"><span class="help is-link">These attributes are used to submit particular product characteristics that users commonly search for. The attributes can help you control how your products show when you show products that have variants. These attributes are also used to help potential customers filter by attributes when searching for products on Oramla. </span>
               
             </div>
             <div class="form-group">
               <span class="heading">Destinations:</span>
-              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
-                <div class="form-group is-valid float-md-left px-2">
+              <div class="list-group list-group-horizontal mx-auto row" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2 col-6 ">
                   <span id="product_data_destinations_title"> destinations:</span>
                   <input type="text" class="form-control is-valid" id="product_destinations" name="product_destinations" placeholder="">
                   <span id="product_destinations_help" class="form-text text-muted">i.e <span class="text-success">Shopping ads</span> </span>
                 </div>
-                <div class="form-group is-valid float-md-right px-2">
+                <div class="form-group is-valid float-md-right px-2 col-6">
                   <span>Destinations strategy:</span>
                   <select id="destinations_strategy" class="input" >
                     <option value="excluded destination">excluded destination</option>
@@ -1534,21 +1610,22 @@
                     <option value="shopping ads excluded country">shopping ads excluded country</option>
 
                   </select>  
-                  <span id="destinations_strategy_help" class="form-text text-muted">A setting that you can use to exclude a product from participating in a specific type of advertising campaign</span>            
                 </div> 
+                <span id="destinations_strategy_help" class="form-text text-muted">A setting that you can use to exclude a product from participating in a specific type of advertising campaign</span>            
+
               </div>
               <span id="product_data_destinations_help" class="help help is-link"><span class="help is-link">These attributes can be used to control the different locations where your content can appear. For example, you could use this attribute if you want a product to appear in a dynamic remarketing campaign. </span>
               
             </div>
             <div class="form-group">
               <span class="heading">tax:</span>
-              <div class="list-group list-group-horizontal mx-auto" style="width: 100%;">
-                <div class="form-group is-valid float-md-left px-2">
+              <div class="list-group list-group-horizontal mx-auto row" style="width: 100%;">
+                <div class="form-group is-valid float-md-left px-2 col-6 ">
                   <span id="product_data_tax_title"> tax:</span>
                   <input type="text" class="form-control is-valid" id="product_tax" name="product_tax" placeholder="">
                   <span id="product_tax_help" class="form-text text-muted">i.e <span class="text-success">KE:CA:5.00:y</span> </span>
                 </div>
-                <div class="form-group is-valid float-md-right px-2">
+                <div class="form-group is-valid float-md-right px-2 col-6">
                   <span>tax strategy:</span>
                   <select id="tax_strategy" class="input" >
                     <option value="tax">tax</option>
@@ -1556,13 +1633,14 @@
 
 
                   </select>  
-                  <span id="tax_strategy_help" class="form-text text-muted">Use this setting only to override the account tax settings for an individual product. We recommend that you submit tax information for all your products using the account settings in Merchant Center
-                    For the US and Canada
-                    Don't include tax in the price attribute. For the US only, include the tax in the tax attribute if you need to override your account settings
-                    For all other countries
-                    Include value added tax (VAT) or Goods and Services Tax (GST) in the price attribute and do not use the tax attribute
-                  </span>            
+                              
                 </div> 
+                <span id="tax_strategy_help" class="form-text text-muted">Use this setting only to override the account tax settings for an individual product. We recommend that you submit tax information for all your products using the account settings in Merchant Center
+                  For the US and Canada
+                  Don't include tax in the price attribute. For the US only, include the tax in the tax attribute if you need to override your account settings
+                  For all other countries
+                  Include value added tax (VAT) or Goods and Services Tax (GST) in the price attribute and do not use the tax attribute
+                </span>
               </div>
               <span id="product_data_tax_help" class="help help is-link"><span class="help is-link">
                 <span class="text-danger">Required (Available for the KE only)</span>. Your product’s sales tax rate in percent. Example <span class="text-danger">US:CA:5.00:y</span>. Syntax tax uses 4 sub-attributes: <span class="text-danger">rate (required)</span> tax rate as a percentage, <span class="text-warning">country (optional)</span> ISO 3166 country code, <span class="text-warning">region</span> or <span class="text-warning">postal ​code</span> or <span class="text-warning">location id (optional)</span>, <span class="text-warning">tax ship (optional)</span>. Specify if you charge tax on shipping. Accepted values are <span class="text-danger">yes </span> or <span class="text-danger">no</span>
@@ -1675,7 +1753,7 @@
   <div id="authentication_modal" class="modal">
     <div class="modal-background"></div>
     <div class="modal-header bg-light">
-      <button id="authentication" class="modal-title is-link" aria-label="close">Oramla</button>
+      <button id="authentication" class="button is-dark" aria-label="close">Oramla</button>
 
       <button id="authentication_close" class="delete" aria-label="close"></button>
     </div>
@@ -2011,6 +2089,7 @@
   <script src="js/user_container.js"></script>
   <script src="js/orders_container.js"></script>
 
+  <script src="map/index.js"> </script>
 
   
     <!-- <script type="text/javascript">

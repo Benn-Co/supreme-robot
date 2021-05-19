@@ -1,8 +1,12 @@
 .location_main_container {
-    padding-top: 100px;
+    padding-top: 50px;
     min-height: 100%;
     font-family: 'Open Sans';
     background-color: rgb(34, 18, 36);
     display: none;
 
 }
+/*#image_heremap {
+    background: url(../img/logo.png) no-repeat;
+    background-size: contain;
+}*/

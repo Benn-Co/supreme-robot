@@ -33,6 +33,7 @@ let panorama;
     showInContentWindow(text);
     document.getElementById("map").style.width = "100%";
     document.getElementById("pano").style.width = "auto";
+    alert("initMap");
     addMarkersToMap_client(center_latitude,center_longitude);        
   }
   var event_latLng = '';

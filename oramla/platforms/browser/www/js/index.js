@@ -370,12 +370,12 @@ function userupdate() {
         $("#input-phone").removeClass("is-invalid");
         $("#input-phone").addClass("is-valid");
         $("#input-phone_help").html($("#input-phone").val());
-        error_phone_data = 0;
+        //error_phone_data = 0;
     } else {
         $("#input-phone").addClass("is-invalid");
         $("#input-phone").removeClass("is-valid");
         $("#input-phone_help").html("Enter a vald phone number");
-        error_phone_data = 1;
+        //error_phone_data = 1;
     }    
     var error_postal_data = 0;
     if ($("#input-postal-code").val() != "" && $("#input-postal-code").val() != null) {
@@ -4316,6 +4316,11 @@ availability_strategy.addEventListener('change', (event) => {
         i_e = 'i.e <span class="text-danger">in stock</span>';
         //$("#product_availability_help").html(strategy_data);
         //availability = strategy_data;
+        $("#product_availability").val(availability);
+        if (availability != '') {
+            $("#product_availability_help").html('<span class="text-success">' + availability + '</span>');
+        }
+
     } else if (product_availability_strategy == 'availability ​​date') {
         $("#product_data_specification_title").html(product_availability_strategy + ":");
         $("#availability_strategy_help").html('Use this attribute if your product’s availability is <span class="text-danger">preorder </span> or <span class="text-danger">backorder </span>');
@@ -4324,6 +4329,10 @@ availability_strategy.addEventListener('change', (event) => {
         i_e = 'i.e <span class="text-danger">2016-02-24T11:07+0100</span>';
         //$("#product_availability_help").html(strategy_data);
         //availability_date = strategy_data;
+        $("#product_availability").val(availability_date);
+        if (availability_date != '') {
+            $("#product_availability_help").html('<span class="text-success">' + availability_date + '</span>');
+        }
     } else if (product_availability_strategy == 'cost of goods sold') {
         $("#product_data_specification_title").html(product_availability_strategy + ":");
         $("#availability_strategy_help").html('The costs associated with the sale of a particular product as defined by the accounting convention you set up. These costs may include <span class="text-danger">material </span>, <span class="text-danger">labor </span>, <span class="text-danger">freight </span>, or other <span class="text-danger">overhead </span> expenses.');
@@ -4332,6 +4341,10 @@ availability_strategy.addEventListener('change', (event) => {
         i_e = 'i.e <span class="text-danger">$ 20</span>';
         //$("#product_availability_help").html(strategy_data);
         //cost_of_goods_sold = strategy_data;
+        $("#product_availability").val(cost_of_goods_sold);
+        if (cost_of_goods_sold != '') {
+            $("#product_availability_help").html('<span class="text-success">' + cost_of_goods_sold + '</span>');
+        }
     } else if (product_availability_strategy == 'expiration date') {
         $("#product_data_specification_title").html(product_availability_strategy + ":");
         $("#availability_strategy_help").html("Use a date less than 30 days in the future");
@@ -4341,6 +4354,10 @@ availability_strategy.addEventListener('change', (event) => {
 
         //$("#product_availability_help").html(strategy_data);
         //expiration_date = strategy_data;
+        $("#product_availability").val(expiration_date);
+        if (expiration_date != '') {
+            $("#product_availability_help").html('<span class="text-success">' + expiration_date + '</span>');
+        }
     } else if (product_availability_strategy == 'sale price effective date') {
         $("#product_data_specification_title").html(product_availability_strategy + ":");
         $("#availability_strategy_help").html('Use together with  <span class="text-info">sale ​price </span>. If you don’t submit <span class="text-info">sale ​price ​effective ​date </span>, the <span class="text-info">sale ​price </span> always applies. Use a start date before the end date');
@@ -4350,6 +4367,10 @@ availability_strategy.addEventListener('change', (event) => {
 
         //$("#product_availability_help").html(strategy_data);
         //sale_price_effective_date = strategy_data;
+        $("#product_availability").val(sale_price_effective_date);
+        if (sale_price_effective_date != '') {
+            $("#product_availability_help").html('<span class="text-success">' + sale_price_effective_date + '</span>');
+        }
     } else if (product_availability_strategy == 'unit pricing measure') {
         $("#product_data_specification_title").html(product_availability_strategy + ":");
         $("#availability_strategy_help").html('Use the measure or dimension of the product without packaging. Use a positive number. For variants. Include with the same value for <span class="text-info">item group id </span> and different values for <span class="text-info">unit pricing measure</span>');
@@ -4359,6 +4380,10 @@ availability_strategy.addEventListener('change', (event) => {
 
         //$("#product_availability_help").html(strategy_data);
         //unit_pricing_measure = strategy_data;
+        $("#product_availability").val(unit_pricing_measure);
+        if (unit_pricing_measure != '') {
+            $("#product_availability_help").html('<span class="text-success">' + unit_pricing_measure + '</span>');
+        }
     } else if (product_availability_strategy == 'unit price base measure') {
         $("#product_data_specification_title").html(product_availability_strategy + ":");
         $("#availability_strategy_help").html('<span class="text-warning">Optional</span> when you submit <span class="text-info">unit ​​pricing ​​measure</span>. Use the same unit of measure for both <span class="text-info">unit ​​pricing ​​measure</span> and <span class="text-info">unit pricing ​base ​measure</span>. Keep in mind that the <span class="text-info">price</span> (or sale price, if active) is used to calculate the unit price of the product. For example, if price is 3 USD, <span class="text-info">unit ​​pricing ​​measure</span> is <span class="text-danger">150ml</span>, and <span class="text-info">unit ​pricing ​base ​measure</span> is <span class="text-danger">100ml</span>, the unit price is 2 USD / 100ml');
@@ -4368,6 +4393,10 @@ availability_strategy.addEventListener('change', (event) => {
 
         //$("#product_availability_help").html(strategy_data);
         //unit_price_base_measure = strategy_data;
+        $("#product_availability").val(unit_price_base_measure);
+        if (unit_price_base_measure != '') {
+            $("#product_availability_help").html('<span class="text-success">' + unit_price_base_measure + '</span>');
+        }
     } else if (product_availability_strategy == 'installment') {
         $("#product_data_specification_title").html(product_availability_strategy + ":");
         $("#availability_strategy_help").html('Match the installment option that’s visible on your landing page. Don’t require a loyalty card. For Latin America, make sure the price attribute is the total price when paid in full up-front and use the installment attribute to indicate an alternative payment option using installments. For other countries, use the price attribute (as low as 0) as the up-front payment (including any device down payment and activation fees), and the installment attribute for additional monthly installment payments.');
@@ -4377,6 +4406,10 @@ availability_strategy.addEventListener('change', (event) => {
 
         //$("#product_availability_help").html(strategy_data);
         //installment = strategy_data;
+        $("#product_availability").val(installment);
+        if (installment != '') {
+            $("#product_availability_help").html('<span class="text-success">' + installment + '</span>');
+        }
     } else if (product_availability_strategy == 'subscription cost') {
         $("#product_data_specification_title").html(product_availability_strategy + ":");
         $("#availability_strategy_help").html('Submit the price attribute with the total amount due at checkout (including down payment and activation fee). Match the communications payment plan that you display on your landing page. The plan must be easy to find on the landing page.');
@@ -4386,6 +4419,10 @@ availability_strategy.addEventListener('change', (event) => {
 
         //$("#product_availability_help").html(strategy_data);
         //subscription_cost = strategy_data;
+        $("#product_availability").val(subscription_cost);
+        if (subscription_cost != '') {
+            $("#product_availability_help").html('<span class="text-success">' + subscription_cost + '</span>');
+        }
     } else if (product_availability_strategy == 'loyalty points') {
         $("#product_data_specification_title").html(product_availability_strategy + ":");
         $("#availability_strategy_help").html("Only submit loyalty points with a specific monetary value");
@@ -4395,6 +4432,10 @@ availability_strategy.addEventListener('change', (event) => {
 
         //$("#product_availability_help").html(strategy_data);
         ///loyalty_points = strategy_data;
+        $("#product_availability").val(loyalty_points);
+        if (loyalty_points != '') {
+            $("#product_availability_help").html('<span class="text-success">' + loyalty_points + '</span>');
+        }
     }
     if ($("#product_availability").val() != '' && $("#product_availability").val() != null) {
         $("#product_availability_help").html($("#product_availability").val());
@@ -4484,6 +4525,10 @@ brand_strategy.addEventListener('change', (event) => {
         $("#product_data_brand_help").html(' <span class="text-danger">Required(For all new products, except movies, books, and musical recording brands)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s brand name. Example<span class="text-danger">Oramla</span>. Syntax Max 70 characters. Schema.org property<span class="text-info">Product.brand</span>');
         i_e = 'i.e <span class="text-danger">Oramla</span>';
         //var brand = strategy_data;
+        $("#product_brand").val(brand);
+        if (brand != '') {
+            $("#product_brand_help").html('<span class="text-success">' + brand + '</span>');
+        }
     } else if (product_brand_strategy == 'gtin') {
         $("#product_data_brand_title").html(product_brand_strategy + ":");
         $("#brand_strategy_help").html('Exclude dashes and spaces. Submit only valid GTINs as defined in the official GS1 validation guide, which includes these requirements: The checksum digit is present and correct. The GTIN is not restricted (GS1 prefix ranges 02, 04, 2). The GTIN is not a coupon (GS1 prefix ranges 98 - 99). For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product. Don’t provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand’s product. For <span class="text-info">multipacks</span>: Use the product identifiers that relates to the multipack. For <span class="text-info">bundles</span>: Use the product identifiers for the main product in the bundle. If you offer customization, engraving, or other personalization of a product that’s been assigned a GTIN by the manufacturer: Submit the GTIN and use the <span class="text-info">is ​bundle</span> attribute to let us know that the product includes customization');
@@ -4491,6 +4536,10 @@ brand_strategy.addEventListener('change', (event) => {
         $("#product_data_brand_help").html('<span class="text-danger">Required (For all new products with a GTIN assigned by the manufacturer)</span>. <span class="text-warning">Optional (strongly recommended)</span> for all other products. Your product’s Global Trade Item Number (GTIN). Example <span class="text-danger">3234567890126</span>. Syntax Max 50 numeric characters (max 14 per value - added spaces and dashes are ignored). Supported values UPC (in North America / GTIN-12), <span class="text-primary">12-digit</span> number like 323456789012 8-digit UPC-E codes should be converted to <span class="text-primary">12-digit</span> codes EAN (in Europe / GTIN-13) 13-digit number like 3001234567892 JAN (in Japan / GTIN-13) 8 or 13-digit number like 49123456 or 4901234567894 ISBN (for books) 10 or <span class="text-primary">13-digit</span> number like 1455582344 or 978-1455582341. If you have both, only include the 13-digit number. ISBN-10 are deprecated and should be converted to <span class="text-primary">ISBN-13 ITF-14</span> (for multipacks / GTIN-14) <span class="text-primary">14-digit</span> number like 10856435001702. Schema.org property <span class="text-info">Product.isbn Product.gtin8 Product.gtin12 Product.gtin13 Product.gtin14</span>');
         i_e = 'i.e <span class="text-danger">3234567890126</span>';
         //var gtin = strategy_data;
+        $("#product_brand").val(gtin);
+        if (gtin != '') {
+            $("#product_brand_help").html('<span class="text-success">' + gtin + '</span>');
+        }
     } else if (product_brand_strategy == 'MPN') {
         $("#product_data_brand_title").html(product_brand_strategy + ":");
         $("#brand_strategy_help").html('Only submit MPNs assigned by a manufacturer. Use the most specific MPN possible. For example, different colors of a product should have different MPNs.');
@@ -4498,12 +4547,20 @@ brand_strategy.addEventListener('change', (event) => {
         $("#product_data_brand_help").html('<span class="text-danger">Required (Only if your new product does not have a manufacturer assigned GTIN)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s Manufacturer Part Number (mpn). Example <span class="text-danger">OR12345AMLA</span>. Syntax Max 70 alphanumeric characters. Schema.org property <span class="text-info">Product.mpn</span>');
         i_e = 'i.e <span class="text-danger">OR12345AMLA</span>';
         //var MPN = strategy_data;
+        $("#product_brand").val(MPN);
+        if (MPN != '') {
+            $("#product_brand_help").html('<span class="text-success">' + MPN + '</span>');
+        }
     } else if (product_brand_strategy == 'identifier exists') {
         $("#product_data_brand_title").html(product_brand_strategy + ":");
         $("#brand_strategy_help").html('If you don’t submit the attribute, the default is <span class="text-danger">yes</span>. Your product’s category type determines which UPIs (GTIN, MPN, brand) are required. If your product is a media item and the GTIN is unavailable: Submit <span class="text-info">identifier exists</span> attribute with a value of <span class="text-danger">no</span>. Note: ISBN and SBN codes are accepted as GTINs. If your product is an apparel (clothing) item and the brand is unavailable: Submit <span class="text-info">identifier ​exists</span> attribute with a value of <span class="text-danger">no</span>. In all other categories, if your product doesn’t have a GTIN, or a combination of MPN and brand: Submit <span class="text-info">identifier exists</span> attribute with a value of <span class="text-danger">no</span>');
        
         $("#product_data_brand_help").html('<span class="text-warning">Optional</span>. Use to indicate whether or not the unique product identifiers (UPIs) GTIN, MPN, and brand are available for your product. Example <span class="text-danger">no</span>. Supported values <span class="text-danger">yes</span> Product identifiers are assigned to the new product by the manufacturer, <span class="text-danger">no</span> Product lacks a brand, GTIN, or MPN (see requirements to the right). If set to <span class="text-danger">no</span>, still provide the UPIs you have.');
         i_e = 'i.e <span class="text-danger">no</span>';
+        $("#product_brand").val(identifier_exists);
+        if (identifier_exists != '') {
+            $("#product_brand_help").html('<span class="text-success">' + identifier_exists + '</span>');
+        }
         //var identifier_exists = strategy_data;
     }
     
@@ -4723,6 +4780,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-danger">Required</span> if your product is <span class="text-danger">used</span> or <span class="text-danger">refurbished</span>. <span class="text-warning">Optional</span> for new products. Example <span class="text-danger">new</span>. Supported values <span class="text-danger">new</span>, <span class="text-danger">Brand new</span>, <span class="text-danger">original</span>, <span class="text-danger">unopened packaging</span>, <span class="text-danger">refurbished</span>, <span class="text-danger">Professionally restored to working order</span>, <span class="text-danger">comes with a warranty</span>, <span class="text-danger">may or may not have the original packaging</span>, <span class="text-danger">used</span>, <span class="text-danger">Previously used</span>, <span class="text-danger">original packaging opened or missing</span>. Schema.org property <span class="text-info">Offer.​itemCondition</span>');
         i_e = 'i.e <span class="text-danger">new</span>';
         //var brand = strategy_data;
+        $("#product_condition").val(condition);
+        if (condition != '') {
+            $("#product_condition_help").html('<span class="text-success">' + condition + '</span>');
+        }
     } else if (product_condition_strategy == 'adult') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('Submit <span class="text-danger">yes</span> if this individual product contains nudity or sexually suggestive content. If you don’t submit the attribute, the default is <span class="text-danger">no</span>.');
@@ -4730,6 +4791,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-danger">Required (If a product contains adult content)</span>. Indicate a product includes sexually suggestive content. Example <span class="text-danger">yes</span>. Supported values <span class="text-danger">yes</span> <span class="text-danger">no</span>');
         i_e = 'i.e <span class="text-danger">yes</span>';
         //var adult = strategy_data;
+        $("#product_condition").val(adult);
+        if (adult != '') {
+            $("#product_condition_help").html('<span class="text-success">' + adult + '</span>');
+        }
     } else if (product_condition_strategy == 'multipack') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('Submit this attribute if you defined a custom group of identical products and are selling them as a single unit of sale. For example, you’re selling 6 bars of soap together. Submit the number of products in your multipack. If you don’t submit the attribute, the default is <span class="text-danger">0</span>. If the product’s manufacturer assembled the multipack instead of you, don’t submit this attribute');
@@ -4737,6 +4802,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-danger">Required (For multipack products in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)</span>. <span class="text-danger">Required</span> for enhanced free listings on Oramla if you’ve created a multipack. <span class="text-warning">Optional</span> for all other products and countries of sale. The number of identical products sold within a merchant-defined multipack. Example <span class="text-danger">6</span>. Syntax <span class="text-info">Integer</span>');
         i_e = 'i.e <span class="text-danger">6</span>';
         //var multipack = strategy_data;
+        $("#product_condition").val(multipack);
+        if (multipack != '') {
+            $("#product_condition_help").html('<span class="text-success">' + multipack + '</span>');
+        }
     } else if (product_condition_strategy == 'is bundle') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('Submit <span class="text-danger">yes</span> if you’re selling a custom bundle of different products that you created, and the bundle includes a main product. For example, a camera combined with a lens and bag. If you don’t submit the attribute, the default is <span class="text-danger">no</span>. Don’t use this attribute for bundles without a clear main product. For example, a gift basket containing cheese and crackers');
@@ -4744,6 +4813,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-danger">Required (For bundles in Australia, Brazil, Czechia, France, Germany, Italy, Japan, Netherlands, Spain, Switzerland, the UK and the US)</span>. <span class="text-danger">Required</span> for enhanced free listings on Oramla if you’ve created a bundle containing a main product. <span class="text-warning">Optional</span> for all other products and countries of sale. Indicates a product is a merchant-defined custom group of different products featuring one main product. Example <span class="text-danger">yes</span>. Supported values <span class="text-danger">yes</span>, <span class="text-danger">no</span>');
         i_e = 'i.e <span class="text-danger">yes</span>';
         //var is_bundle = strategy_data;
+        $("#product_condition").val(is_bundle);
+        if (is_bundle != '') {
+            $("#product_condition_help").html('<span class="text-success">' + is_bundle + '</span>');
+        }
     } else if (product_condition_strategy == 'energy efficiency class') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('Include the legally required energy label. To be used in combination with <span class="text-info">min energy ​​efficiency ​​class</span> and <span class="text-info">max energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">G</span>).');
@@ -4751,6 +4824,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-warning">Optional (except when required by local law or regulations)</span>. Your product’s energy label. Example <span class="text-danger">A+</span>. Supported values <span class="text-danger">A+++</span>, <span class="text-danger">A++</span>, <span class="text-danger">A+</span>, <span class="text-danger">A</span>, <span class="text-danger">B</span>, <span class="text-danger">C</span>, <span class="text-danger">D</span>, <span class="text-danger">E</span>, <span class="text-danger">F</span>, <span class="text-danger">G</span>');
         i_e = 'i.e <span class="text-danger">A+</span>';
         //var energy_efficiency_class = strategy_data;
+        $("#product_condition").val(energy_efficiency_class);
+        if (energy_efficiency_class != '') {
+            $("#product_condition_help").html('<span class="text-success">' + energy_efficiency_class + '</span>');
+        }
     } else if (product_condition_strategy == 'min energy efficiency class') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('Include the legally required energy label. To be used in combination with <span class="text-info">energy ​​efficiency class</span> and <span class="text-info">max energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">D</span>).');
@@ -4758,6 +4835,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-warning">Optional (except when required by local laws or regulations)</span>. Available for EU & CH only. Your product’s energy label. Example <span class="text-danger">A+++</span>. Supported values <span class="text-danger">A+++</span>, <span class="text-danger">A++</span>, <span class="text-danger">A</span>, <span class="text-danger">B</span>, <span class="text-danger">C</span>, <span class="text-danger">D</span>, <span class="text-danger">E</span>, <span class="text-danger">F</span>, <span class="text-danger">G</span>');
         i_e = 'i.e <span class="text-danger">A+++</span>';
         //var min_energy_efficiency_class = strategy_data;
+        $("#product_condition").val(min_energy_efficiency_class);
+        if (min_energy_efficiency_class != '') {
+            $("#product_condition_help").html('<span class="text-success">' + min_energy_efficiency_class + '</span>');
+        }
     } else if (product_condition_strategy == 'max energy efficiency class') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('Include the legally required energy label. To be used in combination with <span class="text-info">energy ​​efficiency ​​class</span> and <span class="text-info">min energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">D</span>).');
@@ -4765,6 +4846,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-warning">Optional (except when required by local laws or regulations)</span>. Available for EU & CH only. Your product’s energy label. Example <span class="text-danger">D</span>. Supported values <span class="text-danger">A+++</span>, <span class="text-danger">A++</span>, <span class="text-danger">A</span>, <span class="text-danger">B</span>, <span class="text-danger">C</span>, <span class="text-danger">D</span>, <span class="text-danger">E</span>, <span class="text-danger">F</span>, <span class="text-danger">G</span>');
         i_e = 'i.e <span class="text-danger">D</span>';
         //var max_energy_efficiency_class = strategy_data;
+        $("#product_condition").val(max_energy_efficiency_class);
+        if (max_energy_efficiency_class != '') {
+            $("#product_condition_help").html('<span class="text-success">' + max_energy_efficiency_class + '</span>');
+        }
     } else if (product_condition_strategy == 'age group') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('Include one value per product. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">age ​group</span>');
@@ -4772,6 +4857,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-danger">Required (For all apparel products that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products with assigned age groups)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Apparel & Accessories (166) products. <span class="text-warning">Optional</span> for all other products and countries of sale. The demographic for which your product is intended. Example <span class="text-danger">infant</span>. Supported values <span class="text-danger">newborn</span> Up to 3 months old <span class="text-danger">infant</span> Between 3-12 months old <span class="text-danger">toddler</span> Between 1-5 years old <span class="text-danger">kids</span> Between 5-13 years old <span class="text-danger">adult</span> Typically teens or older. Schema.org property <span class="text-info">Product.​audience.​suggestedMinAge Product.​audience.​suggestedMaxAge</span>');
         i_e = 'i.e <span class="text-danger">infant</span>';
         //var age_group = strategy_data;
+        $("#product_condition").val(age_group);
+        if (age_group != '') {
+            $("#product_condition_help").html('<span class="text-success">' + age_group + '</span>');
+        }
     } else if (product_condition_strategy == 'color') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('Don’t use a number such as 0 2 4 6 8. Don’t use characters that aren’t alphanumeric such as #fff000. Don’t use only 1 letter such as R (For Chinese, Japanese, or Korean languages, you can include a single character such as 红). Don’t reference the product or image such as “see image”. Don’t combine several color names into 1 word, such as RedPinkBlue. Instead, separate them with a <span class="text-danger">/</span>, such as <span class="text-danger">Red/Pink/Blue</span>. Don’t use a value that isn’t a color, such as multicolor, various, variety, men’s, women’s, or N/A. If your product features multiple colors, list the primary color first. For variants. Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">color</span>');
@@ -4779,6 +4868,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-danger">Required (For all apparel products in feeds that are targeted to Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different colors)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Apparel & Accessories (166) products. <span class="text-warning">Optional</span> for all other products and countries of sale. Your product’s color(s). Example <span class="text-danger">Black</span>. Syntax Max 100 alphanumeric characters (max 40 characters per color). Schema.org property <span class="text-info">Product.color</span>');
         i_e = 'i.e <span class="text-danger">Black</span>';
         //var color = strategy_data;
+        $("#product_condition").val(color);
+        if (color != '') {
+            $("#product_condition_help").html('<span class="text-success">' + color + '</span>');
+        }
     } else if (product_condition_strategy == 'gender') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('For some Apparel & Accessories (166) categories like Shoelaces (1856), this attribute is recommended instead of required since these categories aren’t dependent on gender. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">gender</span>');
@@ -4786,6 +4879,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-danger">Required (Required for all apparel items in feeds that are targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all gender-specific products)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Oramla Apparel & Accessories (166) products. <span class="text-danger">Optional</span> for all other products and countries of sale. The gender for which your product is intended. Example <span class="text-danger">Unisex</span>. Supported values <span class="text-danger">male</span>, <span class="text-danger">female</span>, <span class="text-danger">unisex</span>. Schema.org property <span class="text-info">Product.​audience.​suggested​Gender</span>');
         i_e = 'i.e <span class="text-danger">Unisex</span>';
         //var gender = strategy_data;
+        $("#product_condition").val(gender);
+        if (gender != '') {
+            $("#product_condition_help").html('<span class="text-success">' + gender + '</span>');
+        }
     } else if (product_condition_strategy == 'material') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('To indicate multiple materials for a single product (not variants), add a primary material, followed by up to 2 secondary materials, separated by a <span class="text-danger">/</span>. For example, instead of CottonPolyesterElastane, use <span class="text-danger">cotton/polyester/elastane</span>. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">material</span>');
@@ -4793,6 +4890,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-danger">Required (if relevant for distinguishing different products in a set of variants)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s fabric or material. Example <span class="text-danger">leather</span>. Syntax Max 200 characters. Schema.org property <span class="text-danger">Product.material</span>');
         i_e = 'i.e <span class="text-danger">leather</span>';
         //var material = strategy_data;
+        $("#product_condition").val(material);
+        if (material != '') {
+            $("#product_condition_help").html('<span class="text-success">' + material + '</span>');
+        }
     } else if (product_condition_strategy == 'pattern') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for pattern');
@@ -4800,6 +4901,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-danger">Required (if relevant for distinguishing different products in a set of variants)</span>. <span class="text-warning">Optional</span> for all other products. Your product’s pattern or graphic print. Example <span class="text-danger">striped</span>, <span class="text-danger">polka dot</span>, <span class="text-danger">paisley</span>. Syntax Max 100 characters. Schema.org property <span class="text-info">Product.pattern</span>');
         i_e = 'i.e <span class="text-danger">striped</span>';
         //var condition = strategy_data;
+        $("#product_condition").val(pattern);
+        if (pattern != '') {
+            $("#product_condition_help").html('<span class="text-success">' + pattern + '</span>');
+        }
     } else if (product_condition_strategy == 'size') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('For variants: Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">size</span>. If sizes contain multiple dimensions, condense them into 1 value. For example, <span class="text-danger">"16/34 Tall"</span> for neck size <span class="text-danger">16 inches</span>, sleeve length <span class="text-danger">34 inches</span>, and <span class="text-danger">“Tall” fit</span>. If your item is one size fits all or one size fits most, you can use <span class="text-danger">one size</span>, <span class="text-danger">OS</span>, <span class="text-danger">one size fits all</span>, <span class="text-danger">OSFA</span>, <span class="text-danger">one size fits most</span>, or <span class="text-danger">OSFM</span>. For merchant-defined multipack products, submit the <span class="text-info">multipack</span> quantity using the <span class="text-info">multipack</span> attribute. Do not submit the multipack quantity under size.');
@@ -4807,6 +4912,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-danger">Required (Required for all apparel products in Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) product categories targeted to people in Brazil, France, Germany, Japan, the UK, and the US as well as all products available in different sizes)</span>. <span class="text-danger">Required</span> for enhanced free listings for all Apparel & Accessories > Clothing (1604) and Apparel & Accessories > Shoes (187) products. <span class="text-warning">Optional</span> for all other products and countries of sale. Your product’s size. Example <span class="text-danger">XL</span>. Syntax Max 100 characters. Schema.org property <span class="text-info">Product.size</span>');
         i_e = 'i.e <span class="text-danger">XL</span>';
         //var size = strategy_data;
+        $("#product_condition").val(size);
+        if (size != '') {
+            $("#product_condition_help").html('<span class="text-success">' + size + '</span>');
+        }
     } else if (product_condition_strategy == 'size system') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('If you don’t submit the attribute, the default is your country of sale');
@@ -4814,6 +4923,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-warning">Optional (Available for apparel products only)</span>. The country of the size system used by your product. Example <span class="text-danger">US</span>. Supported values <span class="text-danger">US</span>, <span class="text-danger">UK</span>, <span class="text-danger">EU</span>, <span class="text-danger">DE</span>, <span class="text-danger">FR</span>, <span class="text-danger">JP</span>, <span class="text-danger">CN (China)</span>, <span class="text-danger">IT</span>, <span class="text-danger">BR</span>, <span class="text-danger">MEX</span>, <span class="text-danger">AU</span>...');
         i_e = 'i.e <span class="text-danger">US</span>';
         //var size_system = strategy_data;
+        $("#product_condition").val(size_system);
+        if (size_system != '') {
+            $("#product_condition_help").html('<span class="text-success">' + size_system + '</span>');
+        }
     } else if (product_condition_strategy == 'item group id') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('Use a unique value for each group of variants. Use the parent SKU where possible. Keep the value the same when updating your product data. Use only valid unicode characters. Use an item group ID for a set of products that differ by one or more of these attributes: <span class="text-info">color</span>, <span class="text-info">size</span>, <span class="text-info">pattern</span>, <span class="text-info">material</span>, <span class="text-info">age group</span>, <span class="text-info">gender</span>. Include the same attributes for each product in the item group. For example, if a product varies by size and color, submit size and color for every product that share the same value for <span class="text-info">item ​group ​id</span>. If your products differ by design elements that aren’t represented by the attributes above, don’t use <span class="text-info">item ​group ​id</span>');
@@ -4821,6 +4934,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-danger">Required (Tanzania, South Africa, Nigeria, Morocco, the United Kingdom, and Kenya if the product is a variant)</span>. <span class="text-danger">Required</span> for enhanced free listings for all product variants. <span class="text-warning">Optional</span> for all other products and countries of sale. ID for a group of products that come in different versions (variants). Example <span class="text-danger">AB12345</span>. Syntax Max 50 alphanumeric characters. Schema.org property <span class="text-info">Product.​inProductGroupWithID</span>');
         i_e = 'i.e <span class="text-danger">AB12345</span>';
         //var item_group_id = strategy_data;
+        $("#product_condition").val(item_group_id);
+        if (item_group_id != '') {
+            $("#product_condition_help").html('<span class="text-success">' + item_group_id + '</span>');
+        }
     } else if (product_condition_strategy == 'product detail') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('Don’t add information covered in other attributes, all capital letters, gimmicky foreign characters, promotion text, or list keywords or search terms. Don’t add information such as price, sale price, sale dates, shipping, delivery date, other time-related information, or your company’s name. Only provide an attribute name and value when the value is confirmed. For example, provide <span class="text-primary">“Vegetarian=False”</span> if a food product is not vegetarian, and not just because False is the default value for Boolean attributes.');
@@ -4828,6 +4945,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-warning">Optional</span>. Technical specifications or additional details of your product. Example <span class="text-danger">General:Product</span>, <span class="text-danger">Type:Digital player</span>. Syntax <span class="text-info">product detail</span> uses 3 sub-attributes: <span class="text-danger">section name</span>: Max 140 characters, <span class="text-danger">attribute name</span>: Max 140 characters <span class="text-danger">attribute value</span>: Max 1000 characters');
         i_e = 'i.e <span class="text-danger">General:Product</span>';
         //var product_detail = strategy_data;
+        $("#product_condition").val(product_detail);
+        if (product_detail != '') {
+            $("#product_condition_help").html('<span class="text-success">' + product_detail + '</span>');
+        }
     } else if (product_condition_strategy == 'product highlight') {
         $("#product_data_condition_title").html(product_condition_strategy + ":");
         $("#condition_strategy_help").html('Use between 2 and 10 product highlights. Describe only the product itself. Don’t list keywords or search terms .Don’t include promotional text, all capital letters, or gimmicky foreign characters');
@@ -4835,6 +4956,10 @@ condition_strategy.addEventListener('change', (event) => {
         $("#product_data_condition_help").html('<span class="text-warning">Optional</span>. The most relevant highlights of your products. Example <span class="text-danger">Supports thousands of apps</span>, <span class="text-danger">including Netflix</span>, <span class="text-danger">YouTube</span>, and <span class="text-danger">HBO Max</span>. Syntax Max 150 characters');
         i_e = 'i.e <span class="text-danger">Supports thousands of apps</span>';
         //var product_highlight = strategy_data;
+        $("#product_condition").val(product_highlight);
+        if (product_highlight != '') {
+            $("#product_condition_help").html('<span class="text-success">' + product_highlight + '</span>');
+        }
     }
     
     if ($("#product_condition").val() != '' && $("#product_condition").val() != null) {
@@ -4914,6 +5039,10 @@ destinations_strategy.addEventListener('change', (event) => {
         $("#product_data_destinations_help").html('Example <span class="text-danger">Shopping ads</span>. Supported values <span class="text-danger">Shopping ads</span>, <span class="text-danger">Buy on Oramla  Display ads</span>, <span class="text-danger">Local inventory ads</span>, <span class="text-danger">Free listings</span>, <span class="text-danger">Free local listings</span>');
         i_e = 'i.e <span class="text-danger">Shopping ads</span>';
         //var excluded_destination = strategy_data;
+        $("#product_destinations").val(excluded_destination);
+        if (excluded_destination != '') {
+            $("#product_destinations_help").html('<span class="text-success">' + excluded_destination + '</span>');
+        }
     } else if (product_destinations_strategy == 'included destination') {
         $("#product_data_destinations_title").html(product_destinations_strategy + ":");
         $("#destinations_strategy_help").html(' <span class="text-warning">Optional</span>. A setting that you can use to include a product in a specific type of advertising campaign');
@@ -4921,6 +5050,10 @@ destinations_strategy.addEventListener('change', (event) => {
         $("#product_data_destinations_help").html('Example <span class="text-danger">Shopping ads</span>. Supported values <span class="text-danger">Shopping ads</span>, <span class="text-danger">Buy on Oramla listings</span>, <span class="text-danger">Display ads</span>, <span class="text-danger">Local inventory ads</span>, <span class="text-danger">Free listings</span>, <span class="text-danger">Free local listings</span>');
         i_e = 'i.e <span class="text-danger">Shopping ads</span>';
         //var included_destination = strategy_data;
+        $("#product_destinations").val(included_destination);
+        if (included_destination != '') {
+            $("#product_destinations_help").html('<span class="text-success">' + included_destination + '</span>');
+        }
     } else if (product_destinations_strategy == 'shopping ads excluded country') {
         $("#product_data_destinations_title").html(product_destinations_strategy + ":");
         $("#destinations_strategy_help").html('<span class="text-warning">Optional</span>. A setting that allows you to exclude countries where your products are advertised on Shopping ads. Only available for <span class="text-primary">Shopping ads</span>');
@@ -4928,6 +5061,10 @@ destinations_strategy.addEventListener('change', (event) => {
         $("#product_data_destinations_help").html('Example <span class="text-danger">DE</span>. Syntax 2 characters. Must be an ISO_3166-1_alpha-2 country code.');
         i_e = 'i.e <span class="text-danger">DE</span>';
         //var shopping_ads_excluded_country = strategy_data;
+        $("#product_destinations").val(shopping_ads_excluded_country);
+        if (shopping_ads_excluded_country != '') {
+            $("#product_destinations_help").html('<span class="text-success">' + shopping_ads_excluded_country + '</span>');
+        }
     }
     //alert($("#product_destinations").val());
     if ($("#product_destinations").val() != '' && $("#product_destinations").val() != null) {
@@ -5078,6 +5215,10 @@ shipping_strategy.addEventListener('change', (event) => {
         $("#product_data_shipping_help").html('Your product’s shipping cost, shipping speeds, and the locations your product ships to. Supported prices <span class="text-danger">0–1000</span> USD (check for other currencies). Example <span class="text-danger">US:CA:Overnight:16.00 USD:1:1:2:3</span>. Syntax shipping uses the following sub-attributes: <span class="text-danger">country (required)</span> ISO 3166 country code, <span class="text-warning">region</span> or <span class="text-warning">postal ​code</span> or <span class="text-warning">location ​id</span> or <span class="text-warning">location group name (optional)</span>, <span class="text-warning">service (optional)</span>, <span class="text-warning">Service class</span> or <span class="text-warning">shipping speed</span>, <span class="text-warning">price (optional)</span>, <span class="text-primary">Fixed shipping cost</span>, including VAT if required, <span class="text-info">min handling time</span> (optional) and <span class="text-info">max handling time</span> (optional) to specify handling time, <span class="text-info">min transit time</span> (optional) and <span class="text-info">max transit time</span> (optional) to specify transit time');
         i_e = 'i.e <span class="text-danger">US:CA:Overnight:16.00 USD:1:1:2:3</span>';
         //var excluded_destination = strategy_data;
+        $("#product_shipping").val(shipping);
+        if (shipping != '') {
+            $("#product_shipping_help").html('<span class="text-success">' + shipping + '</span>');
+        }
     } else if (product_shipping_strategy == 'shipping label') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
         $("#shipping_strategy_help").html('Use a value that you’ll recognize in your account shipping settings. The value won’t be shown to users. Examples: <span class="text-danger">Sameday</span>, <span class="text-danger">Oversize</span>, <span class="text-danger">Only FedEx</span>');
@@ -5085,6 +5226,10 @@ shipping_strategy.addEventListener('change', (event) => {
         $("#product_data_shipping_help").html(' <span class="text-warning">Optional</span>. Label that you assign to a product to help assign correct shipping costs in Merchant Center account settings. Example <span class="text-danger">perishable</span>. Syntax Max 100 characters');
         i_e = 'i.e <span class="text-danger">perishable</span>';
         //var shipping_label = strategy_data;
+        $("#product_shipping").val(shipping_label);
+        if (shipping_label != '') {
+            $("#product_shipping_help").html('<span class="text-success">' + shipping_label + '</span>');
+        }
     } else if (product_shipping_strategy == 'shipping weight') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
         $("#shipping_strategy_help").html('Submit this value if you set up account shipping settings for carrier-calculated rates or weight-based shipping services');
@@ -5092,6 +5237,10 @@ shipping_strategy.addEventListener('change', (event) => {
         $("#product_data_shipping_help").html('<span class="text-warning">Optional (Required for carrier-calculated rates, a table based on weight, or a rule based on weight in your account shipping settings)</span>. The weight of the product used to calculate the shipping cost. Supported <span class="text-info">weights</span> <span class="text-danger">0–2000</span> lbs for imperial, <span class="text-danger">0–1000</span> kgs for metric. Example <span class="text-danger">3 kg</span>. Syntax Number + unit. Supported units <span class="text-danger">lb</span>, <span class="text-danger">oz</span>, <span class="text-danger">g</span>, <span class="text-danger">kg</span>');
         i_e = 'i.e <span class="text-danger">3 kg</span>';
         //var shipping_weight = strategy_data;
+        $("#product_shipping").val(shipping_weight);
+        if (shipping_weight != '') {
+            $("#product_shipping_help").html('<span class="text-success">' + shipping_weight + '</span>');
+        }
     } else if (product_shipping_strategy == 'shipping length') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
         $("#shipping_strategy_help").html('Submit this value if you set up account shipping settings for carrier-calculated rates. If you don’t provide shipping dimension attributes while using carrier-calculated rates, we won’t be able to calculate rates based on the dimensional weight of the item. If that’s the case, we’ll just calculate the rates based on the value you provided in <span class="text-info">shipping ​weight</span>. If you submit this attribute, submit all shipping dimension attributes: <span class="text-info">shipping ​length</span>, <span class="text-info">shipping ​width</span>, <span class="text-info">shipping ​height</span>. Use the same unit for all shipping dimension attributes that apply to a single product. Keep in mind that Oramla doesn’t automatically calculate additional shipping cost for oversized items. If your package would be considered large or oversized by your carrier, you should either use the shipping attribute to set shipping cost for an individual product or use the <span class="text-info">shipping ​label</span> attribute with account shipping settings to set the cost');
@@ -5099,6 +5248,10 @@ shipping_strategy.addEventListener('change', (event) => {
         $("#product_data_shipping_help").html(' <span class="text-warning">Optional (Required for carrier-calculated rates in your account shipping settings)</span>. The length of the product used to calculate the shipping cost by dimensional weight. Example <span class="text-danger">20 in</span>. Syntax Number + unit. Supported values <span class="text-danger">1 - 150</span> for inches, <span class="text-danger">1 - 400</span> for cm. Supported units <span class="text-danger">in</span>, <span class="text-danger">cm</span>');
         i_e = 'i.e <span class="text-danger">20 in</span>';
         //var shipping_length = strategy_data;
+        $("#product_shipping").val(shipping_length);
+        if (shipping_length != '') {
+            $("#product_shipping_help").html('<span class="text-success">' + shipping_length + '</span>');
+        }
     } else if (product_shipping_strategy == 'shipping width') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
         $("#shipping_strategy_help").html('Meet the requirements for the <span class="text-info">shipping ​length</span> attribute');
@@ -5106,6 +5259,10 @@ shipping_strategy.addEventListener('change', (event) => {
         $("#product_data_shipping_help").html('<span class="text-warning">Optional (Required for carrier-calculated rates in your account shipping settings)</span>. The width of the product used to calculate the shipping cost by dimensional weight. Example <span class="text-danger">20 in</span>. Syntax Number + unit. Supported values <span class="text-danger">1 - 150</span> for inches, <span class="text-danger">1 - 400</span> for cm. Supported units <span class="text-danger">in</span>, <span class="text-danger">cm</span>');
         i_e = 'i.e <span class="text-danger">20 in</span>';
         //var shipping_width = strategy_data;
+        $("#product_shipping").val(shipping_width);
+        if (shipping_width != '') {
+            $("#product_shipping_help").html('<span class="text-success">' + shipping_width + '</span>');
+        }
     } else if (product_shipping_strategy == 'shipping height') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
         $("#shipping_strategy_help").html('Meet the requirements for the <span class="text-info">shipping ​length</span> attribute');
@@ -5113,6 +5270,10 @@ shipping_strategy.addEventListener('change', (event) => {
         $("#product_data_shipping_help").html('<span class="text-warning">Optional</span> (Required for carrier-calculated rates in your account shipping settings). The height of the product used to calculate the shipping cost by dimensional weight. Example <span class="text-danger">20 in</span>. Syntax Number + unit. Supported values <span class="text-danger">1 - 150</span> for inches, <span class="text-danger">1 - 400</span> for cm. Supported units <span class="text-danger">in</span>, <span class="text-danger">cm</span>');
         i_e = 'i.e <span class="text-danger">20 in</span>';
         //var shipping_height = strategy_data;
+        $("#product_shipping").val(shipping_height);
+        if (shipping_height != '') {
+            $("#product_shipping_help").html('<span class="text-success">' + shipping_height + '</span>');
+        }
     } else if (product_shipping_strategy == 'ships from country') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
         $("#shipping_strategy_help").html('Provide only the country from which you typically ship this product');
@@ -5120,6 +5281,10 @@ shipping_strategy.addEventListener('change', (event) => {
         $("#product_data_shipping_help").html('<span class="text-warning">Optional</span>. A setting that allows you to provide the country from which your product will typically ship. Example <span class="text-danger">DE</span>. 2 characters. Must be an ISO_3166-1_alpha-2 country code');
         i_e = 'i.e <span class="text-danger">DE</span>';
         //var ships_from_country = strategy_data;
+        $("#product_shipping").val(ships_from_country);
+        if (ships_from_country != '') {
+            $("#product_shipping_help").html('<span class="text-success">' + ships_from_country + '</span>');
+        }
     } else if (product_shipping_strategy == 'transit time label') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
         $("#shipping_strategy_help").html('Use a value that you’ll recognize in your account shipping settings. The value won’t be shown to users. Examples: <span class="text-danger">Dog food</span>, <span class="text-danger">From Nairobi</span>, <span class="text-danger">Heavy package</span>');
@@ -5127,6 +5292,10 @@ shipping_strategy.addEventListener('change', (event) => {
         $("#product_data_shipping_help").html(' <span class="text-warning">Optional</span>. Label that you assign to a product to help assign different transit times in Merchant Center account settings. Example <span class="text-danger">From Nairobi</span>. Syntax Max 100 characters');
         i_e = 'i.e <span class="text-danger">From Nairobi</span>';
         //var transit_time_label = strategy_data;
+        $("#product_shipping").val(transit_time_label);
+        if (transit_time_label != '') {
+            $("#product_shipping_help").html('<span class="text-success">' + transit_time_label + '</span>');
+        }
     } else if (product_shipping_strategy == 'max handling time') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
         $("#shipping_strategy_help").html('Submit this attribute if you want to display the overall time it takes for a product to arrive at its destination. Submit the number of business days (as configured in Merchant Center). For products ready to be shipped the <span class="text-primary">same day</span>, submit <span class="text-danger">0</span>. For submitting a time range submit <span class="text-info">max handling time</span> in combination with <span class="text-info">min handling time</span>.');
@@ -5134,6 +5303,10 @@ shipping_strategy.addEventListener('change', (event) => {
         $("#product_data_shipping_help").html('<span class="text-warning">Optional</span>. The longest amount of time between when an order is placed for a product and when the product ships. Example <span class="text-danger">3</span>. Syntax Integer, greater than or equal to <span class="text-danger">0</span>');
         i_e = 'i.e <span class="text-danger">3</span>';
         //var max_handling_time = strategy_data;
+        $("#product_shipping").val(max_handling_time);
+        if (max_handling_time != '') {
+            $("#product_shipping_help").html('<span class="text-success">' + max_handling_time + '</span>');
+        }
     } else if (product_shipping_strategy == 'min handling time') {
         $("#product_data_shipping_title").html(product_shipping_strategy + ":");
         $("#shipping_strategy_help").html('Meet the requirements for the <span class="text-info">max handling time</span> attribute');
@@ -5141,6 +5314,10 @@ shipping_strategy.addEventListener('change', (event) => {
         $("#product_data_shipping_help").html('<span class="text-warning">Optional</span>. The shortest amount of time between when an order is placed for a product and when the product ships. Example <span class="text-danger">1</span>. Syntax Integer, greater than or equal to <span class="text-danger">0</span>');
         i_e = 'i.e <span class="text-danger">1</span>';
         //var min_handling_time = strategy_data;
+        $("#product_shipping").val(min_handling_time);
+        if (min_handling_time != '') {
+            $("#product_shipping_help").html('<span class="text-success">' + min_handling_time + '</span>');
+        }
     }
     //alert($("#product_destinations").val());
     if ($("#product_shipping").val() != '' && $("#product_shipping").val() != null) {
@@ -5211,6 +5388,10 @@ tax_strategy.addEventListener('change', (event) => {
         $("#product_data_tax_help").html('<span class="text-danger">Required (Available for the KE only)</span>. Your product’s sales tax rate in percent. Example <span class="text-danger">US:CA:5.00:y</span>. Syntax tax uses 4 sub-attributes: <span class="text-danger">rate (required)</span> tax rate as a percentage, <span class="text-warning">country (optional)</span> ISO 3166 country code, <span class="text-warning">region</span> or <span class="text-warning">postal ​code</span> or <span class="text-warning">location id (optional)</span>, <span class="text-warning">tax ship (optional)</span>. Specify if you charge tax on shipping. Accepted values are <span class="text-danger">yes </span> or <span class="text-danger">no</span>');
         i_e = 'i.e <span class="text-danger">US:CA:5.00:y</span>';
         //var tax = strategy_data;
+        $("#product_tax").val(tax);
+        if (tax != '') {
+            $("#product_tax_help").html('<span class="text-success">' + tax + '</span>');
+        }
     } else if (product_tax_strategy == 'tax category') {
         $("#product_data_tax_title").html(product_tax_strategy + ":");
         $("#tax_strategy_help").html('Use this attribute if you have products that have a specific tax rate.');
@@ -5218,6 +5399,10 @@ tax_strategy.addEventListener('change', (event) => {
         $("#product_data_tax_help").html(' <span class="text-warning">Optional (Recommended for custom tax rates at the account level)</span>. A category that classifies your product by specific tax rules. Example <span class="text-danger">apparel</span>. Syntax Max 100 characters');
         i_e = 'i.e <span class="text-danger">apparel</span>';
         //var tax_category = strategy_data;
+        $("#product_tax").val(tax_category);
+        if (tax_category != '') {
+            $("#product_tax_help").html('<span class="text-success">' + tax_category + '</span>');
+        }
     }
     //alert($("#product_destinations").val());
     if ($("#product_tax").val() != '' && $("#product_tax").val() != null) {
@@ -6107,6 +6292,10 @@ $("#authentication").click(function(){
     $("#authentication_modal").hide(100);
 
 });
+$("#app_cover_close").click(function(){
+    $("#app-cover-spin").hide(0);
+
+});
 var user_co = 0;
 function user() {    
     if (username == "" || username == null) {
@@ -6172,9 +6361,14 @@ function location_container() {
         longitude = position.coords.longitude;
         localStorage.setItem("latitude", position.coords.latitude);
         localStorage.setItem("longitude", position.coords.longitude);
-        document.getElementById("main_heremap").innerHTML = "";
 
-        $('<iframe src="' + path_protocol + '//' + host_name + ':' + port + '/map/location_container.html" height="400px" width="100%" title="map"></iframe>').appendTo('#main_heremap');
+        var xlatitude = latitude - 0.001;
+        var xlongitude = longitude - 0.001;
+
+        //$('#image_heremap').css("background-image", "url(https://image.maps.ls.hereapi.com/mia/1.6/mapview?apiKey=3ti6HbsCQHDLf4HfUDC-B-FJzAqHUrJ4iEG37mNIxjc&c=" + latitude + "," + longitude + "&sb=mk&t=1&z=15&w=250&nodot&poix0=" + latitude + "," + longitude + ";00a3f2;00a3f2;11;.&poix1=" + xlatitude + "," + xlongitude + ";white;white;11;.)");
+        var url = "https://image.maps.ls.hereapi.com/mia/1.6/mapview?apiKey=3ti6HbsCQHDLf4HfUDC-B-FJzAqHUrJ4iEG37mNIxjc&c=" + latitude + "," + longitude + "&sb=mk&t=1&z=15&w=250&nodot&poix0=" + latitude + "," + longitude + ";00a3f2;00a3f2;11;.&poix1=" + xlatitude + "," + xlongitude + ";white;white;11;.";
+        var image_heremap = document.getElementById('image_heremap');
+        image_heremap.src = url;
 
         action_float_id = 0;
         contact_information_save = 0;
@@ -6198,7 +6392,7 @@ function location_container() {
         },
         success: function (data) {
             //main_heremap
-            var add_heremap = document.getElementById('main_heremap');
+            var add_heremap = document.getElementById('image_heremap');
             add_heremap.src = JSON.stringify(data);
             alert(JSON.stringify(data));
           
@@ -6223,7 +6417,9 @@ function location_container() {
     //navigator.geolocation.getCurrentPosition(onSuccess, onError); 
 }
 function heremapview(latitude,longitude) {
-    $('#app-cover-spin').show(0);
+    //$('#app-cover-spin').show(0);
+    //alert('' + latitude + ',' + longitude + '');   
+
     $.ajax({
         url: 'https://image.maps.ls.hereapi.com/mia/1.6/mapview',
         type: 'GET',
@@ -6232,10 +6428,14 @@ function heremapview(latitude,longitude) {
             z: '14',
             apiKey: '46q01OAMcax9dvSziSM9fEF8biYPSF5F4dPje-QCZ9Q'
         },
-        success: function (data) {
+        success: function (dataa) {
             //var add_heremap = document.getElementById('main_heremap');
             //add_heremap.src = "http://image.maps.cit.api.here.com/mia/1.6/mapview?" +JSON.stringify(data);
-            //alert(data);          
+            /**alert(dataa);   
+            $('#main_heremap').css("background-image", "url(https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap"+
+                "&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318"+
+                "&markers=color:red%7Clabel:C%7C40.718217,-73.998284"+
+                "&key=)"); */       
         }
     }); 
 }
