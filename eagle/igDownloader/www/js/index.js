@@ -22,17 +22,7 @@
 document.addEventListener('deviceready', onDeviceReady, false);
 
 function onDeviceReady() {
-    // Cordova is now initialized. Have fun!
-
-    //console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
-    //document.getElementById('deviceready').classList.add('ready');
-    var IMAGE_pic_url = '../img/logo.png';
-    //$(".appmain").attr("style", "background-image: url('" + IMAGE_pic_url + "')");
-    //$("#main").show(100);
-
-    //$("#appstart").hide(3000,function(){
-        //$("#main").show(100);
-    //});
+    
     $(document).on("change",".uploadUrl", function() {
         $("#upload_from_url_container_help").html('');
         var uploadUrl = $(this);
@@ -54,6 +44,49 @@ function onDeviceReady() {
             $("#upload_from_url_container_help").html('<span class= "text-danger" >Invalid url</span>');
         }
         
-      });
+    });
+    $("body").delegate(".paste_link","click",function(event){
+        event.preventDefault();
+        $("#upload_from_url_container_help").html('');
+        var uploadUrl = $(".uploadUrl").val();
+        if ($(".uploadUrl").val() != '') {
+            var this_url_image = $(".uploadUrl").val();
+            var url_image = new Image();
+            url_image.onload = function() {
+                // image exists and is loaded
+                $(".appmain").attr("style", "background-image: url('" + uploadUrl + "');background-size: center");
 
+                $("#upload_from_url_container_help").html('<span class= "text-success" >Image loaded</span>');
+            }
+            url_image.onerror = function() {
+                $("#upload_from_url_container_help").html('<span class= "text-warning" >Image does not exist</span>');
+            }                
+            url_image.src = this_url_image;
+            
+        } else {
+            $("#upload_from_url_container_help").html('<span class= "text-danger" >Invalid url</span>');
+        }
+    });
+    $("body").delegate(".download_link","click",function(event){
+        event.preventDefault();
+        $("#upload_from_url_container_help").html('');
+        var uploadUrl = $(".uploadUrl").val();
+        if ($(".uploadUrl").val() != '') {
+            var this_url_image = $(".uploadUrl").val();
+            var url_image = new Image();
+            url_image.onload = function() {
+                // image exists and is loaded
+                $(".appmain").attr("style", "background-image: url('" + uploadUrl + "');background-size: center");
+
+                $("#upload_from_url_container_help").html('<span class= "text-success" >Image loaded</span>');
+            }
+            url_image.onerror = function() {
+                $("#upload_from_url_container_help").html('<span class= "text-warning" >Image does not exist</span>');
+            }                
+            url_image.src = this_url_image;
+            
+        } else {
+            $("#upload_from_url_container_help").html('<span class= "text-danger" >Invalid url</span>');
+        }
+    });
 }
