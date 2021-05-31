@@ -57,7 +57,7 @@
         <link rel="stylesheet" href="css/index.css">
         <title>igDownloader</title>
     </head>
-    <body>
+    <body class="appmain">
         <nav class="navbar navbar-dark bg-dark sticky-top">
             <a class="navbar-brand" href="#">igD</a>
 
@@ -67,7 +67,7 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                <input class="form-control mr-sm-2" type="url" placeholder="Url" aria-label="Url">
+                <input class="form-control mr-sm-2 uploadUrl" type="url" placeholder="Url" aria-label="Url">
                 
                 <button class="btn btn-outline-info my-2 my-sm-0 float-left" type="button">Paste link</button>
 
@@ -77,10 +77,14 @@
              
 
         </nav>
+
+        
         
         
 
-
+        <nav class="navbar fixed-bottom navbar-light bg-light">
+            <a id="upload_from_url_container_help" class="navbar-brand" href="#"></a>
+        </nav>
         <script src='ajax/libs/jquery/3.4.1/jquery.min.js'></script>
         <script src='ajax/libs/popper.js/1.14.7/umd/popper.min.js'></script>
         <script src='bootstrap/4.3.1/js/bootstrap.min.js'></script>  

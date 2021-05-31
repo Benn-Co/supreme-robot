@@ -7639,7 +7639,7 @@ $(function() {
             }            
         }
         
-    });
+      });
 });
 
 $("#product_save").click(function(){
