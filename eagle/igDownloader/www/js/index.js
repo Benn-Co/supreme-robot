@@ -27,8 +27,8 @@ function onDeviceReady() {
     //console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     //document.getElementById('deviceready').classList.add('ready');
     var IMAGE_pic_url = '../img/logo.png';
-    $(".appmain").attr("style", "background-image: url('" + IMAGE_pic_url + "')");
-    $("#main").show(100);
+    //$(".appmain").attr("style", "background-image: url('" + IMAGE_pic_url + "')");
+    //$("#main").show(100);
 
     //$("#appstart").hide(3000,function(){
         //$("#main").show(100);
