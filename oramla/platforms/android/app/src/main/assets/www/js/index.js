@@ -23,7 +23,11 @@
 
 //export { colorCode };
 document.addEventListener('deviceready', onDeviceReady, false);
-
+//onDeviceReady();
+/**if (location.protocol !== 'https:') {
+    path_protocol = "https:";
+    window.location.href="" + path_protocol + "//oramla.com";
+} */
 var username = "";
 var email = "";
 var phone = "";
@@ -900,10 +904,13 @@ function search(search_params,startlimit,endlimit) {
 }
 
 function authentication(username) {
-    $("#app-cover-spin").removeClass("app-cover");
-    
+    $("#app-cover-spin").removeClass("app-cover");    
     if (username == "" || username == null) {
-        //$(".main").hide(100);
+        $(".main").show(100);
+        localStorage.setItem("username", '');
+        localStorage.setItem("email", '');
+        //localStorage.setItem("role", role);        
+        main();
         $("#authentication_modal").show(100);
     } else {
         $("#authentication_modal").hide(100);
@@ -918,8 +925,8 @@ function authentication(username) {
 var imgUri = "https://oramla.com/products.html";
 
 function main() {
+    //alert('main');
     $("#app-coverin").hide(100);
-
     $("#authentication_modal").hide(100, function(){
         $(".main").show(100);
         $(".product_main_container").show(100);
@@ -931,12 +938,30 @@ function main() {
     cat_id = '';
     brand_id = "";
     if (role == 'customer' || role == '' || role == null) {
+        $("#admin_product_industry_category").hide(100);
         $("#action_float_id").html('<i class="fa  fa-invision my-float">Sell</i>');
         $("#add_products_agent").hide(100);
+        $("#action_float_id").show(100);
+
     } else {
-        $("#action_float_id").html('<i class="fa fa-invision my-float">Buy</i>');
-        $("#add_products_agent").show(100);        
+        if (role == 'agent') {
+            $("#admin_product_industry_category").hide(100);
+            $("#add_products_agent").show(100);        
+            $("#action_float_id").html('<i class="fa fa-invision my-float">Buy</i>');
+            $("#action_float_id").show(100);
+
+        }
+        if (role == 'admin') {
+            $("#admin_product_industry_category").show(100);
+            $("#add_products_agent").show(100);        
+            $("#action_float_id").hide(100);
+        }
+        
+        //$("#add_products_agent").show(100);        
     }
+    $("#product_add_client_container").hide(100,function(){       
+        $("#product_error").hide(100);
+    });
     product_main_container(startlimit,endlimit,cat_id,brand_id);
     apps_categories('');    
     if (username != "") {
@@ -977,12 +1002,25 @@ $("body").delegate(".add_to_cart","click",function(event){
         product_id(startlimit,endlimit,"add_to_cart",username,$(this).attr('product_id'));    
     }
 });
+var add_products_edit_product = 0;
 $("body").delegate(".edit_product","click",function(event){
     event.preventDefault();
+    $("#product_add_client_container").hide(100,function(){       
+        $("#product_error").hide(100);
+        $("#product_row_container").show(100);
+        add_products_edit_product = 1;
+        //$("#add_products_new").show(100);
+
+    });
     product_id(startlimit,endlimit,"edit_product",username,$(this).attr('product_id'));    
 });
 $("body").delegate(".add_to_remove","click",function(event){
     event.preventDefault();
+    $("#product_add_client_container").hide(100,function(){       
+        $("#product_error").hide(100);
+        $("#product_row_container").show(100);
+
+    });
     product_id(startlimit,endlimit,"remove_product",username,$(this).attr('product_id'));    
 }); 
 $("body").delegate(".wishlist_product","click",function(event){
@@ -1200,6 +1238,14 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                         product_row_container_index = products_data.length;        
                         $("#product_data_container").html(''); 
                         $('#app-cover-spin').hide(0); 
+                        //add_products_edit_product = 1;
+                        if (add_products_edit_product == 1) {
+                            $("#add_products_new").show(100);
+                            if (role == 'admin') {
+                                update_apps_categories('','');
+                            }
+                            //add_products_edit_product = 0;
+                        }
                         products_data.forEach(products_datamyFunction);
                     } else if (products_status == "remove_product") {                    
                         $("#product_data_container").html(''); 
@@ -3131,6 +3177,7 @@ var category_clicked = "";
 $("body").delegate(".category","click",function(event){
     event.preventDefault();
     cat_id = $(this).attr('cat_id');
+    update_cat_id = cat_id;
     var add_client = $(this).attr('add_client');
     startlimit = 0;
     endlimit = 24;
@@ -3163,6 +3210,11 @@ $("body").delegate(".category","click",function(event){
 $("body").delegate(".apps_brands_back","click",function(event){
     event.preventDefault();
     apps_categories('');
+});
+
+$("body").delegate(".remove_brand_id","click",function(event){
+    event.preventDefault();
+    update_apps_categories('',$(this).attr('brand_id'));
 });
 
 $("body").delegate(".selectBrand","click",function(event){
@@ -3222,9 +3274,12 @@ function apps_categories(cat_id) {
 
                         if (apps_categories_status != "0") {  
                             $("#product_category").html('<option value="">Select Category</option>');
-                            $("#apps_brands").html('<a class="nav-link nav-expand-link apps_brands_back button is-black"><i class="fa fa-arrow-left"></i>Back</a>');
+                            $("#apps_brands").html('<a class="nav-link nav-expand-link apps_brands_back button is-link"><i class="fa fa-arrow-left"></i> Back</a>');
                             apps_categories.forEach(apps_brandsmyFunction);
                         } else {
+                            //$("#product_category").html('<option value="">Select Category</option>');
+                            $("#product_category").html('<option value="">Select Industry/Department</option>');
+
                                 $("#apps_brands").html(response.message);
                                 $("#apps_brands").append('No new categories');
                         }
@@ -3240,6 +3295,10 @@ function apps_categories(cat_id) {
                                 $("#apps_categories").append('No new Industries');
                         } 
                     }
+
+                    /**if (role == 'admin') {
+                        update_apps_categories('','');
+                    } */
                     
 
                 }
@@ -3269,12 +3328,22 @@ function apps_brandsmyFunction(item, index) {
     var brand_description = item.brand_description;   
 
     if (category_clicked == '') {
-        var product_industry_option = '<option class="is-link" add_client="' + add_client + '" value="' + brand_id + '">' + brand_title + '</option>';
+        if (role == 'admin') {
+            var product_industry_option = '<option class="is-link" add_client="' + add_client + '" value="' + brand_id + '">' + brand_title + ' <i class="tag is-black fa fa-trash remove_brand_id" brand_id ="' + brand_id + '"></i></option>';
+        } else {
+            var product_industry_option = '<option class="is-link" add_client="' + add_client + '" value="' + brand_id + '">' + brand_title + '</option>';
+        }
         $("#product_category").append(product_industry_option);
     } else{
-        var category_container = '<li class="apps_nav-item nav-expand ">' +
-        '<a brand_id="' + brand_id + '" add_client="' + add_client + '" class="nav-link nav-expand-link selectBrand" href="#">' + brand_title + '</a>' +    
-        '</li>';
+        if (role == 'admin') {
+            var category_container = '<li class="apps_nav-item nav-expand ">' +
+            '<a brand_id="' + brand_id + '" add_client="' + add_client + '" class="nav-link nav-expand-link selectBrand" href="#">' + brand_title + ' <i class="tag is-black fa fa-trash remove_brand_id" brand_id ="' + brand_id + '"></i></a>' +    
+            '</li>';
+        } else {
+            var category_container = '<li class="apps_nav-item nav-expand ">' +
+            '<a brand_id="' + brand_id + '" add_client="' + add_client + '" class="nav-link nav-expand-link selectBrand" href="#">' + brand_title + '</a>' +    
+            '</li>';
+        }        
         $("#apps_brands").append(category_container);
     }
     
@@ -3296,6 +3365,59 @@ function apps_categoriesmyFunction(item, index) {
     $("#product_industry").append(product_industry_option);
 
 }
+var update_cat_id = '';
+function update_apps_categories(cat_id,brand_id){
+    $('#app-cover-spin').show(0);
+    $.ajax({
+        type: "POST", // Type of request to be send, called as
+        dataType: 'json',
+        data: { update_apps_categories: 12, cat_id: cat_id,brand_id: brand_id },
+        processData: true,
+        url: api_server_url + '/cordova/update_apps_categories.php',
+        success: function searchSuccess(response) {
+            $('#app-cover-spin').hide(0);
+            try {
+                //response.data = JSON.parse(response.data);
+                //$("#apps_categories").html('');
+                if (response.message == "success") {
+                    var apps_categories_status = response.apps_categories_status;
+                    var apps_categories_update = response.apps_categories;
+                    apps_categories(update_cat_id);
+                    if (apps_categories_status != "0") {  
+                        $("#admin_product_category").html('<option value="">Select Category</option>');
+                        apps_categories_update.forEach(update_apps_categoriesmyFunction);
+                    } else {
+                            //$("#apps_brands").html(response.message);
+                            //$("#apps_brands").append('No new categories');
+                    }
+                } else {
+                        //$("#apps_categories").html(response.message);
+                        //$("#apps_categories").append('No new Industries');
+                }
+            } catch(e) {
+                    //$("#apps_categories").html(response.message);
+                    //$("#apps_categories").append('JSON parsing error');
+            }
+          
+        },
+        error: function searchError(xhr, err) {
+          //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+          $('#app-cover-spin').hide(0);
+          //$("#apps_categories").append("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+
+        }
+    });
+}
+function update_apps_categoriesmyFunction(item, index) {
+    var brand_id = item.brand_id;
+    var brand_title = item.brand_title;
+    var add_client = item.add_client;
+    var brand_description = item.brand_description;
+    
+    var admin_product_category = '<option class="is-link category" add_client="' + add_client + '" value="' + brand_id + '">' + brand_title + '</option>';
+    $("#admin_product_category").append(admin_product_category);
+
+}
 
 function product_main_container(startlimit,endlimit,cat_id,brand_id) {
     $('#app-cover-spin').show(0);
@@ -3306,6 +3428,7 @@ function product_main_container(startlimit,endlimit,cat_id,brand_id) {
         processData: true,
         url: api_server_url + '/cordova/product_main_container.php',
         success: function searchSuccess(response) {
+            //alert("cat_id " + cat_id + " : brand_id " + brand_id)
             try {
                 if (response.message == "success") {
                     var products_status = response.products_status;
@@ -3364,67 +3487,168 @@ function products_datamyFunction(item, index) {
     window.location.href="#maincontainer";
     var product_row_index = product_row_container_index;
     var product_image = item.product_img;
-    var product_price = currency_exchange_rate * item.product_price;    
+    product_price = currency_exchange_rate * item.product_price;    
     product_price = product_price.toFixed(2);
+
+    var salling_price = currency_exchange_rate * item.product_price;    
+    salling_price = salling_price.toFixed(2);
+
     var product_title = item.product_title;
     var product_title_account = "";
+    var product_quantity = item.product_quantity;
     var timestamp = item.add_date;
 
     var item_add_description = item.add_description;
 
     if (item_add_description.includes("{", 0) && item_add_description.endsWith("}")) {
     var description = JSON.parse(item.add_description);
-    var item_add_description = description.product_description;
-    var tax = description.tax;
-    var tax_category = description.tax_category;
 
-    var shipping = description.shipping;
-    var shipping_rates = description.shipping_rates;
-    var shipping_strategies = description.shipping_strategies;
-    var shipping_label = description.shipping_label;
-    var shipping_weight = description.shipping_weight;
-    var shipping_length = description.shipping_length;
-    var shipping_width = description.shipping_width;
-    var shipping_height = description.shipping_height;
-    var ships_from_country = description.ships_from_country;
-    var transit_time_label = description.transit_time_label;
-    var max_handling_time = description.max_handling_time;
-    var min_handling_time = description.min_handling_time;
-
-    var condition = description.condition;
-    var adult = description.adult;
-    var multipack = description.multipack;
-    var is_bundle = description.is_bundle;
-    var energy_efficiency_class = description.energy_efficiency_class;
-    var min_energy_efficiency_class = description.min_energy_efficiency_class;
-    var max_energy_efficiency_class = description.max_energy_efficiency_class;
-    var age_group = description.age_group;
-    var color = description.color;
-    var gender = description.gender;
-    var material = description.material;
-    var pattern = description.pattern;
-    var size = description.size;
-    var size_system = description.size_system;
-    var item_group_id = description.item_group_id;
-    var product_detail = description.product_detail;
-    var product_highlight = description.product_highlight;
-
-    var brand = description.brand;
-    var gtin = description.gtin;
-    var MPN = description.MPN;
-    var identifier_exists = description.identifier_exists;
-
-    var availability = description.availability;
-    var availability_date = description.availability_date;
-    var cost_of_goods_sold = description.cost_of_goods_sold;
-    var expiration_date = description.expiration_date;
-    var sale_price_effective_date = description.sale_price_effective_date;
-    var unit_pricing_measure = description.unit_pricing_measure;
-    var unit_price_base_measure = description.unit_price_base_measure;
-    var installment = description.installment;
-    var subscription_cost = description.subscription_cost;
-    var loyalty_points = description.loyalty_points;
+    item_add_description = description.product_description;
     
+    tax = description.tax;
+    tax_category = description.tax_category;
+
+    shipping = description.shipping;
+    shipping_rates = description.shipping_rates;
+    shipping_strategies = description.shipping_strategies;
+    shipping_label = description.shipping_label;
+    shipping_weight = description.shipping_weight;
+    shipping_length = description.shipping_length;
+    shipping_width = description.shipping_width;
+    shipping_height = description.shipping_height;
+    ships_from_country = description.ships_from_country;
+    transit_time_label = description.transit_time_label;
+    max_handling_time = description.max_handling_time;
+    min_handling_time = description.min_handling_time;
+
+    condition = description.condition;
+    adult = description.adult;
+    multipack = description.multipack;
+    is_bundle = description.is_bundle;
+    energy_efficiency_class = description.energy_efficiency_class;
+    min_energy_efficiency_class = description.min_energy_efficiency_class;
+    max_energy_efficiency_class = description.max_energy_efficiency_class;
+    age_group = description.age_group;
+    color = description.color;
+    gender = description.gender;
+    material = description.material;
+    pattern = description.pattern;
+    size = description.size;
+    size_system = description.size_system;
+    item_group_id = description.item_group_id;
+    product_detail = description.product_detail;
+    product_highlight = description.product_highlight;
+
+    brand = description.brand;
+    gtin = description.gtin;
+    MPN = description.MPN;
+    identifier_exists = description.identifier_exists;
+
+    availability = description.availability;
+    availability_date = description.availability_date;
+    cost_of_goods_sold = description.cost_of_goods_sold;
+    expiration_date = description.expiration_date;
+    sale_price_effective_date = description.sale_price_effective_date;
+    unit_pricing_measure = description.unit_pricing_measure;
+    unit_price_base_measure = description.unit_price_base_measure;
+    installment = description.installment;
+    subscription_cost = description.subscription_cost;
+    loyalty_points = description.loyalty_points;
+    //loyalty_points = description.loyalty_points;
+    net_price = currency_exchange_rate * description.net_price;
+    //net_price = description.net_price;
+    product_price = net_price;
+    if (add_products_edit_product == 1) {
+        //add_products_edit_product = 0;
+        $('.imagePreview').css("background-image", "url("+product_image+")");
+        $("#product_title").val(product_title);
+        $("#product_price").val(net_price);
+        //$("#product_industry").val(tax);
+        //$("#product_category").val(tax);
+        $("#product_type").val(product_type);
+        //$("#pricing_strategy").val(tax);
+        //$("#shipping_strategies").val(tax);            
+        //$("#shipping_rates").val('<option class="is-link" value="Flat rate shipping"> Flat rate shipping</option>');
+        $("#product_shipping").val(shipping);
+        $("#product_description").val(item_add_description);
+        $("#product_availability").val(availability);
+        $("#product_brand").val(brand);
+        $("#product_condition").val(condition);
+        $("#product_tax").val(tax);
+        $("#product_quantity").val(product_quantity);
+        //$("#product_destinations").val(productdestinations);
+
+        $("#product_data_tax").val(tax);
+        $("#product_data_shipping_rates").val(shipping_rates);
+        $("#product_data_shipping_strategies").val(shipping_strategies);
+        $("#product_data_product_type").val(product_type);
+        $("#product_data_pricing_strategy").val(pricing_strategy);
+        $("#product_data_product_price").val(product_price);
+        $("#product_data_product_list_price").val(product_list_price);
+    
+        $("#product_data_net_price").val(net_price);
+        $("#product_data_sale_price").val(sale_price);
+        $("#product_data_tax_category").val(tax_category);   
+    
+        $("#product_data_shipping").val(shipping);
+        $("#product_data_shipping_label").val(shipping_label);
+        $("#product_data_shipping_weight").val(shipping_weight);
+        $("#product_data_shipping_length").val(shipping_length);
+        $("#product_data_shipping_width").val(shipping_width);
+        $("#product_data_shipping_height").val(shipping_height);
+        $("#product_data_ships_from_country").val(ships_from_country);
+        $("#product_data_transit_time_label").val(transit_time_label);
+        $("#product_data_max_handling_time").val(max_handling_time);
+        $("#product_data_min_handling_time").val(min_handling_time);
+        $("#product_data_excluded_destination").val(excluded_destination);
+        $("#product_data_included_destination").val(included_destination);
+        $("#product_data_shopping_ads_excluded_country").val(shopping_ads_excluded_country);
+        $("#product_data_condition").val(condition);
+        $("#product_data_adult").val(adult);
+        $("#product_data_multipack").val(multipack);
+        $("#product_data_is_bundle").val(is_bundle);
+        $("#product_data_energy_efficiency_class").val(energy_efficiency_class);
+        $("#product_data_min_energy_efficiency_class").val(min_energy_efficiency_class);
+        $("#product_data_max_energy_efficiency_class").val(max_energy_efficiency_class);
+        $("#product_data_age_group").val(age_group);
+        $("#product_data_color").val(color);
+        $("#product_data_gender").val(gender);
+        $("#product_data_material").val(material);
+        $("#product_data_pattern").val(pattern);
+        $("#product_data_size").val(size);
+        $("#product_data_size_system").val(size_system);
+        $("#product_data_item_group_id").val(item_group_id);
+        $("#product_data_product_detail").val(product_detail);
+        $("#product_data_product_highlight").val(product_highlight);
+        $("#product_data_brand").val(brand);
+    
+        $("#product_data_gtin").val(gtin);
+        $("#product_data_MPN").val(MPN);
+        $("#product_data_identifier_exists").val(identifier_exists);
+        $("#product_data_availability").val(availability);
+        $("#product_data_availability_date").val(availability_date);
+        $("#product_data_cost_of_goods_sold").val(cost_of_goods_sold);
+        $("#product_data_expiration_date").val(expiration_date);
+        $("#product_data_sale_price_effective_date").val(sale_price_effective_date);
+        $("#product_data_unit_pricing_measure").val(unit_pricing_measure);
+        $("#product_data_unit_price_base_measure").val(unit_price_base_measure);
+        $("#product_data_installment").val(installment);
+        $("#product_data_subscription_cost").val(subscription_cost);
+        $("#product_data_loyalty_points").val(loyalty_points);
+        $("#product_data_product_title").val(product_title);
+        $("#product_data_product_industry").val(product_industry);
+        $("#product_data_product_category").val(product_category);
+    
+        $("#product_data_product_description").val(product_description);
+        $("#product_data_product_quantity").val(product_quantity);
+
+        //alert(product_quantity);
+        //$("#add_products_new").show(100);
+        //add_products_edit_product = 0;
+    }
+    
+
+
     var location = JSON.parse(item.add_location);
     var item_address = location.address;
     var item_postal = location.postal;
@@ -3434,59 +3658,151 @@ function products_datamyFunction(item, index) {
     var item_add_location = '' + item.add_client + ' <br>' + '' + item_address +  ' <br>' + '' + item_country + ' ' + item_city + ' ' + item_postal + ' ';
 
     } else {
+        if (add_products_edit_product == 1) {
+            //add_products_edit_product = 0;
+            product_price = salling_price;
+
+            $('.imagePreview').css("background-image", "url("+product_image+")");
+            $("#product_title").val(product_title);
+            $("#product_price").val(product_price);
+            //$("#product_industry").val(tax);
+            //$("#product_category").val(tax);
+            $("#product_type").val(product_type);
+            //$("#pricing_strategy").val(tax);
+            //$("#shipping_strategies").val(tax);            
+            //$("#shipping_rates").val('<option class="is-link" value="Flat rate shipping"> Flat rate shipping</option>');
+            $("#product_shipping").val(shipping);
+            $("#product_description").val(item_add_description);
+            $("#product_availability").val(availability);
+            $("#product_brand").val(brand);
+            $("#product_condition").val(condition);
+            $("#product_tax").val(tax);
+            $("#product_quantity").val(product_quantity);
+            //$("#product_destinations").val(productdestinations);
+
+            $("#product_data_tax").val(tax);
+            $("#product_data_shipping_rates").val(shipping_rates);
+            $("#product_data_shipping_strategies").val(shipping_strategies);
+            $("#product_data_product_type").val(product_type);
+            $("#product_data_pricing_strategy").val(pricing_strategy);
+            $("#product_data_product_price").val(product_price);
+            $("#product_data_product_list_price").val(product_list_price);
         
+            $("#product_data_net_price").val(net_price);
+            $("#product_data_sale_price").val(sale_price);
+            $("#product_data_tax_category").val(tax_category);   
+        
+            $("#product_data_shipping").val(shipping);
+            $("#product_data_shipping_label").val(shipping_label);
+            $("#product_data_shipping_weight").val(shipping_weight);
+            $("#product_data_shipping_length").val(shipping_length);
+            $("#product_data_shipping_width").val(shipping_width);
+            $("#product_data_shipping_height").val(shipping_height);
+            $("#product_data_ships_from_country").val(ships_from_country);
+            $("#product_data_transit_time_label").val(transit_time_label);
+            $("#product_data_max_handling_time").val(max_handling_time);
+            $("#product_data_min_handling_time").val(min_handling_time);
+            $("#product_data_excluded_destination").val(excluded_destination);
+            $("#product_data_included_destination").val(included_destination);
+            $("#product_data_shopping_ads_excluded_country").val(shopping_ads_excluded_country);
+            $("#product_data_condition").val(condition);
+            $("#product_data_adult").val(adult);
+            $("#product_data_multipack").val(multipack);
+            $("#product_data_is_bundle").val(is_bundle);
+            $("#product_data_energy_efficiency_class").val(energy_efficiency_class);
+            $("#product_data_min_energy_efficiency_class").val(min_energy_efficiency_class);
+            $("#product_data_max_energy_efficiency_class").val(max_energy_efficiency_class);
+            $("#product_data_age_group").val(age_group);
+            $("#product_data_color").val(color);
+            $("#product_data_gender").val(gender);
+            $("#product_data_material").val(material);
+            $("#product_data_pattern").val(pattern);
+            $("#product_data_size").val(size);
+            $("#product_data_size_system").val(size_system);
+            $("#product_data_item_group_id").val(item_group_id);
+            $("#product_data_product_detail").val(product_detail);
+            $("#product_data_product_highlight").val(product_highlight);
+            $("#product_data_brand").val(brand);
+        
+            $("#product_data_gtin").val(gtin);
+            $("#product_data_MPN").val(MPN);
+            $("#product_data_identifier_exists").val(identifier_exists);
+            $("#product_data_availability").val(availability);
+            $("#product_data_availability_date").val(availability_date);
+            $("#product_data_cost_of_goods_sold").val(cost_of_goods_sold);
+            $("#product_data_expiration_date").val(expiration_date);
+            $("#product_data_sale_price_effective_date").val(sale_price_effective_date);
+            $("#product_data_unit_pricing_measure").val(unit_pricing_measure);
+            $("#product_data_unit_price_base_measure").val(unit_price_base_measure);
+            $("#product_data_installment").val(installment);
+            $("#product_data_subscription_cost").val(subscription_cost);
+            $("#product_data_loyalty_points").val(loyalty_points);
+            $("#product_data_product_title").val(product_title);
+            $("#product_data_product_industry").val(product_industry);
+            $("#product_data_product_category").val(product_category);
+        
+            $("#product_data_product_description").val(product_description);
+            $("#product_data_product_quantity").val(product_quantity);
+    
+            //alert(product_quantity);
+            //$("#add_products_new").show(100);
+            //add_products_edit_product = 0;
+        }
     //var item_add_description = '';
     //var item_add_description = description;
-    var tax = '';
-    var tax_category = '';
-
-    var shipping = '';
-    var shipping_rates = '';
-    var shipping_strategies = '';
-    var shipping_label = '';
-    var shipping_weight = '';
-    var shipping_length = '';
-    var shipping_width = '';
-    var shipping_height = '';
-    var ships_from_country = '';
-    var transit_time_label = '';
-    var max_handling_time = '';
-    var min_handling_time = '';
-
-    var condition = '';
-    var adult = '';
-    var multipack = '';
-    var is_bundle = '';
-    var energy_efficiency_class = '';
-    var min_energy_efficiency_class = '';
-    var max_energy_efficiency_class = '';
-    var age_group = '';
-    var color = '';
-    var gender = '';
-    var material = '';
-    var pattern = '';
-    var size = '';
-    var size_system = '';
-    var item_group_id = '';
-    var product_detail = '';
-    var product_highlight = '';
-
-    var brand = '';
-    var gtin = '';
-    var MPN = '';
-    var identifier_exists = '';
-
-    var availability = '';
-    var availability_date = '';
-    var cost_of_goods_sold = '';
-    var expiration_date = '';
-    var sale_price_effective_date = '';
-    var unit_pricing_measure = '';
-    var unit_price_base_measure = '';
-    var installment = '';
-    var subscription_cost = '';
-    var loyalty_points = '';
+    tax = '';
+    tax_category = '';
     
+    shipping = '';
+    shipping_rates = '';
+    shipping_strategies = '';
+    shipping_label = '';
+    shipping_weight = '';
+    shipping_length = '';
+    shipping_width = '';
+    shipping_height = '';
+    ships_from_country = '';
+    transit_time_label = '';
+    max_handling_time = '';
+    min_handling_time = '';
+    
+    condition = '';
+    adult = '';
+    multipack = '';
+    is_bundle = '';
+    energy_efficiency_class = '';
+    min_energy_efficiency_class = '';
+    max_energy_efficiency_class = '';
+    age_group = '';
+    color = '';
+    gender = '';
+    material = '';
+    pattern = '';
+    size = '';
+    size_system = '';
+    item_group_id = '';
+    product_detail = '';
+    product_highlight = '';
+    
+    brand = '';
+    gtin = '';
+    MPN = '';
+    identifier_exists = '';
+    availability = '';
+    availability_date = '';
+    cost_of_goods_sold = '';
+    expiration_date = '';
+    sale_price_effective_date = '';
+    unit_pricing_measure = '';
+    unit_price_base_measure = '';
+    installment = '';
+    subscription_cost = '';
+    loyalty_points = '';
+
+
+    
+
+
     //var location = JSON.parse(item.add_location);
     var item_address = '';
     var item_postal = '';
@@ -3512,13 +3828,13 @@ function products_datamyFunction(item, index) {
     if (username == item.add_client) {
         var adminactions = '';
         var actions = '' +
-        '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  salling_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="more fl-l edit_product" product_id = "' + item.product_id + '"><span><span><i class="fa fa-edit"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></i></span></a>';
     } else {
         var adminactions = '';
         var actions = '' +
-        '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  salling_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="share fl-l connect_product" connect_image_url="' + IMAGE_url + '" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
     }//product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" 
@@ -3528,7 +3844,7 @@ function products_datamyFunction(item, index) {
         '<a href="javascript:void(0)" class="share fl-l add_to_remove" product_id = "' + item.product_id + '"><span><span><i class="fa fa-trash"></span></i></span></a>';
         var adminactions = '<div class="buttons cf">' + admin_actions + '</div><br>';
         var actions = '' +
-        '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  product_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
+        '<a href="javascript:void(0)" class="share fl-l add_to_cart" product_id = "' + item.product_id + '"><span><span>' +  currency_price_symbal + ' ' +  salling_price + ' <i class="fa fa-shopping-cart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="more fl-l " product_id = "' + item.product_id + '"><span><span><i class="fa fa-heart"></i></span></span></a>' +
         '<a href="javascript:void(0)" class="share fl-l connect_product" connect_image_url="' + IMAGE_url + '" product_url="' + IMAGE_url + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" add_client = "' + item.add_client + '"><span><span><i class="fa fa-comment"></i></span></span></a>';
     }
@@ -3624,9 +3940,14 @@ function products_datamyFunction(item, index) {
     } else {
         $("#product_next").show(100,function(){       
             $("#product_previous").hide(100);
-            $("#add_products_new").hide(1000);
+            //$("#add_products_new").hide(1000);
 
         });
+    }
+    if (add_products_edit_product == 1) {
+        add_products_edit_product = 0;
+    } else {
+        $("#add_products_new").hide(1000);
     }
     if (product_row_index < 24) {
         $("#product_previous").hide(100);
@@ -3688,6 +4009,9 @@ $("#add_products_agent").click(function(){
         
         $("#percent_price").html(percent_price);
         $("#add_products_new").show(100);
+        if (role == 'admin') {
+            update_apps_categories('','');
+        }
         if (percent_pricing_strategy == 'cost_plus_pricing') {
             $("#pricing_strategy_help").html('Price = total cost of product + gross profit margin');
         } else if (percent_pricing_strategy == 'markup_pricing') {
@@ -5442,8 +5766,13 @@ if (product_industry != '' && product_industry != null) {
     $("#product_industry").removeClass("is-invalid");
     $("#product_industry").addClass("is-valid");
     $("#product_industry_help").html(event.target.value); 
- 
+
+    $("#product_category").html('<option value="">Select Industry/Department</option>');
+
+    
     apps_categories(event.target.value);
+    //update_apps_categories('','');
+
 } else {
     $("#product_industry").removeClass("is-valid");
     $("#product_industry").addClass("is-invalid");
@@ -5462,6 +5791,20 @@ if (product_category != '' && product_category != null) {
     $("#product_category").removeClass("is-valid");
     $("#product_category").addClass("is-invalid");
 }
+});
+
+const admin_product_category_input = document.querySelector('#admin_product_category');
+admin_product_category_input.addEventListener('change', (event) => {
+    var admin_product_category = event.target.value;
+    if (admin_product_category != '' && admin_product_category != null && product_industry != '' && product_industry != null) {
+        $("#admin_product_category").removeClass("is-invalid");
+        $("#admin_product_category").addClass("is-valid"); 
+        //$("#product_category_help").html(event.target.value); 
+        update_apps_categories(product_industry,admin_product_category);    
+    } else {
+        $("#admin_product_category").removeClass("is-valid");
+        $("#admin_product_category").addClass("is-invalid");
+    }
 });
 
 const shipping_rates_input = document.querySelector('#shipping_rates');
@@ -5728,61 +6071,68 @@ $("body").delegate(".get_contact","click",function(event){
 });
 $("body").delegate(".add_float","click",function(event){
     event.preventDefault();
-    conta = 1;
-    chat_ = 1;
-    window.location.href="#center_top_id"; 
-    $("#menu_container_top_tab").hide(100);                
-    $("#center_top_id").show(100);
-    if (username == "") {
-        //$(".main").hide(100);
+    if (username == "" || username == null) {
+        $(".main").show(100);
         $("#authentication_modal").show(100);
     } else {
-        $("#contactname").html($(this).attr('connect_from'));
-        $("#cotacttime").html($(this).attr('connects_time'));
-        var IMAGE_url = 'img/jeans3.jpg';
-        $(".picbar").attr("style", "background-image: url('" + IMAGE_url + "')");
-        var chat_message = '';
-        div_cima = 1;
-        connect_from = $(this).attr('connect_from');
-        connects_datalength = 0;
-        messageauto = 1;
-        connects_datalengthnow = 0;
-        $("#chat").html('loading ...');
-        //contact_from = 0;
-        response_message_from = 0;
-        contact(username,$(this).attr('connect_from'),$(this).attr('connects_id'),chat_message);
+        conta = 1;
+        chat_ = 1;
+        window.location.href="#"; 
+        $("#menu_container_top_tab").hide(100);                
+        $("#center_top_id").show(100);
+        //if (username == "") {
+            //$(".main").hide(100);
+           // $("#authentication_modal").show(100);
+        //} else {
+            $("#contactname").html($(this).attr('connect_from'));
+            $("#cotacttime").html($(this).attr('connects_time'));
+            var IMAGE_url = 'img/jeans3.jpg';
+            $(".picbar").attr("style", "background-image: url('" + IMAGE_url + "')");
+            var chat_message = '';
+            div_cima = 1;
+            connect_from = $(this).attr('connect_from');
+            connects_datalength = 0;
+            messageauto = 1;
+            connects_datalengthnow = 0;
+            $("#chat").html('loading ...');
+            //contact_from = 0;
+            response_message_from = 0;
+            contact(username,$(this).attr('connect_from'),$(this).attr('connects_id'),chat_message);
+        
+            $("#connects_chatbar").show(100);
+            $("#product_container").hide(100);
+            $("#menu_container_left_tab").hide(100);
+            $("#orders_container").hide(100);
+            $("#order_items_container").hide(10);
+            $("#cart_container").hide(100);
+            $("#location_container").hide(100);
+            $("#user_container").hide(100);
+            $("#top_menu").show(100,function(){       
+                $("#search").hide(100);
+                $("#top_slider").hide(100);
     
-        $("#connects_chatbar").show(100);
-        $("#product_container").hide(100);
-        $("#menu_container_left_tab").hide(100);
-        $("#orders_container").hide(100);
-        $("#order_items_container").hide(10);
-        $("#cart_container").hide(100);
-        $("#location_container").hide(100);
-        $("#user_container").hide(100);
-        $("#top_menu").show(100,function(){       
-            $("#search").hide(100);
-            $("#top_slider").hide(100);
-
-        });
-        $("#connects_contacts").show(100,function(){       
-            $("#connects_messages").hide(100);                
-        });
-        if (messageauto == 1) {
-            messageauto = 0; 
-            $(".chat_main_container").show(100)
-            $("#connects_contacts").hide(100,function(){       
-                $("#connects_messages").show(100); 
-                $("#menu_container_top_tab").hide(100);                
-                //$("#menu_container_bottom_tab").hide(100);
-                $("#center_top_id").hide(100);                
-
             });
-        }
+            $("#connects_contacts").show(100,function(){       
+                $("#connects_messages").hide(100);                
+            });
+            if (messageauto == 1) {
+                messageauto = 0; 
+                $(".chat_main_container").show(100)
+                $("#connects_contacts").hide(100,function(){       
+                    $("#connects_messages").show(100); 
+                    $("#menu_container_top_tab").hide(100);                
+                    //$("#menu_container_bottom_tab").hide(100);
+                    $("#center_top_id").hide(100);                
+    
+                });
+            }
+        //}
+        $("#product_add_client_container").hide(100,function(){       
+            $("#product_error").hide(100);
+        });
+
     }
-    $("#product_add_client_container").hide(100,function(){       
-        $("#product_error").hide(100);
-    });
+    
     if (_apps_tab != 0) {
         document.body.classList.toggle('nav-is-toggled');
         _apps_tab =0;
@@ -5997,7 +6347,7 @@ $("#s5").click(function(){
     cat_id = '';
     brand_id = "";
     if (username == "" || username == null) {
-        //$(".main").hide(100);
+        $(".main").show(100);
         $("#authentication_modal").show(100);
     } else {
         window.location.href="#"; 
@@ -6212,33 +6562,39 @@ document.addEventListener('backbutton', function(){
 });
 
 $("#s2").click(function(){
-    search_value = '';
-    geoshop_value = '';
-    cat_id = '';
-    brand_id = "";
-    //window.location.href="#cart_container";
-    $("#menu_container_top_tab").show(100);                
-
-    $("#product_container").hide(100);
-    $("#menu_container_left_tab").hide(100);
-    $("#chat_container").hide(100);
-    $("#connects_chatbar").hide(100);
-    $("#location_container").hide(100);
-    $("#user_container").hide(100);
-    $("#top_menu").show(100,function(){       
-        $("#search").hide(100);
-        $("#top_slider").hide(100);
-
-    });
     if (username == "" || username == null) {
-        //$(".main").hide(100);
+        $(".main").show(100);
         $("#authentication_modal").show(100);
     } else {
-        cart();
+        search_value = '';
+        geoshop_value = '';
+        cat_id = '';
+        brand_id = "";
+        //window.location.href="#cart_container";
+        $("#menu_container_top_tab").show(100);                
+    
+        $("#product_container").hide(100);
+        $("#menu_container_left_tab").hide(100);
+        $("#chat_container").hide(100);
+        $("#connects_chatbar").hide(100);
+        $("#location_container").hide(100);
+        $("#user_container").hide(100);
+        $("#top_menu").show(100,function(){       
+            $("#search").hide(100);
+            $("#top_slider").hide(100);
+    
+        });
+        //if (username == "" || username == null) {
+        //    $(".main").show(100);
+         //   $("#authentication_modal").show(100);
+        //} else {
+            cart();
+        //}
+        $("#product_add_client_container").hide(100,function(){       
+            $("#product_error").hide(100);
+        });
     }
-    $("#product_add_client_container").hide(100,function(){       
-        $("#product_error").hide(100);
-    });
+    
     if (_apps_tab != 0) {
         document.body.classList.toggle('nav-is-toggled');
         _apps_tab =0;
@@ -6255,29 +6611,39 @@ function cart() {
 }
 
 $("#s4").click(function(){
-    search_value = '';
-    geoshop_value = '';
-    cat_id = '';
-    brand_id = "";
-    //window.location.href="#user_container";
-    $("#menu_container_top_tab").show(100);                
+    if (username == "" || username == null) {
+        $(".main").show(100);
+        $("#authentication_modal").show(100);
+    } else {
+        $("#authentication_modal").hide(100);
+        $(".main").show(100);
+        $(".user").show(100);
+        search_value = '';
+        geoshop_value = '';
+        cat_id = '';
+        brand_id = "";
+        //window.location.href="#user_container";
+        $("#menu_container_top_tab").show(100);                
+    
+        $("#product_container").hide(100);
+        $("#menu_container_left_tab").hide(100);
+        $("#chat_container").hide(100);
+        $("#connects_chatbar").hide(100);
+        $("#orders_container").hide(100);
+        $("#order_items_container").hide(10);
+        $("#cart_container").hide(100);
+        $("#location_container").hide(100);
+        $("#top_menu").show(100,function(){       
+            $("#search").hide(100);
+            $("#top_slider").hide(100);
+        });
+        user();
+        $("#product_add_client_container").hide(100,function(){       
+            $("#product_error").hide(100);
+        });
 
-    $("#product_container").hide(100);
-    $("#menu_container_left_tab").hide(100);
-    $("#chat_container").hide(100);
-    $("#connects_chatbar").hide(100);
-    $("#orders_container").hide(100);
-    $("#order_items_container").hide(10);
-    $("#cart_container").hide(100);
-    $("#location_container").hide(100);
-    $("#top_menu").show(100,function(){       
-        $("#search").hide(100);
-        $("#top_slider").hide(100);
-    });
-    user();
-    $("#product_add_client_container").hide(100,function(){       
-        $("#product_error").hide(100);
-    });
+    }
+    
     if (_apps_tab != 0) {
         document.body.classList.toggle('nav-is-toggled');
         _apps_tab =0;
@@ -6298,50 +6664,56 @@ $("#app_cover_close").click(function(){
 });
 var user_co = 0;
 function user() {    
-    if (username == "" || username == null) {
-        $(".user").hide(100);
-        //$(".main").hide(100);        
-        $("#authentication_modal").show(100);
-    } else {
-        $("#authentication_modal").hide(100);
+    //if (username == "" || username == null) {
+        //$(".user").hide(100);
+        //$(".main").show(100);
+        //$("#authentication_modal").show(100);
+    //} else {
+        //$("#authentication_modal").hide(100);
         $(".main").show(100);
         $(".user").show(100);
-        window.location.href="#user_container";
+        window.location.href="#";
         user_co = 1;
         user_container(username,email);
 
-    }    
+    //}    
 }
 
 $("#s3").click(function(){
-    search_value = '';
-    geoshop_value = '';
-    cat_id = '';
-    //window.location.href="#location_container";
-    $("#menu_container_top_tab").show(100);                
-
-    $("#product_container").hide(100);
-    $("#menu_container_left_tab").hide(100);
-    $("#chat_container").hide(100);
-    $("#connects_chatbar").hide(100);
-    $("#orders_container").hide(100);
-    $("#order_items_container").hide(10);
-    $("#cart_container").hide(100);
-    $("#user_container").hide(100);
-    $("#top_menu").show(100,function(){       
-        $("#search").hide(100);
-        $("#top_slider").hide(100);
-
-    });
     if (username == "" || username == null) {
-        //$(".main").hide(100);
+        $(".main").show(100);
         $("#authentication_modal").show(100);
     } else {
-        location_container();
+        search_value = '';
+        geoshop_value = '';
+        cat_id = '';
+        //window.location.href="#location_container";
+        $("#menu_container_top_tab").show(100);                
+    
+        $("#product_container").hide(100);
+        $("#menu_container_left_tab").hide(100);
+        $("#chat_container").hide(100);
+        $("#connects_chatbar").hide(100);
+        $("#orders_container").hide(100);
+        $("#order_items_container").hide(10);
+        $("#cart_container").hide(100);
+        $("#user_container").hide(100);
+        $("#top_menu").show(100,function(){       
+            $("#search").hide(100);
+            $("#top_slider").hide(100);
+    
+        });
+        //if (username == "" || username == null) {
+            //$(".main").hide(100);
+           // $("#authentication_modal").show(100);
+        //} else {
+            location_container();
+        //}
+        $("#product_add_client_container").hide(100,function(){       
+            $("#product_error").hide(100);
+        });
     }
-    $("#product_add_client_container").hide(100,function(){       
-        $("#product_error").hide(100);
-    });
+    
     if (_apps_tab != 0) {
         document.body.classList.toggle('nav-is-toggled');
         _apps_tab =0;
@@ -7274,6 +7646,7 @@ $("#product_save").click(function(){
     $("#api_server_url").val(api_server_url);
 
     var product_save = 0;
+
     var product_quantity = $("#product_quantity").val();
     var product_description = $("#product_description").val();
     var product_type = $("#product_type").val();
@@ -7292,9 +7665,12 @@ $("#product_save").click(function(){
         $("#product_title").removeClass("is-invalid");
         $("#product_title").addClass("is-valid");
         $("#product_title_help").html(product_title);
+        //alert(product_price);
         if (product_price == '') {
             window.location.href="#product_price";
             product_save = 1;
+            //alert(product_price);
+
             $("#product_price").removeClass("is-valid");
             $("#product_price").addClass("is-invalid");
         } else {

@@ -31,60 +31,6 @@
   <meta name="msapplication-TileImage" content="img/favicon-32x32.png">
   <link rel="shortcut icon" href="img/favicon-32x32.png">
 
-  
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpPM8vcpY3LhhPJ4CYL6_aZ3lAOJwHTEo&callback=initMap&libraries=geometry&v=weekly"
-    defer
-  ></script>
-  <style type="text/css">
-    /* Optional: Makes the sample page fill the window. html,
-    body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }*/
-    
-
-    #map,
-    #pano {
-      float: left;
-      height: 100%;
-      width: 50%;
-    }
-
-    #container {
-      height: 100%;
-      position:relative;
-    }
-    #floating-panel {
-      position: absolute;
-      top: 10px;
-      left: 25%;
-      z-index: 5;
-      background-color: #fff;
-      padding: 5px;
-      border: 1px solid #999;
-      text-align: center;
-      font-family: "Roboto", "sans-serif";
-      line-height: 30px;
-      padding-left: 10px;
-    }
-    #sidebar-panel {
-      position: absolute;
-      bottom: 10px;
-      left: 25%;
-      z-index: 5;
-      background-color: #fff;
-      padding: 5px;
-      border: 1px solid #999;
-      text-align: center;
-      font-family: "Roboto", "sans-serif";
-      line-height: 30px;
-      padding-left: 10px;
-    }
-  </style>
-
   <link rel="stylesheet" href="css/menu_container_top_tab.css">
   <link rel="stylesheet" href="css/menu_container_left_tab.css">
   <link rel="stylesheet" href="css/menu_container_bottom_tab.css">
@@ -934,20 +880,7 @@
       <nav class="navbar bg-light sticky-top">
         <span>Your delivery Location </span>
       </nav>
-      <div id="container">
-        <div id="floating-panel">
-          <input id="agent_location" type="button" value="Navigation" onclick="agent_location();" />
-          <input type="button" value="Navigation" onclick="autonavigate();" />
-          <input type="button" value="Street View" onclick="autoStreetview();" />
-          <input type="button" value="Directions" onclick="directions();" />
-  
-        </div>
-        <div id="map"></div>
-        <div id="pano"></div>     
-        <div id="sidebar-panel">
-  
-        </div>
-      </div>
+
       <section class="container">
         <div class="hero-image-wrapper">
           <div class="hero-image-element">
@@ -1401,7 +1334,7 @@
               </div>
               <span  id="product_price_strategy_help"  class="help"><span class="help is-success">Calculated as (<b id="percent_price"></b>)% of the product price</span></span>
 
-            </div>
+            </div>           
 
             <div class="form-group">
               <div class="list-group list-group-horizontal mx-auto row" style="width: 100%;">
@@ -1422,12 +1355,18 @@
                   <span id="product_category_help" class="form-text text-muted"><span class="text-danger">Required.</span> Oramla-defined product category for your product</span>            
                 </div>                
               </div>
-
+              <div id="admin_product_industry_category" class="form-group">
+                <span>Category:</span>
+                <select id="admin_product_category" class="input" >
+                  <option value="">Select Industry/Department</option>
+                
+                </select> 
+              </div>
               <label class="label" for="product_type">Product Type:</label>
               <input type="text" class="form-control is-valid" id="product_type" name="product_type" placeholder="For example, include Maxi Dresses instead of just Dresses">
               <span id="product_type_help" class="form-text text-muted">Product category that you define for your product</span>
             </div>
-
+            
             <div class="form-group">
               <div class="list-group list-group-horizontal mx-auto row" style="width: 100%;">
                 <div class="form-group is-valid float-md-left px-2 col-6 ">
@@ -2089,7 +2028,6 @@
   <script src="js/user_container.js"></script>
   <script src="js/orders_container.js"></script>
 
-  <script src="map/index.js"> </script>
 
   
     <!-- <script type="text/javascript">

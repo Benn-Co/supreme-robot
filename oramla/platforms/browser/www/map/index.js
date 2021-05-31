@@ -33,7 +33,7 @@ let panorama;
     showInContentWindow(text);
     document.getElementById("map").style.width = "100%";
     document.getElementById("pano").style.width = "auto";
-    alert("initMap");
+    //alert("initMap");
     addMarkersToMap_client(center_latitude,center_longitude);        
   }
   var event_latLng = '';
@@ -234,6 +234,7 @@ let panorama;
         ['' + add_client + '',add_client_latitude,add_client_longitude,0,],
         ['' + username + '',username_latitude,username_longitude,0,],
     ];
+
     for (i = 0; i < locations.length; i++) {
         const svgMarker = {
             path:
@@ -303,6 +304,7 @@ let panorama;
             });
         })(marker, i);
     }
+    //alert(locations);
     
   }
 

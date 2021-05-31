@@ -1334,7 +1334,7 @@
               </div>
               <span  id="product_price_strategy_help"  class="help"><span class="help is-success">Calculated as (<b id="percent_price"></b>)% of the product price</span></span>
 
-            </div>
+            </div>           
 
             <div class="form-group">
               <div class="list-group list-group-horizontal mx-auto row" style="width: 100%;">
@@ -1355,12 +1355,18 @@
                   <span id="product_category_help" class="form-text text-muted"><span class="text-danger">Required.</span> Oramla-defined product category for your product</span>            
                 </div>                
               </div>
-
+              <div id="admin_product_industry_category" class="form-group">
+                <span>Category:</span>
+                <select id="admin_product_category" class="input" >
+                  <option value="">Select Industry/Department</option>
+                
+                </select> 
+              </div>
               <label class="label" for="product_type">Product Type:</label>
               <input type="text" class="form-control is-valid" id="product_type" name="product_type" placeholder="For example, include Maxi Dresses instead of just Dresses">
               <span id="product_type_help" class="form-text text-muted">Product category that you define for your product</span>
             </div>
-
+            
             <div class="form-group">
               <div class="list-group list-group-horizontal mx-auto row" style="width: 100%;">
                 <div class="form-group is-valid float-md-left px-2 col-6 ">
