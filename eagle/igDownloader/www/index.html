@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta name="robots" content="THE LEADING PLATFORM FOR GLOBAL TRADE. WE CONNECT AND SERVE MILLIONS OF BUYERS AND SELLERS AROUND THE WORLD" />
+
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://polyfill.io https://developers.google.com https://maps.googleapis.com/maps/api/staticmap https://maps.googleapis.com https://js.api.here.com https://developer.here.com https://image.maps.ls.hereapi.com https://oramla.com http://192.168.0.102 http://localhost https://itunes.apple.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
+      
+        <!-- Required meta tags-->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <link rel="stylesheet" href="lib/font-awesome-4.5.0/css/font-awesome.min.css" />
+        <meta name="color-scheme" content="light dark">
+
+        <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+        <meta name="msapplication-TileImage" content="img/favicon-32x32.png">
+        <link rel="shortcut icon" href="img/favicon-32x32.png">
+
+        <link rel="stylesheet" href="bulma/css/bulma.css">
+  
+        <link rel='stylesheet' href='bootstrap/4.3.1/css/bootstrap.min.css'>
+        <link rel="stylesheet" href="fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+        
+        <link rel="stylesheet" href="css/index.css">
+        <title>igDownloader</title>
+    </head>
+    <body>
+        <nav class="navbar navbar-dark bg-dark sticky-top">
+            <a class="navbar-brand" href="#">igD</a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                
+                <button class="btn btn-outline-info my-2 my-sm-0" type="button">Paste link</button>
+
+                <button class="btn btn-outline-success my-2 my-sm-0" type="button">Download</button>
+
+            </div>
+             
+
+        </nav>
+        
+        <div id="main" class="appmain container" style="display:none">            
+            <div class="card">
+                <header class="card-header">
+                  <p class="card-header-title">
+                    Component
+                  </p>
+                  <button class="card-header-icon" aria-label="more options">
+                    <span class="icon">
+                      <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </span>
+                  </button>
+                </header>
+
+                <div class="card-image">
+                    <figure class="image is-4by3">
+                      <img src="img/logo.png" alt="Placeholder image">
+                    </figure>
+                </div>
+
+                <div class="card-content">
+                  <div class="content">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
+                    <a href="#">@bulmaio</a>. <a href="#">#css</a> <a href="#">#responsive</a>
+                    <br>
+                    <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                  </div>
+                </div>
+
+                <footer class="card-footer">
+                  <a href="#" class="card-footer-item">Save</a>
+                  <a href="#" class="card-footer-item">Edit</a>
+                  <a href="#" class="card-footer-item">Delete</a>
+                </footer>
+
+            </div>
+        </div>
+
+
+        <script src='ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+        <script src='ajax/libs/popper.js/1.14.7/umd/popper.min.js'></script>
+        <script src='bootstrap/4.3.1/js/bootstrap.min.js'></script>  
+        
+        <script src="cordova.js"></script>
+        <script src="js/index.js"></script>
+    </body>
+</html>
