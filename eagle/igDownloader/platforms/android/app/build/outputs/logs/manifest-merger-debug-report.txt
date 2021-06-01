@@ -38,46 +38,46 @@ ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle
 		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:3:106-131
 	android:anyDensity
 		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:3:23-48
-uses-permission#android.permission.INTERNET
-ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:4:5-67
-	android:name
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:4:22-64
 application
-ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:5:5-12:19
+ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:4:5-11:19
 	android:supportsRtl
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:5:121-147
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:4:121-147
 	android:label
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:5:88-120
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:4:88-120
 	android:hardwareAccelerated
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:5:18-52
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:4:18-52
 	android:icon
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:5:53-87
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:4:53-87
 activity#com.bennco.org.MainActivity
-ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:6:9-11:20
+ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:5:9-10:20
 	android:label
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:6:136-173
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:5:136-173
 	android:launchMode
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:6:174-204
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:5:174-204
 	android:windowSoftInputMode
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:6:296-338
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:5:296-338
 	android:configChanges
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:6:19-135
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:5:19-135
 	android:theme
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:6:233-295
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:5:233-295
 	android:name
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:6:205-232
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:5:205-232
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:7:13-10:29
+ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:6:13-9:29
 	android:label
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:7:28-65
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:6:28-65
 action#android.intent.action.MAIN
-ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:8:17-69
+ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:7:17-69
 	android:name
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:8:25-66
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:7:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:9:17-77
+ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:8:17-77
 	android:name
-		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:9:27-74
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:8:27-74
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:12:5-81
+	android:name
+		ADDED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml:12:22-78
 uses-sdk
 INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\eagle\igDownloader\platforms\android\app\src\main\AndroidManifest.xml

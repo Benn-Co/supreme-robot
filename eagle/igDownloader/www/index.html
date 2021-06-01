@@ -29,7 +29,7 @@
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta name="robots" content="THE LEADING PLATFORM FOR GLOBAL TRADE. WE CONNECT AND SERVE MILLIONS OF BUYERS AND SELLERS AROUND THE WORLD" />
+        <meta name="robots" content="igDownloader" />
 
         <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com https://polyfill.io https://developers.google.com https://maps.googleapis.com/maps/api/staticmap https://maps.googleapis.com https://js.api.here.com https://developer.here.com https://image.maps.ls.hereapi.com https://oramla.com http://192.168.0.102 http://localhost https://itunes.apple.com 'unsafe-eval' 'unsafe-inline' ws://*; style-src 'self' 'unsafe-inline'; media-src *; img-src * data:">
       
@@ -58,33 +58,46 @@
         <title>igDownloader</title>
     </head>
     <body class="appmain">
-        <nav class="navbar navbar-dark bg-dark sticky-top">
-            <a class="navbar-brand" href="#">igD</a>
+        <nav class="navbar navbar-dark bg-light sticky-top">
+            <img src="img/logo.png" alt="img/logo.png" class="rounded-circle" width="35" height="35">
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <a class="button is-light">
+                igDownloader
+            </a>
+
+            <a role="button" class="navbar-burger navbartoggle" aria-controls="navbarSupportedContent" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                <input class="form-control mr-sm-2 uploadUrl" type="url" placeholder="Enter url" aria-label="Enter url">
+                <input id="uploadUrlimage" class="form-control mr-sm-2 uploadUrl" type="url" placeholder="Enter url" aria-label="Enter url">
                 
-                <button class="btn btn-outline-info my-2 my-sm-0 float-left paste_link" type="button">Paste link</button>
+                <button class="btn btn-outline-secondary my-2 my-sm-0 float-left preview_link" type="button">Preview</button>
 
-                <button class="btn btn-outline-success my-2 my-sm-0 float-right download_link" type="button">Download</button>
+                <button class="btn btn-outline-success my-2 my-sm-0 float-right download_link" type="btnDownload" rel="uploadUrl">Download</button>
 
-            </div>
-             
+            </div>             
 
         </nav>
-
         
-        
-        
+        <div class="card" style="width: 100%;height: 100%;">
+            <img id="uploadUrl" class="card-img-top" src="" alt="">
+            <div class="card-body">
+                <video width="400" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    <source src="https://www.w3schools.com/html/mov_bbb.ogg" type="video/ogg">
+                    Your browser does not support HTML video.
+                </video>
+            </div>
+        </div>        
 
         <nav class="navbar fixed-bottom navbar-light bg-light">
-            <a id="upload_from_url_container_help" class="navbar-brand" href="#"></a>
+            <p id="upload_from_url_container_help" class="card-text"></p>
         </nav>
+
         <script src='ajax/libs/jquery/3.4.1/jquery.min.js'></script>
         <script src='ajax/libs/popper.js/1.14.7/umd/popper.min.js'></script>
         <script src='bootstrap/4.3.1/js/bootstrap.min.js'></script>  
