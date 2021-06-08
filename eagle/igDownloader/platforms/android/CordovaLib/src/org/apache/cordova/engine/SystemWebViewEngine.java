@@ -232,7 +232,7 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
 
     private void enableRemoteDebugging() {
         try {
-            WebView.setWebContentsDebuggingEnabled(true);
+            WebView.setWebContentsDebuggingEnabled(false);
         } catch (IllegalArgumentException e) {
             LOG.d(TAG, "You have one job! To turn on Remote Web Debugging! YOU HAVE FAILED! ");
             e.printStackTrace();
