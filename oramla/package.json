@@ -38,7 +38,7 @@
       "cordova-plugin-inappbrowser": {},
       "cordova-plugin-geolocation": {
         "GPS_REQUIRED": "true"
-      }
+      } 
     },
     "platforms": [
       "electron",

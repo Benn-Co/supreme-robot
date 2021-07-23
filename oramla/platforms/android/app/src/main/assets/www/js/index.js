@@ -23,7 +23,7 @@
 
 //export { colorCode };
 document.addEventListener('deviceready', onDeviceReady, false);
-
+//me
 /**onDeviceReady();
 if (location.protocol !== 'https:') {
     path_protocol = "https:";
@@ -55,11 +55,10 @@ var path_name = window.location.pathname;
 var path_href = window.location.href;
 var datab = null;
 var api_server_url = "https://oramla.com";
+//var api_server_url = "http://localhost";
 
 //var devicePlatform = device.platform;
 function onDeviceReady() {
-    //console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
-    //document.getElementById('deviceready').classList.add('ready');
     username = localStorage.getItem("username");
     email = localStorage.getItem("email");
     check_user_authentication(username,email);
@@ -89,7 +88,6 @@ function check_user_authentication(username,email) {
                 } else {
                     latitude = '';
                     longitude = '';
-                    //var location = JSON.parse(response.location_name);
                     postal = '';
                     country = '';
                     city = '';
@@ -137,7 +135,7 @@ function check_user_authentication(username,email) {
 }
 
 function user_container(user,email) {
-    $('#app-cover-spin').show(0);
+    //$('#app-cover-spin').show(0);
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
@@ -265,12 +263,19 @@ function user_container(user,email) {
                         city = location.city;
                         address = location.address;
 
+
                         $("#menu_container_role").html('<span class="badge badge-secondary">' + response.role + '</span>');
+                        //alert(response.pending_orders);
                         $("#menu_container_pending_orders_count").html('<span class="badge badge-warning">' + response.pending_orders + '</span>');
                         $("#menu_container_active_orders_count").html('<span class="badge badge-success">' + response.active_orders + '</span>');
                         $("#menu_container_confirmed_orders_count").html('<span class="badge badge-danger">' + response.confirmed_orders + '</span>');
                         $("#menu_container_complete_orders_count").html('<span class="badge badge-info">' + response.complete_orders + '</span>');
                         $("#menu_container_orders_count").html('<span class="badge badge-secondary">' + response.user_orders + '</span>');
+
+                        if (order_id_status == 1) {
+                            order_id_status = 0;
+                            $('#app-cover-spin').hide(0);
+                        }
                     } else {
                         $('#app-cover-spin').hide(0);
 
@@ -647,8 +652,32 @@ inputRange.addEventListener('input', function() {
     }    
     
 });
+$("body").delegate(".new_order","click",function(event){
+    event.preventDefault();
+    window.location.href="#product_container";
+    $("#menu_container_left_tab").show(100);
+    $("#chat_container").hide(100);
+    $("#connects_chatbar").hide(100);
 
-$("#radio-0").click(function(){
+    $("#orders_container").hide(100);
+    $("#order_items_container").hide(10);
+    $("#cart_container").hide(100);
+    $("#location_container").hide(100);
+    $("#user_container").hide(100);
+    $("#product_add_client_container").hide(100);
+    $("#top_menu").show(100,function(){       
+        $("#search").hide(100);
+        $("#top_slider").hide(100);
+
+    });
+    if (_apps_tab != 0) {
+        document.body.classList.toggle('nav-is-toggled');
+        _apps_tab =0;
+    }
+    _back = 1;
+    main();
+});
+function home(params) {
     window.location.href="#product_container";
     $("#menu_container_left_tab").show(100);
     $("#chat_container").hide(100);
@@ -670,7 +699,26 @@ $("#radio-0").click(function(){
         _apps_tab =0;
     }
     main();
+}
+$("#radio-0").click(function(){
+    home('');
 });
+
+/**bootup();
+var bootup = function(){$(document).ready(function(){
+    var originalDOM=document.body.innerHTML;
+    //jQuery lines of code here
+    var refresh = function(){
+        $("#radio-0").click(function(){
+            document.body.innerHTML = originalDOM;
+            bootup();
+        });
+    };
+    refresh();
+
+});}; */
+
+
 
 $("#radio-2").click(function(){  
     $('.product_main_container').show(100, function(){
@@ -926,12 +974,16 @@ function main() {
         $(".main").show(100);
         $(".product_main_container").show(100);
     });
-    startlimit = 0;
-    endlimit = 24;
-    search_value = '';
-    geoshop_value = '';
-    cat_id = '';
-    brand_id = "";
+    /**if (_back == 1) {
+        _back = 0;
+    } else {
+        startlimit = 0;
+        endlimit = 24;
+        search_value = '';
+        geoshop_value = '';
+        cat_id = '';
+        brand_id = "";
+    } */    
     if (role == 'customer' || role == '' || role == null) {
         $("#admin_product_industry_category").hide(100);
         $("#action_float_id").html('<i class="fa  fa-invision my-float">Sell</i>');
@@ -944,26 +996,34 @@ function main() {
             $("#add_products_agent").show(100);        
             $("#action_float_id").html('<i class="fa fa-invision my-float">Buy</i>');
             $("#action_float_id").show(100);
-
         }
         if (role == 'admin') {
             $("#admin_product_industry_category").show(100);
             $("#add_products_agent").show(100);        
             $("#action_float_id").hide(100);
-        }
-        
-        //$("#add_products_agent").show(100);        
+        }     
     }
     $("#product_add_client_container").hide(100,function(){       
         $("#product_error").hide(100);
     });
-    product_main_container(startlimit,endlimit,cat_id,brand_id);
-    apps_categories('');    
-    if (username != "") {
-        count_time_out = 0;
-        loadconnects();
-        user_container(username,email);
-    }    
+    if (_back == 1) {
+        _back = 0;
+    } else {
+        startlimit = 0;
+        endlimit = 24;
+        search_value = '';
+        geoshop_value = '';
+        cat_id = '';
+        brand_id = "";
+        product_main_container(startlimit,endlimit,cat_id,brand_id);
+        apps_categories('');    
+        if (username != "") {
+            count_time_out = 0;
+            loadconnects();
+            user_container(username,email);
+        }
+    }
+        
 }
 var conectset = 0;
 var messageauto = 0;
@@ -994,6 +1054,7 @@ $("body").delegate(".add_to_cart","click",function(event){
         //$(".main").hide(100);
         $("#authentication_modal").show(100);
     } else {
+        //alert($(this).attr('product_id'));
         product_id(startlimit,endlimit,"add_to_cart",username,$(this).attr('product_id'));    
     }
 });
@@ -1116,9 +1177,12 @@ $("body").delegate(".qt-plus","click",function(event){
     event.preventDefault();
     product_id(startlimit,endlimit,"qt-plus",username,$(this).attr('product_id'));    
 });
+var qt_value = 0;
+
 $("body").delegate(".qtinput","keyup",function(event){
     event.preventDefault();
-    product_id(startlimit,endlimit,"qt",$(this).val(),$(this).attr('product_id'));    
+    qt_value = $(this).val();
+    product_id(startlimit,endlimit,"qt",username,$(this).attr('product_id'));    
 });
 
 $("body").delegate(".order_confirm","click",function(event){
@@ -1129,14 +1193,37 @@ $("body").delegate(".order_cancel","click",function(event){
     event.preventDefault();
     order_id(startlimit,endlimit,'order_cancel',username,$(this).attr('order_id'));    
 });
+var order_view_outline = '';
 $("body").delegate(".order_view","click",function(event){
     event.preventDefault();
+    order_view_outline = $(this).attr('status');
     order_id(startlimit,endlimit,$(this).attr('status'),username,$(this).attr('order_id'));    
 });
 var data_len = 0;
+var order_id_status = 0;
 function order_id(startlimit,endlimit,status,username,order_id) {
     $('#app-cover-spin').show(0);
-
+    if (order_view_outline == 'pending') {
+        $(".order_view_outline").removeClass('is-success'); 
+        $(".order_view_outline").removeClass('is-danger'); 
+        $(".order_view_outline").addClass('is-warning');
+        //$("#orderid_outline").html('<button class="button is-warning is-outlined orderidoutline">Order <b id="orderid"></b></button>');
+        //alert(order_view_outline);
+    }
+    if (order_view_outline == 'active') {
+        $(".order_view_outline").removeClass('is-warning'); 
+        $(".order_view_outline").removeClass('is-danger'); 
+        $(".order_view_outline").addClass('is-success');
+        //$("#orderid_outline").html('<button class="button is-success is-outlined orderidoutline">Order <b id="orderid"></b></button>');
+        //alert(order_view_outline);
+    }
+    if (order_view_outline == 'cancelled') {
+        $(".order_view_outline").removeClass('is-warning'); 
+        $(".order_view_outline").removeClass('is-success'); 
+        $(".order_view_outline").addClass('is-danger');
+        //$("#orderid_outline").html('<button class="button is-danger is-outlined orderidoutline">Order <b id="orderid"></b></button>');
+        //alert(order_view_outline);
+    }
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
@@ -1144,10 +1231,8 @@ function order_id(startlimit,endlimit,status,username,order_id) {
         processData: true,
         url: api_server_url + '/cordova/order_id.php',
         success: function searchSuccess(response) {            
-            try {
-                //response.data = JSON.parse(response.data);
+            try {                
                 if (response.message == "success") {
-                    //window.location.href="#orders_container";
                     $("#menu_container_top_tab").show(100); 
                     $("#product_container").hide(100);
                     $("#menu_container_left_tab").hide(100);
@@ -1157,57 +1242,159 @@ function order_id(startlimit,endlimit,status,username,order_id) {
                     $("#user_container").hide(100);
                     var products_status = response.products_status;
                     var products_data = response.products;
-                    
-                    //order_items_container
-                    if (status == "active" || status == "cancelled" || status == "shipped") {
-                        $("#orders_items_made").html('');
-                        $("#orderid").html(order_id);
-                        //window.location.href="#order_items_container";
-                        data_len = products_data.length;
-                        products_data.forEach(order_items_datamyFunction);
+                    data_len = products_data.length;
+                    if (data_len < 1) {
+                        var orders_made = '<tr>' + 
+                        '<td><a href="#"><img src="img/logo.png" class="avatar" alt="Avatar"> ' + username + '</a></td>' + 
+                        '<td>You have no ' + status + ' order(s) yet.</td>' +                         
+                        '<td>' + '<span class="btn btn-outline-success float-right button is-black new_order">New order</span>' + 
+                        '</td>' + 
+                        '</tr>';
+                        $("#orders_made").html(orders_made);
+                        $("#orders_container").show(10,function(){
+                            $("#order_next").hide(10); 
+                            $('#order_previous').hide(10);
+                            $("#order_items_container").hide(10);
+                            $('#app-cover-spin').hide(0);           
+                        });
                     } else {
-                        $("#orders_made").html('');
-                        //window.location.href="#order_container";
-                        data_len = products_data.length;
-                        if (status == "pending_orders") {
-                            $("#pending_orders_count").html(products_data.length);
-                        } else if (status == "active_orders") {
-                            $("#active_orders_count").html(products_data.length);
-                        } else if (status == "confirmed_orders") {
-                            $("#confirmed_orders_count").html(products_data.length);
-                        } else if (status == "complete_orders") {
-                            $("#complete_orders_count").html(products_data.length);
-                        } else if (status == "user_orders") {
-                            $("#_orders_count").html(products_data.length);
-                        }
-                        products_data.forEach(order_datamyFunction);
-                    }
-                    
-                    
+                        if (status == "pending" || status == "active" || status == "cancelled" || status == "shipped") {
+                            $("#orders_items_made").html('');
+                            $("#orderid").html(order_id);
+
+                            $("#menu_container_role_items").html('<span class="badge badge-secondary">' + data_len + '</span>');
+                            $("#menu_container_pending_orders_items_count").html('<span class="badge badge-warning">' + data_len + '</span>');
+                            $("#menu_container_active_orders_items_count").html('<span class="badge badge-success">' + 0 + '</span>');
+                            $("#menu_container_confirmed_orders_items_count").html('<span class="badge badge-danger">' + 0 + '</span>');
+                            $("#menu_container_complete_orders_items_count").html('<span class="badge badge-info">' + 0 + '</span>');
+                            $("#menu_container_orders_items_count").html('<span class="badge badge-secondary">' + 0 + '</span>');
+    
+                            data_len = products_data.length;
+                            if (data_len < 1) {
+                                var orders_made = '<tr>' + 
+                                '<td><a href="#"><img src="img/logo.png" class="avatar" alt="Avatar"> ' + username + '</a></td>' + 
+                                '<td>You have no ' + status + ' order yet.</td>' +                         
+                                '<td>' + '<span class="btn btn-outline-success float-right button is-black new_order">New order</span>' + 
+                                '</td>' + 
+                                '</tr>';
+                                $("#orders_made").html(orders_made);
+                                $('#app-cover-spin').hide(0);
+    
+                            } else {
+                                products_data.forEach(order_items_datamyFunction); 
+                            }
+                        } else {
+                            $("#orders_made").html('');
+                            data_len = products_data.length;
+                            if (status == "pending_orders") {
+                                $("#pending_orders_count").html(products_data.length);
+                                if (data_len < 1) {
+                                    var orders_made = '<tr>' + 
+                                    '<td><a href="#"><img src="img/logo.png" class="avatar" alt="Avatar"> ' + username + '</a></td>' + 
+                                    '<td>You have no pending orders yet.</td>' +                         
+                                    '<td>' + '<span class="btn btn-outline-success float-right button is-black new_order">New order</span>' + 
+                                    '</td>' + 
+                                    '</tr>';
+                                    $("#orders_made").html(orders_made);
+                                    $('#app-cover-spin').hide(0);
+                                }
+                            } else if (status == "active_orders") {
+                                $("#active_orders_count").html(products_data.length);
+                                if (data_len < 1) {
+                                    var orders_made = '<tr>' + 
+                                    '<td><a href="#"><img src="img/logo.png" class="avatar" alt="Avatar"> ' + username + '</a></td>' + 
+                                    '<td>You have no active orders yet.</td>' +                         
+                                    '<td>' + '<span class="btn btn-outline-success float-right button is-black new_order">New order</span>' + 
+                                    '</td>' + 
+                                    '</tr>';
+                                    $("#orders_made").html(orders_made);
+                                    $('#app-cover-spin').hide(0);
+                                }
+                            } else if (status == "confirmed_orders") {
+                                $("#confirmed_orders_count").html(products_data.length);
+                                if (data_len < 1) {
+                                    var orders_made = '<tr>' + 
+                                    '<td><a href="#"><img src="img/logo.png" class="avatar" alt="Avatar"> ' + username + '</a></td>' + 
+                                    '<td>You have no confirmed orders yet.</td>' +                         
+                                    '<td>' + '<span class="btn btn-outline-success float-right button is-black new_order">New order</span>' + 
+                                    '</td>' + 
+                                    '</tr>';
+                                    $("#orders_made").html(orders_made);
+                                    $('#app-cover-spin').hide(0);
+                                }
+                            } else if (status == "complete_orders") {
+                                $("#complete_orders_count").html(products_data.length);
+                                if (data_len < 1) {
+                                    var orders_made = '<tr>' + 
+                                    '<td><a href="#"><img src="img/logo.png" class="avatar" alt="Avatar"> ' + username + '</a></td>' + 
+                                    '<td>You have no completed orders yet.</td>' +                         
+                                    '<td>' + '<span class="btn btn-outline-success float-right button is-black new_order">New order</span>' + 
+                                    '</td>' + 
+                                    '</tr>';
+                                    $("#orders_made").html(orders_made);
+                                    $('#app-cover-spin').hide(0);
+                                }
+                            } else if (status == "user_orders") {
+                                $("#_orders_count").html(products_data.length);
+                                if (data_len < 1) {
+                                    var orders_made = '<tr>' + 
+                                    '<td><a href="#"><img src="img/logo.png" class="avatar" alt="Avatar"> ' + username + '</a></td>' + 
+                                    '<td>You have not made any order yet.</td>' +                         
+                                    '<td>' + '<span class="btn btn-outline-success float-right button is-black new_order">New order</span>' + 
+                                    '</td>' + 
+                                    '</tr>';
+                                    $("#orders_made").html(orders_made);
+                                    $('#app-cover-spin').hide(0);
+                                }
+                            }
+                            products_data.forEach(order_datamyFunction);
+                        } 
+                        order_id_status = 1;
+                        user_container(username,email);
+                    }                                       
                 } else {
                     $('#app-cover-spin').hide(0);
-                    alert(response.message);
-                }
-                
+                    var orders_made = '<tr>' + 
+                        '<td><a href="#"><img src="img/logo.png" class="avatar" alt="Avatar"> ' + username + '</a></td>' + 
+                        '<td>' + response.message + '</td>' +                         
+                        '<td>' +  "Error" + 
+                        '</td>' + 
+                        '</tr>';
+                    $("#orders_made").html(orders_made);
+                }                
             } catch(e) {
                 $('#app-cover-spin').hide(0);
-                alert('JSON parsing error');
+                var orders_made = '<tr>' + 
+                        '<td><a href="#"><img src="img/logo.png" class="avatar" alt="Avatar"> ' + username + '</a></td>' + 
+                        '<td>JSON parsing error</td>' +                         
+                        '<td>' +  "Error" + 
+                        '</td>' + 
+                        '</tr>';
+                $("#orders_made").html(orders_made);
             }          
         },
         error: function searchError(xhr, err) {
-          alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
+          var orders_made = '<tr>' + 
+          '<td><a href="#"><img src="img/logo.png" class="avatar" alt="Avatar"> ' + username + '</a></td>' + 
+          '<td>' + "Error on ajax call: " + err  + " " + JSON.stringify(xhr) + '</td>' +                         
+          '<td>' +  "Error" + 
+          '</td>' + 
+          '</tr>';
+          $("#orders_made").html(orders_made);
           $('#app-cover-spin').hide(0);
         }
     });
     
 }
 
+var more_products_status = "0";
+var add_products_edit_product_save = 0;
 function product_id(startlimit,endlimit,action,username,product_id) {
     $('#app-cover-spin').show(0);
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
-        data: { product_id_action: action, startlimit: startlimit, endlimit: endlimit, username: username, product_id: product_id },
+        data: { product_id_action: action,api_server_url: api_server_url, startlimit: startlimit, endlimit: endlimit, username: username, product_id: product_id, qt_value: qt_value },
         processData: true,
         url: api_server_url + '/cordova/product_id.php',
         success: function searchSuccess(response) {
@@ -1215,26 +1402,28 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                 //response.data = JSON.parse(response.data);
                 if (response.message == "success") {
                     var products_status = response.products_status;
+                    var products_user = response.username;
+                    more_products_status = "0";
                     var products_data = response.products;
-                    //alert("quantity " + response.data.quantity);
                     total_pay = 0;
                     total_total = 0;
                     total_tax = 0;
                     total_shipping = 0;
                     //alert(products_status);
                     $("#orders_container").hide(10,function(){});
-                    $("#order_items_container").hide(10);
-    
+                    $("#order_items_container").hide(10);    
                     if (products_status == "add_to_cart") {                    
                         $("#shopping_cart_num").html(products_data.length);
                         $('#app-cover-spin').hide(0);
-
+                        var add_to_cart_query = response.add_to_cart_query;
+                        //alert(add_to_cart_query);                        
                     } else if (products_status == "edit_product") {
                         $("#product_data_container").html(''); 
                         product_row_container_index = products_data.length;        
                         $("#product_data_container").html(''); 
                         $('#app-cover-spin').hide(0); 
                         //add_products_edit_product = 1;
+                        add_products_edit_product_save = 1;
                         if (add_products_edit_product == 1) {
                             //edit_product_id 
                             $("#edit_product_id").val(edit_product_id); 
@@ -1242,9 +1431,19 @@ function product_id(startlimit,endlimit,action,username,product_id) {
                             if (role == 'admin') {
                                 update_apps_categories('','');
                             }
+                            
                             //add_products_edit_product = 0;
                         }
                         products_data.forEach(products_datamyFunction);
+                        more_products_status = response.more_products_status;
+                        
+                        if (more_products_status == "1") {
+                            var more_products_data = response.more_products;
+                            $(".mare_imagePreview").parent().remove();
+                            more_products_data.forEach(more_products_datamyFunction);
+                        }
+
+
                     } else if (products_status == "remove_product") {                    
                         $("#product_data_container").html(''); 
                         product_row_container_index = products_data.length;
@@ -1607,9 +1806,11 @@ function order_datamyFunction(item, index) {
         var oreder = '<a order_id="' + item.order_id + '" status="' + item.status + '" class="viewcancel order_view" title="View Details" data-toggle="tooltip">' + item.order_id + '</a>';
     }
 
+    var img_src = item.messages;
+
     var orders_made = '<tr>' + 
-    '<td><a href="#"><img src="img/49806f3f1c7483093855ebca1b8ae2c4.jpg" class="avatar" alt="Avatar"> ' + item.username + '</a></td>' + 
-    '<td>' +  currency_price_symbal + '' + total_amount + '<br>' + status + '<br>' + item.timestamp + '<br> address : ' + address + '<br> postal : ' + postal + '<br> city : ' + city + '<br> country : ' + country + '</td>' +                         
+    '<td order_id="' + item.order_id + '" status="' + item.status + '" class="order_view"><a href="#"><img src="' + img_src + '" class="avatar" alt="Avatar"> ' + item.username + '</a></td>' + 
+    '<td order_id="' + item.order_id + '" status="' + item.status + '" class="order_view">' +  currency_price_symbal + '' + total_amount + '<br>' + status + '<br>' + item.timestamp + '<br> address : ' + address + '<br> postal : ' + postal + '<br> city : ' + city + '<br> country : ' + country + '</td>' +                         
     '<td>' +  oreder + 
     '</td>' + 
     '</tr>';
@@ -1717,6 +1918,8 @@ function checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_
                         window.location.href="#order_container";
                         data_len = products_data.length;
                         products_data.forEach(order_datamyFunction);
+                        order_id_status = 1;
+                        user_container(username,email);
                     }
                     $("#order_items_container").hide(10);
                 } else {
@@ -3438,7 +3641,8 @@ function product_main_container(startlimit,endlimit,cat_id,brand_id) {
                         });
                         product_row_container_index = products_data.length; 
                         $("#product_data_container").html(''); 
-                        $('#app-cover-spin').hide(0);                 
+                        $('#app-cover-spin').hide(0);
+                        //alert(product_row_container_index);
                         products_data.forEach(products_datamyFunction);
                     } else {
                         $('.product_error').show(100, function(){
@@ -3485,6 +3689,7 @@ function products_datamyFunction(item, index) {
     window.location.href="#maincontainer";
     var product_row_index = product_row_container_index;
     var product_image = item.product_img;
+    //alert(product_image);
     product_price = currency_exchange_rate * item.product_price;    
     product_price = product_price.toFixed(2);
 
@@ -3558,8 +3763,74 @@ function products_datamyFunction(item, index) {
     //net_price = description.net_price;
     product_price = net_price;
     if (add_products_edit_product == 1) {
-        //add_products_edit_product = 0;
-        $('.imagePreview').css("background-image", "url("+product_image+")");
+        //add_products_edit_product = 0; 
+        
+        if (product_image.includes(api_server_url)) {
+            $("#upload_from_file").hide();
+            $("#upload_from_url_container").hide();
+            $("#upload_from_url").show();
+            $("#upload_from_file_container").show();
+            upload_from_url = 0;
+            upload_from_file = 1;
+            $("#product_save").removeClass("btn-danger");
+            $("#product_save").removeClass("btn-success");
+            $("#product_save").removeClass("btn-info");
+            $("#product_save").removeClass("btn-warning");
+        
+            $("#product_save").addClass("btn-primary");
+            $("#product_save").html('Update');
+            $("#upload_from_help").html('');
+
+            var product_image = item.product_img;
+            var url_image = new Image();
+            url_image.onload = function() {
+                if (upload_from_file == 1) {
+                    $("#upload_from_url").show();
+                    $("#upload_from_file").hide();
+                    $("#upload_from_url_container").hide();
+                    $("#upload_from_file_container").show();
+
+                }
+
+                $("#value_from_url").val(product_image);
+                //alert($("#value_from_url").val());
+
+                $('.imagePreview').css("background-image", "url("+product_image+")");
+            }
+            url_image.src = product_image;
+        } else {
+            $("#upload_from_url").hide();
+            $("#upload_from_file_container").hide();
+            $("#upload_from_file").show();
+            $("#upload_from_url_container").show();
+            upload_from_url = 1;
+            upload_from_file = 0;
+            $("#product_save").removeClass("btn-danger");
+            $("#product_save").removeClass("btn-success");
+            $("#product_save").removeClass("btn-info");
+            $("#product_save").removeClass("btn-warning");
+        
+            $("#product_save").addClass("btn-primary");
+            $("#product_save").html('Update');
+            $("#upload_from_help").html('');
+            if (upload_from_url == 1) {
+                $("#upload_from_url").hide();
+                $("#upload_from_file").show();
+                $("#upload_from_url_container").show();
+                $("#upload_from_file_container").hide();
+            }
+            var product_image = item.product_img;
+            var url_image = new Image();
+            url_image.onload = function() {
+
+                $("#value_from_url").val(product_image);
+                //alert($("#value_from_url").val());
+
+                $('.imagePreview').css("background-image", "url("+product_image+")");
+            }
+            url_image.src = product_image;
+        }
+
         $("#product_title").val(product_title);
         $("#product_price").val(net_price);
 
@@ -3673,7 +3944,13 @@ function products_datamyFunction(item, index) {
             product_price = salling_price;
 
             $("#edit_product_id").val(edit_product_id); 
+
+            $("#value_from_url").val(product_image);
+
+            //alert($("#value_from_url").val());
+
             $('.imagePreview').css("background-image", "url("+product_image+")");
+            
             $("#product_title").val(product_title);
             $("#product_price").val(product_price);
             //$("#product_industry").val(tax);
@@ -3933,7 +4210,14 @@ function products_datamyFunction(item, index) {
     if (index >= startlimit) {
         var url_image = new Image();
         url_image.onload = function() {
-            $("#product_data_container").append(product_row_container);
+            //$("#product_data_container").append(product_row_container);
+            if (IMAGE_urlcond == IMAGE_url) {
+                //alert(IMAGE_urlcond);
+            } else {
+                IMAGE_urlcond =IMAGE_url;
+                $("#product_data_container").append(product_row_container);
+
+            }
         }                
         url_image.src = IMAGE_url;
     }
@@ -3965,6 +4249,48 @@ function products_datamyFunction(item, index) {
         $("#product_next").hide(100);
     }
     
+}
+var IMAGE_urlcond = '';
+function more_products_datamyFunction(item, index) {
+    if(index >= 1){
+        var product_image = item.product_img;
+        var url_image = new Image();
+        url_image.onload = function() {
+            if (product_image.includes(api_server_url)) {
+                $(".imgAdd_file").closest(".row").find('.imgAdd').before('<div class="col imgUp"><div id="mare_image' + index + '" class="imagePreview mare_imagePreview" style="background-image:url(' + product_image + ');"></div>' +
+                '<label class="btn btn-primary">' +
+                  'Choose file ' +
+                  '<input type="file" name="fileToUpload[]" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">' +
+                '</label> ' + item.more_product_id + ' <i class="fa fa-times del"></i></div>');
+                
+                $(".imgAdd_url").closest(".row").find('.imgAdd').before('<div class="col imgUp"><div id="mare_image' + index + '" class="imagePreview mare_imagePreview" style="background-image:url(' + product_image + ');"></div><div class="control"><input type="url" name="urlToUpload[]" class="uploadUrl img input is-success" placeholder="Enter url i.e http://oramla.com" style="width:auto;height:0px;overflow:hidden;" value="' + product_image + '"></div>' + item.more_product_id + ' <i class="fa fa-times del"></i></div>');
+    
+                upload_from_url = 0;
+                upload_from_file = 1;
+                $("#upload_from_url").show();
+                $("#upload_from_file").hide();
+                $("#upload_from_url_container").hide();
+                $("#upload_from_file_container").show();
+            } else {
+                $(".imgAdd_url").closest(".row").find('.imgAdd').before('<div class="col imgUp"><div id="mare_image' + index + '" class="imagePreview mare_imagePreview" style="background-image:url(' + product_image + ');"></div><div class="control"><input type="url" name="urlToUpload[]" class="uploadUrl img input is-success" placeholder="Enter url i.e http://oramla.com" style="width:auto;height:0px;overflow:hidden;" value="' + product_image + '"></div>' + item.more_product_id + ' <i class="fa fa-times del"></i></div>');
+                
+                $(".imgAdd_file").closest(".row").find('.imgAdd').before('<div class="col imgUp"><div id="mare_image' + index + '" class="imagePreview mare_imagePreview" style="background-image:url(' + product_image + ');"></div>' +
+                '<label class="btn btn-primary">' +
+                  'Choose file ' +
+                  '<input type="file" name="fileToUpload[]" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">' +
+                '</label> ' + item.more_product_id + ' <i class="fa fa-times del"></i></div>');
+                
+                  
+                upload_from_url = 1;
+                upload_from_file = 0;
+                $("#upload_from_url").hide();
+                $("#upload_from_file").show();
+                $("#upload_from_url_container").show();
+                $("#upload_from_file_container").hide();
+            }
+        }                
+        url_image.src = product_image;
+    }
 }
 
 $(".logout").click(function(){
@@ -3998,6 +4324,7 @@ $(".logout").click(function(){
 var add_products_agent = 0;
 $("#add_products_agent").click(function(){
     //phone = '';
+    add_products_edit_product_save = 0;
     edit_product_id = '';
 
     var product_image = '';
@@ -6389,7 +6716,7 @@ function chat_contacts_datamyFunction(item, index) {
     }
     
 }
-
+var _back = 0;
 $("#order_items_back").click(function(){
     $("#order_items_container").hide(100,function(){
     }); 
@@ -6410,6 +6737,7 @@ $("#order_back").click(function(){
         $("#top_slider").hide(100);
 
     });
+    _back = 1;
     main();
     $("#product_add_client_container").hide(100,function(){       
         $("#product_error").hide(100);
@@ -6438,6 +6766,7 @@ $("#cart_back").click(function(){
         $("#top_slider").hide(100);
 
     });
+    _back = 1;
     main();
     $("#product_add_client_container").hide(100,function(){       
         $("#product_error").hide(100);
@@ -6843,13 +7172,18 @@ function user() {
 $("#s3").click(function(){
     if (username == "" || username == null) {
         $(".main").show(100);
+        //$("#sentiment_form").show(100);
         $("#authentication_modal").show(100);
+
     } else {
+        $("#authentication_modal").hide(100);
+
         search_value = '';
         geoshop_value = '';
         cat_id = '';
+        order_id(startlimit,endlimit,'user_orders',username,'');
         //window.location.href="#location_container";
-        $("#menu_container_top_tab").show(100);                
+        /**$("#menu_container_top_tab").show(100);                
     
         $("#product_container").hide(100);
         $("#menu_container_left_tab").hide(100);
@@ -6864,15 +7198,10 @@ $("#s3").click(function(){
             $("#top_slider").hide(100);
     
         });
-        //if (username == "" || username == null) {
-            //$(".main").hide(100);
-           // $("#authentication_modal").show(100);
-        //} else {
-            location_container();
-        //}
+        location_container();
         $("#product_add_client_container").hide(100,function(){       
             $("#product_error").hide(100);
-        });
+        }); */
     }
     
     if (_apps_tab != 0) {
@@ -6978,11 +7307,19 @@ function snackbar(message) {
     x.innerHTML = message;
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
+
 $("#login").keypress(function (e){
     if(e.keyCode == 13){
         login_button();
     }
 });
+var bot_typing = '';
+$("#chat_message").keypress(function (e){
+    if(e.keyCode == 13){
+        //login_button();
+    }
+});
+
 function login_button() {
     var User_name_format = /^[A-Za-z0-9' ']+$/;
 
@@ -7097,10 +7434,8 @@ function login_user(login_email,login_password,login_details_username,login_deta
           
         },
         error: function searchError(xhr, err) {
-          //alert("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
           $('#app-cover-spin').hide(0);
           $("#login_button_help").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-          //api_server_url = "http://192.168.0.102";
           main();
 
         }
@@ -7138,6 +7473,7 @@ function login_user(login_email,login_password,login_details_username,login_deta
         
     }); */
 }
+
 
 $("#regis").keypress(function (e){
     if(e.keyCode == 13){
@@ -7729,7 +8065,7 @@ $(".imgAdd").click(function(){
           '<input type="file" name="fileToUpload[]" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">' +
         '</label> <i class="fa fa-times del"></i></div>');
     } else {
-        $(this).closest(".row").find('.imgAdd').before('<div class="col imgUp"><div class="imagePreview"></div><div class="control"><input type="url" class="uploadUrl img input is-success" placeholder="Enter url i.e http://oramla.com" style="width:auto;height:0px;overflow:hidden;"></div><i class="fa fa-times del"></i></div>');
+        $(this).closest(".row").find('.imgAdd').before('<div class="col imgUp"><div class="imagePreview"></div><div class="control"><input type="url" name="urlToUpload[]" class="uploadUrl img input is-success" placeholder="Enter url i.e http://oramla.com" style="width:auto;height:0px;overflow:hidden;"></div><i class="fa fa-times del"></i></div>');
     }
 });
 $(document).on("click", "i.del" , function() {
@@ -7954,6 +8290,9 @@ $("#product_save").click(function(){
         }
     }
 
+
+    //$("#product_data_upload_from").val(tax);
+
     $("#product_data_tax").val(tax);
     $("#product_data_shipping_rates").val(shipping_rates);
     $("#product_data_shipping_strategies").val(shipping_strategies);
@@ -8018,6 +8357,8 @@ $("#product_save").click(function(){
     $("#product_data_product_description").val(product_description);
     $("#product_data_product_quantity").val(product_quantity);
 
+    //alert(add_products_edit_product_save);
+
     if (upload_from_file == 1) {
         var uploadFile_arr = $('.uploadFile').map(function(){ return  $(this).val() }).get()
         var i;
@@ -8030,7 +8371,7 @@ $("#product_save").click(function(){
             }
         }
         if (product_save == 0) {
-            if (upload_from_check == 1) {
+            if (upload_from_check == 1 || add_products_edit_product_save == 1) {
                 $("#product_save").removeClass("btn-primary");
                 $("#product_save").removeClass("btn-success");
                 $("#product_save").removeClass("btn-danger");
@@ -8061,6 +8402,8 @@ $("#product_save").click(function(){
                 
         
     } else {
+        //alert(upload_from_file);
+
         var uploadUrl_arr = $('.uploadUrl').map(function(){ return  $(this).val() }).get();
         var i;
         var upload_from_check = 0;
@@ -8071,8 +8414,18 @@ $("#product_save").click(function(){
                 upload_from_check = 0;
             }
         }
-        if (upload_from_check == 1) {
-            upload_image_from_url(uploadUrl_arr);      
+        //alert(upload_from_check);
+        if (upload_from_check == 1 || add_products_edit_product_save == 1) {
+            $("#product_save").removeClass("btn-primary");
+            $("#product_save").removeClass("btn-success");
+            $("#product_save").removeClass("btn-danger");
+            $("#product_save").removeClass("btn-warning");
+
+            $("#product_save").addClass("btn-info");
+            $("#product_save").html('Uploading...');
+            $("#upload_from_file_container_help").html('Please wait...');
+            $("#upload_from_help").html('Please wait...');
+            upload_image_from_url('uploadUrl_arr');      
         } else {
             $("#upload_from_url_container_help").html("No Url To the image");
             $("#upload_from_help").html("No Url To the image");
@@ -8081,12 +8434,14 @@ $("#product_save").click(function(){
     
 });
 
-
 function upload_image_from_url(uploadUrl_arr) {
-    
+    $("#product_data_upload_from").val('url');
+    $("#product_client").val(username);
+
+    upload_image_from(uploadUrl_arr);
 }
 
-function upload_image_from_file(uploadFile_arr) {
+function upload_image_from(upload_arr){
     $('#app-cover-spin').show(0);
     // Create an FormData object 
     var formData = $(".fileToUploadForm").submit(function (e) {
@@ -8100,31 +8455,76 @@ function upload_image_from_file(uploadFile_arr) {
         type: 'POST',
         data: formData,
         success: function (response) {
+           // alert(response.message);
             try {
+                //alert(response.edit_product_id);
+
                 if (response.message == "success") {
+                   
+                    //alert("add_products_edit_product_save " + add_products_edit_product_save);
+                    //alert(response.url_to_upload);
+
+                   if(add_products_edit_product_save == 1){
+                      //alert(response.url_to_upload);
+                      add_products_edit_product_save = 0;
+                      $("#product_save").removeClass("btn-primary");
+                      $("#product_save").removeClass("btn-info");
+                      $("#product_save").removeClass("btn-danger");
+                      $("#product_save").removeClass("btn-warning");
+
+                      $("#product_save").addClass("btn-success");
+                      $('#app-cover-spin').hide(0);
+
+                      //var results = response.results;
+                      //alert(results);
+
+                      /**var imageurl = response.imageurl;
+                      var response_imageurl = '<ul>';
+                      for (i = 0; i < imageurl.length; i++) {
+                          response_imageurl += "<li>" + imageurl[i] + "</li>";
+                      }
+                      response_imageurl += '</ul>'; */
+                      //$("#upload_from_file_container_help").html(response.uploadFile_arr.message + '. Image url : <span class="text-success">' + response_imageurl + '</span>');
+                      //imageurl
+                      //$("#product_save").html(response.uploadFile_arr.message);
+                      $("#upload_from_help").html(response.product_title + ' updated successfuly');
+                      /**cat_id = '';
+                      brand_id = '';
+                      startlimit = 0;
+                      endlimit = 24;
+                      if (edit_product_id != '') {
+                          product_id(startlimit,endlimit,"edit_product",username,edit_product_id);
+                          edit_product_id = '';
+                      } else {
+                          product_main_container(startlimit,endlimit,cat_id,brand_id);
+                      } */
+                      home('');
+
+                      
+
+                   } else {
                     if (response.uploadFile_arr.message == "success") {
+                        add_products_edit_product_save = 0;
                         $("#product_save").removeClass("btn-primary");
                         $("#product_save").removeClass("btn-info");
                         $("#product_save").removeClass("btn-danger");
                         $("#product_save").removeClass("btn-warning");
-
                         $("#product_save").addClass("btn-success");
                         $('#app-cover-spin').hide(0);
-
-                        //var results = response.results;
-                        //alert(results);
-
+                        
                         var imageurl = response.imageurl;
                         var response_imageurl = '<ul>';
                         for (i = 0; i < imageurl.length; i++) {
                             response_imageurl += "<li>" + imageurl[i] + "</li>";
+                            //alert(imageurl[i]);
                         }
                         response_imageurl += '</ul>';
                         $("#upload_from_file_container_help").html(response.uploadFile_arr.message + '. Image url : <span class="text-success">' + response_imageurl + '</span>');
                         //imageurl
                         $("#product_save").html(response.uploadFile_arr.message);
                         $("#upload_from_help").html(response.product_title + ' uploaded successfuly');
-                        cat_id = '';
+                        home('');
+                        /**cat_id = '';
                         brand_id = '';
                         startlimit = 0;
                         endlimit = 24;
@@ -8133,8 +8533,10 @@ function upload_image_from_file(uploadFile_arr) {
                             edit_product_id = '';
                         } else {
                             product_main_container(startlimit,endlimit,cat_id,brand_id);
-                        }
-                    } else {                        
+                        } */
+                    } else {  
+                        //alert(response.uploadFile_arr.message);
+                      
                         $("#product_save").removeClass("btn-primary");
                         $("#product_save").removeClass("btn-success");
                         $("#product_save").removeClass("btn-info");
@@ -8153,8 +8555,17 @@ function upload_image_from_file(uploadFile_arr) {
                             $("#upload_from_help").html(response.uploadFile_arr.message);
                         }
                     }
+                   }                   
                 } else {
+                    $("#product_save").removeClass("btn-primary");
+                    $("#product_save").removeClass("btn-success");
+                    $("#product_save").removeClass("btn-info");
+                    $("#product_save").removeClass("btn-warning");
+
+                    $("#product_save").addClass("btn-danger");
                     $('#app-cover-spin').hide(0);
+                    $("#product_save").html(response.message);
+
                     $("#upload_from_file_container_help").html(response.message);
 
                     $("#upload_from_help").html(response.message);
@@ -8176,5 +8587,20 @@ function upload_image_from_file(uploadFile_arr) {
         processData: false,
         cache: false
     });
-    
+}
+
+function upload_image_from_file(uploadFile_arr) {
+    $("#product_data_upload_from").val('file');
+    $("#product_client").val(username);
+
+    upload_image_from(uploadFile_arr);    
+}
+
+var figure = $(".alpha_video").hover( hoverVideo, hideVideo );
+
+function hoverVideo(e) {
+    $('video', this).get(0).play();
+}
+function hideVideo(e) {
+    $('video', this).get(0).pause();
 }

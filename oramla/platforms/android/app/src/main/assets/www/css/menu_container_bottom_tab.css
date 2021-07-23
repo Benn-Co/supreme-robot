@@ -9,7 +9,7 @@
     align-items: flex-end;
     position: fixed;
     justify-content: center;
-    background-color: rgb(34, 18, 36);
+    background-color: #c5c5c5;
     text-align: center;
     z-index: 3;
   }

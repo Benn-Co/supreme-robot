@@ -193,15 +193,15 @@
       </div>            
     </div>         
 
-    <nav id="menu_container_left_tab" role='navigation' class="navigation">
+    <nav id="menu_container_left_tab" role='navigation' class="navigation" style="display: none;">
       <input type="checkbox" id="post" class="postToggle" />
-      <label id="menu_container_orders_count" for="post" class="postBtn"></label>
+      <label for="post" class="postBtn"></label>
       <ul>
-        <li id="menu_container_pending_orders_count" class="pending_orders text">Add products</li>
-        <li id="menu_container_active_orders_count" class="active_orders quote">Orders</li>
-        <li id="menu_container_confirmed_orders_count" class="confirmed_orders link">Sell</li>
-        <li id="menu_container_complete_orders_count" class="complete_orders chat">Connects</li>
-        <li id="menu_container_role" class="user_orders video">Currency</li>
+        <li id="" class="pending_orders text">Add products</li>
+        <li id="" class="active_orders quote">Orders</li>
+        <li id="" class="confirmed_orders link">Sell</li>
+        <li id="" class="complete_orders chat">Connects</li>
+        <li id="" class="user_orders video">Currency</li>
       </ul>
     </nav>
     
@@ -229,6 +229,13 @@
           </div>
         </div>  
       </div>
+
+
+      <!--<div class="card">
+        <div class="alpha_video"> <video class="vdo" src="https://mdbootstrap.com/img/video/Sail-Away.mp4" loop="1" preload="auto" muted=""></video> </div>
+        
+      </div>-->
+      
 
       <div id="product_row_container">
         <div id="product_data_container"  class="row">
@@ -276,10 +283,9 @@
             <i class="fa fa-credit-card" aria-hidden="true"></i>
           </a>
 
-          <a class="nav-item nav-link add_nav" href="#">
-            <i id="arrow_add_client_back" class="fa fa-arrow-left"></i>
-          </a>
-          
+          <div class="my-2 my-lg-0">
+            <button id="arrow_add_client_back"  class="button is-black"><i class="fa fa-arrow-left"></i></button>
+          </div>
         </nav>
         
         <section class="buy-grid container-fluid">          
@@ -620,9 +626,8 @@
         <div class="is-centered">
            <h2>Connects</h2>
         </div>
-        <div class="is-centered">
+        <div class="my-2 my-lg-0">
           <button id="contacts_back"  class="button is-black"><i class="fa fa-arrow-left"></i></button>
-          
         </div>
       </nav>
       <div id="connects_contacts">
@@ -674,7 +679,7 @@
         <div class="is-centered">
             <h2>shopping cart</h2>
         </div>
-        <div class="add_active">
+        <div class="my-2 my-lg-0">
           <button id="cart_back"  class="button is-black"><i class="fa fa-arrow-left"></i></button>
         </div>
       </nav>
@@ -785,14 +790,52 @@
     </div>
 
     <div id="orders_container" class="orders_">      
-      <nav class="navbar navbar-light bg-light sticky-top">
-        <div class="is-centered">
-          <h2>Order <b>Details</b></h2>
-        </div>
-        <div class="add_active">
+     
+      <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <a class="navbar-brand" href="#">Orders</a>        
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link user_orders">
+              <div class="icon youtube">
+                <div class="tooltip">Orders</div>
+                <span id="menu_container_role" class=""></span>
+              </div>              
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link pending_orders">              
+              <div class="icon facebook" data-toggle="tooltip" data-placement="bottom" title="Pending orders">
+                <span id="menu_container_pending_orders_count" class=""></span>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active_orders">              
+              <div class="icon twitter" data-toggle="tooltip" data-placement="bottom" title="Active orders">
+                <span id="menu_container_active_orders_count" class=""></span>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link confirmed_orders">              
+              <div class="icon instagram" data-toggle="tooltip" data-placement="bottom" title="Cancelled orders">
+                <span id="menu_container_confirmed_orders_count" class=""></span>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link complete_orders">              
+              <div class="icon github" data-toggle="tooltip" data-placement="bottom" title="Completed orders">
+                <span id="menu_container_complete_orders_count" class=""></span>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <div class="my-2 my-lg-0">
           <button id="order_back" class="button is-black"><i class="fa fa-arrow-left"></i></button>
         </div>
-      </nav>
+      </nav>      
+      
       <table class="table table-striped table-hover">
         <thead>
             <tr>
@@ -805,6 +848,9 @@
           
         </tbody>
       </table>
+
+      
+
       <div id="arrow_navigation_order" class="arrow_navigation_cont">
 
       <ul class="v-effect-link">
@@ -835,15 +881,53 @@
       
     </div>
 
-    <div id="order_items_container" class="order_items"> 
-      <nav class="navbar navbar-light bg-light sticky-top">
-        <div class="is-centered">
-          <h2>Order <b id="orderid"></b></h2>   
-        </div>
-        <div class="add_active">
+    <div id="order_items_container" class="order_items">       
+      <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <a class="navbar-brand" href="#" id="orderid_outline">
+          <button class="button is-success is-outlined order_view_outline">Order <b id="orderid"></b></button>          
+        </a>        
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link user_orders">
+              <div class="icon youtube">
+                <div class="tooltip">All Items</div>
+                <span id="menu_container_role_items" class=""></span>
+              </div>              
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link pending_orders">              
+              <div class="icon facebook" data-toggle="tooltip" data-placement="bottom" title="Pending order items">
+                <span id="menu_container_pending_orders_items_count" class=""></span>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active_orders">              
+              <div class="icon twitter" data-toggle="tooltip" data-placement="bottom" title="Active order items">
+                <span id="menu_container_active_orders_items_count" class=""></span>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link confirmed_orders">              
+              <div class="icon instagram" data-toggle="tooltip" data-placement="bottom" title="Cancelled order items">
+                <span id="menu_container_confirmed_orders_items_count" class=""></span>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link complete_orders">              
+              <div class="icon github" data-toggle="tooltip" data-placement="bottom" title="Completed order items">
+                <span id="menu_container_complete_orders_items_count" class=""></span>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <div class="my-2 my-lg-0">
           <button id="order_items_back" class="button is-black"><i class="fa fa-arrow-left"></i></button>
         </div>
-      </nav>     
+      </nav>
       <div id="orders_items_made" class="caercontainer container-fluid">
         
       </div>
@@ -891,10 +975,12 @@
         
       </section>
 
+      
+
     </div>
 
     <div id="user_container" class="user">
-      
+ 
       <div id="user_error" class="w-full sm:w-1/2 md:w-1/3 flex flex-col p-3 user_error_container">
         <div class="bg-white rounded-lg shadow-lg overflow-hidden flex-1 flex flex-col">
           <div class="bg-cover h-48" style="background-image: url(https://images.unsplash.com/photo-1523978591478-c753949ff840?w=900);"></div>
@@ -1221,7 +1307,7 @@
         <div class="modal-background"></div>
 
         <div class="modal-content">
-          <div class="modal-header">
+          <div class="modal-header red">
             <h5 class="modal-title" id="add_products_newTitle">Add your product(s)</h5>
             <button id="add_products_close" class="delete" aria-label="close"></button>
           </div>
@@ -1229,11 +1315,12 @@
             <form class="fileToUploadForm" enctype="multipart/form-data">
             
             <div class="form-group" style="display: none;">
-              <input type="text" class="form-control is-valid" id="product_client" name="product_client" value="mopal">
+              <input type="text" class="form-control is-valid" id="product_client" name="product_client" value="">
             </div>
             <div class="form-group" style="display: none;">
+              <input type="text" class="form-control is-valid" id="product_data_upload_from" name="product_data_upload_from" value="">
               <input type="text" class="form-control is-valid" id="api_server_url" name="api_server_url" value="">
-
+              <input type="text" class="form-control is-valid" id="edit_product_id" name="edit_product_id" value="">
               <input type="text" class="form-control is-valid" id="product_data_tax" name="product_data_tax" value="">
               <input type="text" class="form-control is-valid" id="product_data_sale_price" name="product_data_sale_price" value="">
               <input type="text" class="form-control is-valid" id="product_data_net_price" name="product_data_net_price" value="">
@@ -1620,7 +1707,7 @@
                         <input type="file" name="fileToUpload[]" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">
                       </label>                    
                   </div>
-                  <i class="fa fa-plus imgAdd"></i>
+                  <i class="fa fa-plus imgAdd imgAdd_file"></i>
                 </div>
                 <span id="upload_from_file_container_help" class="form-text text-muted"><span class="text-danger">Required</span>. The file of your product’s main image. Example <span class="text-success">​image1.​jpg</span>
 
@@ -1630,10 +1717,10 @@
                 <div class="row">
                   <div class="col imgUp">
                     <div class="imagePreview"></div>
-                    <div class="control"><input type="url" class="uploadUrl img input is-success" placeholder="Enter url i.e http://oramla.com" style="width:auto;height:0px;overflow:hidden;"></div>
+                    <div class="control"><input id="value_from_url" type="url" name="urlToUpload[]" class="uploadUrl img input is-success" placeholder="Enter url i.e http://oramla.com" style="width:auto;height:0px;overflow:hidden;"></div>
                     
                   </div>
-                  <i class="fa fa-plus imgAdd"></i>
+                  <i class="fa fa-plus imgAdd imgAdd_url"></i>
                 </div>
                 <span id="upload_from_url_container_help" class="form-text text-muted"><span class="text-danger">Required</span>. The URL of your product’s main image. Example <span class="text-success">http://​www.example.​com/​image1.​jpg</span>
                 </span>
@@ -1643,7 +1730,7 @@
 
             </form>
           </div>
-          <div class="modal-footer">
+          <div class="modal-footer red">
             <span id="upload_from_help" class="is-link is-black "></span>
 
             <button id="product_footer_close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1661,7 +1748,9 @@
         <input class="bottom_input" type="radio" name="s" id="s1" checked="checked">
         <input class="bottom_input" type="radio" name="s" id="s5">
         <input class="bottom_input" type="radio" name="s" id="s2">
+
         <input class="bottom_input" type="radio" name="s" id="s3">
+        
         <input class="bottom_input" type="radio" name="s" id="s4">
         <label class="bottom_label" for="s1"><img src="img/home-svgrepo-com.svg" alt=""></label>
         <label class="bottom_label" for="s5">
@@ -1673,7 +1762,12 @@
           <span id="shopping_cart_num" class="circle_num badge badge-danger">0</span>
         </label>
 
-        <label class="bottom_label" for="s3"><img src="img/location-svgrepo-com.svg" alt=""></label>
+        <label class="bottom_label" for="s3">
+          <!--<img src="img/location-svgrepo-com.svg" alt="">-->
+          <img src="img/orders.png" alt="">
+
+          <span id="menu_container_orders_count" class="circle_num badge badge-info">0</span>
+        </label>
         <label class="bottom_label" for="s4"><img src="img/user-svgrepo-com.svg" alt=""></label>
 
         <div class="circle"></div>

@@ -10,7 +10,7 @@
   margin-top: 50px !important;
   height: auto !important;
   font-family: 'Open Sans';
-  background-color: rgb(34, 18, 36);
+  background-image:linear-gradient(to bottom, #c5c5c5 0%, #c5c5c5 51%);
   display: none;
 
 }

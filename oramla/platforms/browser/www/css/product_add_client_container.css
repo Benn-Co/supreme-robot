@@ -52,7 +52,7 @@
 #add_main {
   position: fixed;
   list-style: none;
-  background-color: rgb(34, 18, 36);
+  background-image:linear-gradient(to bottom, #c5c5c5 0%, #c5c5c5 51%);
   font-weight: 400;
   font-size: 0;
   text-transform: uppercase;
@@ -243,7 +243,7 @@ nav li:hover ul {
 nav li ul li {
 	float: none;
 	width: 100%;
-  background-color: rgb(34, 18, 36);
+  background-image:linear-gradient(to bottom, #c5c5c5 0%, #c5c5c5 51%);
   border-radius: 32px;
   color: aliceblue;
 
@@ -327,7 +327,7 @@ nav li ul a:hover {
 .carousel_othe_divtext {  
   z-index: 0;
   text-align: center;
-  background-color: #000;
+  background-image:linear-gradient(to bottom, #c5c5c5 0%, #c5c5c5 51%);
   opacity: 0.5;
 }
 ._carousel_indicators {  
@@ -651,7 +651,7 @@ nav li ul a:hover {
 
 /* On hover, add a black background color with a little bit see-through */
 .prev:hover, .next:hover {
-  background-color: rgba(0,0,0,0.8);
+  background-image:linear-gradient(to bottom, #c5c5c5 0%, #c5c5c5 51%);
 }
 
 /* Caption text */
@@ -660,8 +660,9 @@ nav li ul a:hover {
   font-size: 15px;
   width: 100%;
   text-align: center;
-  background-color: rgb(34, 18, 36);
+  background-image:linear-gradient(to bottom, #c5c5c5 0%, #c5c5c5 51%);
   padding: 20px;
+  z-index: 2 !important;
 }
 .client_text {
   color: aliceblue;
@@ -669,7 +670,7 @@ nav li ul a:hover {
   width: 100%;
   max-width: 100px;
   text-align: center;
-  background-color: rgb(34, 18, 36);
+  background-image:linear-gradient(to bottom, #c5c5c5 0%, #c5c5c5 51%);
   border-radius: 32px;
 }
 
