@@ -123,3 +123,5 @@ org/apache/cordova/media/AudioHandler.java
  org.apache.cordova.media.AudioHandler$1
 org/apache/cordova/geolocation/Geolocation.java
  org.apache.cordova.geolocation.Geolocation
+org/apache/cordova/device/Device.java
+ org.apache.cordova.device.Device

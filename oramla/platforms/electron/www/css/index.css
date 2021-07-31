@@ -433,3 +433,24 @@ font-size:15px;
   margin: auto;
   box-sizing: border-box;
 }
+.tagvideo{
+  display: none;
+}
+.hero-imagevideo{
+  display: none;
+}
+
+.topRight {
+    position: absolute;
+    top: 2%;
+    right: 1%;
+    
+}
+.topRightpadding {
+  margin-right: 10px !important ;
+}
+.top_Left {
+  position: absolute;
+  top: 2%;
+  left: 1%;
+}

@@ -269,7 +269,8 @@
           <a class="nav-item nav-link active" href="#agentclient">
             <div class="tags"> 
               <img id="otheaddlimg" src="img/logo.png" class="tag" alt="">   
-                        
+              <video id="otheaddlvideo" class="vdo tag tagvideo" src="" loop="1" preload="auto" muted=""></video>
+
               <span class="tag is-black"><span id="otheaddl"></span> <span class="fa fa-star" id="rating_num" > 3</span></span>              
             </div>
           </a>
@@ -290,8 +291,10 @@
         
         <section class="buy-grid container-fluid">          
           <div class="hero-image-wrapper image">
-            <div class="hero-image-element">
+            <div class="hero-image-element alpha_video">
               <img id="add_imageadd_" src="http://localhost/product_images/amphibolite.jpg" class="hero-image-element" alt="alt">
+              <video id="add_videoadd_" class="vdo hero-image-element hero-imagevideo " src="" loop="1" preload="auto" muted=""></video>
+
               <div id="other_title" class="row">                    
               </div>
             </div>            
@@ -789,52 +792,64 @@
     
     </div>
 
-    <div id="orders_container" class="orders_">      
-     
+    <div id="orders_container" class="orders_">
       <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-        <a class="navbar-brand" href="#">Orders</a>        
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link user_orders">
+        
+        <a class="navbar-brand" href="#">Orders</a> 
+
+        <button type="button" class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary">
+          <!--begin::Svg Icon | path: icons/duotone/Layout/Layout-4-blocks-2.svg-->
+          <span class="svg-icon svg-icon-1">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+              <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <rect x="5" y="5" width="5" height="5" rx="1" fill="#000000"></rect>
+                <rect x="14" y="5" width="5" height="5" rx="1" fill="#000000" opacity="0.3"></rect>
+                <rect x="5" y="14" width="5" height="5" rx="1" fill="#000000" opacity="0.3"></rect>
+                <rect x="14" y="14" width="5" height="5" rx="1" fill="#000000" opacity="0.3"></rect>
+              </g>
+            </svg>
+          </span>
+          <!--end::Svg Icon-->
+        </button>
+        
+        <div class="collapse navbar-collapse  row justify-content-md-center" id="navbarNav">
+          <form class="form-inline">
+            <button type="button" class="btn btn-outline-secondary btn-sm user_orders">
               <div class="icon youtube">
                 <div class="tooltip">Orders</div>
                 <span id="menu_container_role" class=""></span>
-              </div>              
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link pending_orders">              
+              </div>
+            </button>
+            <button type="button" class="btn btn-outline-warning btn-sm pending_orders">
               <div class="icon facebook" data-toggle="tooltip" data-placement="bottom" title="Pending orders">
                 <span id="menu_container_pending_orders_count" class=""></span>
               </div>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active_orders">              
+            </button>
+            <button type="button" class="btn btn-outline-success btn-sm active_orders">
               <div class="icon twitter" data-toggle="tooltip" data-placement="bottom" title="Active orders">
                 <span id="menu_container_active_orders_count" class=""></span>
               </div>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link confirmed_orders">              
+            </button>
+            <button type="button" class="btn btn-outline-danger btn-sm confirmed_orders">
               <div class="icon instagram" data-toggle="tooltip" data-placement="bottom" title="Cancelled orders">
                 <span id="menu_container_confirmed_orders_count" class=""></span>
               </div>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link complete_orders">              
+            </button>
+            <button type="button" class="btn btn-outline-info btn-sm complete_orders">
               <div class="icon github" data-toggle="tooltip" data-placement="bottom" title="Completed orders">
                 <span id="menu_container_complete_orders_count" class=""></span>
               </div>
-            </a>
-          </li>
-        </ul>
-        <div class="my-2 my-lg-0">
+            </button>
+          </form>          
+        </div>
+
+        <div class="form-inline topRight">
+          <button class="d-lg-none button is-black topRightpadding"  data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></button>
+
           <button id="order_back" class="button is-black"><i class="fa fa-arrow-left"></i></button>
         </div>
-      </nav>      
+        
+      </nav>           
       
       <table class="table table-striped table-hover">
         <thead>
@@ -881,53 +896,52 @@
       
     </div>
 
-    <div id="order_items_container" class="order_items">       
+    <div id="order_items_container" class="order_items"> 
+      
       <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <a class="navbar-brand" href="#" id="orderid_outline">
           <button class="button is-success is-outlined order_view_outline">Order <b id="orderid"></b></button>          
-        </a>        
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link user_orders">
+        </a>   
+
+        <div class="collapse navbar-collapse  row justify-content-md-center" id="navbarNav_items">
+          <form class="form-inline">
+            <button type="button" class="btn btn-outline-secondary btn-sm user_orders_items">
               <div class="icon youtube">
                 <div class="tooltip">All Items</div>
                 <span id="menu_container_role_items" class=""></span>
-              </div>              
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link pending_orders">              
+              </div>
+            </button>
+            <button type="button" class="btn btn-outline-warning btn-sm pending_orders_items">
               <div class="icon facebook" data-toggle="tooltip" data-placement="bottom" title="Pending order items">
                 <span id="menu_container_pending_orders_items_count" class=""></span>
               </div>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active_orders">              
+            </button>
+            <button type="button" class="btn btn-outline-success btn-sm active_orders_items">
               <div class="icon twitter" data-toggle="tooltip" data-placement="bottom" title="Active order items">
                 <span id="menu_container_active_orders_items_count" class=""></span>
               </div>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link confirmed_orders">              
+            </button>
+            <button type="button" class="btn btn-outline-danger btn-sm confirmed_orders_items">
               <div class="icon instagram" data-toggle="tooltip" data-placement="bottom" title="Cancelled order items">
                 <span id="menu_container_confirmed_orders_items_count" class=""></span>
               </div>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link complete_orders">              
+            </button>
+            <button type="button" class="btn btn-outline-info btn-sm complete_orders_items">
               <div class="icon github" data-toggle="tooltip" data-placement="bottom" title="Completed order items">
                 <span id="menu_container_complete_orders_items_count" class=""></span>
               </div>
-            </a>
-          </li>
-        </ul>
-        <div class="my-2 my-lg-0">
+            </button>
+          </form>          
+        </div>
+
+        <div class="form-inline topRight">           
+          <button class="d-lg-none button is-black topRightpadding"  data-toggle="collapse" data-target="#navbarNav_items" aria-controls="navbarNav_items" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></button>
           <button id="order_items_back" class="button is-black"><i class="fa fa-arrow-left"></i></button>
         </div>
+        
       </nav>
+      
+
       <div id="orders_items_made" class="caercontainer container-fluid">
         
       </div>
@@ -998,7 +1012,11 @@
         </div>  
       </div>
 
-      <div id="user_row_container" >        
+
+
+      <div id="user_row_container" >
+        
+
         <div class="col raww">                       
           <div class="card card-profile shadow raww">
             <a class="btn btn-sm btn-secondary left"><b class="">Account</b></a>

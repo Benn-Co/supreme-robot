@@ -439,3 +439,24 @@ font-size:15px;
 .hero-imagevideo{
   display: none;
 }
+
+.topRight {
+    position: absolute;
+    top: 2%;
+    right: 1%;
+    
+}
+.topRightpadding {
+  margin-right: 10px !important ;
+}
+.collapseTop{
+  position: absolute;
+
+  top: 10%;
+
+}
+.top_Left_nav {
+  position: absolute;
+  top: 2%;
+  left: 1%;
+}

@@ -26,6 +26,9 @@
     <feature name="Geolocation">
         <param name="android-package" value="org.apache.cordova.geolocation.Geolocation" />
     </feature>
+    <feature name="Device">
+        <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
     <name>Oramla</name>
     <description>
         The leading platform for globle trade. We connect and serve millions of buyers and sellers around the world
