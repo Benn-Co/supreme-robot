@@ -55,43 +55,103 @@
 30        android:required="true" />
 30-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:19:64-87
 31
-32    <application
-32-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:5-12:19
-33        android:debuggable="true"
-34        android:hardwareAccelerated="true"
-34-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:18-52
-35        android:icon="@mipmap/ic_launcher"
-35-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:53-87
-36        android:label="@string/app_name"
-36-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:88-120
-37        android:supportsRtl="true" >
-37-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:121-147
-38        <activity
-38-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:9-11:20
-39            android:name="com.benco.org.MainActivity"
-39-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:205-232
-40            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-40-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:19-135
-41            android:label="@string/activity_name"
-41-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:136-173
-42            android:launchMode="singleTop"
-42-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:174-204
-43            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
-43-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:233-295
-44            android:windowSoftInputMode="adjustResize" >
-44-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:296-338
-45            <intent-filter android:label="@string/launcher_name" >
-45-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:7:13-10:29
-45-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:7:28-65
-46                <action android:name="android.intent.action.MAIN" />
-46-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:8:17-69
-46-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:8:25-66
-47
-48                <category android:name="android.intent.category.LAUNCHER" />
-48-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:9:17-77
-48-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:9:27-74
-49            </intent-filter>
-50        </activity>
-51    </application>
-52
-53</manifest>
+32    <uses-permission
+32-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:20:5-90
+33        android:name="android.permission.CAMERA"
+33-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:20:22-62
+34        android:required="false" />
+34-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:20:63-87
+35
+36    <uses-feature
+36-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:21:5-85
+37        android:name="android.hardware.camera"
+37-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:21:19-57
+38        android:required="false" />
+38-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:21:58-82
+39    <uses-feature
+39-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:22:5-91
+40        android:name="android.hardware.camera.front"
+40-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:22:19-63
+41        android:required="false" />
+41-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:22:64-88
+42    <!-- TODO replace above two with next line after Android 4.2 -->
+43    <!-- <uses-feature android:name="android.hardware.camera.any"/> -->
+44    <uses-feature
+44-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:32:5-34:36
+45        android:name="android.hardware.camera.autofocus"
+45-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:33:9-57
+46        android:required="false" />
+46-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:34:9-33
+47    <uses-feature
+47-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:35:5-37:36
+48        android:name="android.hardware.camera.flash"
+48-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:36:9-53
+49        android:required="false" />
+49-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:37:9-33
+50    <uses-feature
+50-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:38:5-40:36
+51        android:name="android.hardware.screen.landscape"
+51-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:39:9-57
+52        android:required="false" />
+52-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:40:9-33
+53    <uses-feature
+53-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:41:5-43:36
+54        android:name="android.hardware.wifi"
+54-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:42:9-45
+55        android:required="false" />
+55-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:43:9-33
+56
+57    <application
+57-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:5-12:19
+58        android:debuggable="true"
+59        android:hardwareAccelerated="true"
+59-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:18-52
+60        android:icon="@mipmap/ic_launcher"
+60-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:53-87
+61        android:label="@string/app_name"
+61-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:88-120
+62        android:supportsRtl="true" >
+62-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:5:121-147
+63        <activity
+63-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:9-11:20
+64            android:name="com.benco.org.MainActivity"
+64-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:205-232
+65            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
+65-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:19-135
+66            android:label="@string/activity_name"
+66-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:136-173
+67            android:launchMode="singleTop"
+67-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:174-204
+68            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
+68-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:233-295
+69            android:windowSoftInputMode="adjustResize" >
+69-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:6:296-338
+70            <intent-filter android:label="@string/launcher_name" >
+70-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:7:13-10:29
+70-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:7:28-65
+71                <action android:name="android.intent.action.MAIN" />
+71-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:8:17-69
+71-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:8:25-66
+72
+73                <category android:name="android.intent.category.LAUNCHER" />
+73-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:9:17-77
+73-->C:\MAMP\Benn-Co\Benn Co App\Oramla.V8\public_html\supreme-robot\oramla\platforms\android\app\src\main\AndroidManifest.xml:9:27-74
+74            </intent-filter>
+75        </activity>
+76        <activity
+76-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:46:9-52:63
+77            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+77-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:47:13-74
+78            android:clearTaskOnLaunch="true"
+78-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:48:13-45
+79            android:screenOrientation="sensorLandscape"
+79-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:49:13-56
+80            android:stateNotNeeded="true"
+80-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:50:13-42
+81            android:theme="@style/zxing_CaptureTheme"
+81-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:51:13-54
+82            android:windowSoftInputMode="stateAlwaysHidden" />
+82-->[com.journeyapps:zxing-android-embedded:3.3.0] C:\Users\Pavilion\.gradle\caches\transforms-2\files-2.1\2a408ac06d0d14d964eff06a45248eb0\zxing-android-embedded-3.3.0\AndroidManifest.xml:52:13-60
+83    </application>
+84
+85</manifest>

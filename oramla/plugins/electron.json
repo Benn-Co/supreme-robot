@@ -13,10 +13,23 @@
     "cordova-plugin-console": {
       "PACKAGE_NAME": "com.benco.org"
     },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.benco.org"
+    },
     "cordova-plugin-file": {
       "PACKAGE_NAME": "com.benco.org"
     },
+    "cordova-plugin-geolocation": {
+      "GPS_REQUIRED": "true",
+      "PACKAGE_NAME": "com.benco.org"
+    },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "com.benco.org"
+    },
     "cordova-plugin-media": {
+      "PACKAGE_NAME": "com.benco.org"
+    },
+    "cordova-plugin-qrscanner": {
       "PACKAGE_NAME": "com.benco.org"
     },
     "cordova-plugin-splashscreen": {
@@ -26,16 +39,6 @@
       "PACKAGE_NAME": "com.benco.org"
     },
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "com.benco.org"
-    },
-    "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "com.benco.org"
-    },
-    "cordova-plugin-geolocation": {
-      "GPS_REQUIRED": "true",
-      "PACKAGE_NAME": "com.benco.org"
-    },
-    "cordova-plugin-device": {
       "PACKAGE_NAME": "com.benco.org"
     }
   },

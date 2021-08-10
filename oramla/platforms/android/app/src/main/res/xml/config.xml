@@ -29,6 +29,9 @@
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
     </feature>
+    <feature name="QRScanner">
+        <param name="android-package" value="com.bitpay.cordova.qrscanner.QRScanner" />
+    </feature>
     <name>Oramla</name>
     <description>
         The leading platform for globle trade. We connect and serve millions of buyers and sellers around the world

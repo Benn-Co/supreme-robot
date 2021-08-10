@@ -22,17 +22,31 @@
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
 
 //export { colorCode };
+
+var blocks = cordova.platformId;
+//document.addEventListener('deviceready',onDeviceReady, false);
 if (window.location.hostname == 'oramla.com') {
+    //alert(window.location.hostname);
     if (location.protocol !== 'https:') {
         path_protocol = "https:";
         window.location.href="" + path_protocol + "//oramla.com";
     }
     onDeviceReady();
-
 } else {
-    document.addEventListener('deviceready', onDeviceReady, false);
-    //var devicePlatform = device.platform;
-    //alert(devicePlatform);
+    //alert(cordova.platformId);
+    //document.addEventListener('deviceready',onDeviceReady, false);
+    if(cordova.platformId == 'electron'){
+        //alert(cordova.platformId);
+        document.addEventListener('deviceready', function (evt) {
+            onDeviceReady();
+        }, false);
+    } else {
+        document.addEventListener('deviceready', function (evt) {
+            onDeviceReady();
+        }, false);
+    }
+    //
+    
 }
 
 
@@ -74,7 +88,9 @@ var user_currency_price_symbal = '$';
 var user_currency_exchange_rate = 1;
 
 function onDeviceReady() {
+    //alert(blocks);
     username = localStorage.getItem("username");
+    //alert(username);
     email = localStorage.getItem("email");
     check_user_authentication(username,email);
 }
@@ -841,6 +857,173 @@ $("#radio-3").click(function(){
         _apps_tab =0;
     }
 });
+//useractivity
+$("#useractivity").click(function(){
+    $("#useranalysiscard").hide(100);
+    $("#useractivitycard").show(100);
+    $("#storegheader").html('Activity');
+
+});
+//useranalysis
+$("#useranalysis").click(function(){
+    $("#useractivitycard").hide(100);
+    $("#useranalysiscard").show(100);
+    $("#storegheader").html('Analysis');
+
+});
+//mystoreorders
+//mystoreorderscol
+$("#mystoreorders").click(function(){
+    //$("#mystorecol").hide(100);
+    $("#mystorecol").addClass('d-none');
+    $("#mystorecol").addClass('d-lg-block');
+    $("#mystoreorderscol").show(100);
+    //$("#storegheader").html('Activity');
+
+});
+
+$("#qr-reader-results").click(function(){
+    stopScanning('decodedText','decodedResult');
+    //$("#qrcodemodal").removeClass('is-active'); 
+});
+$("#qr-reader-error").click(function(){
+    stopScanning('decodedText','decodedResult');
+    //$("#qrcodemodal").removeClass('is-active'); 
+});
+$("#qr-deletemodal").click(function(){
+    stopScanning('decodedText','decodedResult');
+    //$("#qrcodemodal").removeClass('is-active'); 
+});
+$(".scan-qr-stop").click(function(){
+    stopScanning('decodedText','decodedResult');
+    //$("#qrcodemodal").removeClass('is-active'); 
+});
+
+$("body").delegate(".generate-qr-code","click",function(event){
+    event.preventDefault();
+    $("#qrcodemodal").addClass('is-active');
+
+    $("#qrcodescanner").hide(100);
+    $("#qrcode").show(100);
+    updateQRCode($(this).attr('qr_code_id'));    
+});
+function updateQRCode(text) {
+    $('#qrcode').html('');
+    $('#qrcode').qrcode({
+        render	: "table",
+        text	: text
+    });
+}
+function stopScanning(decodedText,decodedResult) {         
+    let scanner = new Instascan.Scanner({ video: document.getElementById('qr-reader') });    
+    Instascan.Camera.getCameras().then(function (cameras) {
+        if(cameras.length > 0){
+            this.scanner.stop();
+            $("#qrcodemodal").removeClass('is-active');
+        }
+    }).catch(function (e) {
+        resulterrorContainer.innerHTML = e;
+    });
+}
+$(".scan-qr-code").click(function(){
+    $("#qrcodemodal").addClass('is-active');
+    $("#qrcode").hide(100);
+    $("#qrcodescanner").show(100);
+    var resultContainer = document.getElementById('qr-reader-results');
+    var resulterrorContainer = document.getElementById('qr-reader-error');
+    let opts = {
+        // Whether to scan continuously for QR codes. If false, use scanner.scan() to manually scan.
+        // If true, the scanner emits the "scan" event when a QR code is scanned. Default true.
+        continuous: true,
+        
+        // The HTML element to use for the camera's video preview. Must be a <video> element.
+        // When the camera is active, this element will have the "active" CSS class, otherwise,
+        // it will have the "inactive" class. By default, an invisible element will be created to
+        // host the video.
+        video: document.getElementById('qr-reader'),
+        
+        // Whether to horizontally mirror the video preview. This is helpful when trying to
+        // scan a QR code with a user-facing camera. Default true.
+        mirror: false,
+        
+        // Whether to include the scanned image data as part of the scan result. See the "scan" event
+        // for image format details. Default false.
+        captureImage: true,
+        
+        // Only applies to continuous mode. Whether to actively scan when the tab is not active.
+        // When false, this reduces CPU usage when the tab is not active. Default true.
+        backgroundScan: false,
+        
+        // Only applies to continuous mode. The period, in milliseconds, before the same QR code
+        // will be recognized in succession. Default 5000 (5 seconds).
+        refractoryPeriod: 5000,
+        
+        // Only applies to continuous mode. The period, in rendered frames, between scans. A lower scan period
+        // increases CPU usage but makes scan response faster. Default 1 (i.e. analyze every frame).
+        scanPeriod: 1
+    };      
+    //let scanner = new Instascan.Scanner(opts);
+    let scanner = new Instascan.Scanner({ video: document.getElementById('qr-reader') });
+
+    resulterrorContainer.innerHTML = '';
+    resultContainer.innerHTML =  '';
+    scanner.addListener('scan', function (content, image) {
+        //alert(content);
+        resultContainer.innerHTML = content;
+        resulterrorContainer.innerHTML = '';
+    });
+    
+    
+    Instascan.Camera.getCameras().then(function (cameras) {
+      if (cameras.length > 0) {
+        if(cameras.length > 1){
+            if(cameras[1]!=""){
+                scanner.start(cameras[1]);
+            }else{
+                resulterrorContainer.innerHTML = 'No Back camera found!';
+            }
+        } else {
+            if(cameras[0]!=""){
+                scanner.start(cameras[0]);
+            }else{
+                resulterrorContainer.innerHTML = 'No Front camera found!';
+            }
+        }
+        $('[name="options"]').on('change',function(){
+            if($(this).val()==1){
+                if(cameras[0]!=""){
+                    scanner.start(cameras[0]);
+                }else{
+                    resulterrorContainer.innerHTML = 'No Front camera found!';
+                }
+            }else if($(this).val()==2){
+                if(cameras[1]!=""){
+                    scanner.start(cameras[1]);
+                }else{
+                    resulterrorContainer.innerHTML = 'No Back camera found!';
+                }
+            }
+        });
+      } else {
+        resulterrorContainer.innerHTML = 'No cameras found.';
+      }
+    }).catch(function (e) {
+        resulterrorContainer.innerHTML = e;
+    });
+});
+
+//mystorecol
+//mystore
+$("#mystore").click(function(){
+    $("#mystoreorderscol").hide(100);
+    //$("#mystorecol").show(100);
+    $("#mystorecol").removeClass('d-none');
+    $("#mystorecol").removeClass('d-lg-block');
+
+    //d-none d-lg-block
+    //$("#storegheader").html('Analysis');
+
+});
 
 $("#radio-1").click(function(){
     $("#top_menu").hide(100,function(){       
@@ -1523,6 +1706,24 @@ function order_id(startlimit,endlimit,status,username,order_id) {
                                     $('#app-cover-spin').hide(0);
                                 }
                             }
+                            data_len = products_data.length;
+                            if (role == 'customer') {
+                                $("#mystorecol").removeClass('d-none');
+                                $("#mystorecol").removeClass('d-lg-block');
+                                $("#mystorecol").hide(100);
+                                $("#moreaction").hide(100);
+
+                                $("#mystoreorderscol").removeClass('col-xl-8');
+                                $("#mystoreorderscol").addClass('col');
+                            } else {
+                                $("#mystoreorderscol").removeClass('col');
+                                $("#mystoreorderscol").addClass('col-xl-8');
+                                $("#mystorecol").addClass('d-none');
+                                $("#mystorecol").addClass('d-lg-block');
+                                $("#mystorecol").show(100);
+                                $("#moreaction").show(100);
+
+                            }
                             products_data.forEach(order_datamyFunction);
                         } 
                         order_id_status = 1;
@@ -2040,7 +2241,10 @@ function order_datamyFunction(item, index) {
 
     if (item.status == "active") {
         var status = '<span class="status text-success">&bull;</span> Active';
-        var oreder = '<a order_id="' + item.order_id + '" status="' + item.status + '" class="view order_view" title="View Details" data-toggle="tooltip">' + item.order_id + '</a>';
+        var oreder = '<a order_id="' + item.order_id + '" status="' + item.status + '" class="view order_view" title="View Details" data-toggle="tooltip">' + item.order_id + '</a>' + 
+        '<br>' + 
+        '<br>' +  
+        '<i class="fa fa-qrcode generate-qr-code" aria-hidden="true" qr_code_id="' + item.order_id + '"></i>';
 
     } else if (item.status == "pending") {
         var status = '<span class="status text-warning">&bull;</span> Pending';
@@ -2070,14 +2274,125 @@ function order_datamyFunction(item, index) {
     '</tr>';
     $("#orders_made").append(orders_made);
 
-    if (data_i == index) {        
+    //alert('data_i ' + data_len + ' data_len ' + data_len + ' index ' + index);
+    if (data_i == index) { 
+        /**var ctxB = document.getElementById("barChart").getContext('2d');
+        var myBarChart = new Chart(ctxB, {
+            type: 'bar',
+            data: {
+                labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [25, 20, 30, 22, 17, 29],
+                    backgroundColor: [
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff'
+                    ],
+                    borderColor: [
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: !0,
+                maintainAspectRatio: !1,
+                defaultColor: '#eee',
+                defaultFontColor: '#eee',
+                layout: {
+                  padding: 0
+                },
+                legend: {
+                  display: !1,
+                  position: "bottom",
+                  labels: {
+                    usePointStyle: !0,
+                    padding: 16
+                  }
+                },
+                elements: {
+                  point: {
+                    radius: 0,
+                    backgroundColor: '#eee'
+                  },
+                  line: {
+                    tension: .4,
+                    borderWidth: 4,
+                    borderColor: '#eee',
+                    backgroundColor: '#eee',
+                    borderCapStyle: "rounded"
+                  },
+                  rectangle: {
+                    backgroundColor: '#eee',
+                  },
+                  arc: {
+                    backgroundColor: '#eee',
+                    borderColor: '#eee',
+                    borderWidth: 4
+                  }
+                },
+                tooltips: {
+                  enabled: !0,
+                  mode: "index",
+                  intersect: !1
+                },
+                scales: {
+                  xAxes: [{
+                    maxBarThickness: 30,
+                    gridLines: {
+                      display: false,
+                      drawBorder: false
+                    },
+                    ticks: {
+                      fontColor: 'rgba(0,0,0, .3)'
+                    }
+                  }],
+                  yAxes: [{
+                    gridLines: {
+                      borderDash: [2],
+                      borderDashOffset: [2],
+                      color: '#ccc',
+                      drawBorder: !1,
+                      drawTicks: !1,
+                      drawOnChartArea: !0,
+                      zeroLineWidth: 0,
+                      zeroLineColor: "rgba(0,0,0,0)",
+                      zeroLineBorderDash: [2],
+                      zeroLineBorderDashOffset: [2]
+                    },
+                    ticks: {
+                      fontColor: 'rgba(0,0,0, .3)',
+                      beginAtZero: true,
+                      padding: 10
+                    }
+                  }]
+                }
+            }
+        }); */
+
         $("#orders_container").show(10,function(){
             $("#cart_container").hide(10); 
             //$('#app-cover-spin').hide(0);
             $("#order_items_container").hide(10);
             //alert(data_i + " " + index);
-            $('#app-cover-spin').hide(0);           
-        });  
+            $('#app-cover-spin').hide(0); 
+            //bar
+            
+            //alert();
+            //$("#barChart").html(myBarChart);
+
+
+        }); 
+
         if (data_i < 12) {
             $("#order_next").hide(10); 
             $('#order_previous').hide(10);
@@ -2171,6 +2486,23 @@ function checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_
                         $("#orders_made").html('');
                         window.location.href="#order_container";
                         data_len = products_data.length;
+                        if (role == 'customer') {
+                            $("#mystorecol").removeClass('d-none');
+                            $("#mystorecol").removeClass('d-lg-block');
+                            $("#mystorecol").hide(100);
+                            $("#moreaction").hide(100);
+
+                            $("#mystoreorderscol").removeClass('col-xl-8');
+                            $("#mystoreorderscol").addClass('col');
+                        } else {
+                            $("#mystoreorderscol").removeClass('col');
+                            $("#mystoreorderscol").addClass('col-xl-8');
+                            $("#mystorecol").addClass('d-none');
+                            $("#mystorecol").addClass('d-lg-block');
+                            $("#mystorecol").show(100);
+                            $("#moreaction").show(100);
+
+                        }
                         products_data.forEach(order_datamyFunction);
                         order_id_status = 1;
                         user_container(username,email);

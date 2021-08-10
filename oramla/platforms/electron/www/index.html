@@ -30,6 +30,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
   <meta name="msapplication-TileImage" content="img/favicon-32x32.png">
   <link rel="shortcut icon" href="img/favicon-32x32.png">
+  
 
   <link rel="stylesheet" href="css/menu_container_top_tab.css">
   <link rel="stylesheet" href="css/menu_container_left_tab.css">
@@ -624,7 +625,8 @@
          
     </div>
 
-    <div id="chat_container" class="chat_main_container is-fullhd">      
+    <div id="chat_container" class="chat_main_container is-fullhd"> 
+      
       <nav  id="center_top_id" class="navbar navbar-light bg-light fixed-top sticky-top">
         <div class="is-centered">
            <h2>Connects</h2>
@@ -794,76 +796,218 @@
 
     <div id="orders_container" class="orders_">
       <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-        
-        <a class="navbar-brand" href="#">Orders</a> 
+          <button class="d-lg-none button is-black"  data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></button>
+          <img src="https://bootdey.com/img/Content/avatar/avatar3.png" width="50" height="50" class="rounded-circle d-none d-lg-block" alt="Angelica Ramos">
 
-        <button type="button" class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary">
-          <!--begin::Svg Icon | path: icons/duotone/Layout/Layout-4-blocks-2.svg-->
-          <span class="svg-icon svg-icon-1">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-              <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <rect x="5" y="5" width="5" height="5" rx="1" fill="#000000"></rect>
-                <rect x="14" y="5" width="5" height="5" rx="1" fill="#000000" opacity="0.3"></rect>
-                <rect x="5" y="14" width="5" height="5" rx="1" fill="#000000" opacity="0.3"></rect>
-                <rect x="14" y="14" width="5" height="5" rx="1" fill="#000000" opacity="0.3"></rect>
-              </g>
-            </svg>
-          </span>
-          <!--end::Svg Icon-->
-        </button>
-        
-        <div class="collapse navbar-collapse  row justify-content-md-center" id="navbarNav">
-          <form class="form-inline">
-            <button type="button" class="btn btn-outline-secondary btn-sm user_orders">
-              <div class="icon youtube">
-                <div class="tooltip">Orders</div>
-                <span id="menu_container_role" class=""></span>
-              </div>
-            </button>
-            <button type="button" class="btn btn-outline-warning btn-sm pending_orders">
-              <div class="icon facebook" data-toggle="tooltip" data-placement="bottom" title="Pending orders">
-                <span id="menu_container_pending_orders_count" class=""></span>
-              </div>
-            </button>
-            <button type="button" class="btn btn-outline-success btn-sm active_orders">
-              <div class="icon twitter" data-toggle="tooltip" data-placement="bottom" title="Active orders">
-                <span id="menu_container_active_orders_count" class=""></span>
-              </div>
-            </button>
-            <button type="button" class="btn btn-outline-danger btn-sm confirmed_orders">
-              <div class="icon instagram" data-toggle="tooltip" data-placement="bottom" title="Cancelled orders">
-                <span id="menu_container_confirmed_orders_count" class=""></span>
-              </div>
-            </button>
-            <button type="button" class="btn btn-outline-info btn-sm complete_orders">
-              <div class="icon github" data-toggle="tooltip" data-placement="bottom" title="Completed orders">
-                <span id="menu_container_complete_orders_count" class=""></span>
-              </div>
-            </button>
-          </form>          
-        </div>
-
-        <div class="form-inline topRight">
-          <button class="d-lg-none button is-black topRightpadding"  data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></button>
-
-          <button id="order_back" class="button is-black"><i class="fa fa-arrow-left"></i></button>
-        </div>
-        
-      </nav>           
-      
-      <table class="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>Customer</th>
-                <th>Details</th>
-                <th>Order</th>
-            </tr>
-        </thead>
-        <tbody id="orders_made">
           
-        </tbody>
-      </table>
+          <!--<button type="button" class="button is-dark d-block">
+            <span class="svg-icon svg-icon-1">
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <rect x="5" y="5" width="5" height="5" rx="1" fill="#000000"></rect>
+                  <rect x="14" y="5" width="5" height="5" rx="1" fill="#000000" opacity="0.3"></rect>
+                  <rect x="5" y="14" width="5" height="5" rx="1" fill="#000000" opacity="0.3"></rect>
+                  <rect x="14" y="14" width="5" height="5" rx="1" fill="#000000" opacity="0.3"></rect>
+                </g>
+              </svg>
+            </span>
+          </button>-->
+          <div class="collapse navbar-collapse row justify-content-md-center mt-3" id="navbarNav">
+            <form class="form-inline">
+              <button type="button" class="btn btn-outline-secondary btn-sm user_orders">
+                <div class="icon youtube">
+                  <div class="tooltip">Orders</div>
+                  <span id="menu_container_role" class=""></span>
+                </div>
+              </button>
+              <button type="button" class="btn btn-outline-warning btn-sm pending_orders">
+                <div class="icon facebook" data-toggle="tooltip" data-placement="bottom" title="Pending orders">
+                  <span id="menu_container_pending_orders_count" class=""></span>
+                </div>
+              </button>
+              <button type="button" class="btn btn-outline-success btn-sm active_orders">
+                <div class="icon twitter" data-toggle="tooltip" data-placement="bottom" title="Active orders">
+                  <span id="menu_container_active_orders_count" class=""></span>
+                </div>
+              </button>
+              <button type="button" class="btn btn-outline-danger btn-sm confirmed_orders">
+                <div class="icon instagram" data-toggle="tooltip" data-placement="bottom" title="Cancelled orders">
+                  <span id="menu_container_confirmed_orders_count" class=""></span>
+                </div>
+              </button>
+              <button type="button" class="btn btn-outline-info btn-sm complete_orders">
+                <div class="icon github" data-toggle="tooltip" data-placement="bottom" title="Completed orders">
+                  <span id="menu_container_complete_orders_count" class=""></span>
+                </div>
+              </button>
+            </form>          
+          </div>
+          <div class="form-inline topRight">
+            <div id="moreaction">
+              <button class="button d-inline p-2 bg-primary text-white d-lg-none" id="mystore">Store</button>
+              <button class="button d-inline p-2 bg-dark text-white d-lg-none" id="mystoreorders">Orders</button>
+            </div>
+            <a href="#" class="generate-qr-code" qr_code_id="1" data-display="static">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+            </a>
 
+            <button id="order_back" class="button is-black"><i class="fa fa-arrow-left"></i></button>
+          </div>        
+      </nav>  
+      
+      <div class="row">
+        <div class="col-xl-4 d-none d-lg-block" id="mystorecol">          
+          <div class="card">
+            <div class="card-header">
+              <div class="container">
+                <div class="row">
+                  <div class="col">
+                    <h5 class="card-title mb-0">Store</h5>
+                  </div>
+                  <div class="d-inline p-2">
+                    <a href="#" id="storegheader">Analysis</a>                    
+                  </div>
+                  <div class="col col-lg-2">
+                    <div class="card-actions right">
+                      <div class="dropdown show">
+                        <a href="#" data-toggle="dropdown" data-display="static">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                        </a>
+        
+                        <div class="dropdown-menu dropdown-menu-right">
+                          <a class="dropdown-item" href="#" id="useranalysis">Analysis</a>
+                          <a class="dropdown-item" href="#"id="useractivity">Activity</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>              
+            </div>
+            <div class="card-body">
+              <!-- Card -->
+              <div class="card" id="useranalysiscard">
+                <div class="card-body">
+                  <p class="text-uppercase small mb-2 d-inline p-2"><strong>PERFORMANCE</strong></p>
+                  <h5 class="font-weight-bold mb-0 d-inline p-2">Total orders</h5>
+                </div>
+                <hr class="my-0">
+                <div class="card-body">
+                  <ul class="chart">
+                    <li>
+                      <span style="height:5%" title="New Orders"></span>
+                    </li>
+                    <li>
+                      <span style="height:70%" title="Customers"></span>
+                    </li>
+                    <li>
+                      <span style="height:50%" title="Ticket Resolved"></span>
+                    </li>
+                    <li>
+                      <span style="height:15%" title="Revenue Today"></span>
+                    </li>
+                  </ul>    
+                  
+                  
+                </div>
+              </div>
+
+              
+
+              <div class="card" id="useractivitycard" style="display: none;">
+                <div class="card-body">
+                  <p class="text-uppercase small mb-2 d-inline p-2"><strong>Activity</strong></p>
+                  <h5 class="font-weight-bold mb-0 d-inline p-2">Recent</h5>
+                </div>
+                <hr class="my-0">
+                <div class="card-body">
+                  <ul class="timeline mt-2 mb-0">
+                    <li class="timeline-item">
+                      <strong>Signed out</strong>
+                      <span class="float-right text-muted text-sm">30m ago</span>
+                      <p>Nam pretium turpis et arcu. Duis arcu tortor, suscipit...</p>
+                    </li>
+                    <li class="timeline-item">
+                      <strong>Created invoice #1204</strong>
+                      <span class="float-right text-muted text-sm">2h ago</span>
+                      <p>Sed aliquam ultrices mauris. Integer ante arcu...</p>
+                    </li>
+                    <li class="timeline-item">
+                      <strong>Discarded invoice #1147</strong>
+                      <span class="float-right text-muted text-sm">3h ago</span>
+                      <p>Nam pretium turpis et arcu. Duis arcu tortor, suscipit...</p>
+                    </li>
+                    <li class="timeline-item">
+                      <strong>Signed in</strong>
+                      <span class="float-right text-muted text-sm">3h ago</span>
+                      <p>Curabitur ligula sapien, tincidunt non, euismod vitae...</p>
+                    </li>
+                    <li class="timeline-item">
+                      <strong>Signed up</strong>
+                      <span class="float-right text-muted text-sm">2d ago</span>
+                      <p>Sed aliquam ultrices mauris. Integer ante arcu...</p>
+                    </li>
+                  </ul>
+                  
+                  
+                </div>
+              </div>              
+              <!-- Card -->  
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-8" id="mystoreorderscol">
+          <div class="card">
+            <div class="card-header pb-0">
+              <div class="container">
+                <div class="row">
+                  <div class="col">
+                    <h5 class="card-title mb-0 generate-qr-code" qr_code_id="1">Orders</h5>
+                  </div>
+                  <div class="d-inline p-2">
+                    Summary
+                  </div>
+                  <div class="col col-lg-2">
+                    <div class="card-actions right">
+                      <div class="dropdown show">
+                        <a href="#" data-toggle="dropdown" data-display="static">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal align-middle"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+                        </a>
+        
+                        <div class="dropdown-menu dropdown-menu-right">
+                          <a class="dropdown-item " href="Qrscan.html">Qrscan</a>
+
+                          <a class="dropdown-item user_orders" href="#">All orders</a>
+                          <a class="dropdown-item pending_orders" href="#">Pending orders</a>
+                          <a class="dropdown-item active_orders" href="#">Active orders</a>
+                          <a class="dropdown-item confirmed_orders" href="#">Cancelled orders</a>
+                          <a class="dropdown-item complete_orders" href="#">Completed orders</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped" style="width:100%">
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Details</th>
+                    <th>Order</th>
+                  </tr>
+                </thead>
+                <tbody id="orders_made">
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>  
+        
+      </div>
       
 
       <div id="arrow_navigation_order" class="arrow_navigation_cont">
@@ -899,11 +1043,12 @@
     <div id="order_items_container" class="order_items"> 
       
       <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-        <a class="navbar-brand" href="#" id="orderid_outline">
-          <button class="button is-success is-outlined order_view_outline">Order <b id="orderid"></b></button>          
-        </a>   
+        <div class="form-inline gutters-sm">
+          <button class="d-lg-none button is-black mr-3"  data-toggle="collapse" data-target="#navbarNav_items" aria-controls="navbarNav_items" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></button>
+          <button class="button is-success is-outlined order_view_outline ">Order <b id="orderid"></b></button>          
+        </div>
 
-        <div class="collapse navbar-collapse  row justify-content-md-center" id="navbarNav_items">
+        <div class="collapse navbar-collapse row justify-content-md-center mt-3" id="navbarNav_items">
           <form class="form-inline">
             <button type="button" class="btn btn-outline-secondary btn-sm user_orders_items">
               <div class="icon youtube">
@@ -933,13 +1078,63 @@
             </button>
           </form>          
         </div>
-
-        <div class="form-inline topRight">           
-          <button class="d-lg-none button is-black topRightpadding"  data-toggle="collapse" data-target="#navbarNav_items" aria-controls="navbarNav_items" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-ellipsis-v"></i><i class="fa fa-ellipsis-v"></i></button>
+        <div class="form-inline topRight">
           <button id="order_items_back" class="button is-black"><i class="fa fa-arrow-left"></i></button>
         </div>
-        
+       
       </nav>
+
+      <div class="container padding-bottom-3x mb-1" style="display: none;">
+        <div class="card mb-3">
+          <div class="p-4 text-center text-white text-lg bg-dark rounded-top"><span class="text-uppercase">Tracking Order No - </span><span class="text-medium">34VB5540K83</span></div>
+          <div class="d-flex flex-wrap flex-sm-nowrap justify-content-between py-3 px-2 bg-secondary">
+            <div class="w-100 text-center py-1 px-2"><span class="text-medium">Shipped Via:</span> UPS Ground</div>
+            <div class="w-100 text-center py-1 px-2"><span class="text-medium">Status:</span> Checking Quality</div>
+            <div class="w-100 text-center py-1 px-2"><span class="text-medium">Expected Date:</span> SEP 09, 2017</div>
+          </div>
+          <div class="card-body">
+            <div class="steps d-flex flex-wrap flex-sm-nowrap justify-content-between padding-top-2x padding-bottom-1x">
+              <div class="step completed">
+                <div class="step-icon-wrap">
+                  <div class="step-icon"><i class="pe-7s-cart"></i></div>
+                </div>
+                <h4 class="step-title">Confirmed Order</h4>
+              </div>
+              <div class="step completed">
+                <div class="step-icon-wrap">
+                  <div class="step-icon"><i class="pe-7s-config"></i></div>
+                </div>
+                <h4 class="step-title">Processing Order</h4>
+              </div>
+              <div class="step completed">
+                <div class="step-icon-wrap">
+                  <div class="step-icon"><i class="pe-7s-medal"></i></div>
+                </div>
+                <h4 class="step-title">Quality Check</h4>
+              </div>
+              <div class="step">
+                <div class="step-icon-wrap">
+                  <div class="step-icon"><i class="pe-7s-car"></i></div>
+                </div>
+                <h4 class="step-title">Product Dispatched</h4>
+              </div>
+              <div class="step">
+                <div class="step-icon-wrap">
+                  <div class="step-icon"><i class="pe-7s-home"></i></div>
+                </div>
+                <h4 class="step-title">Product Delivered</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex flex-wrap flex-md-nowrap justify-content-center justify-content-sm-between align-items-center">
+          <div class="custom-control custom-checkbox mr-3">
+            <input class="custom-control-input" type="checkbox" id="notify_me" checked="">
+            <label class="custom-control-label" for="notify_me">Notify me when order is delivered</label>
+          </div>
+          <div class="text-left text-sm-right"><a class="btn btn-outline-primary btn-rounded btn-sm" href="orderDetails" data-toggle="modal" data-target="#orderDetails">View Order Details</a></div>
+        </div>
+      </div>
       
 
       <div id="orders_items_made" class="caercontainer container-fluid">
@@ -1015,7 +1210,198 @@
 
 
       <div id="user_row_container" >
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="main-breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
+            <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+          </ol>
+        </nav>
+        <!-- /Breadcrumb -->
+
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex flex-column align-items-center text-center">
+                  <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
+                  <div class="mt-3">
+                    <h4>John Doe</h4>
+                    <p class="text-secondary mb-1">Full Stack Developer</p>
+                    <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
+                  </div>
+                </div>
+                <div class="row align-items-end">
+                  <div class="col">
+                    <button class="btn btn-outline-primary">Message</button>
+                  </div>
+                  <div class="col">
+                    <button class="btn btn-outline-primary">Message</button>
+                  </div>
+                  <div class="col">
+                    <button class="btn btn-outline-primary">Message</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card mt-3">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                  <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe mr-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Website</h6>
+                  <span class="text-secondary">https://bootdey.com</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                  <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github mr-2 icon-inline"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>Github</h6>
+                  <span class="text-secondary">bootdey</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                  <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter mr-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>Twitter</h6>
+                  <span class="text-secondary">@bootdey</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                  <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram mr-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</h6>
+                  <span class="text-secondary">bootdey</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                  <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook mr-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>Facebook</h6>
+                  <span class="text-secondary">bootdey</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="card">
+              <div class="card-body">
+                <div class="row gutters">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <h6 class="mb-3 text-primary">Personal Details</h6>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="fullName">Full Name</label>
+                      <input type="text" class="form-control" id="fullName" placeholder="Enter full name">
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="eMail">Email</label>
+                      <input type="email" class="form-control" id="eMail" placeholder="Enter email ID">
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="phone">Phone</label>
+                      <input type="text" class="form-control" id="phone" placeholder="Enter phone number">
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="website">Website URL</label>
+                      <input type="url" class="form-control" id="website" placeholder="Website url">
+                    </div>
+                  </div>
+                </div>
+                <div class="row gutters">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <h6 class="mb-3 text-primary">Address</h6>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="Street">Street</label>
+                      <input type="name" class="form-control" id="Street" placeholder="Enter Street">
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="ciTy">City</label>
+                      <input type="name" class="form-control" id="ciTy" placeholder="Enter City">
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="sTate">State</label>
+                      <input type="text" class="form-control" id="sTate" placeholder="Enter State">
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="zIp">Zip Code</label>
+                      <input type="text" class="form-control" id="zIp" placeholder="Zip Code">
+                    </div>
+                  </div>
+                </div>
+                <div class="row gutters">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="text-right">
+                      <button type="button" id="submit" name="submit" class="btn btn-secondary">Cancel</button>
+                      <button type="button" id="submit" name="submit" class="btn btn-primary">Update</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row gutters-sm mt-3">
+              <div class="col-sm-6 mb-3">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5 class="d-flex align-items-center mb-3">Project Status</h5>
+                    <p>Web Design</p>
+                    <div class="progress mb-3" style="height: 5px">
+                      <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p>Website Markup</p>
+                    <div class="progress mb-3" style="height: 5px">
+                      <div class="progress-bar bg-danger" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p>One Page</p>
+                    <div class="progress mb-3" style="height: 5px">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p>Mobile Template</p>
+                    <div class="progress mb-3" style="height: 5px">
+                      <div class="progress-bar bg-warning" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p>Backend API</p>
+                    <div class="progress" style="height: 5px">
+                      <div class="progress-bar bg-info" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 mb-3">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5 class="d-flex align-items-center mb-3">Project Status</h5>
+                    <p>Web Design</p>
+                    <div class="progress mb-3" style="height: 5px">
+                      <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p>Website Markup</p>
+                    <div class="progress mb-3" style="height: 5px">
+                      <div class="progress-bar bg-danger" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p>One Page</p>
+                    <div class="progress mb-3" style="height: 5px">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p>Mobile Template</p>
+                    <div class="progress mb-3" style="height: 5px">
+                      <div class="progress-bar bg-warning" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p>Backend API</p>
+                    <div class="progress" style="height: 5px">
+                      <div class="progress-bar bg-info" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>            
+          </div>
+        </div>
         
+        
+       
 
         <div class="col raww">                       
           <div class="card card-profile shadow raww">
@@ -1906,8 +2292,41 @@
 
   </div> 
 
-  
-  
+  <div id="qrcodemodal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card  mx-auto" style="width: auto;">
+      <header class="modal-card-head">
+        <div class="container">
+          <div class="row">
+            <button class="button is-primary is-outlined generate-qr-code mr-3" qr_code_id="1">Generate QR</button>
+            <button class="button is-link is-outlined scan-qr-code" href="#">Scan QR</button>
+          </div>
+        </div>
+        <button id="qr-deletemodal" class="delete" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <div class="card" id="qrcode" style="align-self: center;width: auto"></div>
+        <div class="card" id="qrcodescanner" style="display: none; width: 18rem;" >
+              <!--<div id="qr-reader" style="display: inline-block;"></div>-->
+              <video id="qr-reader" class="card-body" style="max-width: 18rem;max-height: 18rem;" ></video>              
+              <footer class="modal-card-foot">
+                <label class="button is-success is-outlined">
+                  <input type="radio" name="options" value="1" autocomplete="off" checked>1
+                </label>
+                <label class="button is-link is-outlined">
+                  <input type="radio" name="options" value="2" autocomplete="off">2
+                </label>
+                <label class="button is-link is-danger scan-qr-stop">
+                  <span>Stop</span>
+                </label>                
+              </footer>
+              <span id="qr-reader-results" class="is-success"></span>
+              <span id="qr-reader-error" class="is-danger"></span>          
+        </div>        
+      </section>
+    </div>
+  </div>
+  <!---->
   <!-- <script type="text/template7" id="results">
     {{#if @global.ios}}
     <div class="navbar">
@@ -2126,7 +2545,10 @@
   <script src="js/arrow_navigation_container.js"></script>
   <script src="js/menu_container_apps_tab.js"></script>
 
-  
+  <script type="text/javascript" src="qr/src/jquery.qrcode.js"></script>
+  <script type="text/javascript" src="qr/src/qrcode.js"></script>
+  <script type="text/javascript" src="qr/instascan-builds/master/instascan.min.js"></script>
+
   <script src="js/index.js"></script>
   <script src="js/modal.js"></script>
 

@@ -34,6 +34,9 @@
     },
     "cordova-plugin-device": {
       "PACKAGE_NAME": "com.benco.org"
+    },
+    "cordova-plugin-qrscanner": {
+      "PACKAGE_NAME": "com.benco.org"
     }
   },
   "dependent_plugins": {}

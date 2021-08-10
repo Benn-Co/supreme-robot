@@ -22,13 +22,23 @@
 // See https://cordova.apache.org/docs/en/latest/cordova/events/events.html#deviceready
 
 //export { colorCode };
-document.addEventListener('deviceready', onDeviceReady, false);
+if (window.location.hostname == 'oramla.com') {
+    if (location.protocol !== 'https:') {
+        path_protocol = "https:";
+        window.location.href="" + path_protocol + "//oramla.com";
+    }
+    onDeviceReady();
 
-/**onDeviceReady();
-if (location.protocol !== 'https:') {
-    path_protocol = "https:";
-    window.location.href="" + path_protocol + "//oramla.com";
-} */
+} else {
+    document.addEventListener('deviceready', onDeviceReady, false);
+    //var devicePlatform = device.platform;
+    //alert(devicePlatform);
+}
+
+
+
+//me
+/** */
 var username = "";
 var email = "";
 var phone = "";
@@ -55,9 +65,14 @@ var path_name = window.location.pathname;
 var path_href = window.location.href;
 var datab = null;
 var api_server_url = "https://oramla.com";
-var api_server_url = "http://localhost";
+//var api_server_url = "http://localhost";
 
 //var devicePlatform = device.platform;
+var originalDOM='';
+
+var user_currency_price_symbal = '$';
+var user_currency_exchange_rate = 1;
+
 function onDeviceReady() {
     username = localStorage.getItem("username");
     email = localStorage.getItem("email");
@@ -677,7 +692,7 @@ $("body").delegate(".new_order","click",function(event){
     _back = 1;
     main();
 });
-$("#radio-0").click(function(){
+function home(params) {
     window.location.href="#product_container";
     $("#menu_container_left_tab").show(100);
     $("#chat_container").hide(100);
@@ -699,6 +714,9 @@ $("#radio-0").click(function(){
         _apps_tab =0;
     }
     main();
+}
+$("#radio-0").click(function(){
+    home('');
 });
 
 $("#radio-2").click(function(){  
@@ -739,7 +757,9 @@ var geoshop_value = '';
 function geoshop(latitude,longitude,gradius,startlimit,endlimit) {
     $('#top_value_range').html(" latitude : " + latitude + ", longitude : " + longitude + ". Radius : " + gradius + " Km. ");
     geoshop_value = " latitude : " + latitude + ", longitude : " + longitude + ". Radius : " + gradius + " Km. ";
-    $('#app-cover-spin').show(0);
+    if (autoloadproducts == 0) {
+        $('#app-cover-spin').show(0);
+    }
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
@@ -757,8 +777,12 @@ function geoshop(latitude,longitude,gradius,startlimit,endlimit) {
                             $("#product_row_container").show(100);
                             $("#arrow_navigation_container").show(100);
                         }); 
-                        product_row_container_index = products_data.length;                   
-                        $("#product_data_container").html(''); 
+                        product_row_container_index = products_data.length;  
+                        if (autoloadproducts == 0) {
+                            $("#product_data_container").html(''); 
+                        } else {
+                            autoloadproducts = 0;
+                        }      
                         $('#app-cover-spin').hide(0); 
                         search_value = '';
                         cat_id = '';
@@ -817,6 +841,151 @@ $("#radio-3").click(function(){
         _apps_tab =0;
     }
 });
+//useractivity
+$("#useractivity").click(function(){
+    $("#useranalysiscard").hide(100);
+    $("#useractivitycard").show(100);
+    $("#storegheader").html('Activity');
+
+});
+//useranalysis
+$("#useranalysis").click(function(){
+    $("#useractivitycard").hide(100);
+    $("#useranalysiscard").show(100);
+    $("#storegheader").html('Analysis');
+
+});
+//mystoreorders
+//mystoreorderscol
+$("#mystoreorders").click(function(){
+    //$("#mystorecol").hide(100);
+    $("#mystorecol").addClass('d-none');
+    $("#mystorecol").addClass('d-lg-block');
+    $("#mystoreorderscol").show(100);
+    //$("#storegheader").html('Activity');
+
+});
+$("#qrdropdown").click(function(){
+    //$("#mystorecol").hide(100);
+   // $("#qrdropdownmenu").show(100);
+    $("#qrdropdownmenu").addClass('is-active');
+
+    //$("#storegheader").html('Activity');
+
+});
+$("#qrdropdownmenuclose").click(function(){
+    //$("#mystorecol").hide(100);
+   // $("#qrdropdownmenu").show(100);
+    $("#qrdropdownmenu").removeClass('is-active');
+
+    //$("#storegheader").html('Activity');
+
+});
+
+$("body").delegate(".generate-qr-code","click",function(event){
+    event.preventDefault();
+    //$("#qrdropdownmenu").show(10);
+    $("#qrdropdownmenu").addClass('is-active');
+
+    $("#qrcodescanner").hide(10);
+    $("#qrcode").show(10);
+    updateQRCode($(this).attr('qr_code_id'));    
+});
+function updateQRCode(text) {
+    $('#qrcode').html('');
+    $('#qrcode').qrcode({
+        render	: "table",
+        text	: text
+    });
+}
+function stopScanning(decodedText,decodedResult) {
+    const html5QrCode = new Html5Qrcode("qr-reader");
+    html5QrCode.stop().then((ignore) => {
+        // QR Code scanning is stopped.
+    }).catch((err) => {
+        // Stop failed, handle it.
+    });
+}
+function docReady(fn) {
+    // see if DOM is already available
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        // call on next available tick
+        setTimeout(fn, 1);
+    } else {
+        document.addEventListener("DOMContentLoaded", fn);
+    }
+}
+$(".scan-qr-code").click(function(){
+    //$("#qrdropdownmenu").show(10);
+    $("#qrdropdownmenu").addClass('is-active');
+
+    $("#qrcode").hide(10);
+    $("#qrcodescanner").show(10);
+    docReady(function () {
+        var resultContainer = document.getElementById('qr-reader-results');
+        var resulterrorContainer = document.getElementById('qr-reader-error');
+        var lastResult, countResults = 0;
+        function onScanSuccess(decodedText, decodedResult) {
+            if (decodedText !== lastResult) {
+                ++countResults;
+                lastResult = decodedText;
+                resultContainer.innerHTML = 'Scan result ' + decodedText;
+                resulterrorContainer.innerHTML = '';
+                stopScanning(decodedText,decodedResult);            
+            }
+            resulterrorContainer.innerHTML = '';
+        }
+        function onScanFailure(error) {
+            resulterrorContainer.innerHTML = 'Code scan error ' + error;
+        }
+        var html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: 250 });
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        
+        
+        /**const html5QrCode = new Html5Qrcode("qr-reader");
+        // File based scanning
+        const fileinput = document.getElementsByName('input');
+        fileinput.addEventListener('change', e => {
+            if (e.target.files.length == 0) {
+                // No file selected, ignore
+                resulterrorContainer.innerHTML = 'No file selected, ignored';
+                resultContainer.innerHTML = '';
+
+                return;
+            }
+            const imageFile = e.target.files[0];
+            // Scan QR Code
+            html5QrCode.scanFile(imageFile, true)
+            .then(decodedText => {
+                // success, use decodedText
+                resultContainer.innerHTML = 'decodedText ' + decodedText;
+                resulterrorContainer.innerHTML = '';
+
+               // console.log(decodedText);
+            })
+            .catch(err => {
+                // failure, handle it.
+                resulterrorContainer.innerHTML = 'Error scanning file. Reason:  ' + err;
+                resultContainer.innerHTML = '';
+
+                //console.log(`Error scanning file. Reason: ${err}`)
+            });
+        }); */
+
+    });    
+});
+//mystorecol
+//mystore
+$("#mystore").click(function(){
+    $("#mystoreorderscol").hide(100);
+    //$("#mystorecol").show(100);
+    $("#mystorecol").removeClass('d-none');
+    $("#mystorecol").removeClass('d-lg-block');
+
+    //d-none d-lg-block
+    //$("#storegheader").html('Analysis');
+
+});
 
 $("#radio-1").click(function(){
     $("#top_menu").hide(100,function(){       
@@ -863,7 +1032,9 @@ function search_button() {
 }
 var search_value = '';
 function search(search_params,startlimit,endlimit) {
-    $('#app-cover-spin').show(0);
+    if (autoloadproducts == 0) {
+        $('#app-cover-spin').show(0);
+    }
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
@@ -881,7 +1052,11 @@ function search(search_params,startlimit,endlimit) {
                             $("#arrow_navigation_container").show(100);
                         });  
                         product_row_container_index = products_data.length;
-                        $("#product_data_container").html(''); 
+                        if (autoloadproducts == 0) {
+                            $("#product_data_container").html(''); 
+                        } else {
+                            autoloadproducts = 0;
+                        }
                         $('#app-cover-spin').hide(0);
                         geoshop_value = '';
                         cat_id = '';
@@ -947,7 +1122,171 @@ function authentication(username) {
 }
 
 var imgUri = "https://oramla.com/products.html";
+currency_price_symbal = '$';
 
+function auto_reset_val(params) {
+    //document.body.innerHTML = originalDOM;
+
+    //figure = $(".alpha_video").hover( hoverVideo, hideVideo );
+    upload_from_url = 0;
+    upload_from_file = 1;
+    forgot_login_email = "";
+    bot_typing = '';
+    location_main_container = 0;
+    user_co = 0;
+    connects_data_from = "";
+    bum = 0;
+    unread = 0;
+    get_connect_from = "";
+    chat_ = 0;
+    _back = 0;
+    endchat = 1;
+    value_from_connects_name = "";
+    IMAGE_pic_url  = '../img/jeans3.jpg';
+    data_length = 0;
+    chats_length = 0;
+    connects_datalength = 0;
+    connect_messages = 0;
+    connects_datalengthnow = 0;
+    connectstrue = 0;
+    oppname = 0;
+    response_message = 0;
+    response_message_from = 0;
+    contact_from = 0;
+    contact_ofrom = 0;
+    count_time_out = 0;
+    conta = 0;
+    chat_window = 0;
+    connects_id = "";
+    connect_from = "";
+    product_data =  '';
+    product_tax_strategy = 'tax';
+    tax_category = '';// Use this attribute if you have products that have a specific tax rate.
+    tax = ''; // Use this setting only to override the account tax settings for an individual product. We recommend that you submit tax information for all your products using the account settings in Merchant Center. For the Kenya and Tanzania. Don’t include tax in the price attribute. For the Kenya only, include the tax in the tax attribute if you need to override your account settings. For all other countries Include value added tax (VAT) or Goods and Services Tax (GST) in the price attribute and do not use the tax attribute 
+    product_shipping_strategy = 'shipping';
+    min_handling_time = '';// Meet the requirements for the <span class="text-info">max handling time</span> attribute
+    max_handling_time = '';// Submit this attribute if you want to display the overall time it takes for a product to arrive at its destination. Submit the number of business days (as configured in Merchant Center). For products ready to be shipped the <span class="text-primary">same day</span>, submit <span class="text-danger">0</span>. For submitting a time range submit <span class="text-info">max handling time</span> in combination with <span class="text-info">min handling time</span>.
+    transit_time_label = '';// Use a value that you’ll recognize in your account shipping settings. The value won’t be shown to users. Examples: <span class="text-danger">Dog food</span>, <span class="text-danger">From Seattle</span>, <span class="text-danger">Heavy package</span>
+    ships_from_country = '';// Provide only the country from which you typically ship this product
+    shipping_height = '';// Meet the requirements for the <span class="text-info">shipping ​length</span> attribute
+    shipping_width = '';// Meet the requirements for the <span class="text-info">shipping ​length</span> attribute
+    shipping_length = '';// Submit this value if you set up account shipping settings for carrier-calculated rates. If you don’t provide shipping dimension attributes while using carrier-calculated rates, we won’t be able to calculate rates based on the dimensional weight of the item. If that’s the case, we’ll just calculate the rates based on the value you provided in <span class="text-info">shipping ​weight</span>. If you submit this attribute, submit all shipping dimension attributes: <span class="text-info">shipping ​length</span>, <span class="text-info">shipping ​width</span>, <span class="text-info">shipping ​height</span>. Use the same unit for all shipping dimension attributes that apply to a single product. Keep in mind that Oramla doesn’t automatically calculate additional shipping cost for oversized items. If your package would be considered large or oversized by your carrier, you should either use the shipping attribute to set shipping cost for an individual product or use the <span class="text-info">shipping ​label</span> attribute with account shipping settings to set the cost
+    shipping_weight = '';// Submit this value if you set up account shipping settings for carrier-calculated rates or weight-based shipping services
+    shipping_label = '';// Use a value that you’ll recognize in your account shipping settings. The value won’t be shown to users. Examples: <span class="text-danger">Sameday</span>, <span class="text-danger">Oversize</span>, <span class="text-danger">Only FedEx</span>
+    shipping = '';// Shipping costs are required for enhanced free listings for all products in all countries of sale. Use this setting to override the Merchant Center account shipping settings for an individual product or to specify shipping cost, speed, or additional countries your product ships to.
+    product_destinations_strategy = 'excluded_​​destination';
+    shopping_ads_excluded_country = '';// <span class="text-warning">Optional</span>. A setting that allows you to exclude countries where your products are advertised on Shopping ads. Only available for <span class="text-primary">Shopping ads</span>  
+    included_destination = '';// <span class="text-warning">Optional</span>. A setting that you can use to include a product in a specific type of advertising campaign
+    excluded_destination = '';// <span class="text-warning">Optional</span>. A setting that you can use to exclude a product from participating in a specific type of advertising campaign
+    product_condition_strategy = 'condition';
+    product_highlight = '';// Use between 2 and 10 product highlights. Describe only the product itself. Don't list keywords or search terms .Don’t include promotional text, all capital letters, or gimmicky foreign characters
+    product_detail = '';// Don’t add information covered in other attributes, all capital letters, gimmicky foreign characters, promotion text, or list keywords or search terms. Don’t add information such as price, sale price, sale dates, shipping, delivery date, other time-related information, or your company’s name. Only provide an attribute name and value when the value is confirmed. For example, provide <span class="text-primary">“Vegetarian=False”</span> if a food product is not vegetarian, and not just because False is the default value for Boolean attributes.
+    item_group_id = '';// Use a unique value for each group of variants. Use the parent SKU where possible. Keep the value the same when updating your product data. Use only valid unicode characters. Use an item group ID for a set of products that differ by one or more of these attributes: <span class="text-info">color</span>, <span class="text-info">size</span>, <span class="text-info">pattern</span>, <span class="text-info">material</span>, <span class="text-info">age group</span>, <span class="text-info">gender</span>. Include the same attributes for each product in the item group. For example, if a product varies by size and color, submit size and color for every product that share the same value for <span class="text-info">item ​group ​id</span>. If your products differ by design elements that aren’t represented by the attributes above, don’t use <span class="text-info">item ​group ​id</span>
+    size_system = '';// If you don’t submit the attribute, the default is your country of sale
+    size = '';// For variants: Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">size</span>. If sizes contain multiple dimensions, condense them into 1 value. For example, <span class="text-danger">"16/34 Tall"</span> for neck size <span class="text-danger">16 inches</span>, sleeve length <span class="text-danger">34 inches</span>, and <span class="text-danger">“Tall” fit</span>. If your item is one size fits all or one size fits most, you can use <span class="text-danger">one size</span>, <span class="text-danger">OS</span>, <span class="text-danger">one size fits all</span>, <span class="text-danger">OSFA</span>, <span class="text-danger">one size fits most</span>, or <span class="text-danger">OSFM</span>. For merchant-defined multipack products, submit the <span class="text-info">multipack</span> quantity using the <span class="text-info">multipack</span> attribute. Do not submit the multipack quantity under size.
+    pattern = '';// For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for pattern
+    material = '';// To indicate multiple materials for a single product (not variants), add a primary material, followed by up to 2 secondary materials, separated by a <span class="text-danger">/</span>. For example, instead of CottonPolyesterElastane, use <span class="text-danger">cotton/polyester/elastane</span>. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">material</span>
+    gender = '';// For some Apparel & Accessories (166) categories like Shoelaces (1856), this attribute is recommended instead of required since these categories aren’t dependent on gender. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">gender</span>
+    color = '';// Don’t use a number such as 0 2 4 6 8. Don’t use characters that aren’t alphanumeric such as #fff000. Don’t use only 1 letter such as R (For Chinese, Japanese, or Korean languages, you can include a single character such as 红). Don’t reference the product or image such as “see image”. Don’t combine several color names into 1 word, such as RedPinkBlue. Instead, separate them with a <span class="text-danger">/</span>, such as <span class="text-danger">Red/Pink/Blue</span>. Don’t use a value that isn’t a color, such as multicolor, various, variety, men’s, women’s, or N/A. If your product features multiple colors, list the primary color first. For variants. Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">color</span>
+    age_group = '';// Include one value per product. For variants Include with the same value for <span class="text-info">item ​group ​id</span> and different values for <span class="text-info">age ​group</span>
+    max_energy_efficiency_class = '';// Include the legally required energy label. To be used in combination with <span class="text-info">energy ​​efficiency ​​class</span> and <span class="text-info">min energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">D</span>).
+    min_energy_efficiency_class = '';// Include the legally required energy label. To be used in combination with <span class="text-info">energy ​​efficiency class</span> and <span class="text-info">max energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">D</span>).
+    energy_efficiency_class = '';// Include the legally required energy label. To be used in combination with <span class="text-info">min energy ​​efficiency ​​class</span> and <span class="text-info">max energy efficiency class</span> to create an energy efficiency label, for example, <span class="text-danger">A+</span> (<span class="text-danger">A+++</span> to <span class="text-danger">G</span>).
+    is_bundle = '';// Submit <span class="text-danger">yes</span> if you’re selling a custom bundle of different products that you created, and the bundle includes a main product. For example, a camera combined with a lens and bag. If you don’t submit the attribute, the default is <span class="text-danger">no</span>. Don’t use this attribute for bundles without a clear main product. For example, a gift basket containing cheese and crackers
+    multipack = '';// Submit this attribute if you defined a custom group of identical products and are selling them as a single unit of sale. For example, you’re selling 6 bars of soap together. Submit the number of products in your multipack. If you don’t submit the attribute, the default is <span class="text-danger">0</span>. If the product’s manufacturer assembled the multipack instead of you, don’t submit this attribute
+    adult = '';// Submit <span class="text-danger">yes</span> if this individual product contains nudity or sexually suggestive content. If you don’t submit the attribute, the default is <span class="text-danger">no</span>.
+    condition = '';// The condition of your product at time of sale
+    product_brand_strategy = 'brand';
+    identifier_exists = '';// If you don’t submit the attribute, the default is <span class="text-danger">yes</span>. Your product’s category type determines which UPIs (GTIN, MPN, brand) are required. If your product is a media item and the GTIN is unavailable: Submit <span class="text-info">identifier exists</span> attribute with a value of <span class="text-danger">no</span>. Note: ISBN and SBN codes are accepted as GTINs. If your product is an apparel (clothing) item and the brand is unavailable: Submit <span class="text-info">identifier ​exists</span> attribute with a value of <span class="text-danger">no</span>. In all other categories, if your product doesn’t have a GTIN, or a combination of MPN and brand: Submit <span class="text-info">identifier exists</span> attribute with a value of <span class="text-danger">no</span>
+    MPN = '';// Only submit MPNs assigned by a manufacturer. Use the most specific MPN possible. For example, different colors of a product should have different MPNs.              
+    gtin = '';// Exclude dashes and spaces. Submit only valid GTINs as defined in the official GS1 validation guide, which includes these requirements: The checksum digit is present and correct. The GTIN is not restricted (GS1 prefix ranges 02, 04, 2). The GTIN is not a coupon (GS1 prefix ranges 98 - 99). For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product. Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product. For <span class="text-info">multipacks</span>: Use the product identifiers that relates to the multipack. For <span class="text-info">bundles</span>: Use the product identifiers for the main product in the bundle. If you offer customization, engraving, or other personalization of a product that's been assigned a GTIN by the manufacturer: Submit the GTIN and use the <span class="text-info">is ​bundle</span> attribute to let us know that the product includes customization
+    brand = '';// Provide the brand name of the product generally recognized by consumers. Only provide your store name as the brand in case you manufacture the product, or your product falls into a generic brand category. For example, you could submit your store name as the brand if you sell white label products or customized jewelry. If the product doesn’t have a brand, submit the manufacturer or supplier name under the brand attribute. Don't submit values such as N/A, Generic, No brand, or Does not exist. For compatible products: Submit the GTIN and brand from the manufacturer who actually built the compatible product. Don't provide the Original Equipment Manufacturer (OEM) brand to indicate that your product is compatible with or a replica of the OEM brand's product
+    product_availability_strategy = 'availability';
+     loyalty_points = '';// Only submit loyalty points with a specific monetary value
+    subscription_cost = '';// Submit the price attribute with the total amount due at checkout (including down payment and activation fee). Match the communications payment plan that you display on your landing page. The plan must be easy to find on the landing page.
+    installment = '';// Match the installment option that’s visible on your landing page. Don’t require a loyalty card. For Latin America, make sure the price attribute is the total price when paid in full up-front and use the installment attribute to indicate an alternative payment option using installments. For other countries, use the price attribute (as low as 0) as the up-front payment (including any device down payment and activation fees), and the installment attribute for additional monthly installment payments.
+    unit_price_base_measure = '';// <span class="text-warning">Optional</span> when you submit <span class="text-info">unit ​​pricing ​​measure</span>. Use the same unit of measure for both <span class="text-info">unit ​​pricing ​​measure</span> and <span class="text-info">unit pricing ​base ​measure</span>. Keep in mind that the <span class="text-info">price</span> (or sale price, if active) is used to calculate the unit price of the product. For example, if price is 3 USD, <span class="text-info">unit ​​pricing ​​measure</span> is <span class="text-danger">150ml</span>, and <span class="text-info">unit ​pricing ​base ​measure</span> is <span class="text-danger">100ml</span>, the unit price is 2 USD / 100ml
+    unit_pricing_measure = '';// Use the measure or dimension of the product without packaging. Use a positive number. For variants. Include with the same value for <span class="text-info">item group id </span> and different values for <span class="text-info">unit pricing measure</span>
+    sale_price_effective_date = '';// Use together with  <span class="text-info">sale ​price </span>. If you don't submit <span class="text-info">sale ​price ​effective ​date </span>, the <span class="text-info">sale ​price </span> always applies. Use a start date before the end date
+    expiration_date = '';// Use a date less than 30 days in the future
+    cost_of_goods_sold = '';// The costs associated with the sale of a particular product as defined by the accounting convention you set up. These costs may include <span class="text-danger">material </span>, <span class="text-danger">labor </span>, <span class="text-danger">freight </span>, or other <span class="text-danger">overhead </span> expenses.
+    availability_date = '';// Use this attribute if your product’s availability is <span class="text-danger">preorder </span> or <span class="text-danger">backorder </span>
+    availability = '';// availability_strategy_help => Accurately submit the product's availability and match the availability from your landing page
+    product_title = '';
+    product_industry = '';
+    product_category = '';
+    product_quantity = 0;
+    shipping_strategies = '';
+    shipping_rates = '';
+    product_description = '';
+    net_price = 0;
+    percent_pricing_strategy = 'markup_pricing';
+    product_price = 0;
+
+    selling_price = 7;
+    buying_price = 5;//100%
+
+    percent_price = selling_price/buying_price;
+    pricing_strategy = '';
+    product_type = '';
+    product_list_price = 0;
+    sale_price = 0;
+    action_float_id = 0;
+    contact_information_save = 0;
+    add_products_agent = 0;
+    IMAGE_urlcond = '';
+    product_row_container_index = 0;
+    update_cat_id = '';
+    cat_id = "";
+    brand_id = "";
+    category_clicked = "";
+    other_similar_6 = 6;
+    other_similar_12 = other_similar_6 + 6;
+    other_similar_18 = other_similar_12  + 6;
+    div_cima = 0;
+    add_cdiv_cima = 0;
+    add_client_cima = '';
+     _shipping = '0';
+     _pay = '0';
+    checkout_contact_information_save = 0;
+    total_pay = 0;
+    total_total = 0;
+    total_tax = 0;
+    total_shipping = 0;
+    currency_price_symbal = user_currency_price_symbal;
+    _tax = 16;
+    _delivery = 0.5;
+    more_products_status = "0";
+    add_products_edit_product_save = 0;
+    data_len = 0;
+    order_id_status = 0;
+    order_view_outline = '';
+    qt_value = 0;
+    connect_product = 0;
+    edit_product_id = '';
+    add_products_edit_product = 0;
+    startlimit = 0;
+    endlimit = 24;
+    IMAGE_url_name = 'oramla.com';
+    IMAGE_url_path_name = 'https://'  + IMAGE_url_name + '/product_images/';
+    currency_price = '<i class="fas fa-dollar"> USD</i>';
+    //currency_price_symbal = '<i class="fas fa-dollar"></i>';
+    currency_exchange_rate = user_currency_exchange_rate;
+    api = "product_main_container";
+    conectset = 0;
+    messageauto = 0;
+    imgUri = "https://oramla.com/products.html";
+    search_value = '';
+    _apps_tab = 0;
+    geoshop_value = '';
+    inputRange = document.getElementsByClassName('range')[0];
+    top_value_range = document.getElementsByClassName('top_val_range')[0];
+    gradius = 50;
+    rating_stars = 1;
+    user_role = role;
+
+
+}
 function main() {
     //alert('main');
     $("#app-coverin").hide(100);
@@ -990,6 +1329,7 @@ function main() {
     if (_back == 1) {
         _back = 0;
     } else {
+        auto_reset_val('params');
         startlimit = 0;
         endlimit = 24;
         search_value = '';
@@ -1328,6 +1668,24 @@ function order_id(startlimit,endlimit,status,username,order_id) {
                                     $('#app-cover-spin').hide(0);
                                 }
                             }
+                            data_len = products_data.length;
+                            if (role == 'customer') {
+                                $("#mystorecol").removeClass('d-none');
+                                $("#mystorecol").removeClass('d-lg-block');
+                                $("#mystorecol").hide(100);
+                                $("#moreaction").hide(100);
+
+                                $("#mystoreorderscol").removeClass('col-xl-8');
+                                $("#mystoreorderscol").addClass('col');
+                            } else {
+                                $("#mystoreorderscol").removeClass('col');
+                                $("#mystoreorderscol").addClass('col-xl-8');
+                                $("#mystorecol").addClass('d-none');
+                                $("#mystorecol").addClass('d-lg-block');
+                                $("#mystorecol").show(100);
+                                $("#moreaction").show(100);
+
+                            }
                             products_data.forEach(order_datamyFunction);
                         } 
                         order_id_status = 1;
@@ -1375,7 +1733,7 @@ function product_id(startlimit,endlimit,action,username,product_id) {
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
-        data: { product_id_action: action, startlimit: startlimit, endlimit: endlimit, username: username, product_id: product_id, qt_value: qt_value },
+        data: { product_id_action: action,api_server_url: api_server_url, startlimit: startlimit, endlimit: endlimit, username: username, product_id: product_id, qt_value: qt_value },
         processData: true,
         url: api_server_url + '/cordova/product_id.php',
         success: function searchSuccess(response) {
@@ -1590,7 +1948,8 @@ function cart_datamyFunction(item, index) {
     var actions = '<div class="float-left icon_padding_div icon_cartdelete tags are-medium">' +
     '<span class="tag is-danger icon_remove_cart" product_id = "' + item.product_id + '">Remove</span>' +
     '</div>';
-    product_row_container = '<div class="cart_productitem columns is-multiline is-mobile block"> ' + 
+
+    var product_row_container = '<div class="cart_productitem columns is-multiline is-mobile block"> ' + 
     
     '<div class="column image card"  style="background-image:url(' + IMAGE_url + ');" >' +
     
@@ -1632,6 +1991,49 @@ function cart_datamyFunction(item, index) {
     '</div>' +
     '</div>';
 
+    var product_row_containervideo = '<div class="cart_productitem columns is-multiline is-mobile block alpha_video"> ' + 
+    
+    '<video class="column image card" src="' + IMAGE_url + '" loop="1" preload="auto" muted="" width="100%" height="100%">' +
+    
+    '</video>' +           
+
+    '<div class="column is-6 bg-light card">' +
+    '<span class="text-dark">' + product_title_account + '</span>' +
+    
+    '<div class="row">' +
+
+    '<div class="price ">' +
+    '' +  currency_price_symbal + '' +  product_price + '' +
+    '</div>' +
+
+    '<div class="quantynumber buttons">' + 
+    '<span class="qt-minus button is-light" product_id = "' + item.product_id + '">-</span>' +
+    '<span class="qt button is-link" quantit="' + item.quantity + '">' +
+    '<input class="qt qtinput " product_id = "' + item.product_id + '" type="number" name="' + item.product_id + 'qt_cart" id="' + item.product_id + 'qt_cart" value="' + item.quantity + '">' +
+    '</span>' +
+    '<span class="qt-plus button is-dar" product_id = "' + item.product_id + '">+</span>' +
+    '</div>' +
+
+    '</div>' +
+
+    '<div class="row buttons">' +
+
+    '<div class="float-left icon_padding_div icon_cartdelete button is-danger">' +
+    '<span class="tag is-danger icon_remove_cart" product_id = "' + item.product_id + '"><i class="fa fa-trash"></i></span>' +
+    '</div>' +
+    
+    '<div class="full-price button is-info float-right">' +
+    '' +  currency_price_symbal + '' +  total_ + '' +
+    '</div>' +
+
+    '</div>' +
+
+
+
+    '</div>' +
+    '</div>';
+
+
     
 
     total_tax = Number(total_pay)*0.01*Number(_tax);
@@ -1642,7 +2044,13 @@ function cart_datamyFunction(item, index) {
     var all_total = Number(total_pay) + Number(total_tax) + Number(total_shipping);
     total_total = all_total;
     total_total = total_total.toFixed(2);
-    $("#cart_row_container").append(product_row_container);
+
+    if (IMAGE_url.endsWith(".mp4")) {
+        $("#cart_row_container").append(product_row_containervideo);
+    } else {
+        $("#cart_row_container").append(product_row_container);
+    }
+
 
     total_tax = total_tax.toFixed(2);
     total_shipping = total_shipping.toFixed(2);
@@ -1711,7 +2119,7 @@ function order_items_datamyFunction(item, index) {
         var oreder = '<span type="button" product_id="' + item.product_id + '" status="' + item.status_items + '" class="btn btn-danger order_items_view">' + item.product_id + '</span>';
     }
     
-    product_row_container = '<div class="cart_productitem columns is-multiline is-mobile block"> ' + 
+    var product_row_container = '<div class="cart_productitem columns is-multiline is-mobile block"> ' + 
     '<div class="column image card"  style="background-image:url(' + IMAGE_url + ');" >' +
     //'<img src="' + IMAGE_url + '" alt="' + item.product_img + '">' +
     '</div>' +           
@@ -1734,7 +2142,35 @@ function order_items_datamyFunction(item, index) {
     '</div>' +
     '</div>';
 
-    $("#orders_items_made").append(product_row_container);
+    var product_row_containervideo = '<div class="cart_productitem columns is-multiline is-mobile block alpha_video"> ' + 
+    '<video class="column image card" src="' + IMAGE_url + '" loop="1" preload="auto" muted="" width="100%" height="100%">' +
+    //'<img src="' + IMAGE_url + '" alt="' + item.product_img + '">' +
+    '</video>' +           
+    '<div class="column is-6 bg-light card">' +
+    '<span class="badge badge-info">' + item.product_quantity + '</span> '+
+    '<b>' + product_title_account + '</b>, From ' + add_client + '<br>Status ' + status + '' +
+    
+    '<div class="row">' +
+
+    '<div class="price">' +
+    '' +  currency_price_symbal + '' +  product_price + '' +
+    '</div>' +
+    '<div class="full-price">' +
+    '' +  currency_price_symbal + '' +  total_ + '' +
+    '</div>' +  
+    '</div>' +  
+
+    '<b class="btn-group btn-group-sm">' + oreder + '</b>' + 
+
+    '</div>' +
+    '</div>';
+
+    //alert(IMAGE_url.endsWith(".mp4"))
+    if (IMAGE_url.endsWith(".mp4")) {
+        $("#orders_items_made").append(product_row_containervideo);
+    } else {
+        $("#orders_items_made").append(product_row_container);
+    }
 
 
     if (data_i == index) { 
@@ -1767,7 +2203,10 @@ function order_datamyFunction(item, index) {
 
     if (item.status == "active") {
         var status = '<span class="status text-success">&bull;</span> Active';
-        var oreder = '<a order_id="' + item.order_id + '" status="' + item.status + '" class="view order_view" title="View Details" data-toggle="tooltip">' + item.order_id + '</a>';
+        var oreder = '<a order_id="' + item.order_id + '" status="' + item.status + '" class="view order_view" title="View Details" data-toggle="tooltip">' + item.order_id + '</a>' + 
+        '<br>' + 
+        '<br>' +  
+        '<i class="fa fa-qrcode generate-qr-code" aria-hidden="true" qr_code_id="' + item.order_id + '"></i>';
 
     } else if (item.status == "pending") {
         var status = '<span class="status text-warning">&bull;</span> Pending';
@@ -1787,22 +2226,135 @@ function order_datamyFunction(item, index) {
         var oreder = '<a order_id="' + item.order_id + '" status="' + item.status + '" class="viewcancel order_view" title="View Details" data-toggle="tooltip">' + item.order_id + '</a>';
     }
 
-    var orders_made = '<tr order_id="' + item.order_id + '" status="' + item.status + '" class="order_view">' + 
-    '<td><a href="#"><img src="img/49806f3f1c7483093855ebca1b8ae2c4.jpg" class="avatar" alt="Avatar"> ' + item.username + '</a></td>' + 
-    '<td>' +  currency_price_symbal + '' + total_amount + '<br>' + status + '<br>' + item.timestamp + '<br> address : ' + address + '<br> postal : ' + postal + '<br> city : ' + city + '<br> country : ' + country + '</td>' +                         
+    var img_src = item.messages;
+
+    var orders_made = '<tr>' + 
+    '<td order_id="' + item.order_id + '" status="' + item.status + '" class="order_view"><a href="#"><img src="' + img_src + '" class="avatar" alt="Avatar"> ' + item.username + '</a></td>' + 
+    '<td order_id="' + item.order_id + '" status="' + item.status + '" class="order_view">' +  currency_price_symbal + '' + total_amount + '<br>' + status + '<br>' + item.timestamp + '<br> address : ' + address + '<br> postal : ' + postal + '<br> city : ' + city + '<br> country : ' + country + '</td>' +                         
     '<td>' +  oreder + 
     '</td>' + 
     '</tr>';
     $("#orders_made").append(orders_made);
 
-    if (data_i == index) {        
+    //alert('data_i ' + data_len + ' data_len ' + data_len + ' index ' + index);
+    if (data_i == index) { 
+        /**var ctxB = document.getElementById("barChart").getContext('2d');
+        var myBarChart = new Chart(ctxB, {
+            type: 'bar',
+            data: {
+                labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [25, 20, 30, 22, 17, 29],
+                    backgroundColor: [
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff'
+                    ],
+                    borderColor: [
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff',
+                        '#42aaff'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: !0,
+                maintainAspectRatio: !1,
+                defaultColor: '#eee',
+                defaultFontColor: '#eee',
+                layout: {
+                  padding: 0
+                },
+                legend: {
+                  display: !1,
+                  position: "bottom",
+                  labels: {
+                    usePointStyle: !0,
+                    padding: 16
+                  }
+                },
+                elements: {
+                  point: {
+                    radius: 0,
+                    backgroundColor: '#eee'
+                  },
+                  line: {
+                    tension: .4,
+                    borderWidth: 4,
+                    borderColor: '#eee',
+                    backgroundColor: '#eee',
+                    borderCapStyle: "rounded"
+                  },
+                  rectangle: {
+                    backgroundColor: '#eee',
+                  },
+                  arc: {
+                    backgroundColor: '#eee',
+                    borderColor: '#eee',
+                    borderWidth: 4
+                  }
+                },
+                tooltips: {
+                  enabled: !0,
+                  mode: "index",
+                  intersect: !1
+                },
+                scales: {
+                  xAxes: [{
+                    maxBarThickness: 30,
+                    gridLines: {
+                      display: false,
+                      drawBorder: false
+                    },
+                    ticks: {
+                      fontColor: 'rgba(0,0,0, .3)'
+                    }
+                  }],
+                  yAxes: [{
+                    gridLines: {
+                      borderDash: [2],
+                      borderDashOffset: [2],
+                      color: '#ccc',
+                      drawBorder: !1,
+                      drawTicks: !1,
+                      drawOnChartArea: !0,
+                      zeroLineWidth: 0,
+                      zeroLineColor: "rgba(0,0,0,0)",
+                      zeroLineBorderDash: [2],
+                      zeroLineBorderDashOffset: [2]
+                    },
+                    ticks: {
+                      fontColor: 'rgba(0,0,0, .3)',
+                      beginAtZero: true,
+                      padding: 10
+                    }
+                  }]
+                }
+            }
+        }); */
+
         $("#orders_container").show(10,function(){
             $("#cart_container").hide(10); 
             //$('#app-cover-spin').hide(0);
             $("#order_items_container").hide(10);
             //alert(data_i + " " + index);
-            $('#app-cover-spin').hide(0);           
-        });  
+            $('#app-cover-spin').hide(0); 
+            //bar
+            
+            //alert();
+            //$("#barChart").html(myBarChart);
+
+
+        }); 
+
         if (data_i < 12) {
             $("#order_next").hide(10); 
             $('#order_previous').hide(10);
@@ -1896,6 +2448,23 @@ function checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_
                         $("#orders_made").html('');
                         window.location.href="#order_container";
                         data_len = products_data.length;
+                        if (role == 'customer') {
+                            $("#mystorecol").removeClass('d-none');
+                            $("#mystorecol").removeClass('d-lg-block');
+                            $("#mystorecol").hide(100);
+                            $("#moreaction").hide(100);
+
+                            $("#mystoreorderscol").removeClass('col-xl-8');
+                            $("#mystoreorderscol").addClass('col');
+                        } else {
+                            $("#mystoreorderscol").removeClass('col');
+                            $("#mystoreorderscol").addClass('col-xl-8');
+                            $("#mystorecol").addClass('d-none');
+                            $("#mystorecol").addClass('d-lg-block');
+                            $("#mystorecol").show(100);
+                            $("#moreaction").show(100);
+
+                        }
                         products_data.forEach(order_datamyFunction);
                         order_id_status = 1;
                         user_container(username,email);
@@ -2392,19 +2961,39 @@ var add_cdiv_cima = 0;
 var add_client_cima = '';
 
 function div_cimage(product_price,product_title,add_description,add_client,product_id,add_rating,product_img,add_date,latitude,longitude,add_location,add_review) {
+    $("#other_title").html(''); 
+
     if (product_img.includes("http", 0)) {
         var IMAGE_url = product_img + '';
     } else {
         var IMAGE_url = IMAGE_url_path_name + product_img + '';
     }
-    var add_imageadd_ = document.getElementById('add_imageadd_');
-    add_imageadd_.src = IMAGE_url;
 
-    //add_imageadd_.style = 'background-image:url(' + IMAGE_url + ')';
-    //style="background-image:url(' + IMAGE_url + ');" 
+    if (IMAGE_url.endsWith(".mp4")) {
+        $('#add_imageadd_').hide(0);
+        $('#otheaddlimg').hide(0);
+        $('#add_videoadd_').show(0);
+        $('#otheaddlvideo').show(0);
 
-    var otheaddlimg = document.getElementById('otheaddlimg');
-    otheaddlimg.src = IMAGE_url;
+        var add_imageadd_ = document.getElementById('add_videoadd_');
+        add_imageadd_.src = IMAGE_url;
+
+        var otheaddlimg = document.getElementById('otheaddlvideo');
+        otheaddlimg.src = IMAGE_url;
+    } else {
+        $('#add_videoadd_').hide(0);
+        $('#otheaddlvideo').hide(0);
+        $('#add_imageadd_').show(0);
+        $('#otheaddlimg').show(0);        
+
+        var add_imageadd_ = document.getElementById('add_imageadd_');
+        add_imageadd_.src = IMAGE_url;
+        
+        var otheaddlimg = document.getElementById('otheaddlimg');
+        otheaddlimg.src = IMAGE_url;
+    }
+    
+
     window.location.href="#";
     $("#product_row_container").hide(100,function(){       
         $("#product_add_client_container").show(100);
@@ -2471,8 +3060,32 @@ function div_cimage(product_price,product_title,add_description,add_client,produ
 }
 $("body").delegate(".div_otherimage","click",function(event){
     event.preventDefault();
-    var add_imageadd_ = document.getElementById('add_imageadd_');
-    add_imageadd_.src = $(this).attr('src');
+    var IMAGE_url = $(this).attr('src');
+    if (IMAGE_url.endsWith(".mp4")) {
+        $('#add_imageadd_').hide(0);
+        $('#otheaddlimg').hide(0);
+        $('#add_videoadd_').show(0);
+        $('#otheaddlvideo').show(0);
+
+        var add_imageadd_ = document.getElementById('add_videoadd_');
+        add_imageadd_.src = IMAGE_url;
+
+        var otheaddlimg = document.getElementById('otheaddlvideo');
+        otheaddlimg.src = IMAGE_url;
+    } else {
+        $('#add_videoadd_').hide(0);
+        $('#otheaddlvideo').hide(0);
+        $('#add_imageadd_').show(0);
+        $('#otheaddlimg').show(0);        
+
+        var add_imageadd_ = document.getElementById('add_imageadd_');
+        add_imageadd_.src = IMAGE_url;
+        
+        var otheaddlimg = document.getElementById('otheaddlimg');
+        otheaddlimg.src = IMAGE_url;
+    }
+    //var add_imageadd_ = document.getElementById('add_imageadd_');
+    //add_imageadd_.src = $(this).attr('src');
       
 });
 function other_product_same(product_id) {
@@ -2523,11 +3136,22 @@ function other_product_samemyFunction(item, index) {
     var other_title = '<div class="col add_clidduct_column">' +
     '<img src="' + IMAGE_url + '" alt="' + item.product_img + '" class="rounded div_otherimage" width="100%" height="100%">' +
     '</div>';
-    var url_image = new Image();
-    url_image.onload = function() {
-        $("#other_title").append(other_title);
+
+    var other_titlevideo = '<div class="col add_clidduct_column alpha_video">' +
+    '<video class="rounded div_otherimage" src="' + IMAGE_url + '" loop="1" preload="auto" muted="" width="100%" height="100%"></video>' + 
+    '</div>';
+
+    if (IMAGE_url.endsWith(".mp4")) {
+        $("#other_title").append(other_titlevideo);
+
+    } else {
+        var url_image = new Image();
+        url_image.onload = function() {
+            $("#other_title").append(other_title);
+        }
+        url_image.src = IMAGE_url;
     }
-    url_image.src = IMAGE_url;
+    
 }
 function other_product_same_client(startlimit,endlimit,add_client) {
     //$('#app-cover-spin').show(0);
@@ -2820,13 +3444,89 @@ function other_product_same_clientmyFunction(item, index) {
         '</div> ' +
                  
         '</div>';
-        var url_image = new Image();
-        url_image.onload = function() {
-            $("#add_carousel_other").append(add_carousel_other); 
-            //alert(IMAGE_url);
-   
+
+        var add_carousel_othervideo  = '<div class="carousel-item active alpha_video">' + 
+
+        '<video class="d-block w-100 div_cimage" src="' + IMAGE_url + '" loop="1" preload="auto" muted="" width="100%" height="100%" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item_add_location + 
+        
+
+        '" timestamp="' + timestamp + 
+
+        '" add_description="' + item_add_description +
+    
+        '" tax="' + tax + 
+        '" tax_category="' + tax_category + 
+    
+        '" shipping="' + shipping + 
+        '" shipping_rates="' + shipping_rates + 
+        '" shipping_strategies="' + shipping_strategies + 
+        '" shipping_label="' + shipping_label + 
+        '" shipping_weight="' + shipping_weight + 
+        '" shipping_length="' + shipping_length + 
+        '" shipping_width="' + shipping_width + 
+        '" shipping_height="' + shipping_height + 
+        '" ships_from_country="' + ships_from_country + 
+        '" transit_time_label="' + transit_time_label + 
+        '" max_handling_time="' + max_handling_time + 
+        '" min_handling_time="' + min_handling_time + 
+    
+        '" condition="' + condition + 
+        '" adult="' + adult + 
+        '" multipack="' + multipack + 
+        '" is_bundle="' + is_bundle + 
+        '" energy_efficiency_class="' + energy_efficiency_class + 
+        '" min_energy_efficiency_class="' + min_energy_efficiency_class + 
+        '" max_energy_efficiency_class="' + max_energy_efficiency_class + 
+        '" age_group="' + age_group + 
+        '" color="' + color + 
+        '" gender="' + gender + 
+        '" material="' + material + 
+        '" pattern="' + pattern + 
+        '" size="' + size + 
+        '" size_system="' + size_system + 
+        '" item_group_id="' + item_group_id + 
+        '" product_detail="' + product_detail + 
+        '" product_highlight="' + product_highlight + 
+    
+        '" brand="' + brand + 
+        '" gtin="' + gtin + 
+        '" MPN="' + MPN + 
+        '" identifier_exists="' + identifier_exists + 
+    
+        '" availability="' + availability + 
+        '" availability_date="' + availability_date + 
+        '" expiration_date="' + expiration_date + 
+        '" sale_price_effective_date="' + sale_price_effective_date + 
+        '" unit_pricing_measure="' + unit_pricing_measure + 
+        '" unit_price_base_measure="' + unit_price_base_measure + 
+        '" installment="' + installment + 
+        '" subscription_cost="' + subscription_cost + 
+        '" loyalty_points="' + loyalty_points +
+        
+        '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" ></video>' +
+                
+        '<div class="carousel-caption d-md-block card-title add_divtext add_oer">' + actions +
+        '</div> ' +
+
+        '<div class="card-body">' +
+        '<h5>' + item.product_title + '</h5>' +  
+        '</div> ' +
+                 
+        '</div>';
+
+        if (IMAGE_url.endsWith(".mp4")) {
+            $("#add_carousel_other").append(add_carousel_othervideo); 
+
+        } else {
+            var url_image = new Image();
+            url_image.onload = function() {
+                $("#add_carousel_other").append(add_carousel_other); 
+                //alert(IMAGE_url);
+       
+            }
+            url_image.src = IMAGE_url;
         }
-        url_image.src = IMAGE_url;
+        
     } else {
         var add_carousel_indicators = '<li data-target="#carouselExampleIndicators" data-slide-to="' + index + '" class=""></li>';
         $("#add_carousel_indicators").append(add_carousel_indicators);
@@ -2925,13 +3625,89 @@ function other_product_same_clientmyFunction(item, index) {
         '</div> ' +
 
         '</div>';
-        var url_image = new Image();
-        url_image.onload = function() {
-            //alert(IMAGE_url);
 
-            $("#add_carousel_other").append(add_carousel_other);
+        var add_carousel_othervideo  = '<div class="carousel-item alpha_video">' +
+        '<video class="d-block w-100 div_cimage" src="' + IMAGE_url + '" loop="1" preload="auto" muted="" width="100%" height="100%" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item_add_location + 
+        
+        '" timestamp="' + timestamp + 
+
+        '" add_description="' + item_add_description +
+    
+        '" tax="' + tax + 
+        '" tax_category="' + tax_category + 
+    
+        '" shipping="' + shipping + 
+        '" shipping_rates="' + shipping_rates + 
+        '" shipping_strategies="' + shipping_strategies + 
+        '" shipping_label="' + shipping_label + 
+        '" shipping_weight="' + shipping_weight + 
+        '" shipping_length="' + shipping_length + 
+        '" shipping_width="' + shipping_width + 
+        '" shipping_height="' + shipping_height + 
+        '" ships_from_country="' + ships_from_country + 
+        '" transit_time_label="' + transit_time_label + 
+        '" max_handling_time="' + max_handling_time + 
+        '" min_handling_time="' + min_handling_time + 
+    
+        '" condition="' + condition + 
+        '" adult="' + adult + 
+        '" multipack="' + multipack + 
+        '" is_bundle="' + is_bundle + 
+        '" energy_efficiency_class="' + energy_efficiency_class + 
+        '" min_energy_efficiency_class="' + min_energy_efficiency_class + 
+        '" max_energy_efficiency_class="' + max_energy_efficiency_class + 
+        '" age_group="' + age_group + 
+        '" color="' + color + 
+        '" gender="' + gender + 
+        '" material="' + material + 
+        '" pattern="' + pattern + 
+        '" size="' + size + 
+        '" size_system="' + size_system + 
+        '" item_group_id="' + item_group_id + 
+        '" product_detail="' + product_detail + 
+        '" product_highlight="' + product_highlight + 
+    
+        '" brand="' + brand + 
+        '" gtin="' + gtin + 
+        '" MPN="' + MPN + 
+        '" identifier_exists="' + identifier_exists + 
+    
+        '" availability="' + availability + 
+        '" availability_date="' + availability_date + 
+        '" expiration_date="' + expiration_date + 
+        '" sale_price_effective_date="' + sale_price_effective_date + 
+        '" unit_pricing_measure="' + unit_pricing_measure + 
+        '" unit_price_base_measure="' + unit_price_base_measure + 
+        '" installment="' + installment + 
+        '" subscription_cost="' + subscription_cost + 
+        '" loyalty_points="' + loyalty_points +
+        
+        '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" ></video>' +
+
+        '<div class="carousel-caption d-md-block card-title add_divtext add_oer">' + actions +
+        
+        '</div> ' + 
+        
+        '<div class="card-body">' +
+        '<h5>' + item.product_title + '</h5>' +  
+        '</div> ' +
+
+        '</div>';
+
+
+        if (IMAGE_url.endsWith(".mp4")) {
+            $("#add_carousel_other").append(add_carousel_othervideo);
+
+        } else {
+            var url_image = new Image();
+            url_image.onload = function() {
+                //alert(IMAGE_url);
+    
+                $("#add_carousel_other").append(add_carousel_other);
+            }
+            url_image.src = IMAGE_url;
         }
-        url_image.src = IMAGE_url;
+        
     }
     //alert('add_client');
 
@@ -3198,14 +3974,80 @@ function other_similar_productsmyFunction(item, index) {
         
         '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
         '</div>';
-        var url_image = new Image();
-        url_image.onload = function() {
-            $("#other_similar_products_row1").append(other_similar_products_row1);
+
+        var other_similar_products_rowvideo1 = '<div class="col add_clidduct_column alpha_video">' +
+        '<video class="rounded div_cimage" width="100%" height="100%"  src="' + IMAGE_url + '" loop="1" preload="auto" muted="" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item_add_location + 
+        
+        '" timestamp="' + timestamp + 
+
+        '" add_description="' + item_add_description +
+    
+        '" tax="' + tax + 
+        '" tax_category="' + tax_category + 
+    
+        '" shipping="' + shipping + 
+        '" shipping_rates="' + shipping_rates + 
+        '" shipping_strategies="' + shipping_strategies + 
+        '" shipping_label="' + shipping_label + 
+        '" shipping_weight="' + shipping_weight + 
+        '" shipping_length="' + shipping_length + 
+        '" shipping_width="' + shipping_width + 
+        '" shipping_height="' + shipping_height + 
+        '" ships_from_country="' + ships_from_country + 
+        '" transit_time_label="' + transit_time_label + 
+        '" max_handling_time="' + max_handling_time + 
+        '" min_handling_time="' + min_handling_time + 
+    
+        '" condition="' + condition + 
+        '" adult="' + adult + 
+        '" multipack="' + multipack + 
+        '" is_bundle="' + is_bundle + 
+        '" energy_efficiency_class="' + energy_efficiency_class + 
+        '" min_energy_efficiency_class="' + min_energy_efficiency_class + 
+        '" max_energy_efficiency_class="' + max_energy_efficiency_class + 
+        '" age_group="' + age_group + 
+        '" color="' + color + 
+        '" gender="' + gender + 
+        '" material="' + material + 
+        '" pattern="' + pattern + 
+        '" size="' + size + 
+        '" size_system="' + size_system + 
+        '" item_group_id="' + item_group_id + 
+        '" product_detail="' + product_detail + 
+        '" product_highlight="' + product_highlight + 
+    
+        '" brand="' + brand + 
+        '" gtin="' + gtin + 
+        '" MPN="' + MPN + 
+        '" identifier_exists="' + identifier_exists + 
+    
+        '" availability="' + availability + 
+        '" availability_date="' + availability_date + 
+        '" expiration_date="' + expiration_date + 
+        '" sale_price_effective_date="' + sale_price_effective_date + 
+        '" unit_pricing_measure="' + unit_pricing_measure + 
+        '" unit_price_base_measure="' + unit_price_base_measure + 
+        '" installment="' + installment + 
+        '" subscription_cost="' + subscription_cost + 
+        '" loyalty_points="' + loyalty_points +
+        
+        '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" ></video>' +
+        '</div>';
+
+        if (IMAGE_url.endsWith(".mp4")) {
+            $("#other_similar_products_row1").append(other_similar_products_rowvideo1);
+
+        } else {
+            var url_image = new Image();
+            url_image.onload = function() {
+                $("#other_similar_products_row1").append(other_similar_products_row1);
+            }
+            url_image.onerror = function() {
+                other_similar_6++;
+            }                
+            url_image.src = IMAGE_url;
         }
-        url_image.onerror = function() {
-            other_similar_6++;
-        }                
-        url_image.src = IMAGE_url;
+        
 
     } else if(index < other_similar_12){
         var other_similar_products_row2 = '<div class="col add_clidduct_column">' +
@@ -3266,14 +4108,80 @@ function other_similar_productsmyFunction(item, index) {
         
         '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
         '</div>';
-        var url_image = new Image();
-        url_image.onload = function() {
-            $("#other_similar_products_row2").append(other_similar_products_row2);
+
+        var other_similar_products_rowvideo2 = '<div class="col add_clidduct_column alpha_video">' +
+        '<video class="rounded div_cimage" width="100%" height="100%"  src="' + IMAGE_url + '" loop="1" preload="auto" muted="" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item_add_location + 
+        
+        '" timestamp="' + timestamp + 
+
+        '" add_description="' + item_add_description +
+    
+        '" tax="' + tax + 
+        '" tax_category="' + tax_category + 
+    
+        '" shipping="' + shipping + 
+        '" shipping_rates="' + shipping_rates + 
+        '" shipping_strategies="' + shipping_strategies + 
+        '" shipping_label="' + shipping_label + 
+        '" shipping_weight="' + shipping_weight + 
+        '" shipping_length="' + shipping_length + 
+        '" shipping_width="' + shipping_width + 
+        '" shipping_height="' + shipping_height + 
+        '" ships_from_country="' + ships_from_country + 
+        '" transit_time_label="' + transit_time_label + 
+        '" max_handling_time="' + max_handling_time + 
+        '" min_handling_time="' + min_handling_time + 
+    
+        '" condition="' + condition + 
+        '" adult="' + adult + 
+        '" multipack="' + multipack + 
+        '" is_bundle="' + is_bundle + 
+        '" energy_efficiency_class="' + energy_efficiency_class + 
+        '" min_energy_efficiency_class="' + min_energy_efficiency_class + 
+        '" max_energy_efficiency_class="' + max_energy_efficiency_class + 
+        '" age_group="' + age_group + 
+        '" color="' + color + 
+        '" gender="' + gender + 
+        '" material="' + material + 
+        '" pattern="' + pattern + 
+        '" size="' + size + 
+        '" size_system="' + size_system + 
+        '" item_group_id="' + item_group_id + 
+        '" product_detail="' + product_detail + 
+        '" product_highlight="' + product_highlight + 
+    
+        '" brand="' + brand + 
+        '" gtin="' + gtin + 
+        '" MPN="' + MPN + 
+        '" identifier_exists="' + identifier_exists + 
+    
+        '" availability="' + availability + 
+        '" availability_date="' + availability_date + 
+        '" expiration_date="' + expiration_date + 
+        '" sale_price_effective_date="' + sale_price_effective_date + 
+        '" unit_pricing_measure="' + unit_pricing_measure + 
+        '" unit_price_base_measure="' + unit_price_base_measure + 
+        '" installment="' + installment + 
+        '" subscription_cost="' + subscription_cost + 
+        '" loyalty_points="' + loyalty_points +
+        
+        '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" ></video>' +
+        '</div>';
+
+        if (IMAGE_url.endsWith(".mp4")) {
+            $("#other_similar_products_row2").append(other_similar_products_rowvideo2);
+
+        } else {
+            var url_image = new Image();
+            url_image.onload = function() {
+                $("#other_similar_products_row2").append(other_similar_products_row2);
+            }
+            url_image.onerror = function() {
+                other_similar_12++;
+            }                
+            url_image.src = IMAGE_url;
         }
-        url_image.onerror = function() {
-            other_similar_12++;
-        }                
-        url_image.src = IMAGE_url;
+        
     } else if(index < other_similar_18){
         var other_similar_products_row3 = '<div class="col add_clidduct_column">' +
         '<img class="rounded div_cimage" width="100%" height="100%"  src="' + IMAGE_url + '" alt="' + item.product_img + '" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item_add_location + 
@@ -3333,14 +4241,80 @@ function other_similar_productsmyFunction(item, index) {
         
         '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' +
         '</div>';
-        var url_image = new Image();
-        url_image.onload = function() {
-            $("#other_similar_products_row3").append(other_similar_products_row3);
+
+        var other_similar_products_rowvideo3 = '<div class="col add_clidduct_column alpha_video">' +
+        '<video class="rounded div_cimage" width="100%" height="100%"  src="' + IMAGE_url + '" loop="1" preload="auto" muted="" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item_add_location + 
+        
+        '" timestamp="' + timestamp + 
+
+        '" add_description="' + item_add_description +
+    
+        '" tax="' + tax + 
+        '" tax_category="' + tax_category + 
+    
+        '" shipping="' + shipping + 
+        '" shipping_rates="' + shipping_rates + 
+        '" shipping_strategies="' + shipping_strategies + 
+        '" shipping_label="' + shipping_label + 
+        '" shipping_weight="' + shipping_weight + 
+        '" shipping_length="' + shipping_length + 
+        '" shipping_width="' + shipping_width + 
+        '" shipping_height="' + shipping_height + 
+        '" ships_from_country="' + ships_from_country + 
+        '" transit_time_label="' + transit_time_label + 
+        '" max_handling_time="' + max_handling_time + 
+        '" min_handling_time="' + min_handling_time + 
+    
+        '" condition="' + condition + 
+        '" adult="' + adult + 
+        '" multipack="' + multipack + 
+        '" is_bundle="' + is_bundle + 
+        '" energy_efficiency_class="' + energy_efficiency_class + 
+        '" min_energy_efficiency_class="' + min_energy_efficiency_class + 
+        '" max_energy_efficiency_class="' + max_energy_efficiency_class + 
+        '" age_group="' + age_group + 
+        '" color="' + color + 
+        '" gender="' + gender + 
+        '" material="' + material + 
+        '" pattern="' + pattern + 
+        '" size="' + size + 
+        '" size_system="' + size_system + 
+        '" item_group_id="' + item_group_id + 
+        '" product_detail="' + product_detail + 
+        '" product_highlight="' + product_highlight + 
+    
+        '" brand="' + brand + 
+        '" gtin="' + gtin + 
+        '" MPN="' + MPN + 
+        '" identifier_exists="' + identifier_exists + 
+    
+        '" availability="' + availability + 
+        '" availability_date="' + availability_date + 
+        '" expiration_date="' + expiration_date + 
+        '" sale_price_effective_date="' + sale_price_effective_date + 
+        '" unit_pricing_measure="' + unit_pricing_measure + 
+        '" unit_price_base_measure="' + unit_price_base_measure + 
+        '" installment="' + installment + 
+        '" subscription_cost="' + subscription_cost + 
+        '" loyalty_points="' + loyalty_points +
+        
+        '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" ></video>' +
+        '</div>';
+
+        if (IMAGE_url.endsWith(".mp4")) {
+            $("#other_similar_products_row3").append(other_similar_products_rowvideo3);
+
+        } else {
+            var url_image = new Image();
+            url_image.onload = function() {
+                $("#other_similar_products_row3").append(other_similar_products_row3);
+            }
+            url_image.onerror = function() {
+                other_similar_18++;
+            }                
+            url_image.src = IMAGE_url;
         }
-        url_image.onerror = function() {
-            other_similar_18++;
-        }                
-        url_image.src = IMAGE_url;
+        
     }
     
 }
@@ -3598,9 +4572,12 @@ function update_apps_categoriesmyFunction(item, index) {
     $("#admin_product_category").append(admin_product_category);
 
 }
-
+var product_data_container_appended = 0;
+var product_data_requested_index = 0;
 function product_main_container(startlimit,endlimit,cat_id,brand_id) {
-    $('#app-cover-spin').show(0);
+    if (autoloadproducts == 0) {
+        $('#app-cover-spin').show(0);
+    }
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
@@ -3618,10 +4595,16 @@ function product_main_container(startlimit,endlimit,cat_id,brand_id) {
                             $("#product_row_container").show(100);
                             $("#arrow_navigation_container").show(100);
                         });
-                        product_row_container_index = products_data.length; 
-                        $("#product_data_container").html(''); 
+                        product_row_container_index = products_data.length;
+                        if (autoloadproducts == 0) {
+                            $("#product_data_container").html(''); 
+                        } else {
+                            autoloadproducts = 0;
+                        }
                         $('#app-cover-spin').hide(0);
                         //alert(product_row_container_index);
+                        product_data_container_appended = 0;
+                        product_data_requested_index = 0;
                         products_data.forEach(products_datamyFunction);
                     } else {
                         $('.product_error').show(100, function(){
@@ -3665,9 +4648,11 @@ function product_main_container(startlimit,endlimit,cat_id,brand_id) {
 
 var product_row_container_index = 0;
 function products_datamyFunction(item, index) {
+    //product_data_requested_index ++;
     window.location.href="#maincontainer";
     var product_row_index = product_row_container_index;
     var product_image = item.product_img;
+    //alert(product_image);
     product_price = currency_exchange_rate * item.product_price;    
     product_price = product_price.toFixed(2);
 
@@ -3767,12 +4752,9 @@ function products_datamyFunction(item, index) {
                     $("#upload_from_file").hide();
                     $("#upload_from_url_container").hide();
                     $("#upload_from_file_container").show();
-
                 }
-
                 $("#value_from_url").val(product_image);
                 //alert($("#value_from_url").val());
-
                 $('.imagePreview').css("background-image", "url("+product_image+")");
             }
             url_image.src = product_image;
@@ -3800,10 +4782,8 @@ function products_datamyFunction(item, index) {
             var product_image = item.product_img;
             var url_image = new Image();
             url_image.onload = function() {
-
                 $("#value_from_url").val(product_image);
                 //alert($("#value_from_url").val());
-
                 $('.imagePreview').css("background-image", "url("+product_image+")");
             }
             url_image.src = product_image;
@@ -4181,16 +5161,170 @@ function products_datamyFunction(item, index) {
     '</div>' +
     '<div class="buttons cf">' + actions + '</div>' +
     '</div>';
+
     var product_row_container = '<div class="product_column">' +
     '<div class="card">' + product_container + '</div>' +
     '</div>';
+
+    //IMAGE_url.endsWith("world")   // Returns true
+
+    var container_video = '<video class="" src="' + IMAGE_url + '" loop="1" preload="auto" muted="" width="100%" height="100%"></video>';
+    var product_container_video = '<div class="container-prod alpha_video">' +
+    '<div class="image div_cimage" product_id="' + item.product_id + '" product_title="' + item.product_title + '" product_price="' + item.product_price + '" product_img="' + item.product_img + '" add_client="' + item.add_client + '" add_date="' + item.add_date + '" latitude="' + item.latitude + '" longitude="' + item.longitude + '" add_location="' + item_add_location + 
     
+    '" timestamp="' + timestamp + 
+
+    '" add_description="' + item_add_description +
+
+    '" tax="' + tax + 
+    '" tax_category="' + tax_category + 
+
+    '" shipping="' + shipping + 
+    '" shipping_rates="' + shipping_rates + 
+    '" shipping_strategies="' + shipping_strategies + 
+    '" shipping_label="' + shipping_label + 
+    '" shipping_weight="' + shipping_weight + 
+    '" shipping_length="' + shipping_length + 
+    '" shipping_width="' + shipping_width + 
+    '" shipping_height="' + shipping_height + 
+    '" ships_from_country="' + ships_from_country + 
+    '" transit_time_label="' + transit_time_label + 
+    '" max_handling_time="' + max_handling_time + 
+    '" min_handling_time="' + min_handling_time + 
+
+    '" condition="' + condition + 
+    '" adult="' + adult + 
+    '" multipack="' + multipack + 
+    '" is_bundle="' + is_bundle + 
+    '" energy_efficiency_class="' + energy_efficiency_class + 
+    '" min_energy_efficiency_class="' + min_energy_efficiency_class + 
+    '" max_energy_efficiency_class="' + max_energy_efficiency_class + 
+    '" age_group="' + age_group + 
+    '" color="' + color + 
+    '" gender="' + gender + 
+    '" material="' + material + 
+    '" pattern="' + pattern + 
+    '" size="' + size + 
+    '" size_system="' + size_system + 
+    '" item_group_id="' + item_group_id + 
+    '" product_detail="' + product_detail + 
+    '" product_highlight="' + product_highlight + 
+
+    '" brand="' + brand + 
+    '" gtin="' + gtin + 
+    '" MPN="' + MPN + 
+    '" identifier_exists="' + identifier_exists + 
+
+    '" availability="' + availability + 
+    '" availability_date="' + availability_date + 
+    '" expiration_date="' + expiration_date + 
+    '" sale_price_effective_date="' + sale_price_effective_date + 
+    '" unit_pricing_measure="' + unit_pricing_measure + 
+    '" unit_price_base_measure="' + unit_price_base_measure + 
+    '" installment="' + installment + 
+    '" subscription_cost="' + subscription_cost + 
+    '" loyalty_points="' + loyalty_points + 
+    
+    '" add_review="' + item.add_review + '" add_rating="' + item.add_rating + '" >' + container_video +
+    '</div>' +
+    
+    '<div class="container-information">' +
+    '<div class="title">' +
+    '<p class="card-text"><b style="height: auto;">' + product_title_account + '</b></p>' +
+    '<a href="javascript:void(0)" class="more close"><i class="fa fa-times"></i></a>' +                
+    '</div>' +
+    '<div class="description"><p>From ' + item.add_client + '</p><br>' + item_add_description + '<br>Ratings : ' + item.add_rating + '<br>' + adminactions + '</div>' +
+    '</div>' +
+    '<div class="buttons cf">' + actions + '</div>' +
+    '</div>';
+
+    var product_row_container_video = '<div class="product_column">' +
+    '<div class="card">' + product_container_video + '</div>' +
+    '</div>';
+    //$("#product_data_container").append(product_row_container_video);
+
+
+    //https://www.mazdausa.com/siteassets/vehicles/2021/cx-5/vlp/5050/videos/2021-cx5-vlp-5050-desktop-vid-turbo-v2.mp4
     if (index >= startlimit) {
-        var url_image = new Image();
-        url_image.onload = function() {
-            $("#product_data_container").append(product_row_container);
-        }                
-        url_image.src = IMAGE_url;
+        
+
+        if (IMAGE_url.endsWith(".mp4")) {
+            $("#product_data_container").append(product_row_container_video);
+            //product_data_container_appended++; 
+
+        } else {
+            var url_image = new Image();
+            url_image.onload = function() {
+                product_data_requested_index ++;                
+                if (IMAGE_urlcond == IMAGE_url) {
+
+                } else {
+                    IMAGE_urlcond =IMAGE_url;
+                    $("#product_data_container").append(product_row_container);
+                    product_data_container_appended++;
+                     
+                }
+                var product_data_requested = product_row_index - startlimit;
+                //alert('product_data_requested_index ' + product_data_requested_index + ' product_data_requested ' + product_data_requested);
+                if (product_data_requested_index >= product_data_requested) {
+                        //alert('product_data_requested_index ' + product_data_requested_index + ' product_data_container_appended ' + product_data_container_appended + ' product_data_requested ' + product_data_requested);
+                    if (product_data_requested > product_data_container_appended) {
+                        var addmore = product_data_requested_index - product_data_container_appended;
+                        //alert('addmore ' + addmore + ' product_data_container_appended ' + product_data_container_appended + ' product_data_requested ' + product_data_requested);
+                        autoloadproducts = 1;
+                        var data_startlimit = endlimit;
+                        var data_endlimit = endlimit + addmore;
+                        if (search_value != '') {
+                            search(search_value,data_startlimit,data_endlimit);
+                        } else if(geoshop_value != ''){
+                            geoshop(latitude,longitude,gradius,data_startlimit,data_endlimit);
+                        } else if(cat_id != ''){
+                            product_main_container(data_startlimit,data_endlimit,cat_id,brand_id);
+                        } else if(brand_id != ''){
+                            product_main_container(data_startlimit,data_endlimit,cat_id,brand_id);
+                        } else{
+                            product_main_container(data_startlimit,data_endlimit,cat_id,brand_id);
+                        }
+                        //alert('product_data_requested_index ' + product_data_requested_index + ' product_data_container_appended ' + product_data_container_appended + ' product_data_requested ' + product_data_requested);
+                    }
+                }
+                //autoloadproducts = 0;
+                //alert(product_data_requested_index);
+
+                /** */
+            }
+            url_image.onerror = function() {
+                product_data_requested_index ++;
+                var product_data_requested = product_row_index - startlimit;
+                //alert('product_data_requested_index ' + product_data_requested_index + ' product_data_requested ' + product_data_requested);
+                if (product_data_requested_index >= product_data_requested) {
+                        //alert('product_data_requested_index ' + product_data_requested_index + ' product_data_container_appended ' + product_data_container_appended + ' product_data_requested ' + product_data_requested);
+                    if (product_data_requested > product_data_container_appended) {
+                        var addmore = product_data_requested_index - product_data_container_appended;
+                        //alert('addmore ' + addmore + ' product_data_container_appended ' + product_data_container_appended + ' product_data_requested ' + product_data_requested);
+                        autoloadproducts = 1;
+                        var data_startlimit = endlimit;
+                        var data_endlimit = endlimit + addmore;
+                        if (search_value != '') {
+                            search(search_value,data_startlimit,data_endlimit);
+                        } else if(geoshop_value != ''){
+                            geoshop(latitude,longitude,gradius,data_startlimit,data_endlimit);
+                        } else if(cat_id != ''){
+                            product_main_container(data_startlimit,data_endlimit,cat_id,brand_id);
+                        } else if(brand_id != ''){
+                            product_main_container(data_startlimit,data_endlimit,cat_id,brand_id);
+                        } else{
+                            product_main_container(data_startlimit,data_endlimit,cat_id,brand_id);
+                        }
+                        //alert('product_data_requested_index ' + product_data_requested_index + ' product_data_container_appended ' + product_data_container_appended + ' product_data_requested ' + product_data_requested);
+                    }
+                }
+                //autoloadproducts = 0;
+
+            }               
+            url_image.src = IMAGE_url;
+        }        
+
     }
     if (startlimit > 0) {
         var ger = product_row_index - startlimit;
@@ -4219,9 +5353,14 @@ function products_datamyFunction(item, index) {
         $("#product_previous").hide(100);
         $("#product_next").hide(100);
     }
+
+    
+    //alert(product_data_container_appended);
+
     
 }
-
+var IMAGE_urlcond = '';
+var autoloadproducts = 0;
 function more_products_datamyFunction(item, index) {
     if(index >= 1){
         var product_image = item.product_img;
@@ -7284,7 +8423,7 @@ $("#login").keypress(function (e){
         login_button();
     }
 });
-var bot_typing
+var bot_typing = '';
 $("#chat_message").keypress(function (e){
     if(e.keyCode == 13){
         //login_button();
@@ -8373,7 +9512,6 @@ $("#product_save").click(function(){
                 
         
     } else {
-        //alert(upload_from_file);
 
         var uploadUrl_arr = $('.uploadUrl').map(function(){ return  $(this).val() }).get();
         var i;
@@ -8385,22 +9523,27 @@ $("#product_save").click(function(){
                 upload_from_check = 0;
             }
         }
-        //alert(upload_from_check);
-        if (upload_from_check == 1 || add_products_edit_product_save == 1) {
-            $("#product_save").removeClass("btn-primary");
-            $("#product_save").removeClass("btn-success");
-            $("#product_save").removeClass("btn-danger");
-            $("#product_save").removeClass("btn-warning");
 
-            $("#product_save").addClass("btn-info");
-            $("#product_save").html('Uploading...');
-            $("#upload_from_file_container_help").html('Please wait...');
-            $("#upload_from_help").html('Please wait...');
-            upload_image_from_url('uploadUrl_arr');      
+        if (product_save == 0) {
+            if (upload_from_check == 1 || add_products_edit_product_save == 1) {
+                $("#product_save").removeClass("btn-primary");
+                $("#product_save").removeClass("btn-success");
+                $("#product_save").removeClass("btn-danger");
+                $("#product_save").removeClass("btn-warning");
+    
+                $("#product_save").addClass("btn-info");
+                $("#product_save").html('Uploading...');
+                $("#upload_from_file_container_help").html('Please wait...');
+                $("#upload_from_help").html('Please wait...');
+                upload_image_from_url('uploadUrl_arr');      
+            } else {
+                $("#upload_from_url_container_help").html("No Url To the image");
+                $("#upload_from_help").html("No Url To the image");
+            }
         } else {
-            $("#upload_from_url_container_help").html("No Url To the image");
-            $("#upload_from_help").html("No Url To the image");
+            $("#upload_from_help").html("Correct the error(s)");
         }
+        
     }
     
 });
@@ -8408,7 +9551,6 @@ $("#product_save").click(function(){
 function upload_image_from_url(uploadUrl_arr) {
     $("#product_data_upload_from").val('url');
     $("#product_client").val(username);
-
     upload_image_from(uploadUrl_arr);
 }
 
@@ -8426,161 +9568,119 @@ function upload_image_from(upload_arr){
         type: 'POST',
         data: formData,
         success: function (response) {
-           // alert(response.message);
             try {
-                //alert(response.edit_product_id);
-
                 if (response.message == "success") {
-                   // alert(response.uploadFile_arr.message);
-
                    if(add_products_edit_product_save == 1){
-                    alert(response.url_to_upload);
-                    add_products_edit_product_save = 0;
-                    $("#product_save").removeClass("btn-primary");
-                    $("#product_save").removeClass("btn-info");
-                    $("#product_save").removeClass("btn-danger");
-                    $("#product_save").removeClass("btn-warning");
-
-                    $("#product_save").addClass("btn-success");
-                    $('#app-cover-spin').hide(0);
-
-                    //var results = response.results;
-                    //alert(results);
-
-                    var imageurl = response.imageurl;
-                    var response_imageurl = '<ul>';
-                    for (i = 0; i < imageurl.length; i++) {
-                        response_imageurl += "<li>" + imageurl[i] + "</li>";
-                    }
-                    response_imageurl += '</ul>';
-                    $("#upload_from_file_container_help").html(response.uploadFile_arr.message + '. Image url : <span class="text-success">' + response_imageurl + '</span>');
-                    //imageurl
-                    $("#product_save").html(response.uploadFile_arr.message);
-                    $("#upload_from_help").html(response.product_title + ' uploaded successfuly');
-                    cat_id = '';
-                    brand_id = '';
-                    startlimit = 0;
-                    endlimit = 24;
-                    if (edit_product_id != '') {
-                        product_id(startlimit,endlimit,"edit_product",username,edit_product_id);
-                        edit_product_id = '';
+                    if (upload_from_file == 0) {
+                        add_products_edit_product_save = 0;
+                        $("#product_save").removeClass("btn-primary");
+                        $("#product_save").removeClass("btn-info");
+                        $("#product_save").removeClass("btn-danger");
+                        $("#product_save").removeClass("btn-warning");
+                        $("#product_save").addClass("btn-success");
+                        $('#app-cover-spin').hide(0);
+                        var imageurl = response.imageurl;
+                        var response_imageurl = '<ul>';
+                        for (i = 0; i < imageurl.length; i++) {
+                            response_imageurl += "<li>" + imageurl[i] + "</li>";
+                        }
+                        response_imageurl += '</ul>';
+                        $("#upload_from_file_container_help").html('Image url : <span class="text-success">' + response_imageurl + '</span>');
+                        $("#product_save").html(response.message);
+                        $("#upload_from_help").html(response.product_title + ' updated successfuly');
+                        home('');
                     } else {
-                        product_main_container(startlimit,endlimit,cat_id,brand_id);
-                    }
-
+                     if (response.uploadFile_arr.message == "success") {
+                         add_products_edit_product_save = 0;
+                         $("#product_save").removeClass("btn-primary");
+                         $("#product_save").removeClass("btn-info");
+                         $("#product_save").removeClass("btn-danger");
+                         $("#product_save").removeClass("btn-warning");
+                         $("#product_save").addClass("btn-success");
+                         $('#app-cover-spin').hide(0);                            
+                         var imageurl = response.imageurl;
+                         var response_imageurl = '<ul>';
+                         for (i = 0; i < imageurl.length; i++) {
+                             response_imageurl += "<li>" + imageurl[i] + "</li>";
+                         }
+                         response_imageurl += '</ul>';
+                         $("#upload_from_file_container_help").html(response.uploadFile_arr.message + '. Image url : <span class="text-success">' + response_imageurl + '</span>');
+                         $("#product_save").html(response.uploadFile_arr.message);
+                         $("#upload_from_help").html(response.product_title + ' updated successfuly');
+                         home('');                            
+                     } else {                          
+                         $("#product_save").removeClass("btn-primary");
+                         $("#product_save").removeClass("btn-success");
+                         $("#product_save").removeClass("btn-info");
+                         $("#product_save").removeClass("btn-warning");    
+                         $("#product_save").addClass("btn-danger");
+                         $('#app-cover-spin').hide(0);
+                         $("#product_save").html('fail');
+                         if (response.uploadOk == 0) {
+                             $("#upload_from_file_container_help").html(response.uploadFile_arr);    
+                             $("#upload_from_help").html(response.uploadFile_arr);
+                         } else {
+                             $("#upload_from_file_container_help").html(response.uploadFile_arr.message);    
+                             $("#upload_from_help").html(response.uploadFile_arr.message);
+                         }
+                     }
+                    }                  
                    } else {
-                    if (response.uploadFile_arr.message == "success") {
-                        add_products_edit_product_save = 0;
-                        $("#product_save").removeClass("btn-primary");
-                        $("#product_save").removeClass("btn-info");
-                        $("#product_save").removeClass("btn-danger");
-                        $("#product_save").removeClass("btn-warning");
-
-                        $("#product_save").addClass("btn-success");
-                        $('#app-cover-spin').hide(0);
-
-                        //var results = response.results;
-                        //alert(results);
-
-                        var imageurl = response.imageurl;
-                        var response_imageurl = '<ul>';
-                        for (i = 0; i < imageurl.length; i++) {
-                            response_imageurl += "<li>" + imageurl[i] + "</li>";
+                       if (upload_from_file == 0) {
+                           add_products_edit_product_save = 0;
+                           $("#product_save").removeClass("btn-primary");
+                           $("#product_save").removeClass("btn-info");
+                           $("#product_save").removeClass("btn-danger");
+                           $("#product_save").removeClass("btn-warning");
+                           $("#product_save").addClass("btn-success");
+                           $('#app-cover-spin').hide(0);
+                           var imageurl = response.imageurl;
+                           var response_imageurl = '<ul>';
+                           for (i = 0; i < imageurl.length; i++) {
+                               response_imageurl += "<li>" + imageurl[i] + "</li>";
+                           }
+                           response_imageurl += '</ul>';
+                           $("#upload_from_file_container_help").html('Image url : <span class="text-success">' + response_imageurl + '</span>');
+                           $("#product_save").html(response.message);
+                           $("#upload_from_help").html(response.product_title + ' uploaded successfuly');
+                           home('');
+                       } else {
+                        if (response.uploadFile_arr.message == "success") {
+                            add_products_edit_product_save = 0;
+                            $("#product_save").removeClass("btn-primary");
+                            $("#product_save").removeClass("btn-info");
+                            $("#product_save").removeClass("btn-danger");
+                            $("#product_save").removeClass("btn-warning");
+                            $("#product_save").addClass("btn-success");
+                            $('#app-cover-spin').hide(0);                            
+                            var imageurl = response.imageurl;
+                            var response_imageurl = '<ul>';
+                            for (i = 0; i < imageurl.length; i++) {
+                                response_imageurl += "<li>" + imageurl[i] + "</li>";
+                            }
+                            response_imageurl += '</ul>';
+                            $("#upload_from_file_container_help").html(response.uploadFile_arr.message + '. Image url : <span class="text-success">' + response_imageurl + '</span>');
+                            $("#product_save").html(response.uploadFile_arr.message);
+                            $("#upload_from_help").html(response.product_title + ' uploaded successfuly');
+                            home('');                            
+                        } else {                          
+                            $("#product_save").removeClass("btn-primary");
+                            $("#product_save").removeClass("btn-success");
+                            $("#product_save").removeClass("btn-info");
+                            $("#product_save").removeClass("btn-warning");    
+                            $("#product_save").addClass("btn-danger");
+                            $('#app-cover-spin').hide(0);
+                            $("#product_save").html('fail');
+                            if (response.uploadOk == 0) {
+                                $("#upload_from_file_container_help").html(response.uploadFile_arr);    
+                                $("#upload_from_help").html(response.uploadFile_arr);
+                            } else {
+                                $("#upload_from_file_container_help").html(response.uploadFile_arr.message);    
+                                $("#upload_from_help").html(response.uploadFile_arr.message);
+                            }
                         }
-                        response_imageurl += '</ul>';
-                        $("#upload_from_file_container_help").html(response.uploadFile_arr.message + '. Image url : <span class="text-success">' + response_imageurl + '</span>');
-                        //imageurl
-                        $("#product_save").html(response.uploadFile_arr.message);
-                        $("#upload_from_help").html(response.product_title + ' uploaded successfuly');
-                        cat_id = '';
-                        brand_id = '';
-                        startlimit = 0;
-                        endlimit = 24;
-                        if (edit_product_id != '') {
-                            product_id(startlimit,endlimit,"edit_product",username,edit_product_id);
-                            edit_product_id = '';
-                        } else {
-                            product_main_container(startlimit,endlimit,cat_id,brand_id);
-                        }
-                    } else {  
-                        //alert(response.uploadFile_arr.message);
-                      
-                        $("#product_save").removeClass("btn-primary");
-                        $("#product_save").removeClass("btn-success");
-                        $("#product_save").removeClass("btn-info");
-                        $("#product_save").removeClass("btn-warning");
-
-                        $("#product_save").addClass("btn-danger");
-                        $('#app-cover-spin').hide(0);
-                        $("#product_save").html('fail');
-                        if (response.uploadOk == 0) {
-                            $("#upload_from_file_container_help").html(response.uploadFile_arr);
-
-                            $("#upload_from_help").html(response.uploadFile_arr);
-                        } else {
-                            $("#upload_from_file_container_help").html(response.uploadFile_arr.message);
-
-                            $("#upload_from_help").html(response.uploadFile_arr.message);
-                        }
-                    }
-
-                   }
-                   
-
-                    /**if (response.uploadFile_arr.message == "success") {
-                        add_products_edit_product_save = 0;
-                        $("#product_save").removeClass("btn-primary");
-                        $("#product_save").removeClass("btn-info");
-                        $("#product_save").removeClass("btn-danger");
-                        $("#product_save").removeClass("btn-warning");
-
-                        $("#product_save").addClass("btn-success");
-                        $('#app-cover-spin').hide(0);
-
-                        //var results = response.results;
-                        //alert(results);
-
-                        var imageurl = response.imageurl;
-                        var response_imageurl = '<ul>';
-                        for (i = 0; i < imageurl.length; i++) {
-                            response_imageurl += "<li>" + imageurl[i] + "</li>";
-                        }
-                        response_imageurl += '</ul>';
-                        $("#upload_from_file_container_help").html(response.uploadFile_arr.message + '. Image url : <span class="text-success">' + response_imageurl + '</span>');
-                        //imageurl
-                        $("#product_save").html(response.uploadFile_arr.message);
-                        $("#upload_from_help").html(response.product_title + ' uploaded successfuly');
-                        cat_id = '';
-                        brand_id = '';
-                        startlimit = 0;
-                        endlimit = 24;
-                        if (edit_product_id != '') {
-                            product_id(startlimit,endlimit,"edit_product",username,edit_product_id);
-                            edit_product_id = '';
-                        } else {
-                            product_main_container(startlimit,endlimit,cat_id,brand_id);
-                        }
-                    } else {  
-                        //alert(response.uploadFile_arr.message);
-                      
-                        $("#product_save").removeClass("btn-primary");
-                        $("#product_save").removeClass("btn-success");
-                        $("#product_save").removeClass("btn-info");
-                        $("#product_save").removeClass("btn-warning");
-
-                        $("#product_save").addClass("btn-danger");
-                        $('#app-cover-spin').hide(0);
-                        $("#product_save").html('fail');
-                        if (response.uploadOk == 0) {
-                            $("#upload_from_file_container_help").html(response.uploadFile_arr);
-
-                            $("#upload_from_help").html(response.uploadFile_arr);
-                        } else {
-                            $("#upload_from_file_container_help").html(response.uploadFile_arr.message);
-
-                            $("#upload_from_help").html(response.uploadFile_arr.message);
-                        }
-                    } */
+                       }                    
+                   }                   
                 } else {
                     $("#product_save").removeClass("btn-primary");
                     $("#product_save").removeClass("btn-success");
@@ -8598,14 +9698,12 @@ function upload_image_from(upload_arr){
             } catch(e) {
                 $('#app-cover-spin').hide(0);
                 $("#upload_from_file_container_help").html('JSON parsing error');
-
                 $("#upload_from_help").html('JSON parsing error');
             }
         },
         error: function searchError(xhr, err) {
             $('#app-cover-spin').hide(0);
             $("#upload_from_file_container_help").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
-
             $("#upload_from_help").html("Error on ajax call: " + err  + " " + JSON.stringify(xhr));
         },
         contentType: false,
@@ -8620,3 +9718,13 @@ function upload_image_from_file(uploadFile_arr) {
 
     upload_image_from(uploadFile_arr);    
 }
+
+$("body").delegate(".alpha_video","mouseover",function(event){
+    event.preventDefault();
+    $('video', this).get(0).play();
+});
+$("body").delegate(".alpha_video","mouseout",function(event){
+    event.preventDefault();
+    $('video', this).get(0).pause();
+});
+
