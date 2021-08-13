@@ -58,6 +58,16 @@
   
   <title>Oramla | The leading platform for global trade </title>
 
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-186803693-1">
+  </script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'UA-186803693-1');
+  </script>
 </head>
 
 <body>
@@ -963,7 +973,7 @@
               <div class="container">
                 <div class="row">
                   <div class="col">
-                    <h5 class="card-title mb-0 generate-qr-code" qr_code_id="1">Orders</h5>
+                    <h5 class="card-title mb-0 agent-orders">Orders</h5>
                   </div>
                   <div class="d-inline p-2">
                     Summary
@@ -976,6 +986,8 @@
                         </a>
         
                         <div class="dropdown-menu dropdown-menu-right">
+                          <a class="dropdown-item " href="Barcodescan.html">Barcodescan</a>
+
                           <a class="dropdown-item " href="Qrscan.html">Qrscan</a>
 
                           <a class="dropdown-item user_orders" href="#">All orders</a>

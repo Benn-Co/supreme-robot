@@ -873,29 +873,49 @@ $("#useranalysis").click(function(){
 });
 //mystoreorders
 //mystoreorderscol
+var agent_orders_set = 0;
 $("#mystoreorders").click(function(){
     //$("#mystorecol").hide(100);
     $("#mystorecol").addClass('d-none');
     $("#mystorecol").addClass('d-lg-block');
     $("#mystoreorderscol").show(100);
+    var user_order_id ='';
+    var start_order_limit ='';
+    var end_order_limit ='';
+    agent_orders_set = 1;
+    agent_orders(start_order_limit,end_order_limit,status,username,user_order_id);
+    
+    //$("#storegheader").html('Activity');
+
+});
+$(".agent-orders").click(function(){
+    //$("#mystorecol").hide(100);
+    $("#mystorecol").addClass('d-none');
+    $("#mystorecol").addClass('d-lg-block');
+    $("#mystoreorderscol").show(100);
+    var user_order_id ='';
+    var start_order_limit ='';
+    var end_order_limit ='';
+    agent_orders_set = 1;
+    agent_orders(start_order_limit,end_order_limit,status,username,user_order_id);
     //$("#storegheader").html('Activity');
 
 });
 
 $("#qr-reader-results").click(function(){
-    stopScanning('decodedText','decodedResult');
+    stopScanning('','');
     //$("#qrcodemodal").removeClass('is-active'); 
 });
 $("#qr-reader-error").click(function(){
-    stopScanning('decodedText','decodedResult');
+    stopScanning('','');
     //$("#qrcodemodal").removeClass('is-active'); 
 });
 $("#qr-deletemodal").click(function(){
-    stopScanning('decodedText','decodedResult');
+    stopScanning('','');
     //$("#qrcodemodal").removeClass('is-active'); 
 });
 $(".scan-qr-stop").click(function(){
-    stopScanning('decodedText','decodedResult');
+    stopScanning('','');
     //$("#qrcodemodal").removeClass('is-active'); 
 });
 
@@ -915,15 +935,16 @@ function updateQRCode(text) {
     });
 }
 function stopScanning(decodedText,decodedResult) {         
-    let scanner = new Instascan.Scanner({ video: document.getElementById('qr-reader') });    
-    Instascan.Camera.getCameras().then(function (cameras) {
+    let scanner = new Instascan.Scanner({ video: document.getElementById('qr-reader') }); 
+    scanner.stop(); 
+    $("#qrcodemodal").removeClass('is-active');   
+    /**Instascan.Camera.getCameras().then(function (cameras) {
         if(cameras.length > 0){
-            this.scanner.stop();
-            $("#qrcodemodal").removeClass('is-active');
+            scanner.stop();            
         }
     }).catch(function (e) {
         resulterrorContainer.innerHTML = e;
-    });
+    });*/
 }
 $(".scan-qr-code").click(function(){
     $("#qrcodemodal").addClass('is-active');
@@ -971,8 +992,8 @@ $(".scan-qr-code").click(function(){
         //alert(content);
         resultContainer.innerHTML = content;
         resulterrorContainer.innerHTML = '';
-    });
-    
+        stopScanning(content, image);
+    });    
     
     Instascan.Camera.getCameras().then(function (cameras) {
       if (cameras.length > 0) {
@@ -1011,6 +1032,7 @@ $(".scan-qr-code").click(function(){
         resulterrorContainer.innerHTML = e;
     });
 });
+
 
 //mystorecol
 //mystore
@@ -1560,7 +1582,7 @@ $("body").delegate(".order_view","click",function(event){
 });
 var data_len = 0;
 var order_id_status = 0;
-function order_id(startlimit,endlimit,status,username,order_id) {
+function order_id(startlimit,endlimit,status,username,user_order_id) {
     $('#app-cover-spin').show(0);
     if (order_view_outline == 'pending') {
         $(".order_view_outline").removeClass('is-success'); 
@@ -1586,7 +1608,7 @@ function order_id(startlimit,endlimit,status,username,order_id) {
     $.ajax({
         type: "POST", // Type of request to be send, called as
         dataType: 'json',
-        data: { order_id: 12, startlimit: startlimit, endlimit: endlimit, status:status, username: username, order_id: order_id },
+        data: { order_id: 12, startlimit: startlimit, endlimit: endlimit, status:status, username: username, order_id: user_order_id, agent_orders_set:agent_orders_set },
         processData: true,
         url: api_server_url + '/cordova/order_id.php',
         success: function searchSuccess(response) {            
@@ -1617,7 +1639,7 @@ function order_id(startlimit,endlimit,status,username,order_id) {
                             $('#app-cover-spin').hide(0);           
                         });
                     } else {
-                        if (status == "pending" || status == "active" || status == "cancelled" || status == "shipped") {
+                        if (status == "pending" || status == "active" || status == "cancelled" || status == "shipped" || agent_orders_set == 1) {
                             $("#orders_items_made").html('');
                             $("#orderid").html(order_id);
 
@@ -2404,6 +2426,10 @@ function order_datamyFunction(item, index) {
 
 }
 
+function agent_orders(startlimit,endlimit,status,username,user_order_id) {
+    order_id(startlimit,endlimit,status,username,user_order_id);
+}
+
 var  _shipping = '0';
 var  _pay = '0';
 var checkout_contact_information_save = 0;
@@ -2503,6 +2529,7 @@ function checkout_total(_shipping,_pay,total_pay,total_tax,total_shipping,total_
                             $("#moreaction").show(100);
 
                         }
+                        agent_orders_set = 0;
                         products_data.forEach(order_datamyFunction);
                         order_id_status = 1;
                         user_container(username,email);
@@ -8329,6 +8356,7 @@ $("#s3").click(function(){
         search_value = '';
         geoshop_value = '';
         cat_id = '';
+        agent_orders_set = 0;
         order_id(startlimit,endlimit,'user_orders',username,'');
         //window.location.href="#location_container";
         /**$("#menu_container_top_tab").show(100);                
